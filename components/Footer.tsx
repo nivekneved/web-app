@@ -4,25 +4,25 @@ import { MapPin, Phone, Mail, Clock, Facebook, Instagram, Linkedin } from 'lucid
 export default function Footer() {
     return (
         <footer className="bg-slate-900 text-white">
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12">
                     {/* Company Info */}
-                    <div>
+                    <div className="md:col-span-2 lg:col-span-1">
                         <h3 className="text-2xl font-black mb-4">
                             Travel<span className="text-red-600">Lounge</span>
                         </h3>
-                        <p className="text-slate-300 mb-4 leading-relaxed">
+                        <p className="text-slate-300 mb-4 leading-relaxed text-sm">
                             Your local and international holiday provider. IATA accredited travel agents for safe and memorable holidays.
                         </p>
                         <div className="flex gap-3">
-                            <a href="#" className="w-10 h-10 bg-slate-800 rounded-lg flex items-center justify-center hover:bg-red-600 transition-colors">
-                                <Facebook size={20} />
+                            <a href="#" className="w-9 h-9 bg-slate-800 rounded-lg flex items-center justify-center hover:bg-red-600 transition-colors">
+                                <Facebook size={18} />
                             </a>
-                            <a href="#" className="w-10 h-10 bg-slate-800 rounded-lg flex items-center justify-center hover:bg-red-600 transition-colors">
-                                <Instagram size={20} />
+                            <a href="#" className="w-9 h-9 bg-slate-800 rounded-lg flex items-center justify-center hover:bg-red-600 transition-colors">
+                                <Instagram size={18} />
                             </a>
-                            <a href="#" className="w-10 h-10 bg-slate-800 rounded-lg flex items-center justify-center hover:bg-red-600 transition-colors">
-                                <Linkedin size={20} />
+                            <a href="#" className="w-9 h-9 bg-slate-800 rounded-lg flex items-center justify-center hover:bg-red-600 transition-colors">
+                                <Linkedin size={18} />
                             </a>
                         </div>
                     </div>
@@ -83,7 +83,7 @@ export default function Footer() {
                     {/* Quick Links */}
                     <div>
                         <h4 className="text-lg font-black mb-4">Quick Links</h4>
-                        <ul className="space-y-2 text-slate-300">
+                        <ul className="grid grid-cols-2 gap-x-4 gap-y-2 text-slate-300 text-sm">
                             <li>
                                 <Link href="/" className="hover:text-red-600 transition-colors">Home</Link>
                             </li>
@@ -110,20 +110,18 @@ export default function Footer() {
                             </li>
                         </ul>
                     </div>
-                </div>
 
-                {/* Newsletter */}
-                <div className="mt-12 pt-8 border-t border-slate-800">
-                    <div className="max-w-xl mx-auto text-center">
+                    {/* Newsletter - Moved into grid, spans 2 columns */}
+                    <div className="md:col-span-2 pt-6 lg:pt-0 lg:border-t-0 border-t border-slate-800 lg:mt-0 mt-8">
                         <h4 className="text-lg font-black mb-2">Newsletter</h4>
-                        <p className="text-slate-300 mb-4">Stay up to date with our latest news, receive exclusive deals, and more.</p>
+                        <p className="text-slate-300 mb-4 text-sm">Stay up to date with our latest news, exclusive deals, and more.</p>
                         <div className="flex gap-2">
                             <input
                                 type="email"
-                                placeholder="Enter your email"
-                                className="flex-1 px-4 py-3 bg-slate-800 border border-slate-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-red-600 text-white"
+                                placeholder="Enter email"
+                                className="flex-1 px-4 py-2.5 bg-slate-800 border border-slate-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-red-600 text-white text-sm"
                             />
-                            <button className="px-6 py-3 bg-red-600 text-white rounded-xl font-bold hover:bg-red-700 transition-colors">
+                            <button className="px-5 py-2.5 bg-red-600 text-white rounded-xl font-bold hover:bg-red-700 transition-colors text-sm whitespace-nowrap">
                                 Subscribe
                             </button>
                         </div>
@@ -131,10 +129,10 @@ export default function Footer() {
                 </div>
 
                 {/* Copyright */}
-                <div className="mt-12 pt-8 border-t border-slate-800 text-center text-slate-400">
+                <div className="mt-8 pt-6 border-t border-slate-800 text-center text-slate-400 text-xs">
                     <p>
                         © {new Date().getFullYear()} Travel Lounge and Leisure. All rights reserved.
-                        {' '}- Developed by <a href="https://www.ebox.mu" target="_blank" rel="noopener noreferrer" className="text-red-600 hover:text-red-500">EBOX</a>
+                        {' '}- Developed by <a href="https://www.ebox.mu" target="_blank" rel="noopener noreferrer" className="text-red-600 hover:text-red-500 font-bold">EBOX</a>
                     </p>
                 </div>
             </div>
