@@ -1,0 +1,151 @@
+'use client'
+
+import { useState, useEffect } from 'react'
+import { createClient } from '@/lib/supabase'
+import { useParams } from 'next/navigation'
+import Link from 'next/link'
+import { ArrowLeft, Calendar, Tag } from 'lucide-react'
+
+const supabase = createClient()
+
+type Post = {
+    id: string
+    title: string
+    slug: string
+    content: string
+    excerpt: string
+    featured_image: string | null
+    published_at: string
+    tags: string[]
+}
+
+export default function NewsArticlePage() {
+    const params = useParams()
+    const [post, setPost] = useState<Post | null>(null)
+    const [loading, setLoading] = useState(true)
+
+    useEffect(() => {
+        if (params.slug) {
+            loadPost(params.slug as string)
+        }
+    }, [params.slug])
+
+    async function loadPost(slug: string) {
+        try {
+            const { data, error } = await supabase
+                .from('editorial_posts')
+                .select('*')
+                .eq('slug', slug)
+                .eq('status', 'published')
+                .single()
+
+            if (error) throw error
+            setPost(data)
+        } catch (error) {
+            console.error('Error loading post:', error)
+        } finally {
+            setLoading(false)
+        }
+    }
+
+    if (loading) {
+        return (
+            <div className="min-h-screen flex items-center justify-center">
+                <div className="animate-spin rounded-full h-12 w-12 border-4 border-red-600 border-t-transparent"></div>
+            </div>
+        )
+    }
+
+    if (!post) {
+        return (
+            <div className="min-h-screen flex items-center justify-center">
+                <div className="text-center">
+                    <h1 className="text-4xl font-black text-slate-900 mb-4">Article Not Found</h1>
+                    <Link href="/news" className="text-red-600 font-bold hover:underline">
+                        ← Back to News
+                    </Link>
+                </div>
+            </div>
+        )
+    }
+
+    return (
+        <div className="min-h-screen bg-slate-50">
+            {/* Back Button */}
+            <div className="bg-white border-b border-slate-100">
+                <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+                    <Link href="/news" className="inline-flex items-center gap-2 text-slate-600 hover:text-red-600 font-medium transition-colors">
+                        <ArrowLeft size={18} />
+                        Back to News
+                    </Link>
+                </div>
+            </div>
+
+            {/* Featured Image */}
+            {post.featured_image && (
+                <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+                    <div className="aspect-video rounded-[3rem] overflow-hidden">
+                        <img src={post.featured_image} alt={post.title} className="w-full h-full object-cover" />
+                    </div>
+                </div>
+            )}
+
+            {/* Article Content */}
+            <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+                <article className="bg-white rounded-[3rem] p-12 shadow-sm border border-slate-100">
+                    {/* Meta */}
+                    <div className="flex items-center gap-4 text-sm text-slate-500 mb-6">
+                        <span className="flex items-center gap-2">
+                            <Calendar size={16} />
+                            {new Date(post.published_at).toLocaleDateString('en-US', {
+                                year: 'numeric',
+                                month: 'long',
+                                day: 'numeric'
+                            })}
+                        </span>
+                    </div>
+
+                    {/* Title */}
+                    <h1 className="text-5xl font-black text-slate-900 mb-6 leading-tight">{post.title}</h1>
+
+                    {/* Excerpt */}
+                    <p className="text-xl text-slate-600 mb-8 leading-relaxed font-medium">{post.excerpt}</p>
+
+                    {/* Content */}
+                    <div className="prose prose-lg prose-slate max-w-none">
+                        <div className="whitespace-pre-wrap text-slate-700 leading-relaxed">
+                            {post.content}
+                        </div>
+                    </div>
+
+                    {/* Tags */}
+                    {post.tags && post.tags.length > 0 && (
+                        <div className="mt-12 pt-8 border-t border-slate-200">
+                            <div className="flex items-center gap-3 flex-wrap">
+                                <Tag size={20} className="text-slate-400" />
+                                {post.tags.map((tag, idx) => (
+                                    <span
+                                        key={idx}
+                                        className="px-4 py-2 bg-slate-100 text-slate-700 rounded-xl font-medium text-sm"
+                                    >
+                                        {tag}
+                                    </span>
+                                ))}
+                            </div>
+                        </div>
+                    )}
+                </article>
+
+                {/* Back Button */}
+                <div className="mt-8 text-center">
+                    <Link
+                        href="/news"
+                        className="inline-block px-8 py-4 bg-red-600 text-white rounded-xl font-bold hover:bg-slate-900 transition-all"
+                    >
+                        Read More Articles
+                    </Link>
+                </div>
+            </div>
+        </div>
+    )
+}
