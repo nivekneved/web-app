@@ -2,7 +2,7 @@
 
 import Image from 'next/image'
 import Link from 'next/link'
-import { Car, MapPin, Clock, Shield, ArrowRight, CheckCircle2, Star, Calendar } from 'lucide-react'
+import { Car, MapPin, Clock, Shield, ArrowRight, CheckCircle2, Star, Calendar, Users } from 'lucide-react'
 import { motion } from 'framer-motion'
 
 export default function TransfersPage() {
