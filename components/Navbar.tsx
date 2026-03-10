@@ -3,7 +3,7 @@
 import Link from 'next/link'
 import { useState, useEffect } from 'react'
 import Image from 'next/image'
-import { Menu, X, Hotel, Ship, MapPin, Plane, Activity, Heart, Moon, Sun, Phone, Mail, Facebook, Instagram, Linkedin, ChevronDown } from 'lucide-react'
+import { Menu, X, Hotel, Ship, MapPin, Plane, Activity, Heart, Moon, Sun, Phone, Mail, Facebook, Instagram, Linkedin } from 'lucide-react'
 import { useWishlist } from '@/contexts/WishlistContext'
 import { useTheme } from '@/contexts/ThemeContext'
 
@@ -85,23 +85,9 @@ export default function Navbar() {
                                 Flights
                             </Link>
 
-                            <div className="relative group">
-                                <Link href="/hotels" className="flex items-center gap-1 text-slate-900 hover:text-red-600 font-bold transition-colors">
-                                    Hotels
-                                    <ChevronDown size={14} strokeWidth={3} />
-                                </Link>
-                                <div className="absolute top-full left-0 mt-2 w-56 bg-white rounded-xl shadow-2xl border border-slate-100 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all transform translate-y-2 group-hover:translate-y-0">
-                                    <Link href="/hotels" className="block px-4 py-3 hover:bg-slate-50 transition-colors first:rounded-t-xl text-slate-900 font-medium">
-                                        All Hotels
-                                    </Link>
-                                    <Link href="/hotels/mauritius" className="block px-4 py-3 hover:bg-slate-50 transition-colors text-slate-900 font-medium">
-                                        Mauritius
-                                    </Link>
-                                    <Link href="/hotels/international" className="block px-4 py-3 hover:bg-slate-50 transition-colors last:rounded-b-xl text-slate-900 font-medium">
-                                        International
-                                    </Link>
-                                </div>
-                            </div>
+                            <Link href="/hotels" className="text-slate-900 hover:text-red-600 font-bold transition-colors">
+                                Hotels
+                            </Link>
 
                             <Link href="/rodrigues" className="text-slate-900 hover:text-red-600 font-bold transition-colors">
                                 Rodrigues
