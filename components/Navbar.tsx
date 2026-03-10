@@ -2,16 +2,13 @@
 
 import Link from 'next/link'
 import { useState, useEffect } from 'react'
-import { Menu, X, Hotel, Ship, MapPin, Plane, Activity, User, Heart, Moon, Sun, Phone, Mail, Facebook, Instagram, Linkedin, ChevronDown } from 'lucide-react'
-import { useAuth } from '@/contexts/AuthContext'
+import { Menu, X, Hotel, Ship, MapPin, Plane, Activity, Heart, Moon, Sun, Phone, Mail, Facebook, Instagram, Linkedin, ChevronDown } from 'lucide-react'
 import { useWishlist } from '@/contexts/WishlistContext'
 import { useTheme } from '@/contexts/ThemeContext'
-import { CurrencySelector } from '@/contexts/CurrencyContext'
 
 export default function Navbar() {
     const [isOpen, setIsOpen] = useState(false)
     const [isScrolled, setIsScrolled] = useState(false)
-    const { user } = useAuth()
     const { wishlist } = useWishlist()
     const { theme, toggleTheme } = useTheme()
 
@@ -54,16 +51,6 @@ export default function Navbar() {
                                     <Linkedin size={16} />
                                 </a>
                             </div>
-                            <span className="text-slate-400">|</span>
-                            {user ? (
-                                <Link href="/dashboard" className="hover:text-red-500 transition-colors">
-                                    My Account
-                                </Link>
-                            ) : (
-                                <Link href="/login" className="hover:text-red-500 transition-colors">
-                                    Login / Register
-                                </Link>
-                            )}
                         </div>
                     </div>
                 </div>
@@ -85,27 +72,9 @@ export default function Navbar() {
 
                         {/* Desktop Navigation */}
                         <div className="hidden lg:flex items-center gap-6">
-                            <Link href="/" className="text-slate-700 dark:text-slate-300 hover:text-red-600 font-bold transition-colors">
-                                Home
+                            <Link href="/cruises" className="text-slate-700 dark:text-slate-300 hover:text-red-600 font-bold transition-colors">
+                                Cruises
                             </Link>
-
-                            <div className="relative group">
-                                <Link href="/cruises" className="flex items-center gap-1 text-slate-700 dark:text-slate-300 hover:text-red-600 font-bold transition-colors">
-                                    Cruises
-                                    <ChevronDown size={14} strokeWidth={3} />
-                                </Link>
-                                <div className="absolute top-full left-0 mt-2 w-56 bg-white dark:bg-slate-800 rounded-xl shadow-2xl border border-slate-100 dark:border-slate-700 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all transform translate-y-2 group-hover:translate-y-0">
-                                    <Link href="/cruises" className="block px-4 py-3 hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors first:rounded-t-xl text-slate-700 dark:text-slate-200 font-medium">
-                                        All Cruises
-                                    </Link>
-                                    <Link href="/cruises/costa" className="block px-4 py-3 hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors text-slate-700 dark:text-slate-200 font-medium">
-                                        Costa Cruises
-                                    </Link>
-                                    <Link href="/cruises/msc" className="block px-4 py-3 hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors last:rounded-b-xl text-slate-700 dark:text-slate-200 font-medium">
-                                        MSC Cruises
-                                    </Link>
-                                </div>
-                            </div>
 
                             <Link href="/flights" className="text-slate-700 dark:text-slate-300 hover:text-red-600 font-bold transition-colors">
                                 Flights
@@ -132,28 +101,11 @@ export default function Navbar() {
                             <Link href="/rodrigues" className="text-slate-700 dark:text-slate-300 hover:text-red-600 font-bold transition-colors">
                                 Rodrigues
                             </Link>
-                            
-                             <div className="relative group">
-                                <Link href="/tours" className="flex items-center gap-1 text-slate-700 dark:text-slate-300 hover:text-red-600 font-bold transition-colors">
-                                    Group Tours
-                                    <ChevronDown size={14} strokeWidth={3} />
-                                </Link>
-                                 <div className="absolute top-full left-0 mt-2 w-56 bg-white dark:bg-slate-800 rounded-xl shadow-2xl border border-slate-100 dark:border-slate-700 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all transform translate-y-2 group-hover:translate-y-0">
-                                    <Link href="/tours" className="block px-4 py-3 hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors first:rounded-t-xl text-slate-700 dark:text-slate-200 font-medium">
-                                        All Tours
-                                    </Link>
-                                    <Link href="/tours/asia" className="block px-4 py-3 hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors text-slate-700 dark:text-slate-200 font-medium">
-                                        Asia
-                                    </Link>
-                                    <Link href="/tours/europe" className="block px-4 py-3 hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors text-slate-700 dark:text-slate-200 font-medium">
-                                        Europe
-                                    </Link>
-                                    <Link href="/tours/dubai" className="block px-4 py-3 hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors last:rounded-b-xl text-slate-700 dark:text-slate-200 font-medium">
-                                        Dubai
-                                    </Link>
-                                </div>
-                            </div>
-                            
+
+                            <Link href="/tours" className="text-slate-700 dark:text-slate-300 hover:text-red-600 font-bold transition-colors">
+                                Group Tours
+                            </Link>
+
                             <Link href="/packages" className="text-slate-700 dark:text-slate-300 hover:text-red-600 font-bold transition-colors">
                                 Day Packages
                             </Link>
@@ -165,10 +117,6 @@ export default function Navbar() {
 
                         {/* Right Section */}
                         <div className="flex items-center gap-3">
-                            {/* Currency Selector */}
-                            <div className="hidden md:block">
-                                <CurrencySelector />
-                            </div>
 
                             {/* Dark Mode Toggle */}
                             <button
@@ -192,24 +140,6 @@ export default function Navbar() {
                                 )}
                             </Link>
 
-                            {/* User Button */}
-                            {user ? (
-                                <Link
-                                    href="/dashboard"
-                                    className="hidden md:flex px-4 py-2 bg-red-600 text-white rounded-xl font-bold hover:bg-slate-900 transition-all items-center gap-2"
-                                >
-                                    <User size={18} />
-                                    <span>Dashboard</span>
-                                </Link>
-                            ) : (
-                                <Link
-                                    href="/login"
-                                    className="hidden md:flex px-4 py-2 bg-red-600 text-white rounded-xl font-bold hover:bg-slate-900 transition-all items-center gap-2"
-                                >
-                                    Login
-                                </Link>
-                            )}
-
                             {/* Mobile Menu Button */}
                             <button
                                 onClick={() => setIsOpen(!isOpen)}
@@ -225,13 +155,6 @@ export default function Navbar() {
                 {isOpen && (
                     <div className="lg:hidden bg-white dark:bg-slate-800 border-t border-slate-100 dark:border-slate-700">
                         <div className="px-4 py-4 space-y-2">
-                            <Link
-                                href="/"
-                                onClick={() => setIsOpen(false)}
-                                className="block px-4 py-3 hover:bg-slate-50 dark:hover:bg-slate-700 rounded-xl transition-colors text-slate-700 dark:text-slate-300 font-semibold"
-                            >
-                                Home
-                            </Link>
                             <Link
                                 href="/cruises"
                                 onClick={() => setIsOpen(false)}
@@ -286,15 +209,6 @@ export default function Navbar() {
                             >
                                 Contact
                             </Link>
-                            <div className="pt-4 border-t border-slate-200 dark:border-slate-700">
-                                <Link
-                                    href={user ? "/dashboard" : "/login"}
-                                    onClick={() => setIsOpen(false)}
-                                    className="block px-4 py-3 bg-red-600 text-white rounded-xl font-bold text-center"
-                                >
-                                    {user ? 'Dashboard' : 'Login'}
-                                </Link>
-                            </div>
                         </div>
                     </div>
                 )}
