@@ -5,7 +5,7 @@ export default function Footer() {
     return (
         <footer className="bg-slate-900 text-white">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-x-12 gap-y-4">
                     {/* Company Info */}
                     <div className="md:col-span-2 lg:col-span-1">
                         <h3 className="text-2xl font-black mb-4">
@@ -112,7 +112,7 @@ export default function Footer() {
                     </div>
 
                     {/* Newsletter - Moved into grid, spans 2 columns */}
-                    <div className="md:col-span-2 pt-6 lg:pt-0 lg:border-t-0 border-t border-slate-800 lg:mt-0 mt-8">
+                    <div className="md:col-span-2 lg:pt-0 lg:mt-0 mt-0">
                         <h4 className="text-lg font-black mb-2">Newsletter</h4>
                         <p className="text-slate-300 mb-4 text-sm">Stay up to date with our latest news, exclusive deals, and more.</p>
                         <div className="flex gap-2">
