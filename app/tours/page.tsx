@@ -1,53 +1,45 @@
 'use client'
 
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import Image from 'next/image'
 import ServiceCard from '@/components/ServiceCard'
+import { createClient } from '@/lib/supabase'
 
-const tours = [
-    {
-        id: 1,
-        title: "Thailand Discovery",
-        location: "Bangkok & Phuket",
-        price: "Rs 48,000",
-        image: "/hero-adventure.png",
-        duration: "8 Days",
-        link: "/tours/thailand-discovery",
-        tag: "Best Seller"
-    },
-    {
-        id: 2,
-        title: "Magnificent Dubai",
-        location: "Dubai, UAE",
-        price: "Rs 38,000",
-        image: "/hero-flight.png",
-        duration: "6 Days",
-        link: "/tours/dubai-magnificent",
-        tag: "City Break"
-    },
-    {
-        id: 3,
-        title: "European Grand Tour",
-        location: "France, Italy, Switzerland",
-        price: "Rs 110,000",
-        image: "/hero-adventure.png",
-        duration: "14 Days",
-        link: "/tours/european-grand",
-        tag: "Premium"
-    },
-    {
-        id: 4,
-        title: "Malaysia Truly Asia",
-        location: "Kuala Lumpur & Langkawi",
-        price: "Rs 42,000",
-        image: "/hero-adventure.png",
-        duration: "9 Days",
-        link: "/tours/malaysia",
-        tag: "Culture"
-    }
-]
+const supabase = createClient()
+
+type Tour = {
+    id: string
+    name: string
+    location: string
+    base_price: number
+    image_url: string
+    duration_days: number
+}
 
 export default function ToursPage() {
+    const [tours, setTours] = useState<Tour[]>([])
+    const [loading, setLoading] = useState(true)
+
+    useEffect(() => {
+        loadTours()
+    }, [])
+
+    async function loadTours() {
+        try {
+            const { data, error } = await supabase
+                .from('services')
+                .select('*')
+                .eq('service_type', 'tour')
+                .order('name', { ascending: true })
+
+            if (error) throw error
+            setTours(data || [])
+        } catch (error) {
+            console.error('Error loading tours:', error)
+        } finally {
+            setLoading(false)
+        }
+    }
     return (
         <div className="min-h-screen bg-slate-50 pb-20">
             {/* Hero */}
@@ -82,9 +74,24 @@ export default function ToursPage() {
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                    {tours.map(tour => (
-                        <ServiceCard key={tour.id} {...tour} />
-                    ))}
+                    {loading ? (
+                        [...Array(3)].map((_, i) => (
+                            <div key={i} className="animate-pulse bg-white rounded-3xl h-96 border border-slate-100" />
+                        ))
+                    ) : (
+                        tours.map(tour => (
+                            <ServiceCard
+                                key={tour.id}
+                                title={tour.name}
+                                location={tour.location}
+                                price={`Rs ${tour.base_price.toLocaleString()}`}
+                                image={tour.image_url || "/hero-adventure.png"}
+                                duration={`${tour.duration_days} Days`}
+                                link={`/tours/${tour.id}`}
+                                tag="GROUP TOUR"
+                            />
+                        ))
+                    )}
                 </div>
             </div>
         </div>

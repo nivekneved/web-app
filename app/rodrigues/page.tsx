@@ -1,53 +1,45 @@
 'use client'
 
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import Image from 'next/image'
 import ServiceCard from '@/components/ServiceCard'
+import { createClient } from '@/lib/supabase'
 
-const packages = [
-    {
-        id: 1,
-        title: "Tekoma Boutik Hotel",
-        location: "Anse Ally",
-        price: "Rs 18,000",
-        image: "/hero-hotel.png",
-        duration: "3 Nights",
-        link: "/rodrigues/tekoma",
-        tag: "Luxury"
-    },
-    {
-        id: 2,
-        title: "Cotton Bay Resort",
-        location: "Pointe Coton",
-        price: "Rs 14,500",
-        image: "/hero-hotel.png",
-        duration: "3 Nights",
-        link: "/rodrigues/cotton-bay",
-        tag: "Beachfront"
-    },
-    {
-        id: 3,
-        title: "Mourouk Ebony Hotel",
-        location: "Mourouk",
-        price: "Rs 12,000",
-        image: "/hero-hotel.png",
-        duration: "3 Nights",
-        link: "/rodrigues/mourouk",
-        tag: "Kitesurfing"
-    },
-    {
-        id: 4,
-        title: "Rodrigues Discovery Tour",
-        location: "Island Wide",
-        price: "Rs 5,000",
-        image: "/hero-adventure.png",
-        duration: "Full Day",
-        link: "/rodrigues/island-tour",
-        tag: "Excursion"
-    }
-]
+const supabase = createClient()
+
+type Service = {
+    id: string
+    name: string
+    location: string
+    base_price: number
+    image_url: string
+    service_type: string
+}
 
 export default function RodriguesPage() {
+    const [services, setServices] = useState<Service[]>([])
+    const [loading, setLoading] = useState(true)
+
+    useEffect(() => {
+        loadRodriguesServices()
+    }, [])
+
+    async function loadRodriguesServices() {
+        try {
+            const { data, error } = await supabase
+                .from('services')
+                .select('*')
+                .eq('region', 'Rodrigues')
+                .order('name', { ascending: true })
+
+            if (error) throw error
+            setServices(data || [])
+        } catch (error) {
+            console.error('Error loading Rodrigues services:', error)
+        } finally {
+            setLoading(false)
+        }
+    }
     return (
         <div className="min-h-screen bg-slate-50 pb-20">
             {/* Hero */}
@@ -78,9 +70,23 @@ export default function RodriguesPage() {
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                    {packages.map(pkg => (
-                        <ServiceCard key={pkg.id} {...pkg} />
-                    ))}
+                    {loading ? (
+                        [...Array(3)].map((_, i) => (
+                            <div key={i} className="animate-pulse bg-white rounded-3xl h-96 border border-slate-100" />
+                        ))
+                    ) : (
+                        services.map(service => (
+                            <ServiceCard
+                                key={service.id}
+                                title={service.name}
+                                location={service.location}
+                                price={`Rs ${service.base_price.toLocaleString()}`}
+                                image={service.image_url || (service.service_type === 'hotel' ? "/hero-hotel.png" : "/hero-adventure.png")}
+                                link={`/${service.service_type}s/${service.id}`}
+                                tag={service.service_type.toUpperCase()}
+                            />
+                        ))
+                    )}
                 </div>
             </div>
         </div>

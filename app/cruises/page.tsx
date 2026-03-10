@@ -1,53 +1,46 @@
 'use client'
 
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import Image from 'next/image'
 import ServiceCard from '@/components/ServiceCard'
+import { createClient } from '@/lib/supabase'
 
-const cruises = [
-    {
-        id: 1,
-        title: "Mediterranean Discovery",
-        location: "Barcelona, Spain",
-        price: "Rs 55,000",
-        image: "/hero-cruise.png",
-        duration: "7 Nights",
-        link: "/cruises/mediterranean-discovery",
-        tag: "Costa Cruises"
-    },
-    {
-        id: 2,
-        title: "Caribbean Dream",
-        location: "Miami, USA",
-        price: "Rs 75,000",
-        image: "/hero-cruise.png", // utilizing existing asset
-        duration: "10 Nights",
-        link: "/cruises/caribbean-dream",
-        tag: "MSC Cruises"
-    },
-    {
-        id: 3,
-        title: "Indian Ocean Gems",
-        location: "Port Louis, Mauritius",
-        price: "Rs 35,000",
-        image: "/hero-cruise.png",
-        duration: "5 Nights",
-        link: "/cruises/indian-ocean",
-        tag: "Local Favorite"
-    },
-    {
-        id: 4,
-        title: "Northern Europe Explorer",
-        location: "Copenhagen, Denmark",
-        price: "Rs 82,000",
-        image: "/hero-cruise.png",
-        duration: "12 Nights",
-        link: "/cruises/northern-europe",
-        tag: "Premium"
-    }
-]
+const supabase = createClient()
+
+type Cruise = {
+    id: string
+    name: string
+    location: string
+    base_price: number
+    image_url: string
+    duration_days: number
+    service_type: string
+}
 
 export default function CruisesPage() {
+    const [cruises, setCruises] = useState<Cruise[]>([])
+    const [loading, setLoading] = useState(true)
+
+    useEffect(() => {
+        loadCruises()
+    }, [])
+
+    async function loadCruises() {
+        try {
+            const { data, error } = await supabase
+                .from('services')
+                .select('*')
+                .eq('service_type', 'cruise')
+                .order('name', { ascending: true })
+
+            if (error) throw error
+            setCruises(data || [])
+        } catch (error) {
+            console.error('Error loading cruises:', error)
+        } finally {
+            setLoading(false)
+        }
+    }
     return (
         <div className="min-h-screen bg-slate-50 pb-20">
             {/* Hero */}
@@ -81,9 +74,24 @@ export default function CruisesPage() {
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                    {cruises.map(cruise => (
-                        <ServiceCard key={cruise.id} {...cruise} />
-                    ))}
+                    {loading ? (
+                        [...Array(3)].map((_, i) => (
+                            <div key={i} className="animate-pulse bg-white rounded-3xl h-96 border border-slate-100" />
+                        ))
+                    ) : (
+                        cruises.map(cruise => (
+                            <ServiceCard
+                                key={cruise.id}
+                                title={cruise.name}
+                                location={cruise.location}
+                                price={`Rs ${cruise.base_price.toLocaleString()}`}
+                                image={cruise.image_url || "/hero-cruise.png"}
+                                duration={`${cruise.duration_days} Days`}
+                                link={`/cruises/${cruise.id}`}
+                                tag="CRUISE"
+                            />
+                        ))
+                    )}
                 </div>
             </div>
         </div>

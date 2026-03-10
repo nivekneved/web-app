@@ -1,53 +1,47 @@
 'use client'
 
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import Image from 'next/image'
 import ServiceCard from '@/components/ServiceCard'
+import { createClient } from '@/lib/supabase'
 
-const hotels = [
-    {
-        id: 1,
-        title: "Lux* Grand Baie",
-        location: "Grand Baie, Mauritius",
-        price: "Rs 15,000 / night",
-        image: "/hero-hotel.png",
-        duration: "5 Stars",
-        link: "/hotels/lux-grand-baie",
-        tag: "Luxury"
-    },
-    {
-        id: 2,
-        title: "Constance Belle Mare Plage",
-        location: "Belle Mare, Mauritius",
-        price: "Rs 12,500 / night",
-        image: "/hero-hotel.png",
-        duration: "5 Stars",
-        link: "/hotels/constance-belle-mare",
-        tag: "Golf Resort"
-    },
-    {
-        id: 3,
-        title: "Heritage Le Telfair",
-        location: "Bel Ombre, Mauritius",
-        price: "Rs 14,000 / night",
-        image: "/hero-hotel.png",
-        duration: "5 Stars",
-        link: "/hotels/heritage-le-telfair",
-        tag: "Wellness"
-    },
-    {
-        id: 4,
-        title: "Trou aux Biches Beachcomber",
-        location: "Trou aux Biches, Mauritius",
-        price: "Rs 16,000 / night",
-        image: "/hero-hotel.png",
-        duration: "5 Stars",
-        link: "/hotels/trou-aux-biches",
-        tag: "Honeymoon"
-    }
-]
+const supabase = createClient()
+
+type Hotel = {
+    id: string
+    name: string
+    location: string
+    base_price: number
+    image_url: string
+    rating: number
+    service_type: string
+}
 
 export default function HotelsPage() {
+    const [hotels, setHotels] = useState<Hotel[]>([])
+    const [loading, setLoading] = useState(true)
+
+    useEffect(() => {
+        loadHotels()
+    }, [])
+
+    async function loadHotels() {
+        try {
+            const { data, error } = await supabase
+                .from('services')
+                .select('*')
+                .eq('service_type', 'hotel')
+                .neq('region', 'Rodrigues') // Keep main page for Mauritius/International
+                .order('name', { ascending: true })
+
+            if (error) throw error
+            setHotels(data || [])
+        } catch (error) {
+            console.error('Error loading hotels:', error)
+        } finally {
+            setLoading(false)
+        }
+    }
     return (
         <div className="min-h-screen bg-slate-50 pb-20">
             {/* Hero */}
@@ -81,9 +75,24 @@ export default function HotelsPage() {
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                    {hotels.map(hotel => (
-                        <ServiceCard key={hotel.id} {...hotel} />
-                    ))}
+                    {loading ? (
+                        [...Array(3)].map((_, i) => (
+                            <div key={i} className="animate-pulse bg-white rounded-3xl h-96 border border-slate-100" />
+                        ))
+                    ) : (
+                        hotels.map(hotel => (
+                            <ServiceCard
+                                key={hotel.id}
+                                title={hotel.name}
+                                location={hotel.location}
+                                price={`Rs ${hotel.base_price.toLocaleString()} / night`}
+                                image={hotel.image_url || "/hero-hotel.png"}
+                                duration={`${hotel.rating} Stars`}
+                                link={`/hotels/${hotel.id}`}
+                                tag={hotel.service_type.toUpperCase()}
+                            />
+                        ))
+                    )}
                 </div>
             </div>
         </div>
