@@ -1,147 +1,189 @@
 'use client'
 
 import Image from 'next/image'
-import { Globe, Users, Trophy, Heart, Instagram, Facebook, Linkedin } from 'lucide-react'
+import { Globe, Trophy, MapPin, Clock, ShieldCheck, Star } from 'lucide-react'
 import { motion } from 'framer-motion'
 
 export default function AboutPage() {
     return (
         <div className="min-h-screen bg-white">
             {/* Hero Section */}
-            <section className="relative h-[500px] flex items-center overflow-hidden">
+            <section className="relative h-[600px] flex items-center overflow-hidden">
                 <Image
-                    src="/hero-hotel.png"
-                    alt="About Travel Lounge"
+                    src="/hero-flight.png"
+                    alt="Travel Lounge Mauritius"
                     fill
                     className="object-cover"
                     priority
                 />
-                <div className="absolute inset-0 bg-slate-950/60" />
+                <div className="absolute inset-0 bg-gradient-to-r from-slate-950/90 via-slate-950/60 to-transparent" />
 
-                <div className="container mx-auto px-6 relative z-10 text-center">
+                <div className="container mx-auto px-6 relative z-10">
                     <motion.div
-                        initial={{ opacity: 0, y: 30 }}
-                        animate={{ opacity: 1, y: 0 }}
+                        initial={{ opacity: 0, x: -50 }}
+                        animate={{ opacity: 1, x: 0 }}
                         transition={{ duration: 0.8 }}
+                        className="max-w-3xl"
                     >
-                        <h1 className="text-5xl md:text-7xl font-black text-white mb-6">
-                            Our Journey, <br />Your <span className="text-red-600">Adventure</span>
+                        <span className="inline-block py-1 px-4 rounded-full bg-red-600 text-white text-sm font-bold mb-6 tracking-widest uppercase">
+                            IATA Accredited Agency
+                        </span>
+                        <h1 className="text-6xl md:text-8xl font-black text-white mb-8 leading-none">
+                            Your World, <br />Our <span className="text-red-600">Expertise</span>
                         </h1>
-                        <p className="text-xl text-slate-200 max-w-2xl mx-auto">
-                            Crafting unforgettable travel experiences with passion, expertise, and a commitment to excellence since 2008.
+                        <p className="text-xl text-slate-200 leading-relaxed font-medium">
+                            Since 2014, Travel Lounge has been the premier destination for discerning travelers in Mauritius. We specialize in corporate travel and tailor-made leisure experiences worldwide.
                         </p>
                     </motion.div>
                 </div>
             </section>
 
-            {/* Story Section */}
-            <section className="py-24">
+            {/* Core Identity */}
+            <section className="py-32 relative overflow-hidden">
                 <div className="container mx-auto px-6">
-                    <div className="flex flex-col lg:flex-row gap-16 items-center">
+                    <div className="flex flex-col lg:flex-row gap-20 items-center">
                         <div className="lg:w-1/2">
-                            <span className="text-sm font-bold text-red-600 uppercase tracking-widest mb-4 inline-block">Since 2008</span>
-                            <h2 className="text-4xl font-black text-slate-900 mb-8 leading-tight">We Are More Than Just A <span className="text-red-600">Travel Agency</span></h2>
-                            <div className="space-y-6 text-slate-500 text-lg leading-relaxed">
-                                <p>
-                                    Travel Lounge was born from a simple idea: that everyone deserves to experience the world&apos;s most beautiful destinations without the stress of planning. Based in the heart of Mauritius, we&apos;ve grown from a small local team to a premier IATA accredited agency with a global reach.
+                            <h2 className="text-sm font-bold text-red-600 uppercase tracking-[0.4em] mb-6">About Travel Lounge</h2>
+                            <h3 className="text-5xl font-black text-slate-900 mb-10 leading-tight">
+                                A One-Stop <br /><span className="text-red-600">Travel Solutions</span> Provider
+                            </h3>
+                            <div className="space-y-8 text-slate-600 text-lg">
+                                <p className="leading-relaxed">
+                                    Located in the heart of Port Louis, Travel Lounge Ltd is an IATA accredited travel agency specializing in corporate business and personalized holiday leisure travel deals.
                                 </p>
-                                <p>
-                                    Our expertise spans across luxury cruises, international flights, and tailor-made holidays. We don&apos;t just book trips; we curate moments that last a lifetime. Whether it&apos;s a honeymoon in the Maldives, a safari in Kenya, or a corporate retreat in Singapore, we handle every detail with precision.
+                                <p className="leading-relaxed italic border-l-4 border-red-600 pl-6 py-2 bg-slate-50 rounded-r-2xl">
+                                    &quot;Our mission is to provide dedicated support and personal advice throughout your journey, always putting customer delight at the forefront.&quot;
+                                </p>
+                                <p className="leading-relaxed">
+                                    Whether it&apos;s a complex corporate itinerary or a dream island getaway, our experts ensure a hassle-free experience. Your peace of mind is our primary business.
                                 </p>
                             </div>
                         </div>
-                        <div className="lg:w-1/2 grid grid-cols-2 gap-4">
-                            <div className="space-y-4">
-                                <div className="h-64 relative rounded-3xl overflow-hidden shadow-xl">
-                                    <Image src="/hero-flight.png" alt="Travel" fill className="object-cover" />
+
+                        <div className="lg:w-1/2 relative">
+                            <div className="grid grid-cols-2 gap-6 relative z-10">
+                                <div className="space-y-6 pt-12">
+                                    <div className="bg-slate-900 p-8 rounded-[2.5rem] text-white shadow-2xl">
+                                        <div className="text-5xl font-black text-red-600 mb-2">10+</div>
+                                        <div className="text-sm font-bold text-slate-400 uppercase tracking-widest">Years of Excellence</div>
+                                    </div>
+                                    <div className="h-64 relative rounded-[2.5rem] overflow-hidden shadow-2xl border-4 border-white">
+                                        <Image src="/hero-adventure.png" alt="Travel" fill className="object-cover" />
+                                    </div>
                                 </div>
-                                <div className="h-48 bg-red-600 rounded-3xl p-8 text-white flex flex-col justify-end">
-                                    <div className="text-4xl font-black mb-1">15+</div>
-                                    <div className="text-sm font-bold uppercase tracking-wider">Years Experience</div>
+                                <div className="space-y-6">
+                                    <div className="h-80 relative rounded-[2.5rem] overflow-hidden shadow-2xl border-4 border-white">
+                                        <Image src="/hero-hotel.png" alt="Travel" fill className="object-cover" />
+                                    </div>
+                                    <div className="bg-red-600 p-8 rounded-[2.5rem] text-white shadow-2xl transform hover:scale-105 transition-transform">
+                                        <div className="text-5xl font-black mb-2">IATA</div>
+                                        <div className="text-sm font-bold text-red-100 uppercase tracking-widest">Globally Certified</div>
+                                    </div>
                                 </div>
                             </div>
-                            <div className="pt-12 space-y-4">
-                                <div className="h-48 bg-slate-900 rounded-3xl p-8 text-white flex flex-col justify-end">
-                                    <div className="text-4xl font-black mb-1">50k+</div>
-                                    <div className="text-sm font-bold uppercase tracking-wider">Happy Travelers</div>
-                                </div>
-                                <div className="h-64 relative rounded-3xl overflow-hidden shadow-xl">
-                                    <Image src="/hero-cruise.png" alt="Travel" fill className="object-cover" />
-                                </div>
-                            </div>
+                            <div className="absolute -top-10 -right-10 w-64 h-64 bg-slate-100 rounded-full mix-blend-multiply filter blur-3xl opacity-70 animate-blob" />
+                            <div className="absolute -bottom-10 -left-10 w-64 h-64 bg-red-100 rounded-full mix-blend-multiply filter blur-3xl opacity-70 animate-blob animation-delay-2000" />
                         </div>
                     </div>
                 </div>
             </section>
 
-            {/* Values */}
-            <section className="py-24 bg-slate-50">
-                <div className="container mx-auto px-6 text-center">
-                    <h2 className="text-sm font-bold text-red-600 uppercase tracking-[0.3em] mb-4">Our Values</h2>
-                    <p className="text-4xl font-black text-slate-900 mb-16">The Principles That Guide Us</p>
+            {/* Mission & Vision Cards */}
+            <section className="py-32 bg-slate-50">
+                <div className="container mx-auto px-6">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
+                        <div className="bg-white p-12 rounded-[3.5rem] border border-slate-100 shadow-xl group hover:bg-slate-900 transition-all duration-500">
+                            <div className="w-16 h-16 bg-red-600 text-white rounded-2xl flex items-center justify-center mb-10 transform group-hover:rotate-12 transition-transform">
+                                <Globe size={32} />
+                            </div>
+                            <h3 className="text-3xl font-black text-slate-900 mb-6 group-hover:text-white transition-colors">Our Vision</h3>
+                            <p className="text-slate-500 text-lg leading-relaxed group-hover:text-slate-400 transition-colors">
+                                To be a one-stop travel solutions provider which aims to continuously grow across borders, in products and services, and always putting the customer&apos;s delight at first place.
+                            </p>
+                        </div>
+                        <div className="bg-white p-12 rounded-[3.5rem] border border-slate-100 shadow-xl group hover:bg-red-600 transition-all duration-500">
+                            <div className="w-16 h-16 bg-slate-900 text-white rounded-2xl flex items-center justify-center mb-10 transform group-hover:-rotate-12 transition-transform">
+                                <ShieldCheck size={32} />
+                            </div>
+                            <h3 className="text-3xl font-black text-slate-900 mb-6 group-hover:text-white transition-colors">Our Mission</h3>
+                            <p className="text-slate-500 text-lg leading-relaxed group-hover:text-red-50 transition-colors">
+                                Our dedicated corporate team members focus on personal advice, support and communication throughout your trip abroad and also provide related solutions to individual customers.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </section>
 
-                    <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+            {/* Why Choose Us */}
+            <section className="py-32 bg-white">
+                <div className="container mx-auto px-6 text-center">
+                    <h2 className="text-sm font-bold text-red-600 uppercase tracking-[0.4em] mb-4">The Selection</h2>
+                    <p className="text-5xl font-black text-slate-900 mb-20 leading-tight">Why Choose <span className="text-red-600">Travel Lounge</span>?</p>
+
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-16">
                         {[
-                            { icon: Globe, title: "Global Vision", desc: "Connecting cultures and people through seamless travel." },
-                            { icon: Heart, title: "Passion First", desc: "We love what we do, and it shows in every itinerary we craft." },
-                            { icon: Trophy, title: "Excellence", desc: "Setting the gold standard in premium travel services." },
-                            { icon: Users, title: "Commited Team", desc: "Expert agents dedicated to your journey, 24/7." }
+                            { icon: Star, title: "Tailor-made Specialists", desc: "Customize your trips including accommodation, transport, activities, or places of interest of your choice." },
+                            { icon: Trophy, title: "Guaranteed Quality", desc: "A dedicated team to secure the best hotel rates in most popular destinations. Book with confidence." },
+                            { icon: Clock, title: "24/7 Expert Support", desc: "Our agents are genuine travel specialists. Enjoy peace of mind while we assist you on your planning." }
                         ].map((v, i) => (
-                            <div key={i} className="bg-white p-10 rounded-[3rem] shadow-xl shadow-slate-200/50 hover:shadow-2xl hover:shadow-slate-300/50 transition-all border border-slate-100">
-                                <div className="w-16 h-16 bg-red-50 text-red-600 rounded-2xl flex items-center justify-center mx-auto mb-8">
-                                    <v.icon size={32} />
+                            <div key={i} className="flex flex-col items-center">
+                                <div className="w-20 h-20 bg-slate-50 rounded-3xl flex items-center justify-center text-red-600 mb-8 border border-slate-100 shadow-sm">
+                                    <v.icon size={40} />
                                 </div>
-                                <h3 className="text-xl font-black text-slate-900 mb-4">{v.title}</h3>
-                                <p className="text-slate-500 text-sm leading-relaxed">{v.desc}</p>
+                                <h4 className="text-2xl font-black text-slate-900 mb-4">{v.title}</h4>
+                                <p className="text-slate-500 leading-relaxed max-w-xs">{v.desc}</p>
                             </div>
                         ))}
                     </div>
                 </div>
             </section>
 
-            {/* Team Section Placeholder */}
-            <section className="py-24 container mx-auto px-6 text-center">
-                <h2 className="text-4xl font-black text-slate-900 mb-6">World-Class Expertise</h2>
-                <p className="text-lg text-slate-500 mb-16 max-w-2xl mx-auto">
-                    Our team of IATA-certified travel specialists bring decades of combined experience to ensure your trip is perfect.
-                </p>
-
-                <div className="grid grid-cols-2 lg:grid-cols-4 gap-8">
-                    {[1, 2, 3, 4].map((i) => (
-                        <div key={i} className="group">
-                            <div className="aspect-[4/5] bg-slate-100 rounded-[2.5rem] mb-6 overflow-hidden relative grayscale group-hover:grayscale-0 transition-all">
-                                <div className="absolute inset-0 flex items-center justify-center">
-                                    <span className="text-slate-300 font-black text-6xl">TL</span>
+            {/* Locations */}
+            <section className="py-32 bg-slate-900 text-white">
+                <div className="container mx-auto px-6">
+                    <div className="flex flex-col lg:flex-row gap-20 items-end">
+                        <div className="lg:w-1/2">
+                            <h2 className="text-sm font-bold text-red-600 uppercase tracking-[0.4em] mb-6">Visit Us</h2>
+                            <h3 className="text-4xl font-black mb-12">Our Physical Offices <br />in Mauritius</h3>
+                            <div className="space-y-12">
+                                <div className="flex gap-8 group">
+                                    <div className="w-14 h-14 bg-slate-800 rounded-2xl flex-shrink-0 flex items-center justify-center text-red-600 group-hover:bg-red-600 group-hover:text-white transition-all">
+                                        <MapPin size={28} />
+                                    </div>
+                                    <div>
+                                        <h4 className="text-xl font-black mb-2">Port Louis Headquarters</h4>
+                                        <p className="text-slate-400">Ground Floor Newton Tower, Corner Sir William Newton and Remy Ollier Street, Port Louis.</p>
+                                    </div>
+                                </div>
+                                <div className="flex gap-8 group">
+                                    <div className="w-14 h-14 bg-slate-800 rounded-2xl flex-shrink-0 flex items-center justify-center text-red-600 group-hover:bg-red-600 group-hover:text-white transition-all">
+                                        <MapPin size={28} />
+                                    </div>
+                                    <div>
+                                        <h4 className="text-xl font-black mb-2">Ebene Cybercity</h4>
+                                        <p className="text-slate-400">Ground Floor, 57 Ebene Mews, Rue Du Savoir, Ebene Cybercity.</p>
+                                    </div>
                                 </div>
                             </div>
-                            <h3 className="text-xl font-black text-slate-900">Travel Lounge Expert</h3>
-                            <p className="text-red-600 font-bold text-sm uppercase tracking-widest mt-1">Travel Consultant</p>
                         </div>
-                    ))}
-                </div>
-            </section>
-
-            {/* Social CTA */}
-            <section className="py-24 bg-slate-900 text-white overflow-hidden relative">
-                <div className="container mx-auto px-6 flex flex-col lg:flex-row items-center justify-between relative z-10 gap-12">
-                    <div className="text-center lg:text-left">
-                        <h2 className="text-4xl md:text-5xl font-black mb-6">Stay Connected</h2>
-                        <p className="text-xl text-slate-400">Join our community of travelers and get the latest deals first.</p>
+                        <div className="lg:w-1/2 bg-slate-800 p-12 rounded-[3.5rem] border border-slate-700">
+                            <h4 className="text-2xl font-black mb-6">Opening Hours</h4>
+                            <div className="space-y-4">
+                                <div className="flex justify-between items-center pb-4 border-b border-slate-700">
+                                    <span className="text-slate-400">Monday — Friday</span>
+                                    <span className="font-bold">08:30 – 16:45</span>
+                                </div>
+                                <div className="flex justify-between items-center pb-4 border-b border-slate-700">
+                                    <span className="text-slate-400">Saturday</span>
+                                    <span className="font-bold">08:30 – 12:30</span>
+                                </div>
+                                <div className="flex justify-between items-center pt-2">
+                                    <span className="text-slate-400">Sunday & Holidays</span>
+                                    <span className="text-red-500 font-bold uppercase tracking-widest text-sm">Closed</span>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                    <div className="flex gap-4">
-                        <a href="#" className="w-16 h-16 bg-slate-800 rounded-2xl flex items-center justify-center hover:bg-red-600 transition-all transform hover:scale-110">
-                            <Facebook size={24} />
-                        </a>
-                        <a href="#" className="w-16 h-16 bg-slate-800 rounded-2xl flex items-center justify-center hover:bg-red-600 transition-all transform hover:scale-110">
-                            <Instagram size={24} />
-                        </a>
-                        <a href="#" className="w-16 h-16 bg-slate-800 rounded-2xl flex items-center justify-center hover:bg-red-600 transition-all transform hover:scale-110">
-                            <Linkedin size={24} />
-                        </a>
-                    </div>
-                </div>
-                <div className="absolute bottom-0 right-0 p-12 opacity-5">
-                    <Users size={300} />
                 </div>
             </section>
         </div>
