@@ -3,8 +3,9 @@
 import { useSearchParams } from 'next/navigation'
 import Link from 'next/link'
 import { CheckCircle, Home, User } from 'lucide-react'
+import { Suspense } from 'react'
 
-export default function BookingConfirmationPage() {
+function BookingConfirmationContent() {
     const searchParams = useSearchParams()
     const bookingId = searchParams.get('id') || 'XXXXXXXX'
     const serviceName = searchParams.get('service') || 'Service'
@@ -48,7 +49,7 @@ export default function BookingConfirmationPage() {
                     {/* Info Box */}
                     <div className="bg-blue-50 border border-blue-100 rounded-2xl p-6 mb-8 text-left">
                         <p className="text-sm text-blue-900">
-                            <strong>What's Next?</strong><br />
+                            <strong>What&apos;s Next?</strong><br />
                             A confirmation email has been sent to your registered email address with complete booking details and payment instructions. Our team will contact you shortly to finalize the arrangements.
                         </p>
                     </div>
@@ -78,5 +79,17 @@ export default function BookingConfirmationPage() {
                 </div>
             </div>
         </div>
+    )
+}
+
+export default function BookingConfirmationPage() {
+    return (
+        <Suspense fallback={
+            <div className="min-h-screen bg-slate-50 flex items-center justify-center">
+                <div className="animate-spin rounded-full h-12 w-12 border-4 border-red-600 border-t-transparent"></div>
+            </div>
+        }>
+            <BookingConfirmationContent />
+        </Suspense>
     )
 }
