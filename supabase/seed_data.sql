@@ -116,7 +116,12 @@ END $$;
 INSERT INTO services (name, description, location, region, base_price, rating, service_type, duration_days, amenities) VALUES
 ('Mediterranean Discovery', 'Explore the highlights of the Mediterranean coast.', 'Italy & Greece', 'Europe', 85000, 4.9, 'cruise', 7, ARRAY['Full Board', 'Entertainment', 'Excursions']),
 ('Caribbean Dream', 'Tropical bliss across the Caribbean islands.', 'Miami', 'Caribbean', 92000, 4.8, 'cruise', 10, ARRAY['Luxury Cabin', 'Shows', 'Gym']),
-('Indian Ocean Gems', 'Discover the magic of the Indian Ocean.', 'Port Louis', 'Africa', 55000, 4.7, 'cruise', 5, ARRAY['Local Cuisine', 'Snorkeling', 'Island Hopping']);
+('Indian Ocean Gems', 'Discover the magic of the Indian Ocean.', 'Port Louis', 'Africa', 55000, 4.7, 'cruise', 5, ARRAY['Local Cuisine', 'Snorkeling', 'Island Hopping']),
+('Red Sea & Saudi Arabia', 'Explore the mystical shores of the Red Sea.', 'Jeddah', 'Middle East', 45000, 4.6, 'cruise', 7, ARRAY['Cultural Tours', 'Diving', 'Spa']),
+('Asia Discovery', 'A journey through the vibrant cities of East Asia.', 'Singapore & Tokyo', 'Asia', 115000, 4.9, 'cruise', 12, ARRAY['City Tours', 'Luxury Dining', 'Wellness Center']),
+('Dubai & Emirates', 'Modern luxury meets traditional Arabian charm.', 'Dubai', 'Middle East', 38000, 4.7, 'cruise', 7, ARRAY['Shopping', 'Desert Safari', 'Fine Dining']),
+('Alaska Glaciers', 'Experience the raw beauty of the Alaskan wilderness.', 'Seattle', 'North America', 125000, 4.8, 'cruise', 10, ARRAY['Wildlife Watching', 'Photography', 'Lectures']),
+('South Pacific Paradise', 'Visit the remote islands of the South Pacific.', 'Tahiti', 'Pacific', 155000, 5.0, 'cruise', 14, ARRAY['Private Island', 'Water Sports', 'All-Inclusive']);
 
 -- 5. Activities
 INSERT INTO services (name, description, location, region, base_price, rating, service_type, duration_hours, amenities) VALUES
