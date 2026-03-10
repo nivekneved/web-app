@@ -59,7 +59,7 @@ export default function Navbar() {
 
             {/* Main Navigation */}
             <nav
-                className={`sticky top-0 z-50 bg-white dark:bg-slate-900 transition-all duration-300 ${isScrolled ? 'shadow-lg' : 'border-b border-slate-100 dark:border-slate-800'
+                className={`sticky top-0 z-50 bg-white transition-all duration-300 ${isScrolled ? 'shadow-lg' : 'border-b border-slate-100'
                     }`}
             >
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -77,45 +77,45 @@ export default function Navbar() {
 
                         {/* Desktop Navigation */}
                         <div className="hidden lg:flex items-center gap-6">
-                            <Link href="/cruises" className="text-slate-700 dark:text-slate-300 hover:text-red-600 font-bold transition-colors">
+                            <Link href="/cruises" className="text-slate-900 hover:text-red-600 font-bold transition-colors">
                                 Cruises
                             </Link>
-
-                            <Link href="/flights" className="text-slate-700 dark:text-slate-300 hover:text-red-600 font-bold transition-colors">
+                            ...
+                            <Link href="/flights" className="text-slate-900 hover:text-red-600 font-bold transition-colors">
                                 Flights
                             </Link>
 
                             <div className="relative group">
-                                <Link href="/hotels" className="flex items-center gap-1 text-slate-700 dark:text-slate-300 hover:text-red-600 font-bold transition-colors">
+                                <Link href="/hotels" className="flex items-center gap-1 text-slate-900 hover:text-red-600 font-bold transition-colors">
                                     Hotels
                                     <ChevronDown size={14} strokeWidth={3} />
                                 </Link>
-                                <div className="absolute top-full left-0 mt-2 w-56 bg-white dark:bg-slate-800 rounded-xl shadow-2xl border border-slate-100 dark:border-slate-700 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all transform translate-y-2 group-hover:translate-y-0">
-                                    <Link href="/hotels" className="block px-4 py-3 hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors first:rounded-t-xl text-slate-700 dark:text-slate-200 font-medium">
+                                <div className="absolute top-full left-0 mt-2 w-56 bg-white rounded-xl shadow-2xl border border-slate-100 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all transform translate-y-2 group-hover:translate-y-0">
+                                    <Link href="/hotels" className="block px-4 py-3 hover:bg-slate-50 transition-colors first:rounded-t-xl text-slate-900 font-medium">
                                         All Hotels
                                     </Link>
-                                    <Link href="/hotels/mauritius" className="block px-4 py-3 hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors text-slate-700 dark:text-slate-200 font-medium">
+                                    <Link href="/hotels/mauritius" className="block px-4 py-3 hover:bg-slate-50 transition-colors text-slate-900 font-medium">
                                         Mauritius
                                     </Link>
-                                    <Link href="/hotels/international" className="block px-4 py-3 hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors last:rounded-b-xl text-slate-700 dark:text-slate-200 font-medium">
+                                    <Link href="/hotels/international" className="block px-4 py-3 hover:bg-slate-50 transition-colors last:rounded-b-xl text-slate-900 font-medium">
                                         International
                                     </Link>
                                 </div>
                             </div>
 
-                            <Link href="/rodrigues" className="text-slate-700 dark:text-slate-300 hover:text-red-600 font-bold transition-colors">
+                            <Link href="/rodrigues" className="text-slate-900 hover:text-red-600 font-bold transition-colors">
                                 Rodrigues
                             </Link>
 
-                            <Link href="/tours" className="text-slate-700 dark:text-slate-300 hover:text-red-600 font-bold transition-colors">
+                            <Link href="/tours" className="text-slate-900 hover:text-red-600 font-bold transition-colors">
                                 Group Tours
                             </Link>
 
-                            <Link href="/packages" className="text-slate-700 dark:text-slate-300 hover:text-red-600 font-bold transition-colors">
+                            <Link href="/packages" className="text-slate-900 hover:text-red-600 font-bold transition-colors">
                                 Day Packages
                             </Link>
 
-                            <Link href="/contact" className="text-slate-700 dark:text-slate-300 hover:text-red-600 font-bold transition-colors">
+                            <Link href="/contact" className="text-slate-900 hover:text-red-600 font-bold transition-colors">
                                 Contact
                             </Link>
                         </div>
@@ -158,12 +158,12 @@ export default function Navbar() {
 
                 {/* Mobile Menu */}
                 {isOpen && (
-                    <div className="lg:hidden bg-white dark:bg-slate-800 border-t border-slate-100 dark:border-slate-700">
+                    <div className="lg:hidden bg-white border-t border-slate-100">
                         <div className="px-4 py-4 space-y-2">
                             <Link
                                 href="/cruises"
                                 onClick={() => setIsOpen(false)}
-                                className="flex items-center gap-3 px-4 py-3 hover:bg-slate-50 dark:hover:bg-slate-700 rounded-xl transition-colors text-slate-700 dark:text-slate-300"
+                                className="flex items-center gap-3 px-4 py-3 hover:bg-slate-50 rounded-xl transition-colors text-slate-900"
                             >
                                 <Ship size={18} />
                                 Cruises
@@ -171,7 +171,7 @@ export default function Navbar() {
                             <Link
                                 href="/flights"
                                 onClick={() => setIsOpen(false)}
-                                className="flex items-center gap-3 px-4 py-3 hover:bg-slate-50 dark:hover:bg-slate-700 rounded-xl transition-colors text-slate-700 dark:text-slate-300"
+                                className="flex items-center gap-3 px-4 py-3 hover:bg-slate-50 rounded-xl transition-colors text-slate-900"
                             >
                                 <Plane size={18} />
                                 Flights
@@ -179,7 +179,7 @@ export default function Navbar() {
                             <Link
                                 href="/tours"
                                 onClick={() => setIsOpen(false)}
-                                className="flex items-center gap-3 px-4 py-3 hover:bg-slate-50 dark:hover:bg-slate-700 rounded-xl transition-colors text-slate-700 dark:text-slate-300"
+                                className="flex items-center gap-3 px-4 py-3 hover:bg-slate-50 rounded-xl transition-colors text-slate-900"
                             >
                                 <MapPin size={18} />
                                 Group Tours
@@ -187,7 +187,7 @@ export default function Navbar() {
                             <Link
                                 href="/hotels"
                                 onClick={() => setIsOpen(false)}
-                                className="flex items-center gap-3 px-4 py-3 hover:bg-slate-50 dark:hover:bg-slate-700 rounded-xl transition-colors text-slate-700 dark:text-slate-300"
+                                className="flex items-center gap-3 px-4 py-3 hover:bg-slate-50 rounded-xl transition-colors text-slate-900"
                             >
                                 <Hotel size={18} />
                                 Hotels
@@ -195,7 +195,7 @@ export default function Navbar() {
                             <Link
                                 href="/activities"
                                 onClick={() => setIsOpen(false)}
-                                className="flex items-center gap-3 px-4 py-3 hover:bg-slate-50 dark:hover:bg-slate-700 rounded-xl transition-colors text-slate-700 dark:text-slate-300"
+                                className="flex items-center gap-3 px-4 py-3 hover:bg-slate-50 rounded-xl transition-colors text-slate-900"
                             >
                                 <Activity size={18} />
                                 Activities
@@ -203,14 +203,14 @@ export default function Navbar() {
                             <Link
                                 href="/about"
                                 onClick={() => setIsOpen(false)}
-                                className="block px-4 py-3 hover:bg-slate-50 dark:hover:bg-slate-700 rounded-xl transition-colors text-slate-700 dark:text-slate-300 font-semibold"
+                                className="block px-4 py-3 hover:bg-slate-50 rounded-xl transition-colors text-slate-900 font-semibold"
                             >
                                 About
                             </Link>
                             <Link
                                 href="/contact"
                                 onClick={() => setIsOpen(false)}
-                                className="block px-4 py-3 hover:bg-slate-50 dark:hover:bg-slate-700 rounded-xl transition-colors text-slate-700 dark:text-slate-300 font-semibold"
+                                className="block px-4 py-3 hover:bg-slate-50 rounded-xl transition-colors text-slate-900 font-semibold"
                             >
                                 Contact
                             </Link>
