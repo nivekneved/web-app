@@ -111,11 +111,12 @@ export default function HomePage() {
                 />
               ) : (
                 <Image
-                  src={heroSlides[currentSlide].image_url || heroSlides[currentSlide].image}
-                  alt={heroSlides[currentSlide].title}
+                  src={heroSlides[currentSlide]?.image_url || heroSlides[currentSlide]?.image || '/hero-placeholder.png'}
+                  alt={heroSlides[currentSlide]?.title || 'Hero Slide'}
                   fill
                   className="object-cover scale-105"
                   priority
+                  unoptimized
                 />
               )}
               {/* Darker overlay for better text contrast */}
