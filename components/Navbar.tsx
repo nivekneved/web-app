@@ -2,6 +2,7 @@
 
 import Link from 'next/link'
 import { useState, useEffect } from 'react'
+import Image from 'next/image'
 import { Menu, X, Hotel, Ship, MapPin, Plane, Activity, Heart, Moon, Sun, Phone, Mail, Facebook, Instagram, Linkedin, ChevronDown } from 'lucide-react'
 import { useWishlist } from '@/contexts/WishlistContext'
 import { useTheme } from '@/contexts/ThemeContext'
@@ -23,16 +24,16 @@ export default function Navbar() {
     return (
         <>
             {/* Topbar */}
-            <div className="bg-slate-900 text-white py-2 hidden md:block">
+            <div className="bg-red-600 text-white py-2 hidden md:block">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <div className="flex items-center justify-between text-sm">
                         {/* Left: Contact Info */}
                         <div className="flex items-center gap-6">
-                            <a href="tel:+2302124070" className="flex items-center gap-2 hover:text-red-500 transition-colors">
+                            <a href="tel:+2302124070" className="flex items-center gap-2 hover:bg-white/10 p-1 rounded transition-colors">
                                 <Phone size={14} />
                                 <span>(+230) 212 4070</span>
                             </a>
-                            <a href="mailto:reservation@travellounge.mu" className="flex items-center gap-2 hover:text-red-500 transition-colors">
+                            <a href="mailto:reservation@travellounge.mu" className="flex items-center gap-2 hover:bg-white/10 p-1 rounded transition-colors">
                                 <Mail size={14} />
                                 <span>reservation@travellounge.mu</span>
                             </a>
@@ -41,13 +42,13 @@ export default function Navbar() {
                         {/* Right: Social & User */}
                         <div className="flex items-center gap-4">
                             <div className="flex items-center gap-2">
-                                <a href="#" className="hover:text-red-500 transition-colors">
+                                <a href="#" className="hover:bg-white/10 p-1 rounded transition-colors">
                                     <Facebook size={16} />
                                 </a>
-                                <a href="#" className="hover:text-red-500 transition-colors">
+                                <a href="#" className="hover:bg-white/10 p-1 rounded transition-colors">
                                     <Instagram size={16} />
                                 </a>
-                                <a href="#" className="hover:text-red-500 transition-colors">
+                                <a href="#" className="hover:bg-white/10 p-1 rounded transition-colors">
                                     <Linkedin size={16} />
                                 </a>
                             </div>
@@ -65,9 +66,13 @@ export default function Navbar() {
                     <div className="flex items-center justify-between h-20">
                         {/* Logo */}
                         <Link href="/" className="flex items-center gap-3 z-50">
-                            <span className="text-2xl md:text-3xl font-black tracking-tight text-slate-900 dark:text-white">
-                                Travel<span className="text-red-600">Lounge</span>
-                            </span>
+                            <Image
+                                src="/logo.png"
+                                alt="Travel Lounge"
+                                width={160}
+                                height={40}
+                                className="h-8 md:h-10 w-auto object-contain"
+                            />
                         </Link>
 
                         {/* Desktop Navigation */}
