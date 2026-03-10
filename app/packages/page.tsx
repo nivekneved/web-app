@@ -22,15 +22,22 @@ type Package = {
 export default function PackagesPage() {
     const [packages, setPackages] = useState<Package[]>([])
     const [loading, setLoading] = useState(true)
+    const [filter, setFilter] = useState<'all' | 'sea' | 'land'>('all')
 
     useEffect(() => {
         async function loadPackages() {
             try {
-                const { data, error } = await supabase
+                setLoading(true)
+                let query = supabase
                     .from('services')
                     .select('*')
                     .eq('service_type', 'activity')
-                    .order('name', { ascending: true })
+
+                if (filter !== 'all') {
+                    query = query.eq('region', filter === 'sea' ? 'Sea' : 'Land')
+                }
+
+                const { data, error } = await query.order('name', { ascending: true })
 
                 if (error) throw error
                 setPackages(data || [])
@@ -42,7 +49,8 @@ export default function PackagesPage() {
         }
 
         loadPackages()
-    }, [])
+    }, [filter])
+
     return (
         <div className="min-h-screen bg-slate-50 pb-20">
             {/* Hero */}
@@ -69,8 +77,18 @@ export default function PackagesPage() {
                     <div className="flex flex-wrap gap-4 items-center justify-between">
                         <h2 className="text-2xl font-bold text-slate-900">Explore Mauritius</h2>
                         <div className="flex gap-2">
-                            <button className="px-6 py-2 bg-slate-100 rounded-lg font-bold text-slate-600 hover:bg-slate-200 transition-colors">Sea Activities</button>
-                            <button className="px-6 py-2 bg-slate-100 rounded-lg font-bold text-slate-600 hover:bg-slate-200 transition-colors">Land Activities</button>
+                            <button
+                                onClick={() => setFilter(filter === 'sea' ? 'all' : 'sea')}
+                                className={`px-6 py-2 rounded-lg font-bold transition-colors ${filter === 'sea' ? 'bg-red-600 text-white' : 'bg-slate-100 text-slate-600 hover:bg-slate-200'}`}
+                            >
+                                Sea Activities
+                            </button>
+                            <button
+                                onClick={() => setFilter(filter === 'land' ? 'all' : 'land')}
+                                className={`px-6 py-2 rounded-lg font-bold transition-colors ${filter === 'land' ? 'bg-red-600 text-white' : 'bg-slate-100 text-slate-600 hover:bg-slate-200'}`}
+                            >
+                                Land Activities
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -80,7 +98,7 @@ export default function PackagesPage() {
                         [...Array(3)].map((_, i) => (
                             <div key={i} className="animate-pulse bg-white rounded-3xl h-96 border border-slate-100" />
                         ))
-                    ) : (
+                    ) : packages.length > 0 ? (
                         packages.map(pkg => (
                             <ServiceCard
                                 key={pkg.id}
@@ -93,6 +111,11 @@ export default function PackagesPage() {
                                 tag={pkg.service_type.toUpperCase()}
                             />
                         ))
+                    ) : (
+                        <div className="col-span-full text-center py-20 bg-white rounded-3xl shadow-sm border border-slate-100">
+                            <p className="text-slate-500 text-lg">No activities found for this category.</p>
+                            <button onClick={() => setFilter('all')} className="mt-4 text-red-600 font-bold hover:underline">Show all activities</button>
+                        </div>
                     )}
                 </div>
             </div>

@@ -19,18 +19,21 @@ type Tour = {
 export default function ToursPage() {
     const [tours, setTours] = useState<Tour[]>([])
     const [loading, setLoading] = useState(true)
+    const [filter, setFilter] = useState<'all' | 'Asia' | 'Europe' | 'Middle East'>('all')
 
-    useEffect(() => {
-        loadTours()
-    }, [])
-
-    async function loadTours() {
+    const loadTours = React.useCallback(async () => {
         try {
-            const { data, error } = await supabase
+            setLoading(true)
+            let query = supabase
                 .from('services')
                 .select('*')
                 .eq('service_type', 'tour')
-                .order('name', { ascending: true })
+
+            if (filter !== 'all') {
+                query = query.eq('region', filter)
+            }
+
+            const { data, error } = await query.order('name', { ascending: true })
 
             if (error) throw error
             setTours(data || [])
@@ -39,7 +42,11 @@ export default function ToursPage() {
         } finally {
             setLoading(false)
         }
-    }
+    }, [filter])
+
+    useEffect(() => {
+        loadTours()
+    }, [loadTours])
     return (
         <div className="min-h-screen bg-slate-50 pb-20">
             {/* Hero */}
@@ -66,9 +73,24 @@ export default function ToursPage() {
                     <div className="flex flex-wrap gap-4 items-center justify-between">
                         <h2 className="text-2xl font-bold text-slate-900">Upcoming Departures</h2>
                         <div className="flex gap-2">
-                            <button className="px-6 py-2 bg-slate-100 rounded-lg font-bold text-slate-600 hover:bg-slate-200 transition-colors">Asia</button>
-                            <button className="px-6 py-2 bg-slate-100 rounded-lg font-bold text-slate-600 hover:bg-slate-200 transition-colors">Europe</button>
-                            <button className="px-6 py-2 bg-slate-100 rounded-lg font-bold text-slate-600 hover:bg-slate-200 transition-colors">Middle East</button>
+                            <button
+                                onClick={() => setFilter(filter === 'Asia' ? 'all' : 'Asia')}
+                                className={`px-6 py-2 rounded-lg font-bold transition-colors ${filter === 'Asia' ? 'bg-red-600 text-white' : 'bg-slate-100 text-slate-600 hover:bg-slate-200'}`}
+                            >
+                                Asia
+                            </button>
+                            <button
+                                onClick={() => setFilter(filter === 'Europe' ? 'all' : 'Europe')}
+                                className={`px-6 py-2 rounded-lg font-bold transition-colors ${filter === 'Europe' ? 'bg-red-600 text-white' : 'bg-slate-100 text-slate-600 hover:bg-slate-200'}`}
+                            >
+                                Europe
+                            </button>
+                            <button
+                                onClick={() => setFilter(filter === 'Middle East' ? 'all' : 'Middle East')}
+                                className={`px-6 py-2 rounded-lg font-bold transition-colors ${filter === 'Middle East' ? 'bg-red-600 text-white' : 'bg-slate-100 text-slate-600 hover:bg-slate-200'}`}
+                            >
+                                Middle East
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -78,7 +100,7 @@ export default function ToursPage() {
                         [...Array(3)].map((_, i) => (
                             <div key={i} className="animate-pulse bg-white rounded-3xl h-96 border border-slate-100" />
                         ))
-                    ) : (
+                    ) : tours.length > 0 ? (
                         tours.map(tour => (
                             <ServiceCard
                                 key={tour.id}
@@ -91,6 +113,11 @@ export default function ToursPage() {
                                 tag="GROUP TOUR"
                             />
                         ))
+                    ) : (
+                        <div className="col-span-full text-center py-20 bg-white rounded-3xl shadow-sm border border-slate-100">
+                            <p className="text-slate-500 text-lg">No tours found for this region.</p>
+                            <button onClick={() => setFilter('all')} className="mt-4 text-red-600 font-bold hover:underline">Show all tours</button>
+                        </div>
                     )}
                 </div>
             </div>
