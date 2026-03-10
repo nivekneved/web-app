@@ -19,7 +19,7 @@ export default function AdvancedFilters({ filters, onFilterChange, availableAmen
     const [localFilters, setLocalFilters] = React.useState(filters)
     const [isOpen, setIsOpen] = React.useState(false)
 
-    function updateFilter(key: keyof FilterOptions, value: any) {
+    function updateFilter<K extends keyof FilterOptions>(key: K, value: FilterOptions[K]) {
         const updated = { ...localFilters, [key]: value }
         setLocalFilters(updated)
     }
@@ -90,8 +90,8 @@ export default function AdvancedFilters({ filters, onFilterChange, availableAmen
                                         key={rating}
                                         onClick={() => updateFilter('rating', rating)}
                                         className={`flex-1 px-3 py-2 rounded-lg font-medium transition-all ${localFilters.rating === rating
-                                                ? 'bg-red-600 text-white'
-                                                : 'bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-600'
+                                            ? 'bg-red-600 text-white'
+                                            : 'bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-600'
                                             }`}
                                     >
                                         {rating === 0 ? 'Any' : `${rating}⭐`}
@@ -107,7 +107,7 @@ export default function AdvancedFilters({ filters, onFilterChange, availableAmen
                             </label>
                             <select
                                 value={localFilters.sortBy}
-                                onChange={(e) => updateFilter('sortBy', e.target.value)}
+                                onChange={(e) => updateFilter('sortBy', e.target.value as 'price' | 'rating' | 'popularity')}
                                 className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-700 border border-slate-200 dark:border-slate-600 rounded-xl focus:outline-none focus:ring-4 focus:ring-red-600/20 dark:text-white"
                             >
                                 <option value="popularity">Popularity</option>

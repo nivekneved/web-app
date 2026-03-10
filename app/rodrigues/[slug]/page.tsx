@@ -1,11 +1,10 @@
 'use client'
 
 import React from 'react'
-import { useParams } from 'next/navigation'
 import PackageDetail from '@/components/PackageDetail'
 
 export default function RodriguesDetailPage() {
-    const params = useParams()
+    // URL params are handled by the page's route but not used in the mock view logic
 
     const mockData = {
         title: "Tekoma Boutik Hotel",

@@ -1,9 +1,10 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { createClient } from '@/lib/supabase'
 import Link from 'next/link'
-import { Calendar, User } from 'lucide-react'
+import Image from 'next/image'
+import { createClient } from '@/lib/supabase'
+import { Calendar } from 'lucide-react'
 
 const supabase = createClient()
 
@@ -71,11 +72,12 @@ export default function NewsPage() {
                                 className="bg-white rounded-[2rem] overflow-hidden border border-slate-100 hover:border-red-600 transition-all group shadow-sm hover:shadow-xl"
                             >
                                 {post.featured_image ? (
-                                    <div className="aspect-video bg-slate-200 overflow-hidden">
-                                        <img
+                                    <div className="aspect-video bg-slate-200 overflow-hidden relative">
+                                        <Image
                                             src={post.featured_image}
                                             alt={post.title}
-                                            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                                            fill
+                                            className="object-cover group-hover:scale-105 transition-transform duration-300"
                                         />
                                     </div>
                                 ) : (

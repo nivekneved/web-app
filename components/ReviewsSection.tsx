@@ -32,27 +32,27 @@ export default function ReviewsSection({ serviceId, serviceType }: ReviewsSectio
     const [submitting, setSubmitting] = useState(false)
 
     useEffect(() => {
+        async function loadReviews() {
+            try {
+                const { data, error } = await supabase
+                    .from('reviews')
+                    .select('*')
+                    .eq('service_id', serviceId)
+                    .eq('status', 'approved')
+                    .order('created_at', { ascending: false })
+                    .limit(10)
+
+                if (error) throw error
+                setReviews(data || [])
+            } catch (error) {
+                console.error('Error loading reviews:', error)
+            } finally {
+                setLoading(false)
+            }
+        }
+
         loadReviews()
     }, [serviceId])
-
-    async function loadReviews() {
-        try {
-            const { data, error } = await supabase
-                .from('reviews')
-                .select('*')
-                .eq('service_id', serviceId)
-                .eq('status', 'approved')
-                .order('created_at', { ascending: false })
-                .limit(10)
-
-            if (error) throw error
-            setReviews(data || [])
-        } catch (error) {
-            console.error('Error loading reviews:', error)
-        } finally {
-            setLoading(false)
-        }
-    }
 
     async function handleSubmit(e: React.FormEvent) {
         e.preventDefault()
@@ -88,7 +88,7 @@ export default function ReviewsSection({ serviceId, serviceType }: ReviewsSectio
             setComment('')
             setRating(5)
             setShowForm(false)
-        } catch (error: any) {
+        } catch (error) {
             toast.error('Failed to submit review')
             console.error(error)
         } finally {

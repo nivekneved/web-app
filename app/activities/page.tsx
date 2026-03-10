@@ -2,8 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { createClient } from '@/lib/supabase'
-import Link from 'next/link'
-import { Search, MapPin, Star, DollarSign, Filter, Clock, Activity } from 'lucide-react'
+import { Search, MapPin, Star, Filter, Clock, Activity } from 'lucide-react'
 
 const supabase = createClient()
 

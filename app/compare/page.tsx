@@ -3,7 +3,8 @@
 import { useState, useEffect } from 'react'
 import { createClient } from '@/lib/supabase'
 import Link from 'next/link'
-import { X, Plus, Minus } from 'lucide-react'
+import Image from 'next/image'
+import { X, Plus } from 'lucide-react'
 
 const supabase = createClient()
 
@@ -102,11 +103,14 @@ export default function ComparePage() {
                                             </button>
                                             <div className="pt-8">
                                                 {item.image_url ? (
-                                                    <img
-                                                        src={item.image_url}
-                                                        alt={item.name}
-                                                        className="w-full h-32 object-cover rounded-xl mb-4"
-                                                    />
+                                                    <div className="relative w-full h-32 mb-4 rounded-xl overflow-hidden">
+                                                        <Image
+                                                            src={item.image_url}
+                                                            alt={item.name}
+                                                            fill
+                                                            className="object-cover"
+                                                        />
+                                                    </div>
                                                 ) : (
                                                     <div className="w-full h-32 bg-gradient-to-br from-red-500 to-slate-700 rounded-xl mb-4" />
                                                 )}

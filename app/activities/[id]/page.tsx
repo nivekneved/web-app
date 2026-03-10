@@ -218,7 +218,7 @@ export default function ActivityDetailPage() {
                 {/* Inclusions */}
                 {activity.amenities && activity.amenities.length > 0 && (
                     <div className="bg-white rounded-[2rem] p-8 border border-slate-100 shadow-sm">
-                        <h2 className="text-2xl font-black text-slate-900 mb-6">What's Included</h2>
+                        <h2 className="text-2xl font-black text-slate-900 mb-6">What&apos;s Included</h2>
                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                             {activity.amenities.map((amenity, idx) => (
                                 <div key={idx} className="flex items-center gap-3">

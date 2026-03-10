@@ -26,7 +26,7 @@ export default function LoginPage() {
         try {
             if (isLogin) {
                 // Login
-                const { data, error } = await supabase.auth.signInWithPassword({
+                const { error } = await supabase.auth.signInWithPassword({
                     email: formData.email,
                     password: formData.password,
                 })
@@ -59,8 +59,8 @@ export default function LoginPage() {
                     router.push('/dashboard')
                 }
             }
-        } catch (error: any) {
-            toast.error(error.message || 'Authentication failed')
+        } catch (error) {
+            toast.error((error as Error).message || 'Authentication failed')
         } finally {
             setLoading(false)
         }

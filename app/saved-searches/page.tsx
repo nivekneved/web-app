@@ -88,7 +88,7 @@ export default function SavedSearchesPage() {
                         <Save size={64} className="mx-auto text-slate-300 dark:text-slate-600 mb-4" />
                         <h2 className="text-2xl font-bold text-slate-900 dark:text-white mb-2">No Saved Searches</h2>
                         <p className="text-slate-600 dark:text-slate-400 mb-6">
-                            Save your search criteria to quickly find what you're looking for
+                            Save your search criteria to quickly find what you&apos;re looking for
                         </p>
                         <Link
                             href="/hotels"
@@ -121,8 +121,8 @@ export default function SavedSearchesPage() {
                                     <button
                                         onClick={() => toggleNotifications(search.id)}
                                         className={`p-2 rounded-lg transition-colors ${search.notifications
-                                                ? 'bg-red-50 text-red-600'
-                                                : 'bg-slate-100 dark:bg-slate-700 text-slate-400'
+                                            ? 'bg-red-50 text-red-600'
+                                            : 'bg-slate-100 dark:bg-slate-700 text-slate-400'
                                             }`}
                                         title={search.notifications ? 'Notifications on' : 'Notifications off'}
                                     >

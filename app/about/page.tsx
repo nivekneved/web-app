@@ -1,7 +1,7 @@
 'use client'
 
 import Image from 'next/image'
-import { Globe, Users, Trophy, Heart, CheckCircle2, ArrowRight, Instagram, Facebook, Linkedin } from 'lucide-react'
+import { Globe, Users, Trophy, Heart, Instagram, Facebook, Linkedin } from 'lucide-react'
 import { motion } from 'framer-motion'
 
 export default function AboutPage() {
@@ -43,10 +43,10 @@ export default function AboutPage() {
                             <h2 className="text-4xl font-black text-slate-900 mb-8 leading-tight">We Are More Than Just A <span className="text-red-600">Travel Agency</span></h2>
                             <div className="space-y-6 text-slate-500 text-lg leading-relaxed">
                                 <p>
-                                    Travel Lounge was born from a simple idea: that everyone deserves to experience the world's most beautiful destinations without the stress of planning. Based in the heart of Mauritius, we've grown from a small local team to a premier IATA accredited agency with a global reach.
+                                    Travel Lounge was born from a simple idea: that everyone deserves to experience the world&apos;s most beautiful destinations without the stress of planning. Based in the heart of Mauritius, we&apos;ve grown from a small local team to a premier IATA accredited agency with a global reach.
                                 </p>
                                 <p>
-                                    Our expertise spans across luxury cruises, international flights, and tailor-made holidays. We don't just book trips; we curate moments that last a lifetime. Whether it's a honeymoon in the Maldives, a safari in Kenya, or a corporate retreat in Singapore, we handle every detail with precision.
+                                    Our expertise spans across luxury cruises, international flights, and tailor-made holidays. We don&apos;t just book trips; we curate moments that last a lifetime. Whether it&apos;s a honeymoon in the Maldives, a safari in Kenya, or a corporate retreat in Singapore, we handle every detail with precision.
                                 </p>
                             </div>
                         </div>

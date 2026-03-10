@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react'
 import { useAuth } from '@/contexts/AuthContext'
 import { createClient } from '@/lib/supabase'
 import { useRouter } from 'next/navigation'
+import Link from 'next/link'
 import { User, Mail, Calendar, MapPin, LogOut, BookOpen } from 'lucide-react'
 import { toast } from 'sonner'
 
@@ -36,6 +37,38 @@ export default function DashboardPage() {
     const [loading, setLoading] = useState(true)
 
     useEffect(() => {
+        async function loadProfile() {
+            try {
+                const { data, error } = await supabase
+                    .from('profiles')
+                    .select('*')
+                    .eq('id', user?.id)
+                    .single()
+
+                if (error) throw error
+                setProfile(data)
+            } catch (error) {
+                console.error('Error loading profile:', error)
+            }
+        }
+
+        async function loadBookings() {
+            try {
+                const { data, error } = await supabase
+                    .from('bookings')
+                    .select('*')
+                    .eq('customer_id', user?.id)
+                    .order('created_at', { ascending: false })
+
+                if (error) throw error
+                setBookings(data || [])
+            } catch (error) {
+                console.error('Error loading bookings:', error)
+            } finally {
+                setLoading(false)
+            }
+        }
+
         if (!authLoading && !user) {
             router.push('/login')
         } else if (user) {
@@ -43,38 +76,6 @@ export default function DashboardPage() {
             loadBookings()
         }
     }, [user, authLoading, router])
-
-    async function loadProfile() {
-        try {
-            const { data, error } = await supabase
-                .from('profiles')
-                .select('*')
-                .eq('id', user?.id)
-                .single()
-
-            if (error) throw error
-            setProfile(data)
-        } catch (error) {
-            console.error('Error loading profile:', error)
-        }
-    }
-
-    async function loadBookings() {
-        try {
-            const { data, error } = await supabase
-                .from('bookings')
-                .select('*')
-                .eq('customer_id', user?.id)
-                .order('created_at', { ascending: false })
-
-            if (error) throw error
-            setBookings(data || [])
-        } catch (error) {
-            console.error('Error loading bookings:', error)
-        } finally {
-            setLoading(false)
-        }
-    }
 
     async function handleSignOut() {
         await signOut()
@@ -169,12 +170,12 @@ export default function DashboardPage() {
                                 <div className="text-center py-12">
                                     <MapPin size={48} className="mx-auto text-slate-300 mb-4" />
                                     <p className="text-slate-400 text-lg mb-4">No bookings yet</p>
-                                    <a
+                                    <Link
                                         href="/hotels"
                                         className="inline-block px-6 py-3 bg-red-600 text-white rounded-xl font-bold hover:bg-slate-900 transition-all"
                                     >
                                         Start Exploring
-                                    </a>
+                                    </Link>
                                 </div>
                             ) : (
                                 <div className="space-y-4">
@@ -191,8 +192,8 @@ export default function DashboardPage() {
                                                     </div>
                                                 </div>
                                                 <div className={`px-3 py-1 rounded-lg text-xs font-bold uppercase ${booking.status === 'confirmed' ? 'bg-emerald-50 text-emerald-700' :
-                                                        booking.status === 'pending' ? 'bg-amber-50 text-amber-700' :
-                                                            'bg-slate-100 text-slate-700'
+                                                    booking.status === 'pending' ? 'bg-amber-50 text-amber-700' :
+                                                        'bg-slate-100 text-slate-700'
                                                     }`}>
                                                     {booking.status}
                                                 </div>

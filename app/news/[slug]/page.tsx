@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react'
 import { createClient } from '@/lib/supabase'
 import { useParams } from 'next/navigation'
 import Link from 'next/link'
+import Image from 'next/image'
 import { ArrowLeft, Calendar, Tag } from 'lucide-react'
 
 const supabase = createClient()
@@ -84,8 +85,13 @@ export default function NewsArticlePage() {
             {/* Featured Image */}
             {post.featured_image && (
                 <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-                    <div className="aspect-video rounded-[3rem] overflow-hidden">
-                        <img src={post.featured_image} alt={post.title} className="w-full h-full object-cover" />
+                    <div className="aspect-video rounded-[3rem] overflow-hidden relative">
+                        <Image
+                            src={post.featured_image}
+                            alt={post.title}
+                            fill
+                            className="object-cover"
+                        />
                     </div>
                 </div>
             )}

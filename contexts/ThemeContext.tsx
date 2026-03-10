@@ -21,10 +21,12 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
     useEffect(() => {
         setMounted(true)
         const stored = localStorage.getItem('theme') as Theme
-        if (stored) {
+        // Only set theme if it differs from current state to avoid unnecessary renders
+        if (stored && stored !== 'light') {
             setTheme(stored)
-            document.documentElement.classList.toggle('dark', stored === 'dark')
         }
+        // Apply the class to the document element based on the stored theme or default
+        document.documentElement.classList.toggle('dark', stored === 'dark')
     }, [])
 
     function toggleTheme() {

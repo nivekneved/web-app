@@ -1,7 +1,6 @@
 'use client'
 
-import Image from 'next/image'
-import { Shield, Lock, Bell, CheckCircle2, Award, HeadphonesIcon, Globe, ArrowRight } from 'lucide-react'
+import { Shield, Lock, Bell, CheckCircle2, Award, HeadphonesIcon } from 'lucide-react'
 import { motion } from 'framer-motion'
 
 export default function SafetyPage() {
@@ -72,7 +71,7 @@ export default function SafetyPage() {
                         <div className="flex-1">
                             <h2 className="text-4xl font-black mb-6">Industry-Leading Protection</h2>
                             <p className="text-lg text-slate-400 mb-8 leading-relaxed">
-                                We only partner with airlines, hotels, and tour operators that meet our stringent safety and quality criteria. Our internal "Safety Score" ensures that every part of your journey is vetted.
+                                We only partner with airlines, hotels, and tour operators that meet our stringent safety and quality criteria. Our internal &quot;Safety Score&quot; ensures that every part of your journey is vetted.
                             </p>
                             <ul className="space-y-4">
                                 {[
