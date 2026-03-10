@@ -111,7 +111,7 @@ export default function HomePage() {
                 />
               ) : (
                 <Image
-                  src={heroSlides[currentSlide].image || heroSlides[currentSlide].image_url}
+                  src={heroSlides[currentSlide].image_url || heroSlides[currentSlide].image}
                   alt={heroSlides[currentSlide].title}
                   fill
                   className="object-cover scale-105"
