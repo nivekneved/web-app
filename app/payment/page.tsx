@@ -4,8 +4,9 @@ import { useState } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { CreditCard, Lock, CheckCircle } from 'lucide-react'
 import { toast } from 'sonner'
+import { Suspense } from 'react'
 
-export default function PaymentPage() {
+function PaymentContent() {
     const router = useRouter()
     const searchParams = useSearchParams()
     const amount = searchParams.get('amount') || '0'
@@ -188,5 +189,17 @@ export default function PaymentPage() {
                 </div>
             </div>
         </div>
+    )
+}
+
+export default function PaymentPage() {
+    return (
+        <Suspense fallback={
+            <div className="min-h-screen bg-slate-50 flex items-center justify-center">
+                <div className="animate-spin rounded-full h-12 w-12 border-4 border-red-600 border-t-transparent"></div>
+            </div>
+        }>
+            <PaymentContent />
+        </Suspense>
     )
 }
