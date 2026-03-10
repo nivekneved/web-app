@@ -4,60 +4,45 @@ import React from 'react'
 import Image from 'next/image'
 import ServiceCard from '@/components/ServiceCard'
 
-const packages = [
-    {
-        id: 1,
-        title: "Catamaran Cruise to Île aux Cerfs",
-        location: "East Coast",
-        price: "Rs 1,800",
-        image: "/hero-cruise.png",
-        duration: "Full Day",
-        link: "/packages/catamaran-east",
-        tag: "Best Seller"
-    },
-    {
-        id: 2,
-        title: "Dolphin Watch & Swim",
-        location: "West Coast",
-        price: "Rs 2,200",
-        image: "/hero-cruise.png",
-        duration: "Half Day",
-        link: "/packages/dolphin-swim",
-        tag: "Wildlife"
-    },
-    {
-        id: 3,
-        title: "Chamarel 7 Coloured Earth",
-        location: "South West",
-        price: "Rs 3,500",
-        image: "/hero-adventure.png",
-        duration: "Full Day",
-        link: "/packages/chamarel",
-        tag: "Nature"
-    },
-    {
-        id: 4,
-        title: "Casela Nature Parks",
-        location: "Flic en Flac",
-        price: "Rs 1,200",
-        image: "/hero-adventure.png",
-        duration: "Full Day",
-        link: "/packages/casela",
-        tag: "Adventure"
-    },
-    {
-        id: 5,
-        title: "Subscooter Adventure",
-        location: "Grand Baie",
-        price: "Rs 4,500",
-        image: "/hero-cruise.png",
-        duration: "2 Hours",
-        link: "/packages/subscooter",
-        tag: "Unique"
-    }
-]
+import { useState, useEffect } from 'react'
+import { createClient } from '@/lib/supabase'
+
+const supabase = createClient()
+
+type Package = {
+    id: string
+    name: string
+    location: string
+    base_price: number
+    image_url: string
+    duration: string
+    service_type: string
+}
 
 export default function PackagesPage() {
+    const [packages, setPackages] = useState<Package[]>([])
+    const [loading, setLoading] = useState(true)
+
+    useEffect(() => {
+        async function loadPackages() {
+            try {
+                const { data, error } = await supabase
+                    .from('services')
+                    .select('*')
+                    .eq('service_type', 'activity')
+                    .order('name', { ascending: true })
+
+                if (error) throw error
+                setPackages(data || [])
+            } catch (error) {
+                console.error('Error loading packages:', error)
+            } finally {
+                setLoading(false)
+            }
+        }
+
+        loadPackages()
+    }, [])
     return (
         <div className="min-h-screen bg-slate-50 pb-20">
             {/* Hero */}
@@ -91,9 +76,24 @@ export default function PackagesPage() {
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                    {packages.map(pkg => (
-                        <ServiceCard key={pkg.id} {...pkg} />
-                    ))}
+                    {loading ? (
+                        [...Array(3)].map((_, i) => (
+                            <div key={i} className="animate-pulse bg-white rounded-3xl h-96 border border-slate-100" />
+                        ))
+                    ) : (
+                        packages.map(pkg => (
+                            <ServiceCard
+                                key={pkg.id}
+                                title={pkg.name}
+                                location={pkg.location}
+                                price={`Rs ${pkg.base_price.toLocaleString()}`}
+                                image={pkg.image_url || "/hero-adventure.png"}
+                                duration={pkg.duration || 'Full Day'}
+                                link={`/packages/${pkg.id}`}
+                                tag={pkg.service_type.toUpperCase()}
+                            />
+                        ))
+                    )}
                 </div>
             </div>
         </div>

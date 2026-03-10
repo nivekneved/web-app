@@ -1,3 +1,5 @@
+/*
+// LEGACY SLUG-BASED LOGIC
 'use client'
 
 import React from 'react'
@@ -34,3 +36,10 @@ export default function PackageDetailPage() {
 
     return <PackageDetail {...mockData} />
 }
+*/
+
+/*
+export default function LegacyPackageDetailPage() {
+    return null // Content is now handled by [id]/page.tsx
+}
+*/

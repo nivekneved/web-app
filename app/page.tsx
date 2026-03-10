@@ -1,85 +1,127 @@
 'use client'
 
-import Link from 'next/link'
 import { useState, useEffect } from 'react'
 import Image from 'next/image'
 import {
-  Plane, Ship, MapPin, Activity, Hotel, Car,
-  Award, Shield, HeadphonesIcon, Globe, ArrowRight,
-  Star, TrendingUp, Users, Calendar, Search, Map
+  Globe,
+  Award,
 } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
 import CategoryGrid from '@/components/CategoryGrid'
 import DealsCarousel from '@/components/DealsCarousel'
 
+import { createClient } from '@/lib/supabase'
+
+const supabase = createClient()
+
+type HeroSlide = {
+  title: string
+  subtitle: string
+  cta_text?: string
+  cta_link?: string
+  image_url: string
+  media_type: string
+  video_url: string | null
+  tag?: string
+  cta?: string
+  link?: string
+  image?: string
+}
+
 export default function HomePage() {
   const [currentSlide, setCurrentSlide] = useState(0)
-
-  const heroSlides = [
-    {
-      title: "Elevate Your Journey",
-      subtitle: "Experience luxury travel redefined with our exclusive flight deals.",
-      cta: "Book Your Flight",
-      link: "/flights",
-      image: "/hero-flight.png",
-      tag: "PREMIUM TRAVEL"
-    },
-    {
-      title: "Unforgettable Voyages",
-      subtitle: "Sail away to paradise on the world's most luxurious cruise liners.",
-      cta: "Explore Cruises",
-      link: "/cruises",
-      image: "/hero-cruise.png",
-      tag: "LUXURY CRUISES"
-    },
-    {
-      title: "Mauritian Paradise",
-      subtitle: "Discover the finest resorts and hidden gems in the heart of the Indian Ocean.",
-      cta: "View Hotels",
-      link: "/hotels",
-      image: "/hero-hotel.png",
-      tag: "ISLAND GETAWAYS"
-    },
-    {
-      title: "Infinite Adventures",
-      subtitle: "From mountain peaks to ocean depths, your next story starts here.",
-      cta: "Start Exploring",
-      link: "/activities",
-      image: "/hero-adventure.png",
-      tag: "TAILOR-MADE"
-    }
-  ]
+  const [heroSlides, setHeroSlides] = useState<HeroSlide[]>([])
+  const [loading, setLoading] = useState(true)
 
   useEffect(() => {
+    async function loadHeroSlides() {
+      try {
+        const { data, error } = await supabase
+          .from('hero_slides')
+          .select('*')
+          .eq('is_active', true)
+          .order('order_index', { ascending: true })
+
+        if (error) throw error
+        if (data && data.length > 0) {
+          setHeroSlides(data.map(slide => ({
+            ...slide,
+            subtitle: slide.subtitle || slide.description || '',
+            cta: slide.cta_text || 'Explore',
+            link: slide.cta_link || '/search',
+            image: slide.image_url,
+            tag: 'PREMIUM TRAVEL',
+          })))
+        } else {
+          // Fallback to defaults if no data
+          setHeroSlides([
+            {
+              title: "Elevate Your Journey",
+              subtitle: "Experience luxury travel redefined with our exclusive flight deals.",
+              cta: "Book Your Flight",
+              link: "/flights",
+              image: "/hero-flight.png",
+              tag: "PREMIUM TRAVEL",
+              media_type: 'image',
+              video_url: null,
+              image_url: "/hero-flight.png"
+            }
+          ])
+        }
+      } catch (error) {
+        console.error('Error loading hero slides:', error)
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    loadHeroSlides()
+  }, [])
+
+  useEffect(() => {
+    if (heroSlides.length === 0) return
     const timer = setInterval(() => {
       setCurrentSlide((prev) => (prev + 1) % heroSlides.length)
     }, 6000)
     return () => clearInterval(timer)
-  }, [])
+  }, [heroSlides.length])
 
   return (
     <div className="min-h-screen bg-white selection:bg-red-100 selection:text-red-900">
       {/* Hero Section */}
       <section className="relative h-[85vh] min-h-[600px] flex items-center overflow-hidden">
         <AnimatePresence mode="wait">
-          <motion.div
-            key={currentSlide}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 1 }}
-            className="absolute inset-0"
-          >
-            <Image
-              src={heroSlides[currentSlide].image}
-              alt={heroSlides[currentSlide].title}
-              fill
-              className="object-cover scale-105"
-              priority
-            />
-            {/* Darker overlay for better text contrast if we decide to add text back, currently minimal as per spec */}
-            <div className="absolute inset-0 bg-black/20" />
-          </motion.div>
+          {!loading && heroSlides.length > 0 && (
+            <motion.div
+              key={currentSlide}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 1 }}
+              className="absolute inset-0"
+            >
+              {heroSlides[currentSlide].media_type === 'video' && heroSlides[currentSlide].video_url ? (
+                <video
+                  src={heroSlides[currentSlide].video_url}
+                  autoPlay
+                  loop
+                  muted
+                  playsInline
+                  className="absolute inset-0 w-full h-full object-cover scale-105"
+                />
+              ) : (
+                <Image
+                  src={heroSlides[currentSlide].image || heroSlides[currentSlide].image_url}
+                  alt={heroSlides[currentSlide].title}
+                  fill
+                  className="object-cover scale-105"
+                  priority
+                />
+              )}
+              {/* Darker overlay for better text contrast if we decide to add text back, currently minimal as per spec */}
+              <div className="absolute inset-0 bg-black/20" />
+            </motion.div>
+          )}
         </AnimatePresence>
 
         {/* Indicators */}
@@ -113,7 +155,7 @@ export default function HomePage() {
                 <span className="text-slate-400">crafted with care.</span>
               </p>
               <p className="text-lg text-slate-400 mb-12 leading-relaxed max-w-xl">
-                As an IATA accredited travel provider, we've spent over 15 years perfecting the art of travel.
+                As an IATA accredited travel provider, we&apos;ve spent over 15 years perfecting the art of travel.
               </p>
 
               <div className="grid grid-cols-2 gap-8">

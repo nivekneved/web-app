@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { createClient } from '@/lib/supabase'
 import { useParams } from 'next/navigation'
 import { MapPin, Star, Check, ArrowLeft, Calendar, Users, Heart } from 'lucide-react'
@@ -21,6 +21,19 @@ type Hotel = {
     rating: number
     image_url: string
     amenities: string[]
+    room_types?: {
+        type: string
+        available: boolean
+        prices: {
+            mon: string
+            tue: string
+            wed: string
+            thu: string
+            fri: string
+            sat: string
+            sun: string
+        }
+    }[]
 }
 
 export default function HotelDetailPage() {
@@ -30,6 +43,8 @@ export default function HotelDetailPage() {
     const [checkIn, setCheckIn] = useState('')
     const [checkOut, setCheckOut] = useState('')
     const [guests, setGuests] = useState(2)
+    const [selectedRoom, setSelectedRoom] = useState<number>(0)
+    const [calculatedPrice, setCalculatedPrice] = useState<number>(0)
     const { addToWishlist, removeFromWishlist, isInWishlist } = useWishlist()
 
     function toggleWishlist() {
@@ -80,8 +95,34 @@ export default function HotelDetailPage() {
             toast.error('Please select check-in and check-out dates')
             return
         }
-        toast.success('Booking feature coming soon!')
+
+        const room = hotel?.room_types?.[selectedRoom]
+        if (room && !room.available) {
+            toast.error('This room is currently unavailable')
+            return
+        }
+
+        toast.success(`Booking ${room?.type || 'Room'}... Feature coming soon!`)
     }
+
+    const calculateDynamicPrice = useCallback(() => {
+        if (!hotel || !checkIn) return
+
+        const date = new Date(checkIn)
+        const dayNames = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat']
+        const day = dayNames[date.getDay()]
+
+        const room = hotel.room_types?.[selectedRoom]
+        if (room && room.prices && room.prices[day as keyof typeof room.prices]) {
+            setCalculatedPrice(Number(room.prices[day as keyof typeof room.prices]))
+        } else {
+            setCalculatedPrice(hotel.base_price)
+        }
+    }, [hotel, checkIn, selectedRoom])
+
+    useEffect(() => {
+        calculateDynamicPrice()
+    }, [calculateDynamicPrice])
 
     if (loading) {
         return (
@@ -165,12 +206,42 @@ export default function HotelDetailPage() {
 
                                 <div className="lg:w-96 bg-slate-50 rounded-2xl p-6 border border-slate-200">
                                     <div className="text-center mb-6">
-                                        <div className="text-sm text-slate-500 mb-1">Starting from</div>
-                                        <div className="text-4xl font-black text-slate-900">Rs {hotel.base_price?.toLocaleString()}</div>
+                                        <div className="text-sm text-slate-500 mb-1">
+                                            {checkIn ? 'Price for selected date' : 'Starting from'}
+                                        </div>
+                                        <div className="text-4xl font-black text-slate-900">
+                                            Rs {(calculatedPrice || hotel.base_price).toLocaleString()}
+                                        </div>
                                         <div className="text-sm text-slate-500">per night</div>
                                     </div>
 
                                     <div className="space-y-4">
+                                        {hotel.room_types && hotel.room_types.length > 0 && (
+                                            <div>
+                                                <label className="block text-xs font-bold text-slate-600 uppercase tracking-wide mb-2">
+                                                    Select Room Type
+                                                </label>
+                                                <div className="grid grid-cols-1 gap-2">
+                                                    {hotel.room_types.map((room, idx) => (
+                                                        <button
+                                                            key={idx}
+                                                            onClick={() => setSelectedRoom(idx)}
+                                                            className={`text-left px-4 py-3 rounded-xl border transition-all ${selectedRoom === idx
+                                                                ? 'border-red-600 bg-red-50 ring-2 ring-red-600/10'
+                                                                : 'border-slate-200 bg-white hover:border-slate-300'
+                                                                } ${!room.available ? 'opacity-50 grayscale' : ''}`}
+                                                        >
+                                                            <div className="flex justify-between items-center">
+                                                                <span className="font-bold text-slate-900">{room.type}</span>
+                                                                {!room.available && (
+                                                                    <span className="text-[10px] font-black uppercase text-red-600 bg-red-50 px-2 py-0.5 rounded">Unavailable</span>
+                                                                )}
+                                                            </div>
+                                                        </button>
+                                                    ))}
+                                                </div>
+                                            </div>
+                                        )}
                                         <div>
                                             <label className="block text-xs font-bold text-slate-600 uppercase tracking-wide mb-2">
                                                 <Calendar size={14} className="inline mr-1" />
