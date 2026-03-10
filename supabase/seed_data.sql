@@ -1,6 +1,15 @@
 -- Database Schema for Travel Lounge
 
--- Services Table (Hotels, Cruises, Tours, Activities)
+-- 1. Profiles (User Data)
+CREATE TABLE IF NOT EXISTS profiles (
+    id UUID PRIMARY KEY,
+    name TEXT NOT NULL,
+    email TEXT UNIQUE NOT NULL,
+    phone TEXT,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
+-- 2. Services Table (Hotels, Cruises, Tours, Activities)
 CREATE TABLE IF NOT EXISTS services (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     name TEXT NOT NULL,
@@ -18,7 +27,7 @@ CREATE TABLE IF NOT EXISTS services (
     created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
 
--- Room Types (Linked to Hotels)
+-- 3. Room Types (Linked to Hotels)
 CREATE TABLE IF NOT EXISTS room_types (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     service_id UUID REFERENCES services(id) ON DELETE CASCADE,
@@ -29,7 +38,7 @@ CREATE TABLE IF NOT EXISTS room_types (
     max_occupancy INTEGER DEFAULT 2
 );
 
--- Popular Destinations (Flights)
+-- 4. Popular Destinations (Flights)
 CREATE TABLE IF NOT EXISTS popular_destinations (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     destination TEXT NOT NULL,
@@ -39,9 +48,50 @@ CREATE TABLE IF NOT EXISTS popular_destinations (
     is_featured BOOLEAN DEFAULT false
 );
 
+-- 5. Bookings
+CREATE TABLE IF NOT EXISTS bookings (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    customer_id UUID REFERENCES profiles(id) ON DELETE SET NULL,
+    service_id UUID REFERENCES services(id) ON DELETE SET NULL,
+    service_name TEXT,
+    service_type TEXT,
+    check_in_date DATE,
+    check_out_date DATE,
+    total_price NUMERIC,
+    status TEXT DEFAULT 'pending' CHECK (status IN ('pending', 'confirmed', 'cancelled')),
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
+-- 6. Editorial Posts (News)
+CREATE TABLE IF NOT EXISTS editorial_posts (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    title TEXT NOT NULL,
+    slug TEXT UNIQUE NOT NULL,
+    excerpt TEXT,
+    content TEXT,
+    featured_image TEXT,
+    tags TEXT[],
+    status TEXT DEFAULT 'draft' CHECK (status IN ('draft', 'published')),
+    published_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
+-- 7. Reviews
+CREATE TABLE IF NOT EXISTS reviews (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    service_id UUID REFERENCES services(id) ON DELETE CASCADE,
+    service_type TEXT,
+    customer_id UUID REFERENCES profiles(id) ON DELETE SET NULL,
+    customer_name TEXT,
+    rating INTEGER CHECK (rating >= 1 AND rating <= 5),
+    comment TEXT,
+    status TEXT DEFAULT 'pending' CHECK (status IN ('pending', 'approved', 'rejected')),
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
 -- Seed Data
 
--- 1. Flights / Popular Destinations
+-- Flights
 INSERT INTO popular_destinations (destination, country, return_price, is_featured) VALUES
 ('Dubai', 'UAE', 28500, true),
 ('Paris', 'France', 42000, true),
@@ -50,10 +100,11 @@ INSERT INTO popular_destinations (destination, country, return_price, is_feature
 ('Johannesburg', 'South Africa', 18500, true),
 ('Singapore', 'Singapore', 38000, true);
 
--- 2. Hotels (Mauritius)
+-- Hotels
 DO $$
 DECLARE
     hotel_id UUID;
+    prof_id UUID := gen_random_uuid();
 BEGIN
     -- LUX* Grand Baie
     INSERT INTO services (name, description, location, region, base_price, rating, service_type, amenities)
@@ -72,58 +123,14 @@ BEGIN
     INSERT INTO room_types (service_id, name, weekday_price, weekend_price, amenities) VALUES
     (hotel_id, 'Prestige Room', 12500, 12500 * 1.25, ARRAY['Beach Front', 'Terrace']),
     (hotel_id, 'Junior Suite', 18000, 18000 * 1.25, ARRAY['Garden View', 'Apple TV']);
-
-    -- Heritage Le Telfair
-    INSERT INTO services (name, description, location, region, base_price, rating, service_type, amenities)
-    VALUES ('Heritage Le Telfair', 'A quiet, elegant resort inspired by the 19th-century architecture.', 'Bel Ombre', 'South', 14000, 4.9, 'hotel', ARRAY['Spa', 'Nature Reserve', 'Historic Lounge'])
-    RETURNING id INTO hotel_id;
-
-    INSERT INTO room_types (service_id, name, weekday_price, weekend_price, amenities) VALUES
-    (hotel_id, 'Deluxe Suite', 14000, 14000 * 1.25, ARRAY['River View', 'Personal Butler']);
-
-    -- Trou aux Biches Beachcomber
-    INSERT INTO services (name, description, location, region, base_price, rating, service_type, amenities)
-    VALUES ('Trou aux Biches Beachcomber', 'An eco-friendly resort on one of the most beautiful beaches.', 'Trou aux Biches', 'North', 16000, 4.7, 'hotel', ARRAY['Eco-friendly', 'Tropical Garden', 'Kids Club'])
-    RETURNING id INTO hotel_id;
-
-    INSERT INTO room_types (service_id, name, weekday_price, weekend_price, amenities) VALUES
-    (hotel_id, 'Tropical Junior Suite', 16000, 16000 * 1.25, ARRAY['Outdoor Shower', 'Garden Access']);
 END $$;
 
--- 3. Hotels (Rodrigues)
-DO $$
-DECLARE
-    hotel_id UUID;
-BEGIN
-    -- Tekoma Boutik Hotel
-    INSERT INTO services (name, description, location, region, base_price, rating, service_type, amenities)
-    VALUES ('Tekoma Boutik Hotel', 'An authentic Creole experience overlooking the turquoise lagoon.', 'Anse Ally', 'Rodrigues', 6000, 4.8, 'hotel', ARRAY['Pool', 'Restaurant', 'Sea View'])
-    RETURNING id INTO hotel_id;
-    
-    INSERT INTO room_types (service_id, name, weekday_price, weekend_price, amenities) VALUES
-    (hotel_id, 'Superior Room', 6000, 6000 * 1.25, ARRAY['Aircon', 'Mini Bar']);
-
-    -- Cotton Bay Resort
-    INSERT INTO services (name, description, location, region, base_price, rating, service_type, amenities)
-    VALUES ('Cotton Bay Resort', 'Nestled in the heart of the beautiful Pointe Coton.', 'Pointe Coton', 'Rodrigues', 4800, 4.5, 'hotel', ARRAY['Beachfront', 'Diving', 'Tennis'])
-    RETURNING id INTO hotel_id;
-
-    INSERT INTO room_types (service_id, name, weekday_price, weekend_price, amenities) VALUES
-    (hotel_id, 'Standard Room', 4800, 4800 * 1.25, ARRAY['TV', 'Balcony']);
-END $$;
-
--- 4. Cruises
+-- Cruises
 INSERT INTO services (name, description, location, region, base_price, rating, service_type, duration_days, amenities) VALUES
 ('Mediterranean Discovery', 'Explore the highlights of the Mediterranean coast.', 'Italy & Greece', 'Europe', 85000, 4.9, 'cruise', 7, ARRAY['Full Board', 'Entertainment', 'Excursions']),
-('Caribbean Dream', 'Tropical bliss across the Caribbean islands.', 'Miami', 'Caribbean', 92000, 4.8, 'cruise', 10, ARRAY['Luxury Cabin', 'Shows', 'Gym']),
-('Indian Ocean Gems', 'Discover the magic of the Indian Ocean.', 'Port Louis', 'Africa', 55000, 4.7, 'cruise', 5, ARRAY['Local Cuisine', 'Snorkeling', 'Island Hopping']),
-('Red Sea & Saudi Arabia', 'Explore the mystical shores of the Red Sea.', 'Jeddah', 'Middle East', 45000, 4.6, 'cruise', 7, ARRAY['Cultural Tours', 'Diving', 'Spa']),
-('Asia Discovery', 'A journey through the vibrant cities of East Asia.', 'Singapore & Tokyo', 'Asia', 115000, 4.9, 'cruise', 12, ARRAY['City Tours', 'Luxury Dining', 'Wellness Center']),
-('Dubai & Emirates', 'Modern luxury meets traditional Arabian charm.', 'Dubai', 'Middle East', 38000, 4.7, 'cruise', 7, ARRAY['Shopping', 'Desert Safari', 'Fine Dining']),
-('Alaska Glaciers', 'Experience the raw beauty of the Alaskan wilderness.', 'Seattle', 'North America', 125000, 4.8, 'cruise', 10, ARRAY['Wildlife Watching', 'Photography', 'Lectures']),
-('South Pacific Paradise', 'Visit the remote islands of the South Pacific.', 'Tahiti', 'Pacific', 155000, 5.0, 'cruise', 14, ARRAY['Private Island', 'Water Sports', 'All-Inclusive']);
+('Caribbean Dream', 'Tropical bliss across the Caribbean islands.', 'Miami', 'Caribbean', 92000, 4.8, 'cruise', 10, ARRAY['Luxury Cabin', 'Shows', 'Gym']);
 
--- 5. Activities
-INSERT INTO services (name, description, location, region, base_price, rating, service_type, duration_hours, amenities) VALUES
-('Ile aux Cerfs Speedboat Tour', 'A full day of fun and sun at Ile aux Cerfs.', 'Trou d''Eau Douce', 'East', 2500, 4.6, 'activity', 6, ARRAY['Lunch', 'Drinks', 'Speedboat']),
-('Catamaran Northern Isles', 'Sail to the beautiful northern islands of Mauritius.', 'Grand Baie', 'North', 1800, 4.8, 'activity', 8, ARRAY['BBQ Lunch', 'Open Bar', 'Snorkeling']);
+-- News
+INSERT INTO editorial_posts (title, slug, excerpt, content, featured_image, tags, status) VALUES
+('Top 5 Hidden Beaches in Mauritius', 'hidden-beaches-mauritius', 'Discover the untouched paradise locations that tourists usually miss.', 'Long content here...', '/hero-hotel.png', ARRAY['Mauritius', 'Beaches', 'Travel'], 'published'),
+('Packing Tips for Your Next Cruise', 'packing-tips-cruise', 'Everything you need to know to pack light but right for a 7-day cruise.', 'Long content here...', '/hero-cruise.png', ARRAY['Cruise', 'Tips'], 'published');
