@@ -118,8 +118,56 @@ export default function HomePage() {
                   priority
                 />
               )}
-              {/* Darker overlay for better text contrast if we decide to add text back, currently minimal as per spec */}
-              <div className="absolute inset-0 bg-black/20" />
+              {/* Darker overlay for better text contrast */}
+              <div className="absolute inset-0 bg-black/40" />
+
+              {/* Text Content */}
+              <div className="absolute inset-0 flex items-center justify-center text-center z-10">
+                <div className="max-w-4xl mx-auto px-4">
+                  {heroSlides[currentSlide].tag && (
+                    <motion.div
+                      initial={{ y: 20, opacity: 0 }}
+                      animate={{ y: 0, opacity: 1 }}
+                      transition={{ delay: 0.2 }}
+                      className="inline-block py-1 px-3 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-white text-xs font-bold uppercase tracking-widest mb-6"
+                    >
+                      {heroSlides[currentSlide].tag}
+                    </motion.div>
+                  )}
+
+                  <motion.h1
+                    initial={{ y: 20, opacity: 0 }}
+                    animate={{ y: 0, opacity: 1 }}
+                    transition={{ delay: 0.3 }}
+                    className="text-5xl md:text-7xl font-black text-white mb-6 leading-tight drop-shadow-lg"
+                  >
+                    {heroSlides[currentSlide].title}
+                  </motion.h1>
+
+                  <motion.div
+                    initial={{ y: 20, opacity: 0 }}
+                    animate={{ y: 0, opacity: 1 }}
+                    transition={{ delay: 0.4 }}
+                    className="text-xl md:text-2xl text-white/90 font-medium mb-10 max-w-2xl mx-auto drop-shadow-md"
+                    dangerouslySetInnerHTML={{ __html: heroSlides[currentSlide].subtitle }}
+                  />
+
+                  {heroSlides[currentSlide].cta && heroSlides[currentSlide].link && (
+                    <motion.div
+                      initial={{ y: 20, opacity: 0 }}
+                      animate={{ y: 0, opacity: 1 }}
+                      transition={{ delay: 0.5 }}
+                    >
+                      <a
+                        href={heroSlides[currentSlide].link}
+                        className="inline-flex items-center gap-2 px-8 py-4 bg-red-600 text-white rounded-xl font-bold hover:bg-white hover:text-slate-900 transition-all transform hover:scale-105 shadow-xl shadow-red-600/20"
+                      >
+                        {heroSlides[currentSlide].cta}
+                      </a>
+                    </motion.div>
+                  )}
+                </div>
+              </div>
             </motion.div>
           )}
         </AnimatePresence>
