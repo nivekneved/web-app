@@ -1,3 +1,5 @@
+'use client'
+
 import React, { useState, useEffect, useCallback } from 'react'
 import Link from 'next/link'
 import { MapPin, Phone, Mail, Clock, Facebook, Instagram, Linkedin, Loader2 } from 'lucide-react'

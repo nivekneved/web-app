@@ -9,6 +9,7 @@ import {
 import { motion, AnimatePresence } from 'framer-motion'
 import CategoryGrid from '@/components/CategoryGrid'
 import DealsCarousel from '@/components/DealsCarousel'
+import AnnouncementPopup from '@/components/AnnouncementPopup'
 
 import { toast } from 'sonner'
 import { createClient } from '@/lib/supabase'
@@ -304,6 +305,7 @@ export default function HomePage() {
           </div>
         </div>
       </section>
+      <AnnouncementPopup />
     </div>
   )
 }
