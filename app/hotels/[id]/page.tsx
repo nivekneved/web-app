@@ -165,11 +165,12 @@ export default function HotelDetailPage() {
                     <div className="absolute inset-0 bg-gradient-to-br from-red-600 to-slate-900" />
                 )}
                 <div className="absolute inset-0 bg-black/30" />
+            </div>
 
+            {/* Content Section */}
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 -mt-64 pb-20">
                 {/* Floating Info Card */}
-                <div className="absolute bottom-0 left-0 right-0 translate-y-1/2">
-                    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                        <div className="bg-white rounded-[3rem] shadow-2xl p-8 border border-slate-100">
+                <div className="bg-white rounded-[3rem] shadow-2xl p-8 border border-slate-100 mb-12">
                             <div className="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-6">
                                 <div className="flex-1">
                                     <div className="flex items-start justify-between gap-3 mb-4">
@@ -292,12 +293,7 @@ export default function HotelDetailPage() {
                                 </div>
                             </div>
                         </div>
-                    </div>
-                </div>
-            </div>
 
-            {/* Content Section */}
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-64 pb-20">
                 {/* Amenities */}
                 {hotel.amenities && hotel.amenities.length > 0 && (
                     <div className="bg-white rounded-[2rem] p-8 border border-slate-100 shadow-sm">

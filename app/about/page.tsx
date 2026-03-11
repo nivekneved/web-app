@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect, useMemo } from 'react'
+import React, { useState, useEffect, useMemo, useCallback } from 'react'
 import Image from 'next/image'
 import { Globe, Trophy, MapPin, Clock, ShieldCheck, Star, Loader2 } from 'lucide-react'
 import { motion } from 'framer-motion'
@@ -36,37 +36,68 @@ type AboutContent = {
     }
 }
 
+interface SiteSettings {
+    siteTitle?: string;
+    contactEmail?: string;
+    contactPhone?: string;
+    office1Title?: string;
+    office1Address?: string;
+    office2Title?: string;
+    office2Address?: string;
+    workingHours?: string;
+}
+
 export default function AboutPage() {
     const [content, setContent] = useState<AboutContent | null>(null)
+    const [settings, setSettings] = useState<SiteSettings | null>(null)
     const [loading, setLoading] = useState(true)
     const supabase = useMemo(() => createClient(), [])
 
-    useEffect(() => {
-        const fetchContent = async () => {
-            try {
-                const { data, error } = await supabase
-                    .from('content_blocks')
-                    .select('*')
-                    .eq('page_slug', 'about')
+    const fetchContent = useCallback(async () => {
+        try {
+            const { data, error } = await supabase
+                .from('content_blocks')
+                .select('*')
+                .eq('page_slug', 'about')
 
-                if (error) throw error
+            if (error) throw error
 
-                if (data && data.length > 0) {
-                    const blocks: Record<string, unknown> = {}
-                    data.forEach((block: ContentBlock) => {
-                        blocks[block.section_key] = block.content
-                    })
-                    setContent(blocks as AboutContent)
-                }
-            } catch (err) {
-                console.error('Error fetching about page content:', err)
-            } finally {
-                setLoading(false)
+            if (data && data.length > 0) {
+                const blocks: Record<string, unknown> = {}
+                data.forEach((block: ContentBlock) => {
+                    blocks[block.section_key] = block.content
+                })
+                setContent(blocks as AboutContent)
             }
+        } catch (err) {
+            console.error('About: Error fetching content blocks:', err)
         }
-
-        fetchContent()
     }, [supabase])
+
+    const fetchSettings = useCallback(async () => {
+        try {
+            const { data, error } = await supabase
+                .from('site_settings')
+                .select('value')
+                .eq('key', 'general_config')
+                .single()
+
+            if (error) throw error
+            if (data?.value) {
+                setSettings(data.value as SiteSettings)
+            }
+        } catch (err) {
+            console.error('About: Error fetching settings:', err)
+        }
+    }, [supabase])
+
+    useEffect(() => {
+        const init = async () => {
+            await Promise.all([fetchContent(), fetchSettings()])
+            setLoading(false)
+        }
+        init()
+    }, [fetchContent, fetchSettings])
 
     // Fallback data
     const hero = content?.hero || {
@@ -87,7 +118,7 @@ export default function AboutPage() {
 
     const vision = content?.vision || {
         title: "Our Vision",
-        description: "To be a one-stop travel solutions provider which aims to continuously grow across borders, in products and services, and always putting the customer's delight at first place."
+        description: "To be a one-stop travel solutions provider which aims to continuously grow across borders, in premium services, and always putting the customer's delight at first place."
     }
 
     const mission = content?.mission || {
@@ -246,36 +277,42 @@ export default function AboutPage() {
                                         <MapPin size={28} />
                                     </div>
                                     <div>
-                                        <h4 className="text-xl font-black mb-2">Port Louis Headquarters</h4>
-                                        <p className="text-slate-400">Ground Floor Newton Tower, Corner Sir William Newton and Remy Ollier Street, Port Louis.</p>
+                                        <h4 className="text-xl font-black mb-2">{settings?.office1Title || 'Port Louis Headquarters'}</h4>
+                                        <p className="text-slate-400 whitespace-pre-line">{settings?.office1Address || 'Ground Floor Newton Tower, Corner Sir William Newton and Remy Ollier Street, Port Louis.'}</p>
                                     </div>
                                 </div>
-                                <div className="flex gap-8 group">
-                                    <div className="w-14 h-14 bg-slate-800 rounded-2xl flex-shrink-0 flex items-center justify-center text-red-600 group-hover:bg-red-600 group-hover:text-white transition-all">
-                                        <MapPin size={28} />
+                                {settings?.office2Address && (
+                                    <div className="flex gap-8 group">
+                                        <div className="w-14 h-14 bg-slate-800 rounded-2xl flex-shrink-0 flex items-center justify-center text-red-600 group-hover:bg-red-600 group-hover:text-white transition-all">
+                                            <MapPin size={28} />
+                                        </div>
+                                        <div>
+                                            <h4 className="text-xl font-black mb-2">{settings.office2Title || 'Ebene Cybercity'}</h4>
+                                            <p className="text-slate-400 whitespace-pre-line">{settings.office2Address}</p>
+                                        </div>
                                     </div>
-                                    <div>
-                                        <h4 className="text-xl font-black mb-2">Ebene Cybercity</h4>
-                                        <p className="text-slate-400">Ground Floor, 57 Ebene Mews, Rue Du Savoir, Ebene Cybercity.</p>
-                                    </div>
-                                </div>
+                                )}
                             </div>
                         </div>
                         <div className="lg:w-1/2 bg-slate-800 p-12 rounded-[3.5rem] border border-slate-700">
                             <h4 className="text-2xl font-black mb-6">Opening Hours</h4>
-                            <div className="space-y-4">
-                                <div className="flex justify-between items-center pb-4 border-b border-slate-700">
-                                    <span className="text-slate-400">Monday — Friday</span>
-                                    <span className="font-bold">08:30 – 16:45</span>
-                                </div>
-                                <div className="flex justify-between items-center pb-4 border-b border-slate-700">
-                                    <span className="text-slate-400">Saturday</span>
-                                    <span className="font-bold">08:30 – 12:30</span>
-                                </div>
-                                <div className="flex justify-between items-center pt-2">
-                                    <span className="text-slate-400">Sunday & Holidays</span>
-                                    <span className="text-red-500 font-bold uppercase tracking-widest text-sm">Closed</span>
-                                </div>
+                            <div className="text-slate-400 whitespace-pre-line leading-relaxed">
+                                {settings?.workingHours || (
+                                    <>
+                                        <div className="flex justify-between items-center pb-4 border-b border-slate-700">
+                                            <span>Monday — Friday</span>
+                                            <span className="font-bold text-white">08:30 – 16:45</span>
+                                        </div>
+                                        <div className="flex justify-between items-center pb-4 border-b border-slate-700">
+                                            <span>Saturday</span>
+                                            <span className="font-bold text-white">08:30 – 12:30</span>
+                                        </div>
+                                        <div className="flex justify-between items-center pt-2">
+                                            <span>Sunday & Holidays</span>
+                                            <span className="text-red-500 font-bold uppercase tracking-widest text-sm">Closed</span>
+                                        </div>
+                                    </>
+                                )}
                             </div>
                         </div>
                     </div>

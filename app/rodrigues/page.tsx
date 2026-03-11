@@ -81,7 +81,7 @@ export default function RodriguesPage() {
                                 title={service.name}
                                 location={service.location}
                                 price={`Rs ${service.base_price.toLocaleString()}`}
-                                image={service.image_url || (service.service_type === 'hotel' ? "/hero-hotel.png" : "/hero-adventure.png")}
+                                image={service.image_url || "/hero-hotel.png"}
                                 link={`/${service.service_type === 'activity' ? 'activities' : service.service_type + 's'}/${service.id}`}
                                 tag={service.service_type.toUpperCase()}
                             />

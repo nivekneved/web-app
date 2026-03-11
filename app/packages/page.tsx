@@ -81,13 +81,13 @@ export default function PackagesPage() {
                                 onClick={() => setFilter(filter === 'sea' ? 'all' : 'sea')}
                                 className={`px-6 py-2 rounded-lg font-bold transition-colors ${filter === 'sea' ? 'bg-red-600 text-white' : 'bg-slate-100 text-slate-600 hover:bg-slate-200'}`}
                             >
-                                Sea Activities
+                                Sea Adventures
                             </button>
                             <button
                                 onClick={() => setFilter(filter === 'land' ? 'all' : 'land')}
                                 className={`px-6 py-2 rounded-lg font-bold transition-colors ${filter === 'land' ? 'bg-red-600 text-white' : 'bg-slate-100 text-slate-600 hover:bg-slate-200'}`}
                             >
-                                Land Activities
+                                Land Adventures
                             </button>
                         </div>
                     </div>
@@ -98,7 +98,7 @@ export default function PackagesPage() {
                         [...Array(3)].map((_, i) => (
                             <div key={i} className="animate-pulse bg-white rounded-3xl h-96 border border-slate-100" />
                         ))
-                    ) : packages.length > 0 ? (
+                    ) : (
                         packages.map(pkg => (
                             <ServiceCard
                                 key={pkg.id}
@@ -106,16 +106,11 @@ export default function PackagesPage() {
                                 location={pkg.location}
                                 price={`Rs ${pkg.base_price.toLocaleString()}`}
                                 image={pkg.image_url || "/hero-adventure.png"}
-                                duration={pkg.duration || 'Full Day'}
+                                duration={pkg.duration}
                                 link={`/packages/${pkg.id}`}
-                                tag={pkg.service_type.toUpperCase()}
+                                tag="ACTIVITY"
                             />
                         ))
-                    ) : (
-                        <div className="col-span-full text-center py-20 bg-white rounded-3xl shadow-sm border border-slate-100">
-                            <p className="text-slate-500 text-lg">No activities found for this category.</p>
-                            <button onClick={() => setFilter('all')} className="mt-4 text-red-600 font-bold hover:underline">Show all activities</button>
-                        </div>
                     )}
                 </div>
             </div>

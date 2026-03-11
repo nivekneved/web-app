@@ -1,7 +1,25 @@
-import { useState } from 'react'
+'use client'
+
+import React, { useState, useEffect, useCallback } from 'react'
 import { MapPin, Phone, Mail, Clock, Send, Loader2 } from 'lucide-react'
 import { toast } from 'sonner'
 import { createClient } from '@/lib/supabase'
+
+interface GeneralConfig {
+    siteTitle?: string;
+    contactEmail?: string;
+    contactPhone?: string;
+    whatsappNumber1?: string;
+    whatsappNumber2?: string;
+    office1Title?: string;
+    office1Address?: string;
+    office2Title?: string;
+    office2Address?: string;
+    workingHours?: string;
+    facebookUrl?: string;
+    instagramUrl?: string;
+    linkedinUrl?: string;
+}
 
 export default function ContactPage() {
     const [formData, setFormData] = useState({
@@ -12,7 +30,32 @@ export default function ContactPage() {
         message: ''
     })
     const [submitting, setSubmitting] = useState(false)
+    const [settings, setSettings] = useState<GeneralConfig | null>(null)
+    const [loading, setLoading] = useState(true)
     const supabase = createClient()
+
+    const fetchSettings = useCallback(async () => {
+        try {
+            const { data, error } = await supabase
+                .from('site_settings')
+                .select('value')
+                .eq('key', 'general_config')
+                .single()
+
+            if (error) throw error
+            if (data?.value) {
+                setSettings(data.value as GeneralConfig)
+            }
+        } catch (err) {
+            console.error('Contact: Error fetching settings:', err)
+        } finally {
+            setLoading(false)
+        }
+    }, [supabase])
+
+    useEffect(() => {
+        fetchSettings()
+    }, [fetchSettings])
 
     async function handleSubmit(e: React.FormEvent) {
         e.preventDefault()
@@ -35,11 +78,30 @@ export default function ContactPage() {
         }
     }
 
+    const contactEmail = settings?.contactEmail || 'reservation@travellounge.mu'
+    const contactPhone = settings?.contactPhone || '(+230) 212 4070'
+    const whatsapp1 = settings?.whatsappNumber1 || '+230 5940 7711'
+    const whatsapp2 = settings?.whatsappNumber2 || '+230 5940 7701'
+    const office1Title = settings?.office1Title || 'Port Louis Office'
+    const office1Address = settings?.office1Address || 'Ground Floor Newton Tower, Corner Sir William Newton and Remy Ollier Street, Port Louis, Mauritius'
+    const office2Title = settings?.office2Title || 'Ebene Office'
+    const office2Address = settings?.office2Address || 'Ground Floor, 57 Ebene Mews, Rue Du Savoir, Ebene Cybercity, Mauritius'
+    const workingHours = settings?.workingHours || 'Mon - Fri: 08:30 - 17:00'
+
+    if (loading) {
+        return (
+            <div className="min-h-screen flex flex-col items-center justify-center bg-slate-50 dark:bg-slate-900">
+                <Loader2 className="animate-spin text-red-600 mb-4" size={48} />
+                <p className="text-slate-500 font-bold uppercase tracking-widest text-sm">Getting in touch...</p>
+            </div>
+        )
+    }
+
     return (
         <div className="min-h-screen bg-slate-50 dark:bg-slate-900">
             {/* Hero */}
             <div className="bg-gradient-to-r from-red-600 to-slate-900 text-white py-20">
-                <div className="max-w-7xl mx-auto px-6">
+                <div className="max-w-7xl auto px-6">
                     <h1 className="text-5xl font-black mb-4">Contact Us</h1>
                     <p className="text-xl text-red-100">Get in touch with our IATA accredited travel agents</p>
                 </div>
@@ -52,51 +114,49 @@ export default function ContactPage() {
                         <h2 className="text-3xl font-black text-slate-900 dark:text-white mb-8">Get In Touch</h2>
 
                         {/* Offices */}
-                        <div className="space-y-8 mb-12">
-                            <div className="bg-white dark:bg-slate-800 rounded-2xl p-6 shadow-lg">
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-12">
+                            <div className="bg-white dark:bg-slate-800 rounded-2xl p-6 shadow-lg h-full">
                                 <h3 className="text-xl font-black text-slate-900 dark:text-white mb-4 flex items-center gap-2">
                                     <MapPin className="text-red-600" size={24} />
-                                    Port Louis Office
+                                    {office1Title}
                                 </h3>
-                                <p className="text-slate-600 dark:text-slate-300 mb-4">
-                                    Ground Floor Newton Tower<br />
-                                    Corner Sir William Newton and Remy Ollier Street<br />
-                                    Port Louis, Mauritius
+                                <p className="text-slate-600 dark:text-slate-300 mb-4 whitespace-pre-line text-sm">
+                                    {office1Address}
                                 </p>
                             </div>
 
-                            <div className="bg-white dark:bg-slate-800 rounded-2xl p-6 shadow-lg">
-                                <h3 className="text-xl font-black text-slate-900 dark:text-white mb-4 flex items-center gap-2">
-                                    <MapPin className="text-red-600" size={24} />
-                                    Ebene Office
-                                </h3>
-                                <p className="text-slate-600 dark:text-slate-300 mb-4">
-                                    Ground Floor, 57 Ebene Mews<br />
-                                    Rue Du Savoir<br />
-                                    Ebene Cybercity, Mauritius
-                                </p>
-                            </div>
+                            {(office2Address || settings?.office2Title) && (
+                                <div className="bg-white dark:bg-slate-800 rounded-2xl p-6 shadow-lg h-full">
+                                    <h3 className="text-xl font-black text-slate-900 dark:text-white mb-4 flex items-center gap-2">
+                                        <MapPin className="text-red-600" size={24} />
+                                        {office2Title}
+                                    </h3>
+                                    <p className="text-slate-600 dark:text-slate-300 mb-4 whitespace-pre-line text-sm">
+                                        {office2Address}
+                                    </p>
+                                </div>
+                            )}
                         </div>
 
                         {/* Contact Details */}
                         <div className="bg-white dark:bg-slate-800 rounded-2xl p-6 shadow-lg mb-8">
                             <h3 className="text-xl font-black text-slate-900 dark:text-white mb-4">Contact Details</h3>
                             <div className="space-y-4">
-                                <a href="tel:+2302124070" className="flex items-center gap-3 text-slate-600 dark:text-slate-300 hover:text-red-600 transition-colors">
+                                <a href={`tel:${contactPhone.replace(/\s/g, '')}`} className="flex items-center gap-3 text-slate-600 dark:text-slate-300 hover:text-red-600 transition-colors">
                                     <Phone size={20} className="text-red-600" />
-                                    <span>(+230) 212 4070</span>
+                                    <span>{contactPhone}</span>
                                 </a>
-                                <a href="https://wa.me/23059407711" className="flex items-center gap-3 text-slate-600 dark:text-slate-300 hover:text-red-600 transition-colors">
+                                <a href={`https://wa.me/${whatsapp1.replace(/\D/g, '')}`} target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 text-slate-600 dark:text-slate-300 hover:text-red-600 transition-colors">
                                     <Phone size={20} className="text-red-600" />
-                                    <span>(+230) 5940 7711 (WhatsApp)</span>
+                                    <span>{whatsapp1} (WhatsApp)</span>
                                 </a>
-                                <a href="https://wa.me/23059407701" className="flex items-center gap-3 text-slate-600 dark:text-slate-300 hover:text-red-600 transition-colors">
+                                <a href={`https://wa.me/${whatsapp2.replace(/\D/g, '')}`} target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 text-slate-600 dark:text-slate-300 hover:text-red-600 transition-colors">
                                     <Phone size={20} className="text-red-600" />
-                                    <span>(+230) 5940 7701 (WhatsApp)</span>
+                                    <span>{whatsapp2} (WhatsApp)</span>
                                 </a>
-                                <a href="mailto:reservation@travellounge.mu" className="flex items-center gap-3 text-slate-600 dark:text-slate-300 hover:text-red-600 transition-colors">
+                                <a href={`mailto:${contactEmail}`} className="flex items-center gap-3 text-slate-600 dark:text-slate-300 hover:text-red-600 transition-colors">
                                     <Mail size={20} className="text-red-600" />
-                                    <span>reservation@travellounge.mu</span>
+                                    <span>{contactEmail}</span>
                                 </a>
                             </div>
                         </div>
@@ -107,19 +167,8 @@ export default function ContactPage() {
                                 <Clock size={24} className="text-red-600" />
                                 Working Hours
                             </h3>
-                            <div className="space-y-2 text-slate-600 dark:text-slate-300">
-                                <div className="flex justify-between">
-                                    <span className="font-bold">Monday – Friday:</span>
-                                    <span>08:30 – 16:45</span>
-                                </div>
-                                <div className="flex justify-between">
-                                    <span className="font-bold">Saturday:</span>
-                                    <span>08:30 – 12:30</span>
-                                </div>
-                                <div className="flex justify-between">
-                                    <span className="font-bold">Sunday & Public holidays:</span>
-                                    <span className="text-red-600">Closed</span>
-                                </div>
+                            <div className="space-y-2 text-slate-600 dark:text-slate-300 whitespace-pre-line">
+                                {workingHours}
                             </div>
                         </div>
                     </div>
@@ -216,7 +265,7 @@ export default function ContactPage() {
                         {/* Quick Actions */}
                         <div className="mt-6 grid grid-cols-2 gap-4">
                             <a
-                                href="https://wa.me/23059407711"
+                                href={`https://wa.me/${whatsapp1.replace(/\D/g, '')}`}
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 className="px-6 py-4 bg-green-600 text-white rounded-xl font-bold hover:bg-green-700 transition-all text-center"
@@ -224,7 +273,7 @@ export default function ContactPage() {
                                 WhatsApp Us
                             </a>
                             <a
-                                href="tel:+2302124070"
+                                href={`tel:${contactPhone.replace(/\s/g, '')}`}
                                 className="px-6 py-4 bg-blue-600 text-white rounded-xl font-bold hover:bg-blue-700 transition-all text-center"
                             >
                                 Call Now

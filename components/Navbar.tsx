@@ -1,25 +1,69 @@
 'use client'
 
 import Link from 'next/link'
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import Image from 'next/image'
 import { Menu, X, Hotel, Ship, MapPin, Plane, Activity, Heart, Moon, Sun, Phone, Mail, Facebook, Instagram, Linkedin, ChevronDown } from 'lucide-react'
 import { useWishlist } from '@/contexts/WishlistContext'
 import { useTheme } from '@/contexts/ThemeContext'
+import { createClient } from '@/lib/supabase'
+
+interface SiteSettings {
+    general_config?: {
+        siteTitle?: string;
+        contactEmail?: string;
+        contactPhone?: string;
+        facebookUrl?: string;
+        instagramUrl?: string;
+        linkedinUrl?: string;
+    };
+    [key: string]: unknown;
+}
 
 export default function Navbar() {
     const [isOpen, setIsOpen] = useState(false)
     const [isScrolled, setIsScrolled] = useState(false)
+    const [settings, setSettings] = useState<SiteSettings | null>(null)
     const { wishlist } = useWishlist()
     const { theme, toggleTheme } = useTheme()
+    const supabase = createClient()
+
+    const fetchSettings = useCallback(async () => {
+        try {
+            const { data, error } = await supabase
+                .from('site_settings')
+                .select('*')
+
+            if (error) throw error
+
+            if (data) {
+                const config: SiteSettings = {}
+                data.forEach((item: { key: string; value: unknown }) => {
+                    config[item.key] = item.value
+                })
+                setSettings(config)
+            }
+        } catch (err) {
+            console.error('Error fetching navbar settings:', err)
+        }
+    }, [supabase])
 
     useEffect(() => {
+        fetchSettings()
+
         const handleScroll = () => {
             setIsScrolled(window.scrollY > 20)
         }
         window.addEventListener('scroll', handleScroll)
         return () => window.removeEventListener('scroll', handleScroll)
-    }, [])
+    }, [fetchSettings])
+
+    const siteTitle = settings?.general_config?.siteTitle || 'Travel Lounge'
+    const contactEmail = settings?.general_config?.contactEmail || 'reservation@travellounge.mu'
+    const contactPhone = settings?.general_config?.contactPhone || '(+230) 212 4070'
+    const facebookUrl = settings?.general_config?.facebookUrl || '#'
+    const instagramUrl = settings?.general_config?.instagramUrl || '#'
+    const linkedinUrl = settings?.general_config?.linkedinUrl || '#'
 
     return (
         <>
@@ -29,26 +73,26 @@ export default function Navbar() {
                     <div className="flex items-center justify-between text-sm">
                         {/* Left: Contact Info */}
                         <div className="flex items-center gap-6">
-                            <a href="tel:+2302124070" className="flex items-center gap-2 hover:bg-white/10 p-1 rounded transition-colors">
+                            <a href={`tel:${contactPhone.replace(/\s/g, '')}`} className="flex items-center gap-2 hover:bg-white/10 p-1 rounded transition-colors">
                                 <Phone size={14} />
-                                <span>(+230) 212 4070</span>
+                                <span>{contactPhone}</span>
                             </a>
-                            <a href="mailto:reservation@travellounge.mu" className="flex items-center gap-2 hover:bg-white/10 p-1 rounded transition-colors">
+                            <a href={`mailto:${contactEmail}`} className="flex items-center gap-2 hover:bg-white/10 p-1 rounded transition-colors">
                                 <Mail size={14} />
-                                <span>reservation@travellounge.mu</span>
+                                <span>{contactEmail}</span>
                             </a>
                         </div>
 
                         {/* Right: Social & User */}
                         <div className="flex items-center gap-4">
                             <div className="flex items-center gap-2">
-                                <a href="#" className="hover:bg-white/10 p-1 rounded transition-colors">
+                                <a href={facebookUrl} target="_blank" rel="noopener noreferrer" className="hover:bg-white/10 p-1 rounded transition-colors">
                                     <Facebook size={16} />
                                 </a>
-                                <a href="#" className="hover:bg-white/10 p-1 rounded transition-colors">
+                                <a href={instagramUrl} target="_blank" rel="noopener noreferrer" className="hover:bg-white/10 p-1 rounded transition-colors">
                                     <Instagram size={16} />
                                 </a>
-                                <a href="#" className="hover:bg-white/10 p-1 rounded transition-colors">
+                                <a href={linkedinUrl} target="_blank" rel="noopener noreferrer" className="hover:bg-white/10 p-1 rounded transition-colors">
                                     <Linkedin size={16} />
                                 </a>
                             </div>
@@ -68,7 +112,7 @@ export default function Navbar() {
                         <Link href="/" className="flex items-center gap-3 z-50">
                             <Image
                                 src="/logo.png"
-                                alt="Travel Lounge"
+                                alt={siteTitle}
                                 width={160}
                                 height={40}
                                 className="h-8 md:h-10 w-auto object-contain"
@@ -80,7 +124,7 @@ export default function Navbar() {
                             <Link href="/cruises" className="text-slate-900 hover:text-red-600 font-bold transition-colors">
                                 Cruises
                             </Link>
-                            ...
+
                             <Link href="/flights" className="text-slate-900 hover:text-red-600 font-bold transition-colors">
                                 Flights
                             </Link>

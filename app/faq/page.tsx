@@ -55,27 +55,41 @@ const staticFaqs: GroupedFAQ[] = [
     }
 ]
 
+interface SiteSettings {
+    contactEmail?: string;
+    contactPhone?: string;
+    whatsappNumber1?: string;
+    workingHours?: string;
+}
+
 export default function FAQPage() {
     const [openItems, setOpenItems] = useState<string[]>([])
     const [faqData, setFaqData] = useState<GroupedFAQ[]>(staticFaqs)
+    const [settings, setSettings] = useState<SiteSettings | null>(null)
     const [loading, setLoading] = useState(true)
     const [searchTerm, setSearchTerm] = useState('')
     const supabase = createClient()
 
     useEffect(() => {
-        const fetchFaqs = async () => {
+        const fetchData = async () => {
             try {
-                const { data, error } = await supabase
-                    .from('faqs')
-                    .select('*')
-                    .eq('is_published', true)
-                    .order('order_index', { ascending: true })
+                // Fetch FAQs and Settings in parallel
+                const [faqRes, settingsRes] = await Promise.all([
+                    supabase
+                        .from('faqs')
+                        .select('*')
+                        .eq('is_published', true)
+                        .order('order_index', { ascending: true }),
+                    supabase
+                        .from('site_settings')
+                        .select('value')
+                        .eq('key', 'general_config')
+                        .single()
+                ])
 
-                if (error) throw error
-
-                if (data && data.length > 0) {
+                if (faqRes.data && faqRes.data.length > 0) {
                     const grouped: { [key: string]: GroupedFAQ } = {}
-                    data.forEach((faq: FAQ) => {
+                    faqRes.data.forEach((faq: FAQ) => {
                         if (!grouped[faq.category]) {
                             grouped[faq.category] = { category: faq.category, questions: [] }
                         }
@@ -83,16 +97,19 @@ export default function FAQPage() {
                     })
                     setFaqData(Object.values(grouped))
                 }
+
+                if (settingsRes.data?.value) {
+                    setSettings(settingsRes.data.value as SiteSettings)
+                }
             } catch (err) {
-                console.error('Error fetching FAQs:', err)
-                // Fallback to static data
+                console.error('FAQ: Error fetching data:', err)
             } finally {
                 setLoading(false)
             }
         }
 
-        fetchFaqs()
-    }, [])
+        fetchData()
+    }, [supabase])
 
     function toggleItem(id: string) {
         setOpenItems(prev =>
@@ -194,7 +211,7 @@ export default function FAQPage() {
 
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                         <Link
-                            href="/contact"
+                            href={`mailto:${settings?.contactEmail || 'reservation@travellounge.mu'}`}
                             className="bg-slate-50 rounded-2xl p-6 text-center hover:bg-red-50 hover:border-red-600 border-2 border-transparent transition-all group"
                         >
                             <div className="p-4 bg-white rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4 group-hover:bg-red-600 transition-colors">
@@ -204,23 +221,31 @@ export default function FAQPage() {
                             <p className="text-sm text-slate-600">Get a response within 24 hours</p>
                         </Link>
 
-                        <div className="bg-slate-50 rounded-2xl p-6 text-center border-2 border-transparent">
-                            <div className="p-4 bg-white rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
-                                <Phone size={28} className="text-red-600" />
+                        <a
+                            href={`tel:${settings?.contactPhone || '+2302124070'}`}
+                            className="bg-slate-50 rounded-2xl p-6 text-center hover:bg-red-50 hover:border-red-600 border-2 border-transparent transition-all group"
+                        >
+                            <div className="p-4 bg-white rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4 group-hover:bg-red-600 transition-colors">
+                                <Phone size={28} className="text-red-600 group-hover:text-white transition-colors" />
                             </div>
                             <h3 className="text-lg font-bold text-slate-900 mb-2">Call Us</h3>
-                            <p className="text-sm text-slate-600 mb-2">+230 5XXX XXXX</p>
-                            <p className="text-xs text-slate-500">Mon-Fri: 9AM-6PM</p>
-                        </div>
+                            <p className="text-sm text-slate-600 mb-2">{settings?.contactPhone || '(+230) 212 4070'}</p>
+                            <p className="text-xs text-slate-500 uppercase tracking-widest font-black">{settings?.workingHours?.split('\n')[0] || 'Mon-Fri: 9AM-6PM'}</p>
+                        </a>
 
-                        <div className="bg-slate-50 rounded-2xl p-6 text-center border-2 border-transparent">
-                            <div className="p-4 bg-white rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
-                                <MessageCircle size={28} className="text-red-600" />
+                        <a
+                            href={`https://wa.me/${(settings?.whatsappNumber1 || '+23059407711').replace(/\s+/g, '')}`}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="bg-slate-50 rounded-2xl p-6 text-center hover:bg-red-50 hover:border-red-600 border-2 border-transparent transition-all group"
+                        >
+                            <div className="p-4 bg-white rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4 group-hover:bg-red-600 transition-colors">
+                                <MessageCircle size={28} className="text-red-600 group-hover:text-white transition-colors" />
                             </div>
                             <h3 className="text-lg font-bold text-slate-900 mb-2">Live Chat</h3>
-                            <p className="text-sm text-slate-600">Chat with us in real-time</p>
-                            <p className="text-xs text-slate-500 mt-2">Coming Soon</p>
-                        </div>
+                            <p className="text-sm text-slate-600">Chat with us on WhatsApp</p>
+                            <p className="text-xs text-slate-500 mt-2 font-bold text-green-600">Usually Online</p>
+                        </a>
                     </div>
                 </div>
             </div>

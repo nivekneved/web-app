@@ -1,15 +1,46 @@
-'use client'
-
-import { useState } from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
 import Link from 'next/link'
 import { MapPin, Phone, Mail, Clock, Facebook, Instagram, Linkedin, Loader2 } from 'lucide-react'
 import { createClient } from '@/lib/supabase'
 import { toast } from 'sonner'
 
+interface GeneralConfig {
+    siteTitle?: string;
+    contactEmail?: string;
+    contactPhone?: string;
+    officeAddress?: string;
+    workingHours?: string;
+    facebookUrl?: string;
+    instagramUrl?: string;
+    linkedinUrl?: string;
+}
+
 export default function Footer() {
     const [email, setEmail] = useState('')
     const [submitting, setSubmitting] = useState(false)
+    const [settings, setSettings] = useState<GeneralConfig | null>(null)
     const supabase = createClient()
+
+    const fetchSettings = useCallback(async () => {
+        try {
+            const { data, error } = await supabase
+                .from('site_settings')
+                .select('value')
+                .eq('key', 'general_config')
+                .single()
+
+            if (error) throw error
+            if (data?.value) {
+                setSettings(data.value as GeneralConfig)
+            }
+        } catch (err) {
+            console.error('Footer: Error fetching settings:', err)
+        }
+    }, [supabase])
+
+    useEffect(() => {
+        fetchSettings()
+    }, [fetchSettings])
 
     async function handleSubscribe(e: React.FormEvent) {
         e.preventDefault()
@@ -39,6 +70,14 @@ export default function Footer() {
         }
     }
 
+    const contactEmail = settings?.contactEmail || 'reservation@travellounge.mu'
+    const contactPhone = settings?.contactPhone || '(+230) 212 4070'
+    const officeAddress = settings?.officeAddress || 'Ground Floor Newton Tower, Corner Sir William Newton and Remy Ollier Street, Port Louis, Mauritius'
+    const workingHours = settings?.workingHours || 'Mon - Fri: 08:30 - 17:00'
+    const facebookUrl = settings?.facebookUrl || '#'
+    const instagramUrl = settings?.instagramUrl || '#'
+    const linkedinUrl = settings?.linkedinUrl || '#'
+
     return (
         <footer className="bg-slate-900 text-white">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
@@ -52,13 +91,13 @@ export default function Footer() {
                             Your local and international holiday provider. IATA accredited travel agents for safe and memorable holidays.
                         </p>
                         <div className="flex gap-3">
-                            <a href="#" className="w-9 h-9 bg-slate-800 rounded-lg flex items-center justify-center hover:bg-red-600 transition-colors">
+                            <a href={facebookUrl} target="_blank" rel="noopener noreferrer" className="w-9 h-9 bg-slate-800 rounded-lg flex items-center justify-center hover:bg-red-600 transition-colors">
                                 <Facebook size={18} />
                             </a>
-                            <a href="#" className="w-9 h-9 bg-slate-800 rounded-lg flex items-center justify-center hover:bg-red-600 transition-colors">
+                            <a href={instagramUrl} target="_blank" rel="noopener noreferrer" className="w-9 h-9 bg-slate-800 rounded-lg flex items-center justify-center hover:bg-red-600 transition-colors">
                                 <Instagram size={18} />
                             </a>
-                            <a href="#" className="w-9 h-9 bg-slate-800 rounded-lg flex items-center justify-center hover:bg-red-600 transition-colors">
+                            <a href={linkedinUrl} target="_blank" rel="noopener noreferrer" className="w-9 h-9 bg-slate-800 rounded-lg flex items-center justify-center hover:bg-red-600 transition-colors">
                                 <Linkedin size={18} />
                             </a>
                         </div>
@@ -69,17 +108,10 @@ export default function Footer() {
                         <h4 className="text-lg font-black mb-4">Visit Us</h4>
                         <div className="space-y-4 text-slate-300">
                             <div>
-                                <p className="font-bold text-white mb-1">Port Louis</p>
+                                <p className="font-bold text-white mb-1">Our Office</p>
                                 <p className="text-sm flex items-start gap-2">
                                     <MapPin size={16} className="mt-1 flex-shrink-0 text-red-600" />
-                                    <span>Ground Floor Newton Tower, Corner Sir William Newton and Remy Ollier Street, Port Louis, Mauritius</span>
-                                </p>
-                            </div>
-                            <div>
-                                <p className="font-bold text-white mb-1">Ebene</p>
-                                <p className="text-sm flex items-start gap-2">
-                                    <MapPin size={16} className="mt-1 flex-shrink-0 text-red-600" />
-                                    <span>Ground Floor, 57 Ebene Mews, Rue Du Savoir, Ebene Cybercity</span>
+                                    <span>{officeAddress}</span>
                                 </p>
                             </div>
                         </div>
@@ -89,30 +121,20 @@ export default function Footer() {
                     <div>
                         <h4 className="text-lg font-black mb-4">Contact Us</h4>
                         <div className="space-y-3 text-slate-300">
-                            <a href="tel:+2302124070" className="flex items-center gap-2 hover:text-red-600 transition-colors">
+                            <a href={`tel:${contactPhone.replace(/\s/g, '')}`} className="flex items-center gap-2 hover:text-red-600 transition-colors">
                                 <Phone size={16} className="text-red-600" />
-                                <span>(+230) 212 4070</span>
+                                <span>{contactPhone}</span>
                             </a>
-                            <a href="https://wa.me/23059407711" className="flex items-center gap-2 hover:text-red-600 transition-colors">
-                                <Phone size={16} className="text-red-600" />
-                                <span>(+230) 5940 7711</span>
-                            </a>
-                            <a href="https://wa.me/23059407701" className="flex items-center gap-2 hover:text-red-600 transition-colors">
-                                <Phone size={16} className="text-red-600" />
-                                <span>(+230) 5940 7701</span>
-                            </a>
-                            <a href="mailto:reservation@travellounge.mu" className="flex items-center gap-2 hover:text-red-600 transition-colors">
+                            <a href={`mailto:${contactEmail}`} className="flex items-center gap-2 hover:text-red-600 transition-colors">
                                 <Mail size={16} className="text-red-600" />
-                                <span>reservation@travellounge.mu</span>
+                                <span>{contactEmail}</span>
                             </a>
                             <div className="pt-3">
                                 <p className="font-bold text-white mb-2 flex items-center gap-2">
                                     <Clock size={16} className="text-red-600" />
                                     Working Hours
                                 </p>
-                                <p className="text-sm">Monday – Friday: 08:30 – 16:45</p>
-                                <p className="text-sm">Saturday: 08:30 – 12:30</p>
-                                <p className="text-sm">Sunday & Public holidays: Closed</p>
+                                <p className="text-sm whitespace-pre-line">{workingHours}</p>
                             </div>
                         </div>
                     </div>

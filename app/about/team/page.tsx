@@ -1,63 +1,58 @@
 'use client'
 
+import React, { useState, useEffect } from 'react'
 import Image from 'next/image'
-import { Instagram, Facebook, Linkedin, Mail, Phone, ArrowRight } from 'lucide-react'
+import { Linkedin, Mail, ArrowRight, Loader2 } from 'lucide-react'
 import { motion } from 'framer-motion'
 import Link from 'next/link'
+import { createClient } from '@/lib/supabase'
 
-const team = [
-    {
-        name: "Leena Jhugroo",
-        role: "Managing Director",
-        image: "/team/leena.png",
-        bio: "With over 15 years in the travel industry, Leena leads Travel Lounge with a vision for excellence and customer-centricity.",
-        color: "bg-red-600"
-    },
-    {
-        name: "Nalini Indurjeet",
-        role: "Senior Sales Executive Corporate",
-        image: "/team/nalini.png",
-        bio: "Corporate travel specialist dedicated to providing seamless business itineraries and high-level support.",
-        color: "bg-slate-900"
-    },
-    {
-        name: "Nabila Ramjaun",
-        role: "Senior Sales Executive Corporate",
-        image: "/team/nabila.png",
-        bio: "Exquisite attention to detail in corporate accounts, ensuring efficiency and reliability for our business partners.",
-        color: "bg-slate-800"
-    },
-    {
-        name: "Kirtee Boodoo",
-        role: "Senior Sales Executive Leisure",
-        image: "/team/kirtee.png",
-        bio: "Passionate about crafting personalized holiday experiences that go beyond expectations.",
-        color: "bg-red-600"
-    },
-    {
-        name: "Maleekah Amboorallee",
-        role: "Travel Consultant",
-        image: "/team/maleekah.png",
-        bio: "Expert in local and international destinations, helping travelers find their perfect getaway.",
-        color: "bg-slate-900"
-    },
-    {
-        name: "Manshi Rughoobur",
-        role: "Account Clerk",
-        image: "/team/manshi.png",
-        bio: "The backbone of our financial operations, ensuring precision and transparency in every transaction.",
-        color: "bg-slate-800"
-    },
-    {
-        name: "Mandini Boolauk",
-        role: "Travel Consultant",
-        image: "/team/mandini.png",
-        bio: "Dedicated to assisting clients with the best travel deals and comprehensive itinerary planning.",
-        color: "bg-red-600"
-    }
-]
+interface TeamMember {
+    id: string
+    name: string
+    role: string
+    bio: string
+    photo_url: string | null
+    linkedin_url: string | null
+    email: string
+}
+
+const roleLabels: Record<string, string> = {
+    'admin': 'Universal Root Administrator',
+    'manager': 'Operations Manager',
+    'staff': 'Standard Staff',
+    'receptionist': 'Receptionist',
+    'editor': 'Content Manager',
+    'sales': 'Sales Consultant',
+    'accountant': 'Accounts Representative'
+}
 
 export default function TeamPage() {
+    const [team, setTeam] = useState<TeamMember[]>([])
+    const [loading, setLoading] = useState(true)
+    const supabase = createClient()
+
+    useEffect(() => {
+        async function fetchTeam() {
+            try {
+                const { data, error } = await supabase
+                    .from('admins')
+                    .select('id, name, role, bio, photo_url, linkedin_url, email')
+                    .eq('is_active', true)
+                    .eq('show_on_front_page', true)
+                    .order('display_order', { ascending: true })
+
+                if (error) throw error
+                setTeam(data || [])
+            } catch (err) {
+                console.error('Error fetching team:', err)
+            } finally {
+                setLoading(false)
+            }
+        }
+        fetchTeam()
+    }, [supabase])
+
     return (
         <div className="min-h-screen bg-white">
             {/* Header */}
@@ -79,56 +74,70 @@ export default function TeamPage() {
             {/* Team Grid */}
             <section className="py-32">
                 <div className="container mx-auto px-6">
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12">
-                        {team.map((member, i) => (
-                            <motion.div
-                                key={member.name}
-                                initial={{ opacity: 0, y: 30 }}
-                                whileInView={{ opacity: 1, y: 0 }}
-                                viewport={{ once: true }}
-                                transition={{ delay: i * 0.1 }}
-                                className="group"
-                            >
-                                <div className="relative aspect-[4/5] rounded-[3rem] overflow-hidden mb-8 shadow-2xl shadow-slate-200">
-                                    <Image
-                                        src={member.image}
-                                        alt={member.name}
-                                        fill
-                                        className="object-cover transition-transform duration-700 group-hover:scale-110"
-                                    />
-                                    <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                    {loading ? (
+                        <div className="flex flex-col items-center justify-center py-20">
+                            <Loader2 className="animate-spin text-red-600 mb-4" size={48} />
+                            <p className="text-slate-500 font-bold uppercase tracking-widest text-sm">Assembling Team Data...</p>
+                        </div>
+                    ) : (
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12">
+                            {team.map((member, i) => (
+                                <motion.div
+                                    key={member.id}
+                                    initial={{ opacity: 0, y: 30 }}
+                                    whileInView={{ opacity: 1, y: 0 }}
+                                    viewport={{ once: true }}
+                                    transition={{ delay: i * 0.1 }}
+                                    className="group"
+                                >
+                                    <div className="relative aspect-[4/5] rounded-[3rem] overflow-hidden mb-8 shadow-2xl shadow-slate-200">
+                                        <Image
+                                            src={member.photo_url || `https://ui-avatars.com/api/?name=${encodeURIComponent(member.name)}&size=800&background=F3F4F6&color=9CA3AF`}
+                                            alt={member.name}
+                                            fill
+                                            className="object-cover transition-transform duration-700 group-hover:scale-110"
+                                            unoptimized
+                                        />
+                                        <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
 
-                                    {/* Social Overlay */}
-                                    <div className="absolute bottom-6 left-6 right-6 flex gap-3 translate-y-12 group-hover:translate-y-0 transition-transform duration-500">
-                                        <div className="flex gap-2 bg-white/10 backdrop-blur-md p-2 rounded-2xl w-full justify-around border border-white/20">
-                                            <button className="text-white hover:text-red-600 transition-colors p-2"><Facebook size={20} /></button>
-                                            <button className="text-white hover:text-red-600 transition-colors p-2"><Instagram size={20} /></button>
-                                            <button className="text-white hover:text-red-600 transition-colors p-2"><Linkedin size={20} /></button>
-                                            <button className="text-white hover:text-red-600 transition-colors p-2"><Mail size={20} /></button>
+                                        {/* Social Overlay */}
+                                        <div className="absolute bottom-6 left-6 right-6 flex gap-3 translate-y-12 group-hover:translate-y-0 transition-transform duration-500">
+                                            <div className="flex gap-2 bg-white/10 backdrop-blur-md p-2 rounded-2xl w-full justify-around border border-white/20">
+                                                {member.linkedin_url && (
+                                                    <a href={member.linkedin_url} target="_blank" rel="noopener noreferrer" className="text-white hover:text-red-600 transition-colors p-2">
+                                                        <Linkedin size={20} />
+                                                    </a>
+                                                )}
+                                                <a href={`mailto:${member.email}`} className="text-white hover:text-red-600 transition-colors p-2">
+                                                    <Mail size={20} />
+                                                </a>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
 
-                                <div className="px-4">
-                                    <div className="flex items-center gap-3 mb-3">
-                                        <span className={`w-12 h-1 ${member.color} rounded-full`} />
-                                        <span className="text-sm font-bold text-red-600 uppercase tracking-widest">{member.role}</span>
+                                    <div className="px-4">
+                                        <div className="flex items-center gap-3 mb-3">
+                                            <span className={`w-12 h-1 bg-red-600 rounded-full`} />
+                                            <span className="text-sm font-bold text-red-600 uppercase tracking-widest">
+                                                {roleLabels[member.role] || member.role}
+                                            </span>
+                                        </div>
+                                        <h3 className="text-3xl font-black text-slate-900 mb-4">{member.name}</h3>
+                                        <p className="text-slate-500 leading-relaxed mb-6">
+                                            {member.bio || "Dedicated travel professional at Travel Lounge."}
+                                        </p>
+                                        <Link
+                                            href={`/contact?subject=Meeting with ${member.name}`}
+                                            className="inline-flex items-center gap-2 text-slate-900 font-bold hover:text-red-600 transition-colors group/link"
+                                        >
+                                            Book a consultation
+                                            <ArrowRight size={18} className="transform group-hover/link:translate-x-1 transition-transform" />
+                                        </Link>
                                     </div>
-                                    <h3 className="text-3xl font-black text-slate-900 mb-4">{member.name}</h3>
-                                    <p className="text-slate-500 leading-relaxed mb-6">
-                                        {member.bio}
-                                    </p>
-                                    <Link
-                                        href={`/contact?subject=Meeting with ${member.name}`}
-                                        className="inline-flex items-center gap-2 text-slate-900 font-bold hover:text-red-600 transition-colors group/link"
-                                    >
-                                        Book a consultation
-                                        <ArrowRight size={18} className="transform group-hover/link:translate-x-1 transition-transform" />
-                                    </Link>
-                                </div>
-                            </motion.div>
-                        ))}
-                    </div>
+                                </motion.div>
+                            ))}
+                        </div>
+                    )}
                 </div>
             </section>
 
