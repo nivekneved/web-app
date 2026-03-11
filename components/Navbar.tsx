@@ -24,7 +24,7 @@ export default function Navbar() {
     return (
         <>
             {/* Topbar */}
-            <div className="bg-red-600 text-white py-2 hidden md:block">
+            <div className="bg-red-600 text-white py-1 hidden md:block">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <div className="flex items-center justify-between text-sm">
                         {/* Left: Contact Info */}
@@ -63,7 +63,7 @@ export default function Navbar() {
                     }`}
             >
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                    <div className="flex items-center justify-between h-20">
+                    <div className="flex items-center justify-between h-16">
                         {/* Logo */}
                         <Link href="/" className="flex items-center gap-3 z-50">
                             <Image
