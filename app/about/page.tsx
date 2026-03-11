@@ -1,16 +1,114 @@
 'use client'
 
+import { useState, useEffect, useMemo } from 'react'
 import Image from 'next/image'
-import { Globe, Trophy, MapPin, Clock, ShieldCheck, Star } from 'lucide-react'
+import { Globe, Trophy, MapPin, Clock, ShieldCheck, Star, Loader2 } from 'lucide-react'
 import { motion } from 'framer-motion'
+import { createClient } from '@/lib/supabase'
+
+type ContentBlock = {
+    section_key: string
+    content: unknown
+}
+
+type AboutContent = {
+    hero?: {
+        badge: string
+        title: string
+        description: string
+        image: string
+    }
+    identity?: {
+        subtitle: string
+        title: string
+        description: string
+        quote: string
+        stats_label: string
+        stats_value: string
+    }
+    vision?: {
+        title: string
+        description: string
+    }
+    mission?: {
+        title: string
+        description: string
+    }
+}
 
 export default function AboutPage() {
+    const [content, setContent] = useState<AboutContent | null>(null)
+    const [loading, setLoading] = useState(true)
+    const supabase = useMemo(() => createClient(), [])
+
+    useEffect(() => {
+        const fetchContent = async () => {
+            try {
+                const { data, error } = await supabase
+                    .from('content_blocks')
+                    .select('*')
+                    .eq('page_slug', 'about')
+
+                if (error) throw error
+
+                if (data && data.length > 0) {
+                    const blocks: Record<string, unknown> = {}
+                    data.forEach((block: ContentBlock) => {
+                        blocks[block.section_key] = block.content
+                    })
+                    setContent(blocks as AboutContent)
+                }
+            } catch (err) {
+                console.error('Error fetching about page content:', err)
+            } finally {
+                setLoading(false)
+            }
+        }
+
+        fetchContent()
+    }, [supabase])
+
+    // Fallback data
+    const hero = content?.hero || {
+        badge: "IATA Accredited Agency",
+        title: "Your World, <br />Our <span class=\"text-red-600\">Expertise</span>",
+        description: "Since 2014, Travel Lounge has been the premier destination for discerning travelers in Mauritius. We specialize in corporate travel and tailor-made leisure experiences worldwide.",
+        image: "/hero-flight.png"
+    }
+
+    const identity = content?.identity || {
+        subtitle: "About Travel Lounge",
+        title: "A One-Stop <br /><span class=\"text-red-600\">Travel Solutions</span> Provider",
+        description: "Located in the heart of Port Louis, Travel Lounge Ltd is an IATA accredited travel agency specializing in corporate business and personalized holiday leisure travel deals.",
+        quote: "Our mission is to provide dedicated support and personal advice throughout your journey, always putting customer delight at the forefront.",
+        stats_label: "Years of Excellence",
+        stats_value: "10+"
+    }
+
+    const vision = content?.vision || {
+        title: "Our Vision",
+        description: "To be a one-stop travel solutions provider which aims to continuously grow across borders, in products and services, and always putting the customer's delight at first place."
+    }
+
+    const mission = content?.mission || {
+        title: "Our Mission",
+        description: "Our dedicated corporate team members focus on personal advice, support and communication throughout your trip abroad and also provide related solutions to individual customers."
+    }
+
+    if (loading) {
+        return (
+            <div className="min-h-screen flex items-center justify-center bg-white">
+                <Loader2 className="animate-spin text-red-600" size={48} />
+            </div>
+        )
+    }
+
     return (
         <div className="min-h-screen bg-white">
             {/* Hero Section */}
             <section className="relative h-[600px] flex items-center overflow-hidden">
                 <Image
-                    src="/hero-flight.png"
+                    src={hero.image}
                     alt="Travel Lounge Mauritius"
                     fill
                     className="object-cover"
@@ -26,13 +124,14 @@ export default function AboutPage() {
                         className="max-w-3xl"
                     >
                         <span className="inline-block py-1 px-4 rounded-full bg-red-600 text-white text-sm font-bold mb-6 tracking-widest uppercase">
-                            IATA Accredited Agency
+                            {hero.badge}
                         </span>
-                        <h1 className="text-6xl md:text-8xl font-black text-white mb-8 leading-none">
-                            Your World, <br />Our <span className="text-red-600">Expertise</span>
-                        </h1>
+                        <h1 
+                            className="text-6xl md:text-8xl font-black text-white mb-8 leading-none"
+                            dangerouslySetInnerHTML={{ __html: hero.title }}
+                        />
                         <p className="text-xl text-slate-200 leading-relaxed font-medium">
-                            Since 2014, Travel Lounge has been the premier destination for discerning travelers in Mauritius. We specialize in corporate travel and tailor-made leisure experiences worldwide.
+                            {hero.description}
                         </p>
                     </motion.div>
                 </div>
@@ -43,19 +142,17 @@ export default function AboutPage() {
                 <div className="container mx-auto px-6">
                     <div className="flex flex-col lg:flex-row gap-20 items-center">
                         <div className="lg:w-1/2">
-                            <h2 className="text-sm font-bold text-red-600 uppercase tracking-[0.4em] mb-6">About Travel Lounge</h2>
-                            <h3 className="text-5xl font-black text-slate-900 mb-10 leading-tight">
-                                A One-Stop <br /><span className="text-red-600">Travel Solutions</span> Provider
-                            </h3>
+                            <h2 className="text-sm font-bold text-red-600 uppercase tracking-[0.4em] mb-6">{identity.subtitle}</h2>
+                            <h3 
+                                className="text-5xl font-black text-slate-900 mb-10 leading-tight"
+                                dangerouslySetInnerHTML={{ __html: identity.title }}
+                            />
                             <div className="space-y-8 text-slate-600 text-lg">
                                 <p className="leading-relaxed">
-                                    Located in the heart of Port Louis, Travel Lounge Ltd is an IATA accredited travel agency specializing in corporate business and personalized holiday leisure travel deals.
+                                    {identity.description}
                                 </p>
                                 <p className="leading-relaxed italic border-l-4 border-red-600 pl-6 py-2 bg-slate-50 rounded-r-2xl">
-                                    &quot;Our mission is to provide dedicated support and personal advice throughout your journey, always putting customer delight at the forefront.&quot;
-                                </p>
-                                <p className="leading-relaxed">
-                                    Whether it&apos;s a complex corporate itinerary or a dream island getaway, our experts ensure a hassle-free experience. Your peace of mind is our primary business.
+                                    &quot;{identity.quote}&quot;
                                 </p>
                             </div>
                         </div>
@@ -64,8 +161,8 @@ export default function AboutPage() {
                             <div className="grid grid-cols-2 gap-6 relative z-10">
                                 <div className="space-y-6 pt-12">
                                     <div className="bg-slate-900 p-8 rounded-[2.5rem] text-white shadow-2xl">
-                                        <div className="text-5xl font-black text-red-600 mb-2">10+</div>
-                                        <div className="text-sm font-bold text-slate-400 uppercase tracking-widest">Years of Excellence</div>
+                                        <div className="text-5xl font-black text-red-600 mb-2">{identity.stats_value}</div>
+                                        <div className="text-sm font-bold text-slate-400 uppercase tracking-widest">{identity.stats_label}</div>
                                     </div>
                                     <div className="h-64 relative rounded-[2.5rem] overflow-hidden shadow-2xl border-4 border-white">
                                         <Image src="/hero-adventure.png" alt="Travel" fill className="object-cover" />
@@ -81,8 +178,6 @@ export default function AboutPage() {
                                     </div>
                                 </div>
                             </div>
-                            <div className="absolute -top-10 -right-10 w-64 h-64 bg-slate-100 rounded-full mix-blend-multiply filter blur-3xl opacity-70 animate-blob" />
-                            <div className="absolute -bottom-10 -left-10 w-64 h-64 bg-red-100 rounded-full mix-blend-multiply filter blur-3xl opacity-70 animate-blob animation-delay-2000" />
                         </div>
                     </div>
                 </div>
@@ -96,18 +191,18 @@ export default function AboutPage() {
                             <div className="w-16 h-16 bg-red-600 text-white rounded-2xl flex items-center justify-center mb-10 transform group-hover:rotate-12 transition-transform">
                                 <Globe size={32} />
                             </div>
-                            <h3 className="text-3xl font-black text-slate-900 mb-6 group-hover:text-white transition-colors">Our Vision</h3>
+                            <h3 className="text-3xl font-black text-slate-900 mb-6 group-hover:text-white transition-colors">{vision.title}</h3>
                             <p className="text-slate-500 text-lg leading-relaxed group-hover:text-slate-400 transition-colors">
-                                To be a one-stop travel solutions provider which aims to continuously grow across borders, in products and services, and always putting the customer&apos;s delight at first place.
+                                {vision.description}
                             </p>
                         </div>
                         <div className="bg-white p-12 rounded-[3.5rem] border border-slate-100 shadow-xl group hover:bg-red-600 transition-all duration-500">
                             <div className="w-16 h-16 bg-slate-900 text-white rounded-2xl flex items-center justify-center mb-10 transform group-hover:-rotate-12 transition-transform">
                                 <ShieldCheck size={32} />
                             </div>
-                            <h3 className="text-3xl font-black text-slate-900 mb-6 group-hover:text-white transition-colors">Our Mission</h3>
+                            <h3 className="text-3xl font-black text-slate-900 mb-6 group-hover:text-white transition-colors">{mission.title}</h3>
                             <p className="text-slate-500 text-lg leading-relaxed group-hover:text-red-50 transition-colors">
-                                Our dedicated corporate team members focus on personal advice, support and communication throughout your trip abroad and also provide related solutions to individual customers.
+                                {mission.description}
                             </p>
                         </div>
                     </div>

@@ -1,7 +1,44 @@
+'use client'
+
+import { useState } from 'react'
 import Link from 'next/link'
-import { MapPin, Phone, Mail, Clock, Facebook, Instagram, Linkedin } from 'lucide-react'
+import { MapPin, Phone, Mail, Clock, Facebook, Instagram, Linkedin, Loader2 } from 'lucide-react'
+import { createClient } from '@/lib/supabase'
+import { toast } from 'sonner'
 
 export default function Footer() {
+    const [email, setEmail] = useState('')
+    const [submitting, setSubmitting] = useState(false)
+    const supabase = createClient()
+
+    async function handleSubscribe(e: React.FormEvent) {
+        e.preventDefault()
+        if (!email) return
+
+        setSubmitting(true)
+        try {
+            const { error } = await supabase
+                .from('subscribers')
+                .insert([{ email }])
+
+            if (error) {
+                if (error.code === '23505') {
+                    toast.error('You are already subscribed!')
+                } else {
+                    throw error
+                }
+            } else {
+                toast.success('Thank you for subscribing!')
+                setEmail('')
+            }
+        } catch (err) {
+            console.error('Error subscribing:', err)
+            toast.error('Failed to subscribe. Please try again.')
+        } finally {
+            setSubmitting(false)
+        }
+    }
+
     return (
         <footer className="bg-slate-900 text-white">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
@@ -115,16 +152,23 @@ export default function Footer() {
                     <div className="md:col-span-2 lg:pt-0 lg:mt-0 mt-0">
                         <h4 className="text-lg font-black mb-2">Newsletter</h4>
                         <p className="text-slate-300 mb-4 text-sm">Stay up to date with our latest news, exclusive deals, and more.</p>
-                        <div className="flex gap-2">
+                        <form onSubmit={handleSubscribe} className="flex gap-2">
                             <input
                                 type="email"
                                 placeholder="Enter email"
+                                required
+                                value={email}
+                                onChange={(e) => setEmail(e.target.value)}
                                 className="flex-1 px-4 py-2.5 bg-slate-800 border border-slate-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-red-600 text-white text-sm"
                             />
-                            <button className="px-5 py-2.5 bg-red-600 text-white rounded-xl font-bold hover:bg-red-700 transition-colors text-sm whitespace-nowrap">
-                                Subscribe
+                            <button 
+                                type="submit"
+                                disabled={submitting}
+                                className="px-5 py-2.5 bg-red-600 text-white rounded-xl font-bold hover:bg-red-700 transition-colors text-sm whitespace-nowrap min-w-[100px] flex items-center justify-center"
+                            >
+                                {submitting ? <Loader2 size={16} className="animate-spin" /> : 'Subscribe'}
                             </button>
-                        </div>
+                        </form>
                     </div>
                 </div>
 

@@ -1,8 +1,7 @@
-'use client'
-
 import { useState } from 'react'
-import { MapPin, Phone, Mail, Clock, Send } from 'lucide-react'
+import { MapPin, Phone, Mail, Clock, Send, Loader2 } from 'lucide-react'
 import { toast } from 'sonner'
+import { createClient } from '@/lib/supabase'
 
 export default function ContactPage() {
     const [formData, setFormData] = useState({
@@ -12,11 +11,28 @@ export default function ContactPage() {
         subject: '',
         message: ''
     })
+    const [submitting, setSubmitting] = useState(false)
+    const supabase = createClient()
 
-    function handleSubmit(e: React.FormEvent) {
+    async function handleSubmit(e: React.FormEvent) {
         e.preventDefault()
-        toast.success('Message sent! We\'ll get back to you soon.')
-        setFormData({ name: '', email: '', phone: '', subject: '', message: '' })
+        setSubmitting(true)
+
+        try {
+            const { error } = await supabase
+                .from('inquiries')
+                .insert([formData])
+
+            if (error) throw error
+
+            toast.success('Message sent! We\'ll get back to you soon.')
+            setFormData({ name: '', email: '', phone: '', subject: '', message: '' })
+        } catch (error) {
+            console.error('Error sending message:', error)
+            toast.error('Failed to send message. Please try again later.')
+        } finally {
+            setSubmitting(false)
+        }
     }
 
     return (
@@ -184,10 +200,15 @@ export default function ContactPage() {
 
                                 <button
                                     type="submit"
-                                    className="w-full px-6 py-4 bg-red-600 text-white rounded-xl font-bold hover:bg-slate-900 transition-all flex items-center justify-center gap-2"
+                                    disabled={submitting}
+                                    className="w-full px-6 py-4 bg-red-600 text-white rounded-xl font-bold hover:bg-slate-900 transition-all flex items-center justify-center gap-2 disabled:opacity-50"
                                 >
-                                    <Send size={20} />
-                                    Send Message
+                                    {submitting ? (
+                                        <Loader2 size={20} className="animate-spin" />
+                                    ) : (
+                                        <Send size={20} />
+                                    )}
+                                    {submitting ? 'Sending...' : 'Send Message'}
                                 </button>
                             </form>
                         </div>

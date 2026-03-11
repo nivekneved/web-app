@@ -10,6 +10,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import CategoryGrid from '@/components/CategoryGrid'
 import DealsCarousel from '@/components/DealsCarousel'
 
+import { toast } from 'sonner'
 import { createClient } from '@/lib/supabase'
 
 const supabase = createClient()
@@ -254,13 +255,48 @@ export default function HomePage() {
               <p className="text-lg text-slate-500 mb-10">
                 Receive exclusive travel inspirations, hidden gems, and premium offers directly in your inbox.
               </p>
-              <form className="flex flex-col md:flex-row gap-4">
+              <form onSubmit={async (e: React.FormEvent<HTMLFormElement>) => {
+                e.preventDefault();
+                const form = e.currentTarget;
+                const emailInput = form.elements.namedItem('email') as HTMLInputElement;
+                const email = emailInput?.value;
+                if (!email) return;
+
+                const submitButton = form.querySelector('button') as HTMLButtonElement;
+                submitButton.disabled = true;
+                submitButton.innerHTML = 'Subscribing...';
+
+                try {
+                  const { error } = await supabase
+                    .from('subscribers')
+                    .insert([{ email }]);
+
+                  if (error) {
+                    if (error.code === '23505') {
+                      toast.error('You are already subscribed!');
+                    } else {
+                      throw error;
+                    }
+                  } else {
+                    toast.success('Thank you for subscribing!');
+                    form.reset();
+                  }
+                } catch (err) {
+                  console.error('Error subscribing:', err);
+                  toast.error('Failed to subscribe. Please try again.');
+                } finally {
+                  submitButton.disabled = false;
+                  submitButton.innerHTML = 'Subscribe';
+                }
+              }} className="flex flex-col md:flex-row gap-4">
                 <input
                   type="email"
+                  name="email"
+                  required
                   placeholder="Enter your email"
-                  className="flex-1 px-6 py-4 bg-white border border-slate-200 rounded-xl focus:outline-hidden focus:ring-2 focus:ring-red-600 transition-all font-medium"
+                  className="flex-1 px-6 py-4 bg-white border border-slate-200 rounded-xl focus:outline-hidden focus:ring-2 focus:ring-red-600 transition-all font-medium text-slate-900"
                 />
-                <button className="px-8 py-4 bg-slate-900 text-white rounded-xl font-bold hover:bg-red-600 transition-all transform hover:scale-105">
+                <button type="submit" className="px-8 py-4 bg-slate-900 text-white rounded-xl font-bold hover:bg-red-600 transition-all transform hover:scale-105">
                   Subscribe
                 </button>
               </form>

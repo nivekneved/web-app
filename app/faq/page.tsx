@@ -1,10 +1,24 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import Link from 'next/link'
-import { ChevronDown, HelpCircle, Mail, Phone, MessageCircle } from 'lucide-react'
+import { ChevronDown, HelpCircle, Mail, Phone, MessageCircle, Loader2 } from 'lucide-react'
+import { createClient } from '@/lib/supabase'
 
-const faqs = [
+type FAQ = {
+    id: string
+    category: string
+    question: string
+    answer: string
+    order_index: number
+}
+
+type GroupedFAQ = {
+    category: string
+    questions: { q: string, a: string }[]
+}
+
+const staticFaqs: GroupedFAQ[] = [
     {
         category: 'Booking',
         questions: [
@@ -38,51 +52,65 @@ const faqs = [
                 a: 'Payment is processed immediately upon booking confirmation. For some services, a deposit may be charged initially with the balance due before travel.'
             }
         ]
-    },
-    {
-        category: 'Travel',
-        questions: [
-            {
-                q: 'Do I need travel insurance?',
-                a: 'While not mandatory, we highly recommend travel insurance to protect against unexpected cancellations, medical emergencies, and lost luggage.'
-            },
-            {
-                q: 'What documents do I need for international travel?',
-                a: 'You\'ll need a valid passport (valid for at least 6 months beyond travel date) and any required visas. Check specific requirements for your destination.'
-            },
-            {
-                q: 'Can you help with visa applications?',
-                a: 'Yes, we offer visa assistance services. Contact our support team for details about visa requirements and application support for your destination.'
-            }
-        ]
-    },
-    {
-        category: 'Account',
-        questions: [
-            {
-                q: 'How do I create an account?',
-                a: 'Click "Login" in the navigation menu, then select "Sign Up". Enter your details to create your account and start booking.'
-            },
-            {
-                q: 'I forgot my password. What should I do?',
-                a: 'On the login page, click "Forgot Password" and follow the instructions sent to your email to reset your password.'
-            },
-            {
-                q: 'How do I view my booking history?',
-                a: 'Log in to your account and visit your Dashboard. You\'ll see all your past and upcoming bookings there.'
-            }
-        ]
     }
 ]
 
 export default function FAQPage() {
     const [openItems, setOpenItems] = useState<string[]>([])
+    const [faqData, setFaqData] = useState<GroupedFAQ[]>(staticFaqs)
+    const [loading, setLoading] = useState(true)
+    const [searchTerm, setSearchTerm] = useState('')
+    const supabase = createClient()
+
+    useEffect(() => {
+        const fetchFaqs = async () => {
+            try {
+                const { data, error } = await supabase
+                    .from('faqs')
+                    .select('*')
+                    .eq('is_published', true)
+                    .order('order_index', { ascending: true })
+
+                if (error) throw error
+
+                if (data && data.length > 0) {
+                    const grouped: { [key: string]: GroupedFAQ } = {}
+                    data.forEach((faq: FAQ) => {
+                        if (!grouped[faq.category]) {
+                            grouped[faq.category] = { category: faq.category, questions: [] }
+                        }
+                        grouped[faq.category].questions.push({ q: faq.question, a: faq.answer })
+                    })
+                    setFaqData(Object.values(grouped))
+                }
+            } catch (err) {
+                console.error('Error fetching FAQs:', err)
+                // Fallback to static data
+            } finally {
+                setLoading(false)
+            }
+        }
+
+        fetchFaqs()
+    }, [])
 
     function toggleItem(id: string) {
         setOpenItems(prev =>
             prev.includes(id) ? prev.filter(item => item !== id) : [...prev, id]
         )
     }
+
+    const filteredFaqs = faqData.filter(cat => 
+        cat.category.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        cat.questions.some(q => q.q.toLowerCase().includes(searchTerm.toLowerCase()) || q.a.toLowerCase().includes(searchTerm.toLowerCase()))
+    ).map(cat => ({
+        ...cat,
+        questions: cat.questions.filter(q => 
+            cat.category.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            q.q.toLowerCase().includes(searchTerm.toLowerCase()) || 
+            q.a.toLowerCase().includes(searchTerm.toLowerCase())
+        )
+    }))
 
     return (
         <div className="min-h-screen bg-slate-50">
@@ -104,14 +132,22 @@ export default function FAQPage() {
                         type="text"
                         placeholder="Search for answers..."
                         className="w-full px-6 py-4 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-4 focus:ring-red-600/20 focus:border-red-600 text-lg"
+                        value={searchTerm}
+                        onChange={(e) => setSearchTerm(e.target.value)}
                     />
                 </div>
             </div>
 
             {/* FAQs */}
             <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+                {loading && (
+                    <div className="flex justify-center py-10">
+                        <Loader2 className="animate-spin text-red-600" size={32} />
+                    </div>
+                )}
+                
                 <div className="space-y-12">
-                    {faqs.map((category, catIdx) => (
+                    {filteredFaqs.map((category, catIdx) => (
                         <div key={catIdx}>
                             <h2 className="text-3xl font-black text-slate-900 mb-6">{category.category}</h2>
                             <div className="space-y-4">
