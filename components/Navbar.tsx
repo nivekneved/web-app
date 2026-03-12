@@ -3,7 +3,7 @@
 import Link from 'next/link'
 import { useState, useEffect, useCallback } from 'react'
 import Image from 'next/image'
-import { Menu, X, Hotel, Ship, MapPin, Plane, Activity, Heart, Moon, Sun, Phone, Mail, Facebook, Instagram, Linkedin, ChevronDown } from 'lucide-react'
+import { Menu, X, Hotel, Ship, Plane, Heart, Moon, Sun, Phone, Mail, Facebook, Instagram, Linkedin, ChevronDown } from 'lucide-react'
 import { useWishlist } from '@/contexts/WishlistContext'
 import { useTheme } from '@/contexts/ThemeContext'
 import { createClient } from '@/lib/supabase'
@@ -48,7 +48,7 @@ export default function Navbar() {
         }
     }, [supabase])
 
-    const [navItems, setNavItems] = useState<any[]>([])
+    const [navItems, setNavItems] = useState<NavItem[]>([])
     const fetchNavigations = useCallback(async () => {
         try {
             const { data, error } = await supabase
@@ -76,12 +76,40 @@ export default function Navbar() {
         return () => window.removeEventListener('scroll', handleScroll)
     }, [fetchSettings, fetchNavigations])
 
+    interface NavItem {
+        id: string;
+        label: string;
+        link: string;
+        parent_id?: string | null;
+        children?: NavItem[];
+        [key: string]: unknown;
+    }
+
+    // Helper to build tree
+    const buildNavTree = (items: NavItem[]) => {
+        const tree: NavItem[] = [];
+        const map: { [key: string]: NavItem } = {};
+        items.forEach(item => {
+            map[item.id] = { ...item, children: [] };
+        });
+        items.forEach(item => {
+            if (item.parent_id && map[item.parent_id]) {
+                map[item.parent_id].children?.push(map[item.id]);
+            } else {
+                tree.push(map[item.id]);
+            }
+        });
+        return tree;
+    };
+
     const siteTitle = settings?.general_config?.siteTitle || 'Travel Lounge'
     const contactEmail = settings?.general_config?.contactEmail || 'reservation@travellounge.mu'
     const contactPhone = settings?.general_config?.contactPhone || '(+230) 212 4070'
     const facebookUrl = settings?.general_config?.facebookUrl || '#'
     const instagramUrl = settings?.general_config?.instagramUrl || '#'
     const linkedinUrl = settings?.general_config?.linkedinUrl || '#'
+
+    const displayNavItems = buildNavTree(navItems);
 
     return (
         <>
@@ -139,11 +167,31 @@ export default function Navbar() {
 
                         {/* Desktop Navigation */}
                         <div className="hidden lg:flex items-center gap-6">
-                            {navItems.length > 0 ? (
-                                navItems.map((item) => (
-                                    <Link key={item.id} href={item.link} className="text-slate-900 hover:text-red-600 font-bold transition-colors">
-                                        {item.label}
-                                    </Link>
+                            {displayNavItems.length > 0 ? (
+                                displayNavItems.map((item) => (
+                                    item.children && item.children.length > 0 ? (
+                                        <div key={item.id} className="relative group">
+                                            <Link href={item.link} className="flex items-center gap-1 text-slate-900 hover:text-red-600 font-bold transition-colors">
+                                                {item.label}
+                                                <ChevronDown size={14} strokeWidth={3} />
+                                            </Link>
+                                            <div className="absolute top-full left-0 mt-2 w-56 bg-white rounded-xl shadow-2xl border border-slate-100 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all transform translate-y-2 group-hover:translate-y-0 overflow-hidden">
+                                                {item.children?.map((child: NavItem) => (
+                                                    <Link 
+                                                        key={child.id} 
+                                                        href={child.link} 
+                                                        className="block px-4 py-3 hover:bg-slate-50 transition-colors text-slate-900 font-medium"
+                                                    >
+                                                        {child.label}
+                                                    </Link>
+                                                ))}
+                                            </div>
+                                        </div>
+                                    ) : (
+                                        <Link key={item.id} href={item.link} className="text-slate-900 hover:text-red-600 font-bold transition-colors">
+                                            {item.label}
+                                        </Link>
+                                    )
                                 ))
                             ) : (
                                 <>
@@ -155,9 +203,9 @@ export default function Navbar() {
                                             About
                                             <ChevronDown size={14} strokeWidth={3} />
                                         </Link>
-                                        <div className="absolute top-full left-0 mt-2 w-56 bg-white rounded-xl shadow-2xl border border-slate-100 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all transform translate-y-2 group-hover:translate-y-0">
-                                            <Link href="/about" className="block px-4 py-3 hover:bg-slate-50 transition-colors first:rounded-t-xl text-slate-900 font-medium">Inside Travel Lounge</Link>
-                                            <Link href="/about/team" className="block px-4 py-3 hover:bg-slate-50 transition-colors last:rounded-b-xl text-slate-900 font-medium">Our Team</Link>
+                                        <div className="absolute top-full left-0 mt-2 w-56 bg-white rounded-xl shadow-2xl border border-slate-100 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all transform translate-y-2 group-hover:translate-y-0 overflow-hidden">
+                                            <Link href="/about" className="block px-4 py-3 hover:bg-slate-50 transition-colors text-slate-900 font-medium">Inside Travel Lounge</Link>
+                                            <Link href="/about/team" className="block px-4 py-3 hover:bg-slate-50 transition-colors text-slate-900 font-medium">Our Team</Link>
                                         </div>
                                     </div>
                                     <Link href="/packages" className="text-slate-900 hover:text-red-600 font-bold transition-colors">Day Packages</Link>
@@ -205,16 +253,32 @@ export default function Navbar() {
                 {isOpen && (
                     <div className="lg:hidden bg-white border-t border-slate-100">
                         <div className="px-4 py-4 space-y-2">
-                            {navItems.length > 0 ? (
-                                navItems.map((item) => (
-                                    <Link
-                                        key={item.id}
-                                        href={item.link}
-                                        onClick={() => setIsOpen(false)}
-                                        className="block px-4 py-3 hover:bg-slate-50 rounded-xl transition-colors text-slate-900 font-bold"
-                                    >
-                                        {item.label}
-                                    </Link>
+                            {displayNavItems.length > 0 ? (
+                                displayNavItems.map((item) => (
+                                    <div key={item.id}>
+                                        <Link
+                                            href={item.link}
+                                            onClick={() => !item.children?.length && setIsOpen(false)}
+                                            className="flex items-center justify-between px-4 py-3 hover:bg-slate-50 rounded-xl transition-colors text-slate-900 font-bold"
+                                        >
+                                            {item.label}
+                                            {item.children && item.children.length > 0 && <ChevronDown size={14} />}
+                                        </Link>
+                                        {item.children && item.children.length > 0 && (
+                                            <div className="pl-6 space-y-1 mt-1">
+                                                {item.children.map((child: NavItem) => (
+                                                    <Link
+                                                        key={child.id}
+                                                        href={child.link}
+                                                        onClick={() => setIsOpen(false)}
+                                                        className="block px-4 py-2 text-sm text-slate-600 hover:bg-slate-50 rounded-lg transition-colors"
+                                                    >
+                                                        {child.label}
+                                                    </Link>
+                                                ))}
+                                            </div>
+                                        )}
+                                    </div>
                                 ))
                             ) : (
                                 <>
