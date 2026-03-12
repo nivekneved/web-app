@@ -15,19 +15,21 @@ const ThemeContext = createContext<ThemeContextType>({
 })
 
 export function ThemeProvider({ children }: { children: React.ReactNode }) {
-    const [theme, setTheme] = useState<Theme>('light')
+    const [theme, setTheme] = useState<Theme>(() => {
+        if (typeof window !== 'undefined') {
+            const stored = localStorage.getItem('theme') as Theme
+            return stored || 'light'
+        }
+        return 'light'
+    })
     const [mounted, setMounted] = useState(false)
 
     useEffect(() => {
+        // eslint-disable-next-line react-hooks/set-state-in-effect
         setMounted(true)
-        const stored = localStorage.getItem('theme') as Theme
-        // Only set theme if it differs from current state to avoid unnecessary renders
-        if (stored && stored !== 'light') {
-            setTheme(stored)
-        }
-        // Apply the class to the document element based on the stored theme or default
-        document.documentElement.classList.toggle('dark', stored === 'dark')
-    }, [])
+        // Apply the class to the document element based on the current theme state
+        document.documentElement.classList.toggle('dark', theme === 'dark')
+    }, [theme])
 
     function toggleTheme() {
         const newTheme = theme === 'light' ? 'dark' : 'light'

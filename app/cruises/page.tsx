@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useMemo } from 'react'
 import Image from 'next/image'
 import ServiceCard from '@/components/ServiceCard'
 import { createClient } from '@/lib/supabase'
@@ -20,6 +20,8 @@ type Cruise = {
 export default function CruisesPage() {
     const [cruises, setCruises] = useState<Cruise[]>([])
     const [loading, setLoading] = useState(true)
+    const [sortBy, setSortBy] = useState<string>('name-asc')
+    const [filterPrice, setFilterPrice] = useState<number | null>(null)
 
     useEffect(() => {
         loadCruises()
@@ -31,7 +33,6 @@ export default function CruisesPage() {
                 .from('services')
                 .select('*')
                 .eq('service_type', 'cruise')
-                .order('name', { ascending: true })
 
             if (error) throw error
             setCruises(data || [])
@@ -41,6 +42,23 @@ export default function CruisesPage() {
             setLoading(false)
         }
     }
+
+    const processedCruises = useMemo(() => {
+        let result = [...cruises]
+
+        if (filterPrice) {
+            result = result.filter(c => c.base_price <= filterPrice)
+        }
+
+        result.sort((a, b) => {
+            if (sortBy === 'price-asc') return a.base_price - b.base_price
+            if (sortBy === 'price-desc') return b.base_price - a.base_price
+            if (sortBy === 'name-asc') return a.name.localeCompare(b.name)
+            return 0
+        })
+
+        return result
+    }, [cruises, sortBy, filterPrice])
     return (
         <div className="min-h-screen bg-slate-50 pb-20">
             {/* Hero */}
@@ -65,10 +83,25 @@ export default function CruisesPage() {
             <div className="container mx-auto px-4 -mt-20 relative z-20">
                 <div className="bg-white rounded-3xl p-8 shadow-xl border border-slate-100 mb-12">
                     <div className="flex flex-wrap gap-4 items-center justify-between">
-                        <h2 className="text-2xl font-bold text-slate-900">Available Packages</h2>
-                        <div className="flex gap-2">
-                            <button className="px-6 py-2 bg-slate-100 rounded-lg font-bold text-slate-600 hover:bg-slate-200 transition-colors">Filter</button>
-                            <button className="px-6 py-2 bg-slate-900 text-white rounded-lg font-bold hover:bg-red-600 transition-colors">Sort By</button>
+                        <h2 className="text-2xl font-bold text-slate-900">Available Packages ({processedCruises.length})</h2>
+                        <div className="flex gap-4">
+                            <select 
+                                onChange={(e) => setFilterPrice(e.target.value ? Number(e.target.value) : null)}
+                                className="px-6 py-2 bg-slate-50 border-none rounded-lg font-bold text-slate-600 focus:ring-2 focus:ring-red-600 appearance-none cursor-pointer"
+                            >
+                                <option value="">All Prices</option>
+                                <option value="50000">Under Rs 50k</option>
+                                <option value="100000">Under Rs 100k</option>
+                                <option value="200000">Under Rs 200k</option>
+                            </select>
+                            <select 
+                                onChange={(e) => setSortBy(e.target.value)}
+                                className="px-6 py-2 bg-slate-900 text-white rounded-lg font-bold focus:ring-2 focus:ring-red-600 cursor-pointer"
+                            >
+                                <option value="name-asc">Name (A-Z)</option>
+                                <option value="price-asc">Price (Low to High)</option>
+                                <option value="price-desc">Price (High to Low)</option>
+                            </select>
                         </div>
                     </div>
                 </div>
@@ -78,8 +111,12 @@ export default function CruisesPage() {
                         [...Array(3)].map((_, i) => (
                             <div key={i} className="animate-pulse bg-white rounded-3xl h-96 border border-slate-100" />
                         ))
+                    ) : processedCruises.length === 0 ? (
+                        <div className="col-span-full py-20 text-center text-slate-400 font-bold">
+                            No cruise packages found matching your criteria.
+                        </div>
                     ) : (
-                        cruises.map(cruise => (
+                        processedCruises.map(cruise => (
                             <ServiceCard
                                 key={cruise.id}
                                 title={cruise.name}

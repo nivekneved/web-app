@@ -157,10 +157,14 @@ export default function AboutPage() {
                         <span className="inline-block py-1 px-4 rounded-full bg-red-600 text-white text-sm font-bold mb-6 tracking-widest uppercase">
                             {hero.badge}
                         </span>
-                        <h1 
-                            className="text-6xl md:text-8xl font-black text-white mb-8 leading-none"
-                            dangerouslySetInnerHTML={{ __html: hero.title }}
-                        />
+                        <h1 className="text-6xl md:text-8xl font-black text-white mb-8 leading-none">
+                            {hero.title.split('<br />').map((line, idx) => (
+                                <React.Fragment key={idx}>
+                                    <span dangerouslySetInnerHTML={{ __html: line }} />
+                                    {idx < hero.title.split('<br />').length - 1 && <br />}
+                                </React.Fragment>
+                            ))}
+                        </h1>
                         <p className="text-xl text-slate-200 leading-relaxed font-medium">
                             {hero.description}
                         </p>
@@ -174,10 +178,14 @@ export default function AboutPage() {
                     <div className="flex flex-col lg:flex-row gap-20 items-center">
                         <div className="lg:w-1/2">
                             <h2 className="text-sm font-bold text-red-600 uppercase tracking-[0.4em] mb-6">{identity.subtitle}</h2>
-                            <h3 
-                                className="text-5xl font-black text-slate-900 mb-10 leading-tight"
-                                dangerouslySetInnerHTML={{ __html: identity.title }}
-                            />
+                            <h3 className="text-5xl font-black text-slate-900 mb-10 leading-tight">
+                                {identity.title.split('<br />').map((line, idx) => (
+                                    <React.Fragment key={idx}>
+                                        <span dangerouslySetInnerHTML={{ __html: line }} />
+                                        {idx < identity.title.split('<br />').length - 1 && <br />}
+                                    </React.Fragment>
+                                ))}
+                            </h3>
                             <div className="space-y-8 text-slate-600 text-lg">
                                 <p className="leading-relaxed">
                                     {identity.description}

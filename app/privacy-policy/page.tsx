@@ -1,6 +1,6 @@
 'use client'
 
-import { Shield, Lock, Eye, FileText, ChevronRight } from 'lucide-react'
+import { Shield, Lock, ChevronRight } from 'lucide-react'
 import { motion } from 'framer-motion'
 
 export default function PrivacyPolicyPage() {

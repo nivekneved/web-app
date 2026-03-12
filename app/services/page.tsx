@@ -4,8 +4,8 @@ import Image from 'next/image'
 import Link from 'next/link'
 import {
     Plane, Ship, MapPin, Activity, Hotel, Car,
-    Award, Shield, HeadphonesIcon, Globe, ArrowRight,
-    Zap, Heart, Star, Sparkles
+    Award, Globe, ArrowRight,
+    Zap, Heart, Sparkles
 } from 'lucide-react'
 import { motion } from 'framer-motion'
 

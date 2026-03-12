@@ -1,6 +1,6 @@
 'use client'
 
-import { FileText, CheckCircle2, AlertCircle, ChevronRight, Scale } from 'lucide-react'
+import { AlertCircle, Scale } from 'lucide-react'
 import { motion } from 'framer-motion'
 
 export default function TermsConditionsPage() {

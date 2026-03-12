@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import Image from 'next/image'
-import { X, ExternalLink, Play } from 'lucide-react'
+import { X, ExternalLink } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { createClient } from '@/lib/supabase'
 

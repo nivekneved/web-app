@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 import Image from 'next/image'
 import {
   Globe,
@@ -152,8 +152,14 @@ export default function HomePage() {
                     animate={{ y: 0, opacity: 1 }}
                     transition={{ delay: 0.4 }}
                     className="text-xl md:text-2xl text-white/90 font-medium mb-10 max-w-2xl mx-auto drop-shadow-md"
-                    dangerouslySetInnerHTML={{ __html: heroSlides[currentSlide].subtitle }}
-                  />
+                  >
+                    {heroSlides[currentSlide].subtitle.split('<br />').map((line, idx) => (
+                      <React.Fragment key={idx}>
+                        {idx > 0 && <br />}
+                        <span dangerouslySetInnerHTML={{ __html: line }} />
+                      </React.Fragment>
+                    ))}
+                  </motion.div>
 
                   {heroSlides[currentSlide].cta && heroSlides[currentSlide].link && (
                     <motion.div

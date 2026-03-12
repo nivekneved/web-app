@@ -16,7 +16,7 @@ interface PackageDetailProps {
     meta: { duration: string; location: string; date: string }
 }
 
-export default function PackageDetail({ title, subtitle, description, price, images, highlights, itinerary, meta }: PackageDetailProps) {
+export default function PackageDetail({ title, subtitle, description, images, highlights, itinerary, meta }: PackageDetailProps) {
     return (
         <div className="min-h-screen bg-slate-50 pb-20">
             {/* Hero Image */}
