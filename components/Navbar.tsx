@@ -3,10 +3,14 @@
 import Link from 'next/link'
 import { useState, useEffect, useCallback } from 'react'
 import Image from 'next/image'
-import { Menu, X, Hotel, Ship, Plane, Heart, Moon, Sun, Phone, Mail, Facebook, Instagram, Linkedin, ChevronDown } from 'lucide-react'
+import { Menu, X, Heart, Moon, Sun, Phone, Mail, Facebook, Instagram, Linkedin } from 'lucide-react'
 import { useWishlist } from '@/contexts/WishlistContext'
 import { useTheme } from '@/contexts/ThemeContext'
 import { createClient } from '@/lib/supabase'
+import { navigationConfig } from '@/lib/navigation'
+import { NavRecursive } from './Navbar/NavRecursive'
+import { MobileAccordion } from './Navbar/MobileAccordion'
+import { cn } from '@/lib/utils'
 
 interface SiteSettings {
     general_config?: {
@@ -48,59 +52,15 @@ export default function Navbar() {
         }
     }, [supabase])
 
-    const [navItems, setNavItems] = useState<NavItem[]>([])
-    const fetchNavigations = useCallback(async () => {
-        try {
-            const { data, error } = await supabase
-                .from('navigations')
-                .select('*')
-                .eq('is_active', true)
-                .order('display_order', { ascending: true })
-
-            if (!error && data && data.length > 0) {
-                setNavItems(data)
-            }
-        } catch (err) {
-            console.error('Error fetching dynamic navigations:', err)
-        }
-    }, [supabase])
-
     useEffect(() => {
         fetchSettings()
-        fetchNavigations()
 
         const handleScroll = () => {
             setIsScrolled(window.scrollY > 20)
         }
         window.addEventListener('scroll', handleScroll)
         return () => window.removeEventListener('scroll', handleScroll)
-    }, [fetchSettings, fetchNavigations])
-
-    interface NavItem {
-        id: string;
-        label: string;
-        link: string;
-        parent_id?: string | null;
-        children?: NavItem[];
-        [key: string]: unknown;
-    }
-
-    // Helper to build tree
-    const buildNavTree = (items: NavItem[]) => {
-        const tree: NavItem[] = [];
-        const map: { [key: string]: NavItem } = {};
-        items.forEach(item => {
-            map[item.id] = { ...item, children: [] };
-        });
-        items.forEach(item => {
-            if (item.parent_id && map[item.parent_id]) {
-                map[item.parent_id].children?.push(map[item.id]);
-            } else {
-                tree.push(map[item.id]);
-            }
-        });
-        return tree;
-    };
+    }, [fetchSettings])
 
     const siteTitle = settings?.general_config?.siteTitle || 'Travel Lounge'
     const contactEmail = settings?.general_config?.contactEmail || 'reservation@travellounge.mu'
@@ -109,15 +69,12 @@ export default function Navbar() {
     const instagramUrl = settings?.general_config?.instagramUrl || '#'
     const linkedinUrl = settings?.general_config?.linkedinUrl || '#'
 
-    const displayNavItems = buildNavTree(navItems);
-
     return (
-        <>
+        <header className="w-full">
             {/* Topbar */}
             <div className="bg-red-600 text-white py-1 hidden md:block">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <div className="flex items-center justify-between text-sm">
-                        {/* Left: Contact Info */}
                         <div className="flex items-center gap-6">
                             <a href={`tel:${contactPhone.replace(/\s/g, '')}`} className="flex items-center gap-2 hover:bg-white/10 p-1 rounded transition-colors">
                                 <Phone size={14} />
@@ -129,7 +86,6 @@ export default function Navbar() {
                             </a>
                         </div>
 
-                        {/* Right: Social & User */}
                         <div className="flex items-center gap-4">
                             <div className="flex items-center gap-2">
                                 <a href={facebookUrl} target="_blank" rel="noopener noreferrer" className="hover:bg-white/10 p-1 rounded transition-colors">
@@ -149,13 +105,17 @@ export default function Navbar() {
 
             {/* Main Navigation */}
             <nav
-                className={`sticky top-0 z-50 bg-white transition-all duration-300 ${isScrolled ? 'shadow-lg' : 'border-b border-slate-100'
-                    }`}
+                className={cn(
+                    "sticky top-0 z-50 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md transition-all duration-300",
+                    isScrolled ? "shadow-lg py-2" : "border-b border-slate-100 dark:border-slate-800 py-4"
+                )}
+                role="navigation"
+                aria-label="Main Navigation"
             >
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                    <div className="flex items-center justify-between h-16">
+                    <div className="flex items-center justify-between">
                         {/* Logo */}
-                        <Link href="/" className="flex items-center gap-3 z-50">
+                        <Link href="/" className="flex items-center gap-3 z-50 shrink-0">
                             <Image
                                 src="/logo.png"
                                 alt={siteTitle}
@@ -166,133 +126,84 @@ export default function Navbar() {
                         </Link>
 
                         {/* Desktop Navigation */}
-                        <div className="hidden lg:flex items-center gap-6">
-                            {displayNavItems.length > 0 ? (
-                                displayNavItems.map((item) => (
-                                    item.children && item.children.length > 0 ? (
-                                        <div key={item.id} className="relative group">
-                                            <Link href={item.link} className="flex items-center gap-1 text-slate-900 hover:text-red-600 font-bold transition-colors">
-                                                {item.label}
-                                                <ChevronDown size={14} strokeWidth={3} />
-                                            </Link>
-                                            <div className="absolute top-full left-0 mt-2 w-56 bg-white rounded-xl shadow-2xl border border-slate-100 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all transform translate-y-2 group-hover:translate-y-0 overflow-hidden">
-                                                {item.children?.map((child: NavItem) => (
-                                                    <Link 
-                                                        key={child.id} 
-                                                        href={child.link} 
-                                                        className="block px-4 py-3 hover:bg-slate-50 transition-colors text-slate-900 font-medium"
-                                                    >
-                                                        {child.label}
-                                                    </Link>
-                                                ))}
-                                            </div>
-                                        </div>
-                                    ) : (
-                                        <Link key={item.id} href={item.link} className="text-slate-900 hover:text-red-600 font-bold transition-colors">
-                                            {item.label}
-                                        </Link>
-                                    )
-                                ))
-                            ) : (
-                                <>
-                                    <Link href="/cruises" className="text-slate-900 hover:text-red-600 font-bold transition-colors">Cruises</Link>
-                                    <Link href="/flights" className="text-slate-900 hover:text-red-600 font-bold transition-colors">Flights</Link>
-                                    <Link href="/hotels" className="text-slate-900 hover:text-red-600 font-bold transition-colors">Hotels</Link>
-                                    <div className="relative group">
-                                        <Link href="/about" className="flex items-center gap-1 text-slate-900 hover:text-red-600 font-bold transition-colors">
-                                            About
-                                            <ChevronDown size={14} strokeWidth={3} />
-                                        </Link>
-                                        <div className="absolute top-full left-0 mt-2 w-56 bg-white rounded-xl shadow-2xl border border-slate-100 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all transform translate-y-2 group-hover:translate-y-0 overflow-hidden">
-                                            <Link href="/about" className="block px-4 py-3 hover:bg-slate-50 transition-colors text-slate-900 font-medium">Inside Travel Lounge</Link>
-                                            <Link href="/about/team" className="block px-4 py-3 hover:bg-slate-50 transition-colors text-slate-900 font-medium">Our Team</Link>
-                                        </div>
-                                    </div>
-                                    <Link href="/packages" className="text-slate-900 hover:text-red-600 font-bold transition-colors">Day Packages</Link>
-                                    <Link href="/contact" className="text-slate-900 hover:text-red-600 font-bold transition-colors">Contact</Link>
-                                </>
-                            )}
+                        <div className="hidden lg:block">
+                            <NavRecursive items={navigationConfig.menu} />
                         </div>
 
                         {/* Right Section */}
-                        <div className="flex items-center gap-3">
-                            {/* Dark Mode Toggle */}
-                            <button
-                                onClick={toggleTheme}
-                                className="p-2 hover:bg-slate-100 dark:hover:bg-slate-700 rounded-lg transition-colors hidden md:block"
-                                aria-label="Toggle theme"
-                            >
-                                {theme === 'dark' ? <Sun size={20} className="text-slate-400" /> : <Moon size={20} className="text-slate-600" />}
-                            </button>
-
-                            {/* Wishlist */}
+                        <div className="flex items-center gap-2 md:gap-4">
+                            {/* CTA Button */}
                             <Link
-                                href="/wishlist"
-                                className="relative p-2 hover:bg-slate-100 dark:hover:bg-slate-700 rounded-lg transition-colors hidden md:block"
+                                href={navigationConfig.cta.href}
+                                className="hidden md:flex items-center justify-center px-5 py-2.5 bg-primary hover:bg-primary/90 text-white font-bold rounded-full transition-all hover:scale-105 active:scale-95 shadow-lg shadow-primary/20"
                             >
-                                <Heart size={20} className="text-slate-600 dark:text-slate-400" />
-                                {wishlist.length > 0 && (
-                                    <span className="absolute -top-1 -right-1 bg-red-600 text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center">
-                                        {wishlist.length}
-                                    </span>
-                                )}
+                                {navigationConfig.cta.label}
                             </Link>
 
-                            {/* Mobile Menu Button */}
-                            <button
-                                onClick={() => setIsOpen(!isOpen)}
-                                className="lg:hidden p-2 hover:bg-slate-100 dark:hover:bg-slate-700 rounded-lg transition-colors"
-                            >
-                                {isOpen ? <X size={24} /> : <Menu size={24} />}
-                            </button>
+                            <div className="h-6 w-px bg-slate-200 dark:bg-slate-800 hidden md:block"></div>
+
+                            {/* Theme & Wishlist */}
+                            <div className="flex items-center gap-1 md:gap-2">
+                                <button
+                                    onClick={toggleTheme}
+                                    className="p-2 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg transition-colors"
+                                    aria-label="Toggle theme"
+                                >
+                                    {theme === 'dark' ? <Sun size={20} className="text-slate-400" /> : <Moon size={20} className="text-slate-600" />}
+                                </button>
+
+                                <Link
+                                    href="/wishlist"
+                                    className="relative p-2 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg transition-colors"
+                                    aria-label={`View Wishlist (${wishlist.length} items)`}
+                                >
+                                    <Heart size={20} className="text-slate-600 dark:text-slate-400" />
+                                    {wishlist.length > 0 && (
+                                        <span className="absolute -top-1 -right-1 bg-primary text-white text-[10px] font-bold rounded-full w-5 h-5 flex items-center justify-center">
+                                            {wishlist.length}
+                                        </span>
+                                    )}
+                                </Link>
+
+                                {/* Mobile Menu Button */}
+                                <button
+                                    onClick={() => setIsOpen(!isOpen)}
+                                    className="lg:hidden p-2 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg transition-colors"
+                                    aria-expanded={isOpen}
+                                    aria-controls="mobile-menu"
+                                    aria-label="Toggle mobile menu"
+                                >
+                                    {isOpen ? <X size={24} /> : <Menu size={24} />}
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </div>
 
-                {/* Mobile Menu */}
-                {isOpen && (
-                    <div className="lg:hidden bg-white border-t border-slate-100">
-                        <div className="px-4 py-4 space-y-2">
-                            {displayNavItems.length > 0 ? (
-                                displayNavItems.map((item) => (
-                                    <div key={item.id}>
-                                        <Link
-                                            href={item.link}
-                                            onClick={() => !item.children?.length && setIsOpen(false)}
-                                            className="flex items-center justify-between px-4 py-3 hover:bg-slate-50 rounded-xl transition-colors text-slate-900 font-bold"
-                                        >
-                                            {item.label}
-                                            {item.children && item.children.length > 0 && <ChevronDown size={14} />}
-                                        </Link>
-                                        {item.children && item.children.length > 0 && (
-                                            <div className="pl-6 space-y-1 mt-1">
-                                                {item.children.map((child: NavItem) => (
-                                                    <Link
-                                                        key={child.id}
-                                                        href={child.link}
-                                                        onClick={() => setIsOpen(false)}
-                                                        className="block px-4 py-2 text-sm text-slate-600 hover:bg-slate-50 rounded-lg transition-colors"
-                                                    >
-                                                        {child.label}
-                                                    </Link>
-                                                ))}
-                                            </div>
-                                        )}
-                                    </div>
-                                ))
-                            ) : (
-                                <>
-                                    <Link href="/cruises" onClick={() => setIsOpen(false)} className="flex items-center gap-3 px-4 py-3 hover:bg-slate-50 rounded-xl transition-colors text-slate-900"><Ship size={18} /> Cruises</Link>
-                                    <Link href="/flights" onClick={() => setIsOpen(false)} className="flex items-center gap-3 px-4 py-3 hover:bg-slate-50 rounded-xl transition-colors text-slate-900"><Plane size={18} /> Flights</Link>
-                                    <Link href="/hotels" onClick={() => setIsOpen(false)} className="flex items-center gap-3 px-4 py-3 hover:bg-slate-50 rounded-xl transition-colors text-slate-900"><Hotel size={18} /> Hotels</Link>
-                                    <Link href="/about" onClick={() => setIsOpen(false)} className="block px-4 py-3 hover:bg-slate-50 rounded-xl transition-colors text-slate-900 font-semibold">About Us</Link>
-                                    <Link href="/contact" onClick={() => setIsOpen(false)} className="block px-4 py-3 hover:bg-slate-50 rounded-xl transition-colors text-slate-900 font-semibold">Contact</Link>
-                                </>
-                            )}
+                {/* Mobile Menu Overlay */}
+                <div 
+                    id="mobile-menu"
+                    className={cn(
+                        "lg:hidden fixed inset-x-0 top-[64px] bottom-0 bg-white dark:bg-slate-900 z-40 transition-transform duration-300 ease-in-out transform",
+                        isOpen ? "translate-x-0" : "-translate-x-full"
+                    )}
+                >
+                    <div className="h-full overflow-y-auto px-6 py-8">
+                        <MobileAccordion items={navigationConfig.menu} onClose={() => setIsOpen(false)} />
+                        
+                        {/* Mobile CTA */}
+                        <div className="mt-8 pt-6 border-t border-slate-100 dark:border-slate-800">
+                             <Link
+                                href={navigationConfig.cta.href}
+                                onClick={() => setIsOpen(false)}
+                                className="flex items-center justify-center w-full px-5 py-4 bg-primary text-white font-bold rounded-xl shadow-lg shadow-primary/20"
+                            >
+                                {navigationConfig.cta.label}
+                            </Link>
                         </div>
                     </div>
-                )}
+                </div>
             </nav>
-        </>
+        </header>
     )
 }
