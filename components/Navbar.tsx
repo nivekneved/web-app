@@ -48,15 +48,33 @@ export default function Navbar() {
         }
     }, [supabase])
 
+    const [navItems, setNavItems] = useState<any[]>([])
+    const fetchNavigations = useCallback(async () => {
+        try {
+            const { data, error } = await supabase
+                .from('navigations')
+                .select('*')
+                .eq('is_active', true)
+                .order('display_order', { ascending: true })
+
+            if (!error && data && data.length > 0) {
+                setNavItems(data)
+            }
+        } catch (err) {
+            console.error('Error fetching dynamic navigations:', err)
+        }
+    }, [supabase])
+
     useEffect(() => {
         fetchSettings()
+        fetchNavigations()
 
         const handleScroll = () => {
             setIsScrolled(window.scrollY > 20)
         }
         window.addEventListener('scroll', handleScroll)
         return () => window.removeEventListener('scroll', handleScroll)
-    }, [fetchSettings])
+    }, [fetchSettings, fetchNavigations])
 
     const siteTitle = settings?.general_config?.siteTitle || 'Travel Lounge'
     const contactEmail = settings?.general_config?.contactEmail || 'reservation@travellounge.mu'
@@ -121,45 +139,35 @@ export default function Navbar() {
 
                         {/* Desktop Navigation */}
                         <div className="hidden lg:flex items-center gap-6">
-                            <Link href="/cruises" className="text-slate-900 hover:text-red-600 font-bold transition-colors">
-                                Cruises
-                            </Link>
-
-                            <Link href="/flights" className="text-slate-900 hover:text-red-600 font-bold transition-colors">
-                                Flights
-                            </Link>
-
-                            <Link href="/hotels" className="text-slate-900 hover:text-red-600 font-bold transition-colors">
-                                Hotels
-                            </Link>
-
-                            <div className="relative group">
-                                <Link href="/about" className="flex items-center gap-1 text-slate-900 hover:text-red-600 font-bold transition-colors">
-                                    About
-                                    <ChevronDown size={14} strokeWidth={3} />
-                                </Link>
-                                <div className="absolute top-full left-0 mt-2 w-56 bg-white rounded-xl shadow-2xl border border-slate-100 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all transform translate-y-2 group-hover:translate-y-0">
-                                    <Link href="/about" className="block px-4 py-3 hover:bg-slate-50 transition-colors first:rounded-t-xl text-slate-900 font-medium">
-                                        Inside Travel Lounge
+                            {navItems.length > 0 ? (
+                                navItems.map((item) => (
+                                    <Link key={item.id} href={item.link} className="text-slate-900 hover:text-red-600 font-bold transition-colors">
+                                        {item.label}
                                     </Link>
-                                    <Link href="/about/team" className="block px-4 py-3 hover:bg-slate-50 transition-colors last:rounded-b-xl text-slate-900 font-medium">
-                                        Our Team
-                                    </Link>
-                                </div>
-                            </div>
-
-                            <Link href="/packages" className="text-slate-900 hover:text-red-600 font-bold transition-colors">
-                                Day Packages
-                            </Link>
-
-                            <Link href="/contact" className="text-slate-900 hover:text-red-600 font-bold transition-colors">
-                                Contact
-                            </Link>
+                                ))
+                            ) : (
+                                <>
+                                    <Link href="/cruises" className="text-slate-900 hover:text-red-600 font-bold transition-colors">Cruises</Link>
+                                    <Link href="/flights" className="text-slate-900 hover:text-red-600 font-bold transition-colors">Flights</Link>
+                                    <Link href="/hotels" className="text-slate-900 hover:text-red-600 font-bold transition-colors">Hotels</Link>
+                                    <div className="relative group">
+                                        <Link href="/about" className="flex items-center gap-1 text-slate-900 hover:text-red-600 font-bold transition-colors">
+                                            About
+                                            <ChevronDown size={14} strokeWidth={3} />
+                                        </Link>
+                                        <div className="absolute top-full left-0 mt-2 w-56 bg-white rounded-xl shadow-2xl border border-slate-100 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all transform translate-y-2 group-hover:translate-y-0">
+                                            <Link href="/about" className="block px-4 py-3 hover:bg-slate-50 transition-colors first:rounded-t-xl text-slate-900 font-medium">Inside Travel Lounge</Link>
+                                            <Link href="/about/team" className="block px-4 py-3 hover:bg-slate-50 transition-colors last:rounded-b-xl text-slate-900 font-medium">Our Team</Link>
+                                        </div>
+                                    </div>
+                                    <Link href="/packages" className="text-slate-900 hover:text-red-600 font-bold transition-colors">Day Packages</Link>
+                                    <Link href="/contact" className="text-slate-900 hover:text-red-600 font-bold transition-colors">Contact</Link>
+                                </>
+                            )}
                         </div>
 
                         {/* Right Section */}
                         <div className="flex items-center gap-3">
-
                             {/* Dark Mode Toggle */}
                             <button
                                 onClick={toggleTheme}
@@ -197,69 +205,26 @@ export default function Navbar() {
                 {isOpen && (
                     <div className="lg:hidden bg-white border-t border-slate-100">
                         <div className="px-4 py-4 space-y-2">
-                            <Link
-                                href="/cruises"
-                                onClick={() => setIsOpen(false)}
-                                className="flex items-center gap-3 px-4 py-3 hover:bg-slate-50 rounded-xl transition-colors text-slate-900"
-                            >
-                                <Ship size={18} />
-                                Cruises
-                            </Link>
-                            <Link
-                                href="/flights"
-                                onClick={() => setIsOpen(false)}
-                                className="flex items-center gap-3 px-4 py-3 hover:bg-slate-50 rounded-xl transition-colors text-slate-900"
-                            >
-                                <Plane size={18} />
-                                Flights
-                            </Link>
-                            <Link
-                                href="/tours"
-                                onClick={() => setIsOpen(false)}
-                                className="flex items-center gap-3 px-4 py-3 hover:bg-slate-50 rounded-xl transition-colors text-slate-900"
-                            >
-                                <MapPin size={18} />
-                                Group Tours
-                            </Link>
-                            <Link
-                                href="/hotels"
-                                onClick={() => setIsOpen(false)}
-                                className="flex items-center gap-3 px-4 py-3 hover:bg-slate-50 rounded-xl transition-colors text-slate-900"
-                            >
-                                <Hotel size={18} />
-                                Hotels
-                            </Link>
-                            <Link
-                                href="/activities"
-                                onClick={() => setIsOpen(false)}
-                                className="flex items-center gap-3 px-4 py-3 hover:bg-slate-50 rounded-xl transition-colors text-slate-900"
-                            >
-                                <Activity size={18} />
-                                Activities
-                            </Link>
-                            <div className="space-y-1">
-                                <Link
-                                    href="/about"
-                                    onClick={() => setIsOpen(false)}
-                                    className="block px-4 py-3 hover:bg-slate-50 rounded-xl transition-colors text-slate-900 font-semibold"
-                                >
-                                    About Us
-                                </Link>
-                                <Link
-                                    href="/about/team"
-                                    onClick={() => setIsOpen(false)}
-                                    className="block px-8 py-2 hover:bg-slate-50 rounded-xl transition-colors text-slate-500 font-medium text-sm border-l-2 border-slate-100 ml-4"
-                                >
-                                    Our Team
-                                </Link>
-                            </div>
-                            <Link
-                                href="/contact"
-                                onClick={() => setIsOpen(false)}
-                                className="block px-4 py-3 hover:bg-slate-50 rounded-xl transition-colors text-slate-900 font-semibold"
-                            >
-                                Contact
-                            </Link>
+                            {navItems.length > 0 ? (
+                                navItems.map((item) => (
+                                    <Link
+                                        key={item.id}
+                                        href={item.link}
+                                        onClick={() => setIsOpen(false)}
+                                        className="block px-4 py-3 hover:bg-slate-50 rounded-xl transition-colors text-slate-900 font-bold"
+                                    >
+                                        {item.label}
+                                    </Link>
+                                ))
+                            ) : (
+                                <>
+                                    <Link href="/cruises" onClick={() => setIsOpen(false)} className="flex items-center gap-3 px-4 py-3 hover:bg-slate-50 rounded-xl transition-colors text-slate-900"><Ship size={18} /> Cruises</Link>
+                                    <Link href="/flights" onClick={() => setIsOpen(false)} className="flex items-center gap-3 px-4 py-3 hover:bg-slate-50 rounded-xl transition-colors text-slate-900"><Plane size={18} /> Flights</Link>
+                                    <Link href="/hotels" onClick={() => setIsOpen(false)} className="flex items-center gap-3 px-4 py-3 hover:bg-slate-50 rounded-xl transition-colors text-slate-900"><Hotel size={18} /> Hotels</Link>
+                                    <Link href="/about" onClick={() => setIsOpen(false)} className="block px-4 py-3 hover:bg-slate-50 rounded-xl transition-colors text-slate-900 font-semibold">About Us</Link>
+                                    <Link href="/contact" onClick={() => setIsOpen(false)} className="block px-4 py-3 hover:bg-slate-50 rounded-xl transition-colors text-slate-900 font-semibold">Contact</Link>
+                                </>
+                            )}
                         </div>
                     </div>
                 )}
