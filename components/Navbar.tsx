@@ -12,16 +12,15 @@ import { NavRecursive } from './Navbar/NavRecursive'
 import { MobileAccordion } from './Navbar/MobileAccordion'
 import { cn } from '@/lib/utils'
 
-interface SiteSettings {
-    general_config?: {
-        siteTitle?: string;
-        contactEmail?: string;
-        contactPhone?: string;
-        facebookUrl?: string;
-        instagramUrl?: string;
-        linkedinUrl?: string;
-    };
-    [key: string]: unknown;
+interface NavRow {
+    id: string;
+    label: string;
+    link: string;
+    parent_id: string | null;
+    display_order: number;
+    is_active: boolean;
+    created_at: string;
+    updated_at: string;
 }
 
 export default function Navbar() {
@@ -48,7 +47,9 @@ export default function Navbar() {
                 const tree: NavMenuItem[] = []
                 const map: Record<string, NavMenuItem & { id: string; parent_id: string | null }> = {}
                 
-                data.forEach((item: any) => {
+                const rows = data as NavRow[]
+                
+                rows.forEach((item) => {
                     map[item.id] = { 
                         label: item.label, 
                         href: item.link, 
@@ -58,7 +59,7 @@ export default function Navbar() {
                     }
                 })
                 
-                data.forEach((item: any) => {
+                rows.forEach((item) => {
                     if (item.parent_id && map[item.parent_id]) {
                         map[item.parent_id].children?.push(map[item.id])
                     } else {
