@@ -2,12 +2,14 @@
 
 import { useState, useEffect, useCallback } from 'react'
 import { createClient } from '@/lib/supabase'
-import { useParams } from 'next/navigation'
+import { useParams, useRouter } from 'next/navigation'
 import { MapPin, Star, Check, ArrowLeft, Calendar, Users, Heart } from 'lucide-react'
 import Link from 'next/link'
 import { toast } from 'sonner'
 import { useWishlist } from '@/contexts/WishlistContext'
 import ReviewsSection from '@/components/ReviewsSection'
+import BookingWizard, { BookingWizardData } from '@/components/BookingWizard'
+import { createBookingRequest } from '@/lib/bookingService'
 
 const supabase = createClient()
 
@@ -37,6 +39,7 @@ type Hotel = {
 }
 
 export default function HotelDetailPage() {
+    const router = useRouter()
     const params = useParams()
     const [hotel, setHotel] = useState<Hotel | null>(null)
     const [loading, setLoading] = useState(true)
@@ -45,6 +48,8 @@ export default function HotelDetailPage() {
     const [guests, setGuests] = useState(2)
     const [selectedRoom, setSelectedRoom] = useState<number>(0)
     const [calculatedPrice, setCalculatedPrice] = useState<number>(0)
+    const [showWizard, setShowWizard] = useState(false)
+    const [bookingLoading, setBookingLoading] = useState(false)
     const { addToWishlist, removeFromWishlist, isInWishlist } = useWishlist()
 
     function toggleWishlist() {
@@ -102,7 +107,34 @@ export default function HotelDetailPage() {
             return
         }
 
-        toast.success(`Booking ${room?.type || 'Room'}... Feature coming soon!`)
+        setShowWizard(true)
+    }
+
+    async function handleBookingComplete(data: BookingWizardData) {
+        if (!hotel) return
+        setBookingLoading(true)
+        
+        const result = await createBookingRequest({
+            serviceId: hotel.id,
+            serviceName: hotel.name,
+            serviceCategory: 'hotel',
+            amount: calculatedPrice || hotel.base_price,
+            startDate: data.checkIn,
+            endDate: data.checkOut,
+            paxAdults: data.guests,
+            paxChildren: 0,
+            travelers: data.travelers,
+            specialRequests: data.specialRequests
+        })
+
+        if (result.success) {
+            toast.success('Booking request submitted successfully!')
+            setShowWizard(false)
+            router.push(`/booking-confirmation?id=${result.bookingId}&service=${encodeURIComponent(hotel.name)}&amount=${calculatedPrice || hotel.base_price}`)
+        } else {
+            toast.error(result.error || 'Failed to submit booking request')
+        }
+        setBookingLoading(false)
     }
 
     const calculateDynamicPrice = useCallback(() => {
@@ -147,6 +179,29 @@ export default function HotelDetailPage() {
 
     return (
         <div className="min-h-screen bg-slate-50">
+            {/* Booking Wizard Modal */}
+            {showWizard && (
+                <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm">
+                    <div className="bg-white dark:bg-slate-800 rounded-[3rem] w-full max-w-4xl max-h-[90vh] overflow-y-auto p-1 relative shadow-2xl">
+                        <button 
+                            onClick={() => setShowWizard(false)}
+                            className="absolute top-8 right-8 p-2 text-slate-400 hover:text-slate-600 dark:hover:text-white transition-colors z-10"
+                        >
+                            <ArrowLeft size={24} className="rotate-90 sm:rotate-0" />
+                        </button>
+                        <div className="p-8">
+                            <BookingWizard 
+                                serviceId={hotel.id}
+                                serviceName={hotel.name}
+                                servicePrice={calculatedPrice || hotel.base_price}
+                                serviceCategory="hotel"
+                                onComplete={handleBookingComplete}
+                                isLoading={bookingLoading}
+                            />
+                        </div>
+                    </div>
+                </div>
+            )}
             {/* Back Button */}
             <div className="bg-white border-b border-slate-100">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">

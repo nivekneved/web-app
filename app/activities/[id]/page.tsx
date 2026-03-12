@@ -2,11 +2,13 @@
 
 import { useState, useEffect } from 'react'
 import { createClient } from '@/lib/supabase'
-import { useParams } from 'next/navigation'
+import { useParams, useRouter } from 'next/navigation'
 import { MapPin, Star, Check, ArrowLeft, Clock, Heart } from 'lucide-react'
 import Link from 'next/link'
 import { toast } from 'sonner'
 import { useWishlist } from '@/contexts/WishlistContext'
+import BookingWizard, { BookingWizardData } from '@/components/BookingWizard'
+import { createBookingRequest } from '@/lib/bookingService'
 
 const supabase = createClient()
 
@@ -24,11 +26,14 @@ type ActivityService = {
 }
 
 export default function ActivityDetailPage() {
+    const router = useRouter()
     const params = useParams()
     const [activity, setActivity] = useState<ActivityService | null>(null)
     const [loading, setLoading] = useState(true)
     const [date, setDate] = useState('')
     const [participants, setParticipants] = useState(2)
+    const [showWizard, setShowWizard] = useState(false)
+    const [bookingLoading, setBookingLoading] = useState(false)
     const { addToWishlist, removeFromWishlist, isInWishlist } = useWishlist()
 
     function toggleWishlist() {
@@ -79,7 +84,34 @@ export default function ActivityDetailPage() {
             toast.error('Please select a date')
             return
         }
-        toast.success('Booking feature coming soon!')
+        setShowWizard(true)
+    }
+
+    async function handleBookingComplete(data: BookingWizardData) {
+        if (!activity) return
+        setBookingLoading(true)
+        
+        const result = await createBookingRequest({
+            serviceId: activity.id,
+            serviceName: activity.name,
+            serviceCategory: 'activity',
+            amount: activity.base_price,
+            startDate: data.checkIn || date,
+            endDate: data.checkOut,
+            paxAdults: data.guests || participants,
+            paxChildren: 0,
+            travelers: data.travelers,
+            specialRequests: data.specialRequests
+        })
+
+        if (result.success) {
+            toast.success('Booking request submitted successfully!')
+            setShowWizard(false)
+            router.push(`/booking-confirmation?id=${result.bookingId}&service=${encodeURIComponent(activity.name)}&amount=${activity.base_price}`)
+        } else {
+            toast.error(result.error || 'Failed to submit booking request')
+        }
+        setBookingLoading(false)
     }
 
     if (loading) {
@@ -105,6 +137,29 @@ export default function ActivityDetailPage() {
 
     return (
         <div className="min-h-screen bg-slate-50">
+            {/* Booking Wizard Modal */}
+            {showWizard && (
+                <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm">
+                    <div className="bg-white dark:bg-slate-800 rounded-[3rem] w-full max-w-4xl max-h-[90vh] overflow-y-auto p-1 relative shadow-2xl">
+                        <button 
+                            onClick={() => setShowWizard(false)}
+                            className="absolute top-8 right-8 p-2 text-slate-400 hover:text-slate-600 dark:hover:text-white transition-colors z-10"
+                        >
+                            <ArrowLeft size={24} className="rotate-90 sm:rotate-0" />
+                        </button>
+                        <div className="p-8">
+                            <BookingWizard 
+                                serviceId={activity.id}
+                                serviceName={activity.name}
+                                servicePrice={activity.base_price}
+                                serviceCategory="activity"
+                                onComplete={handleBookingComplete}
+                                isLoading={bookingLoading}
+                            />
+                        </div>
+                    </div>
+                </div>
+            )}
             {/* Back Button */}
             <div className="bg-white border-b border-slate-100">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
@@ -120,7 +175,7 @@ export default function ActivityDetailPage() {
                 {activity.image_url ? (
                     <div className="absolute inset-0 bg-cover bg-center" style={{ backgroundImage: `url(${activity.image_url})` }} />
                 ) : (
-                    <div className="absolute inset-0 bg-gradient-to-br from-purple-600 to-slate-900" />
+                    <div className="absolute inset-0 bg-gradient-to-br from-red-600 to-slate-900" />
                 )}
                 <div className="absolute inset-0 bg-black/30" />
             </div>
@@ -202,7 +257,7 @@ export default function ActivityDetailPage() {
 
                                         <button
                                             onClick={handleBookNow}
-                                            className="w-full px-6 py-4 bg-purple-600 text-white rounded-xl font-black uppercase tracking-wider hover:bg-slate-900 transition-all shadow-lg shadow-purple-600/20"
+                                            className="w-full px-6 py-4 bg-red-600 text-white rounded-xl font-black uppercase tracking-wider hover:bg-slate-900 transition-all shadow-lg shadow-red-600/20"
                                         >
                                             Book Now
                                         </button>
@@ -218,8 +273,8 @@ export default function ActivityDetailPage() {
                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                             {activity.amenities.map((amenity, idx) => (
                                 <div key={idx} className="flex items-center gap-3">
-                                    <div className="p-2 bg-purple-50 rounded-lg">
-                                        <Check size={16} className="text-purple-600" />
+                                    <div className="p-2 bg-red-50 rounded-lg">
+                                        <Check size={16} className="text-red-600" />
                                     </div>
                                     <span className="text-slate-700 font-medium">{amenity}</span>
                                 </div>

@@ -78,7 +78,7 @@ export default function ActivitiesPage() {
     return (
         <div className="min-h-screen bg-slate-50">
             {/* Header */}
-            <div className="bg-gradient-to-r from-purple-600 to-slate-900 text-white py-16">
+            <div className="bg-gradient-to-r from-red-600 to-slate-900 text-white py-16">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <h1 className="text-5xl font-black mb-4">Activities & Experiences</h1>
                     <p className="text-xl text-white/80 font-medium">
@@ -131,7 +131,7 @@ export default function ActivitiesPage() {
                         {filteredActivities.map((activity) => (
                             <div
                                 key={activity.id}
-                                className="group bg-white rounded-[2rem] overflow-hidden border border-slate-100 hover:border-purple-600 hover:shadow-2xl transition-all"
+                                className="group bg-white rounded-[2rem] overflow-hidden border border-slate-100 hover:border-red-600 hover:shadow-2xl transition-all"
                             >
                                 {activity.image_url ? (
                                     <div
@@ -139,7 +139,7 @@ export default function ActivitiesPage() {
                                         style={{ backgroundImage: `url(${activity.image_url})` }}
                                     />
                                 ) : (
-                                    <div className="h-64 bg-gradient-to-br from-purple-600 to-slate-900 flex items-center justify-center">
+                                    <div className="h-64 bg-gradient-to-br from-red-600 to-slate-900 flex items-center justify-center">
                                         <Activity size={64} className="text-white/30" />
                                     </div>
                                 )}
@@ -147,7 +147,7 @@ export default function ActivitiesPage() {
                                 <div className="p-6">
                                     <div className="flex items-start justify-between mb-3">
                                         <div className="flex-1">
-                                            <h3 className="text-2xl font-black text-slate-900 mb-2 group-hover:text-purple-600 transition-colors">
+                                            <h3 className="text-2xl font-black text-slate-900 mb-2 group-hover:text-red-600 transition-colors">
                                                 {activity.name}
                                             </h3>
                                             <div className="flex items-center gap-2 text-sm text-slate-600 mb-1">
@@ -192,7 +192,7 @@ export default function ActivitiesPage() {
                                             <span className="text-2xl font-black text-slate-900">Rs {activity.base_price?.toLocaleString()}</span>
                                             <span className="text-sm text-slate-500">/person</span>
                                         </div>
-                                        <button className="px-4 py-2 bg-purple-600 text-white rounded-lg font-bold hover:bg-slate-900 transition-all text-sm">
+                                        <button className="px-4 py-2 bg-red-600 text-white rounded-lg font-bold hover:bg-slate-900 transition-all text-sm">
                                             Book Now
                                         </button>
                                     </div>

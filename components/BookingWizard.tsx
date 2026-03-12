@@ -14,9 +14,12 @@ type TravelerDetails = {
 type BookingWizardStep = 1 | 2 | 3 | 4
 
 type BookingWizardProps = {
+    serviceId: string
     serviceName: string
     servicePrice: number
+    serviceCategory: string
     onComplete: (data: BookingWizardData) => void
+    isLoading?: boolean
 }
 
 export type BookingWizardData = {
@@ -29,7 +32,7 @@ export type BookingWizardData = {
     roomPreference?: string
 }
 
-export default function BookingWizard({ serviceName, servicePrice, onComplete }: BookingWizardProps) {
+export default function BookingWizard({ serviceName, servicePrice, onComplete, isLoading }: BookingWizardProps) {
     const [currentStep, setCurrentStep] = React.useState<BookingWizardStep>(1)
     const [formData, setFormData] = React.useState<BookingWizardData>({
         checkIn: '',
@@ -295,9 +298,10 @@ export default function BookingWizard({ serviceName, servicePrice, onComplete }:
                     ) : (
                         <button
                             onClick={handleSubmit}
-                            className="flex-1 px-6 py-4 bg-red-600 text-white rounded-xl font-bold hover:bg-slate-900 transition-all"
+                            disabled={isLoading}
+                            className="flex-1 px-6 py-4 bg-red-600 text-white rounded-xl font-bold hover:bg-slate-900 transition-all disabled:opacity-50"
                         >
-                            Proceed to Payment
+                            {isLoading ? 'Submitting...' : 'Submit Booking Request'}
                         </button>
                     )}
                 </div>

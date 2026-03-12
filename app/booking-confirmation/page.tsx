@@ -22,9 +22,9 @@ function BookingConfirmationContent() {
                     </div>
 
                     {/* Success Message */}
-                    <h1 className="text-4xl font-black text-slate-900 mb-3">Booking Confirmed!</h1>
+                    <h1 className="text-4xl font-black text-slate-900 mb-3">Booking Request Received!</h1>
                     <p className="text-lg text-slate-600 mb-8">
-                        Your booking for <span className="font-bold text-slate-900">{serviceName}</span> has been confirmed.
+                        Your booking request for <span className="font-bold text-slate-900">{serviceName}</span> has been successfully submitted.
                     </p>
 
                     {/* Booking Details */}
@@ -50,7 +50,7 @@ function BookingConfirmationContent() {
                     <div className="bg-blue-50 border border-blue-100 rounded-2xl p-6 mb-8 text-left">
                         <p className="text-sm text-blue-900">
                             <strong>What&apos;s Next?</strong><br />
-                            A confirmation email has been sent to your registered email address with complete booking details and payment instructions. Our team will contact you shortly to finalize the arrangements.
+                            Our team has received your request and will review the details. You will receive a notification once the booking is processed. For any offline payment arrangements, our concierge team will contact you directly within the next 24 hours.
                         </p>
                     </div>
 
