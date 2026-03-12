@@ -12,11 +12,10 @@ type Category = {
     image_url: string
     link: string
 }
-
+const supabase = createClient()
 export default function CategoryGrid() {
     const [categories, setCategories] = useState<Category[]>([])
     const [loading, setLoading] = useState(true)
-    const supabase = createClient()
 
     useEffect(() => {
         async function fetchCategories() {
@@ -38,7 +37,7 @@ export default function CategoryGrid() {
         }
 
         fetchCategories()
-    }, [supabase])
+    }, [])
 
     if (loading) {
         return (
