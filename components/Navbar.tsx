@@ -7,7 +7,7 @@ import { Menu, X, Heart, Moon, Sun, Phone, Mail, Facebook, Instagram, Linkedin }
 import { useWishlist } from '@/contexts/WishlistContext'
 import { useTheme } from '@/contexts/ThemeContext'
 import { createClient } from '@/lib/supabase'
-import { navigationConfig } from '@/lib/navigation'
+import { navigationConfig, type NavMenuItem } from '@/lib/navigation'
 import { NavRecursive } from './Navbar/NavRecursive'
 import { MobileAccordion } from './Navbar/MobileAccordion'
 import { cn } from '@/lib/utils'
@@ -28,9 +28,49 @@ export default function Navbar() {
     const [isOpen, setIsOpen] = useState(false)
     const [isScrolled, setIsScrolled] = useState(false)
     const [settings, setSettings] = useState<SiteSettings | null>(null)
+    const [items, setItems] = useState<NavMenuItem[]>([])
     const { wishlist } = useWishlist()
     const { theme, toggleTheme } = useTheme()
     const supabase = createClient()
+
+    const fetchNavigations = useCallback(async () => {
+        try {
+            const { data, error } = await supabase
+                .from('navigations')
+                .select('*')
+                .eq('is_active', true)
+                .order('display_order', { ascending: true })
+
+            if (error) throw error
+
+            if (data) {
+                // Build Tree
+                const tree: NavMenuItem[] = []
+                const map: Record<string, NavMenuItem & { id: string; parent_id: string | null }> = {}
+                
+                data.forEach((item: any) => {
+                    map[item.id] = { 
+                        label: item.label, 
+                        href: item.link, 
+                        children: [],
+                        id: item.id,
+                        parent_id: item.parent_id
+                    }
+                })
+                
+                data.forEach((item: any) => {
+                    if (item.parent_id && map[item.parent_id]) {
+                        map[item.parent_id].children?.push(map[item.id])
+                    } else {
+                        tree.push(map[item.id])
+                    }
+                })
+                setItems(tree)
+            }
+        } catch (err) {
+            console.error('Error fetching navigations:', err)
+        }
+    }, [supabase])
 
     const fetchSettings = useCallback(async () => {
         try {
@@ -54,13 +94,14 @@ export default function Navbar() {
 
     useEffect(() => {
         fetchSettings()
+        fetchNavigations()
 
         const handleScroll = () => {
             setIsScrolled(window.scrollY > 20)
         }
         window.addEventListener('scroll', handleScroll)
         return () => window.removeEventListener('scroll', handleScroll)
-    }, [fetchSettings])
+    }, [fetchSettings, fetchNavigations])
 
     const siteTitle = settings?.general_config?.siteTitle || 'Travel Lounge'
     const contactEmail = settings?.general_config?.contactEmail || 'reservation@travellounge.mu'
@@ -127,7 +168,7 @@ export default function Navbar() {
 
                         {/* Desktop Navigation */}
                         <div className="hidden lg:block">
-                            <NavRecursive items={navigationConfig.menu} />
+                            <NavRecursive items={items.length > 0 ? items : navigationConfig.menu} />
                         </div>
 
                         {/* Right Section */}
@@ -189,7 +230,7 @@ export default function Navbar() {
                     )}
                 >
                     <div className="h-full overflow-y-auto px-6 py-8">
-                        <MobileAccordion items={navigationConfig.menu} onClose={() => setIsOpen(false)} />
+                        <MobileAccordion items={items.length > 0 ? items : navigationConfig.menu} onClose={() => setIsOpen(false)} />
                         
                         {/* Mobile CTA */}
                         <div className="mt-8 pt-6 border-t border-slate-100 dark:border-slate-800">
