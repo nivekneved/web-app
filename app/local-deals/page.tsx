@@ -27,8 +27,8 @@ export default function LocalDealsPage() {
         
         <div className="container mx-auto px-4 relative z-10 text-white">
           <div className="max-w-2xl">
-            <h1 className="text-4xl md:text-6xl font-bold mb-6">Exclusive Local Mauritius Deals</h1>
-            <p className="text-xl mb-8 text-white/90">Experience the best of your home island with our curated collection of local offers, weekend getaways, and day packages.</p>
+            <h1 className="text-4xl md:text-8xl font-bold mb-6 font-serif">Island Escapes, Rediscovered</h1>
+            <p className="text-xl md:text-2xl mb-10 text-white/90 font-light max-w-2xl mx-auto">Discover the best local hotels, activities, and spa deals on our beautiful island. We ensure you a hassle-free stay because your peace of mind is our business.</p>
             <div className="flex flex-wrap gap-4">
               <Link 
                 href="/packages"

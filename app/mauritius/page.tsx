@@ -27,8 +27,8 @@ export default function MauritiusPage() {
         
         <div className="container mx-auto px-4 relative z-10 text-white">
           <div className="max-w-3xl">
-            <h1 className="text-5xl md:text-8xl font-bold mb-6 font-serif tracking-tight">Mauritius</h1>
-            <p className="text-xl md:text-2xl mb-10 text-white/90 font-light max-w-2xl leading-relaxed">A mosaic of cultures, colors, and landscapes. Beyond the pristine beaches, discover a world of volcanic peaks, turquoise lagoons, and warm, welcoming hospitality.</p>
+            <h1 className="text-4xl md:text-8xl font-bold mb-6 font-serif">Mauritius: Beyond the Horizon</h1>
+            <p className="text-xl md:text-2xl mb-10 text-white/90 font-light max-w-2xl mx-auto">From the best local hotels to exclusive spa deals and activities, we ensure you a hassle-free stay. Discover why Mauritius is more than just a destination.</p>
             <div className="flex gap-4">
                  <Link href="/destinations/mauritius" className="px-8 py-4 bg-primary text-white font-bold rounded-full hover:bg-primary/90 transition-all">Explore Destinations</Link>
                  <Link href="/contact" className="px-8 py-4 bg-white/20 backdrop-blur-md text-white border border-white/30 font-bold rounded-full hover:bg-white/30 transition-all">Book Your Stay</Link>

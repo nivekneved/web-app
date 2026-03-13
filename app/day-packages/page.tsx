@@ -50,9 +50,9 @@ export default function DayPackagesPage() {
 
              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
                 {[
-                    { icon: Utensils, title: 'Buffet or A La Carte', desc: 'Indulge in a premium lunch experience at the hotel&apos;s signature restaurant.' },
+                    { icon: Utensils, title: 'Gourmet Lunch', desc: 'Indulge in a premium lunch experience at the hotel&apos;s signature restaurant.' },
                     { icon: Beer, title: 'Unlimited Drinks', desc: 'Selection of beverages, cocktails, and soft drinks throughout your stay.' },
-                    { icon: Waves, title: 'Pool & Beach', desc: 'Full access to swimming pools, private beaches, and lounge facilities.' },
+                    { icon: Waves, title: 'Pool & Beach Access', desc: 'Full access to swimming pools, private beaches, and lounge facilities.' },
                     { icon: Sun, title: 'Resort Activities', desc: 'Non-motorized water sports, gym access, and daily entertainment programs.' },
                 ].map((item, i) => (
                     <div key={i} className="p-10 bg-slate-50 rounded-[3rem] hover:ring-2 ring-primary/20 transition-all text-center">
@@ -73,8 +73,9 @@ export default function DayPackagesPage() {
             <h2 className="text-3xl md:text-5xl font-bold mb-16 text-center">Popular Day Passes</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
                 {[
-                    { hotel: 'Lux* Grand Gaube', price: 'Rs 2,800', hours: '10:00 - 17:00' },
-                    { hotel: 'Shandrani Beachcomber', price: 'Rs 3,200', hours: '09:00 - 18:00' },
+                    { hotel: 'Tamassa Bel Ombre', price: 'Rs 3,000', hours: 'Sat/Sun/PH', location: 'Coastal Road, Bel Ombre' },
+                    { hotel: 'Casuarina Resort & Spa', price: 'Rs 9,500', hours: 'Room + Tea Time', location: 'Trou Aux Biches' },
+                    { hotel: 'Le Cardinal Exclusive', price: 'Rs 5,500', hours: 'Dinner Included', location: 'Trou Aux Biches' },
                 ].map((deal, i) => (
                     <div key={i} className="flex flex-col md:flex-row bg-white/5 border border-white/10 rounded-[2.5rem] overflow-hidden group">
                         <div className="md:w-1/2 relative h-64 md:h-auto">
@@ -84,7 +85,7 @@ export default function DayPackagesPage() {
                             <h3 className="text-2xl font-bold mb-4">{deal.hotel}</h3>
                             <div className="space-y-3 mb-8 text-white/70">
                                 <p className="flex items-center gap-3"><Clock size={18} className="text-primary" /> {deal.hours}</p>
-                                <p className="flex items-center gap-3"><MapPin size={18} className="text-primary" /> Mauritius</p>
+                                <p className="flex items-center gap-3"><MapPin size={18} className="text-primary" /> {deal.location}</p>
                             </div>
                             <div className="flex items-center justify-between mt-auto pt-6 border-t border-white/10">
                                 <span className="text-2xl font-bold text-primary">{deal.price}</span>

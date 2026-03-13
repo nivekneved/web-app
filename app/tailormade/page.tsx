@@ -28,7 +28,7 @@ export default function TailorMadePage() {
         <div className="container mx-auto px-4 relative z-10 text-white text-center">
           <div className="max-w-3xl mx-auto">
             <h1 className="text-4xl md:text-7xl font-bold mb-6 font-serif">Your Journey, Exactly as You Imagine It</h1>
-            <p className="text-xl md:text-2xl mb-10 text-white/90 font-light">Why settle for ordinary when you can have extraordinary? Our travel designers craft one-of-a-kind itineraries tailored precisely to your style, pace, and interests.</p>
+            <p className="text-xl md:text-2xl mb-10 text-white/90 font-light">Customise your trips including accommodation, transport, activities, or places of interest of your choice with our travel specialists.</p>
             <Link 
               href="/contact/request-quote"
               className="inline-block px-10 py-5 bg-white text-primary font-bold rounded-full hover:bg-slate-100 transition-all transform hover:scale-105 shadow-2xl"

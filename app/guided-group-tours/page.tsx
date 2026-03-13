@@ -2,7 +2,7 @@
 import React from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { Users, Landmark, Utensils, Camera, Bus, CheckCircle2 } from 'lucide-react';
+import { Landmark, Utensils, Bus, Camera } from 'lucide-react';
 
 export const metadata = {
   title: 'Guided Group Tours | Travel Lounge',
@@ -62,12 +62,10 @@ export default function GroupToursPage() {
 
              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                 {[
-                    { icon: Landmark, title: 'Expert Local Guides', desc: 'Discover hidden stories and historical secrets from those who know it best.' },
-                    { icon: Utensils, title: 'Authentic Dining', desc: 'Taste local cuisine at hand-picked restaurants away from the tourist traps.' },
-                    { icon: Bus, title: 'Premium Transport', desc: 'Travel in comfort with our fleet of modern, air-conditioned vehicles.' },
-                    { icon: Camera, title: 'Iconic Landmarks', desc: 'Priority access to the world&apos;s most famous sites and viewing points.' },
-                    { icon: Users, title: 'Small Group Sizes', desc: 'Intimate groups that ensure a personalized and social experience.' },
-                    { icon: CheckCircle2, title: 'All-Inclusive Peace of Mind', desc: 'Most meals, entry fees, and activities are included in your price.' },
+                    { icon: Landmark, title: 'Dubai & Malaysia', desc: '17 – 28 July 2026. 11 Nights/12 Days with Emirates. Desert Safari, Batu Caves, Genting Highland. From Rs 78,500.' },
+                    { icon: Utensils, title: 'Bangkok Explorer', desc: '19 – 27 June or 15 – 23 April 2026. Air Austral flights. Chao Phraya dinner cruise, Temple tours, Safari & Marine park. From Rs 59,500.' },
+                    { icon: Bus, title: 'Cape Town Adventure', desc: '12 – 19 April 2026. Experience the soul of South Africa with our curated group itinerary. From Mur 67,000.' },
+                    { icon: Camera, title: 'IATA Accredited', desc: 'Book with confidence knowing you are assisted by genuine travel and holiday specialists.' },
                 ].map((item, i) => (
                     <div key={i} className="flex gap-6 p-8 border border-slate-100 rounded-[2.5rem] hover:bg-slate-50 transition-all">
                         <div className="shrink-0 w-16 h-16 bg-slate-900 text-white rounded-2xl flex items-center justify-center shadow-lg shadow-slate-900/20">

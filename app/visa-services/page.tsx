@@ -27,8 +27,8 @@ export default function VisaServicesPage() {
         
         <div className="container mx-auto px-4 relative z-10 text-white">
           <div className="max-w-2xl bg-white/10 backdrop-blur-md p-10 rounded-3xl border border-white/20">
-            <h1 className="text-4xl md:text-5xl font-bold mb-6">Expert Visa Assistance</h1>
-            <p className="text-lg mb-8 text-white/95 leading-relaxed">Let us handle the complexity of visa applications. Our dedicated team ensures your documentation is perfect and processed with the highest chance of success.</p>
+            <h1 className="text-4xl md:text-8xl font-bold mb-6 italic tracking-tighter">Travel Without Limits</h1>
+            <p className="text-xl md:text-2xl mb-10 text-white/90 font-light max-w-2xl mx-auto">Expert assistance for Schengen, USA, UK, and South Africa visas. As an IATA accredited agency, we ensure your travel documents are handled with professional care.</p>
             <Link 
               href="/contact"
               className="inline-flex items-center gap-3 px-8 py-4 bg-white text-slate-900 font-bold rounded-full hover:bg-slate-50 transition-all"

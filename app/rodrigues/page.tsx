@@ -53,10 +53,8 @@ export default function RodriguesPage() {
                 />
                 <div className="absolute inset-0 bg-black/40" />
                 <div className="relative z-10 text-center text-white px-4">
-                    <h1 className="text-5xl md:text-6xl font-black mb-4">Rodrigues Island</h1>
-                    <p className="text-xl md:text-2xl text-slate-200 max-w-2xl mx-auto">
-                        Experience the authentic charm of our sister island.
-                    </p>
+                    <h1 className="text-4xl md:text-8xl font-bold mb-6 font-serif">Rodrigues: The Authentic Escape</h1>
+            <p className="text-xl md:text-2xl mb-10 text-white/90 font-light max-w-2xl mx-auto">Explore the hidden gem of the Indian Ocean. From charming guest houses to boutique hotels, we provide the best local hospitality and transfers.</p>
                 </div>
             </div>
 

@@ -27,8 +27,8 @@ export default function RodriguesHotelsPage() {
         
         <div className="container mx-auto px-4 relative z-10 text-white">
           <div className="max-w-3xl">
-            <h1 className="text-4xl md:text-6xl font-bold mb-6 font-serif">Island Soul, Authentic Stays</h1>
-            <p className="text-xl md:text-2xl mb-10 text-white/90 font-light">Escape to the authentic charm of Rodrigues. Discover boutique hotels and eco-resorts tucked away in the island&apos;s most serene corners.</p>
+            <h1 className="text-4xl md:text-8xl font-bold mb-6 font-serif">Island Living, Rodrigues Style</h1>
+            <p className="text-xl md:text-2xl mb-10 text-white/90 font-light max-w-2xl">From charming local guest houses to boutique hotels on the coast. Experience genuine hospitality with our curated selection of stays and reliable airport transfers.</p>
             <Link 
               href="/hotels"
               className="px-8 py-4 bg-primary text-white font-bold rounded-xl hover:bg-primary/90 transition-all inline-block"
