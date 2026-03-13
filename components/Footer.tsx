@@ -118,14 +118,14 @@ export default function Footer() {
                                     <span className="w-1.5 h-1.5 bg-red-600 rounded-full"></span>
                                     Port Louis
                                 </p>
-                                <p className="text-xs leading-relaxed mb-2">
+                                <p className="text-sm leading-relaxed mb-2">
                                     Ground Floor Newton Tower, Corner Sir William Newton and Remy Ollier Street, Port Louis
                                 </p>
                                 <a 
                                     href="https://www.google.com/maps/dir/?api=1&destination=Newton+Tower+Port+Louis" 
                                     target="_blank" 
                                     rel="noopener noreferrer"
-                                    className="text-[10px] font-black text-red-500 hover:text-red-400 flex items-center gap-1 uppercase tracking-tighter"
+                                    className="text-sm font-black text-red-500 hover:text-red-400 flex items-center gap-1 uppercase tracking-tighter"
                                 >
                                     <MapPin size={10} />
                                     Get Directions
@@ -136,14 +136,14 @@ export default function Footer() {
                                     <span className="w-1.5 h-1.5 bg-red-600 rounded-full"></span>
                                     Ebene
                                 </p>
-                                <p className="text-xs leading-relaxed mb-2">
+                                <p className="text-sm leading-relaxed mb-2">
                                     Ground Floor, 57 Ebene Mews, Rue Du Savoir, Ebene Cybercity
                                 </p>
                                 <a 
                                     href="https://www.google.com/maps/dir/?api=1&destination=Ebene+Mews+57" 
                                     target="_blank" 
                                     rel="noopener noreferrer"
-                                    className="text-[10px] font-black text-red-500 hover:text-red-400 flex items-center gap-1 uppercase tracking-tighter"
+                                    className="text-sm font-black text-red-500 hover:text-red-400 flex items-center gap-1 uppercase tracking-tighter"
                                 >
                                     <MapPin size={10} />
                                     Get Directions
@@ -155,7 +155,7 @@ export default function Footer() {
                     {/* Contact Us */}
                     <div>
                         <h4 className="text-sm font-black mb-6 uppercase tracking-[0.2em] text-white">Contact Us</h4>
-                        <div className="space-y-4 text-slate-400 font-medium">
+                        <div className="space-y-4 text-slate-400 font-medium text-sm">
                             <a href={`tel:${contactPhone.replace(/\s/g, '')}`} className="flex items-center gap-2 hover:text-red-600 transition-colors">
                                 <Phone size={16} className="text-red-600" />
                                 <span>{contactPhone}</span>
@@ -224,7 +224,7 @@ export default function Footer() {
                 </div>
 
                 {/* Copyright */}
-                <div className="mt-8 pt-6 border-t border-slate-800 text-center text-slate-400 text-xs">
+                <div className="mt-8 pt-6 border-t border-slate-800 text-center text-slate-400 text-sm">
                     <p>
                         © {new Date().getFullYear()} Travel Lounge and Leisure. All rights reserved.
                         {' '}- Developed by <a href="https://www.ebox.mu" target="_blank" rel="noopener noreferrer" className="text-red-600 hover:text-red-500 font-bold">EBOX</a>
