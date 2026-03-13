@@ -35,7 +35,7 @@ export default function BackToTop() {
                     animate={{ opacity: 1, scale: 1, y: 0 }}
                     exit={{ opacity: 0, scale: 0.5, y: 20 }}
                     onClick={scrollToTop}
-                    className="fixed bottom-8 right-8 z-50 p-4 bg-red-600 text-white rounded-2xl shadow-2xl hover:bg-red-500 transition-all group overflow-hidden"
+                    className="fixed bottom-8 left-8 z-50 p-4 bg-red-600 text-white rounded-2xl shadow-2xl hover:bg-red-500 transition-all group overflow-hidden"
                     title="Back to top"
                 >
                     <div className="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300" />
