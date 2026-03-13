@@ -75,8 +75,8 @@ export default function Footer() {
     const contactEmail = settings?.contactEmail || 'reservation@travellounge.mu'
     const contactPhone = settings?.contactPhone || '(+230) 212 4070'
     const workingHours = settings?.workingHours || 'Mon - Fri: 08:30 - 17:00'
-    const facebookUrl = settings?.facebookUrl || '#'
-    const instagramUrl = settings?.instagramUrl || '#'
+    const facebookUrl = settings?.facebookUrl || 'https://www.facebook.com/cqf.xeh.mybluehost.me/website_6dd3f772/'
+    const instagramUrl = settings?.instagramUrl || 'https://www.instagram.com/travellounge_ltd?igsh=MWljeWRiNG43aDN0OQ=='
     const linkedinUrl = settings?.linkedinUrl || '#'
 
     return (
