@@ -4,6 +4,7 @@ import './globals.css'
 import { Toaster } from 'sonner'
 import Navbar from '@/components/Navbar'
 import Footer from '@/components/Footer'
+import FloatingSocial from '@/components/FloatingSocial'
 import { AuthProvider } from '@/contexts/AuthContext'
 import { WishlistProvider } from '@/contexts/WishlistContext'
 import { ThemeProvider } from '@/contexts/ThemeContext'
@@ -33,6 +34,7 @@ export default function RootLayout({
                   {children}
                 </main>
                 <Footer />
+                <FloatingSocial />
                 <Toaster position="top-right" richColors />
               </WishlistProvider>
             </AuthProvider>
