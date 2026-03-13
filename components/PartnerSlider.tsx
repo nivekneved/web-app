@@ -3,7 +3,6 @@
 import React from 'react';
 import Image from 'next/image';
 import { motion } from 'framer-motion';
-import { ChevronLeft, ChevronRight } from 'lucide-react';
 
 const partners = [
   { name: 'Air Austral', logo: '/partners/Air-austral.png' },
@@ -12,50 +11,60 @@ const partners = [
   { name: 'Expat', logo: '/partners/Expat-logo-e1717409708420.jpg' },
   { name: 'Holy', logo: '/partners/HOLY-NEW.png' },
   { name: 'Kenya Airways', logo: '/partners/KenyaAirways.png' },
-  { name: 'Partner 5', logo: '/partners/prt-5-300x225-1.webp' },
-  { name: 'Partner 7', logo: '/partners/prt-7-300x225-1.webp' },
-  { name: 'Partner 3', logo: '/partners/prt3.webp' },
   { name: 'SA Airways', logo: '/partners/SAairways.png' },
   { name: 'Swan', logo: '/partners/SWAN-NEW.png' },
   { name: 'Turkish Airlines', logo: '/partners/Turkishairline.png' },
+  { name: 'Hotelbeds', logo: '/partners/hotelbeds.png' },
+  { name: 'TBO Holidays', logo: '/partners/tboholidays.png' },
+  { name: 'Emirates', logo: '/partners/prt-5-300x225-1.webp' }, 
+  { name: 'Cim Finance', logo: '/partners/prt-7-300x225-1.webp' },
+  { name: 'Partner 3', logo: '/partners/prt3.webp' },
 ];
+
+// Double the partners for a seamless infinite loop
+const sliderPartners = [...partners, ...partners];
 
 export default function PartnerSlider() {
   return (
-    <section className="py-12 bg-white border-y border-slate-100 overflow-hidden">
-      <div className="container mx-auto px-4">
-        <div className="relative flex items-center group">
-          {/* Custom Arrows based on the image */}
-          <button className="absolute left-0 z-10 p-2 text-red-600 opacity-0 group-hover:opacity-100 transition-opacity">
-            <ChevronLeft size={32} />
-          </button>
-          
-          <div className="flex-grow flex items-center justify-around gap-12 overflow-x-auto no-scrollbar py-4">
-             {/* Simple Marquee or row based on image */}
-             <div className="flex items-center gap-16 min-w-full justify-center">
-                {partners.map((partner, index) => (
-                    <motion.div
-                        key={partner.name}
-                        initial={{ opacity: 0, y: 10 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        transition={{ delay: index * 0.1 }}
-                        className="relative h-12 w-48 shrink-0 grayscale hover:grayscale-0 transition-all duration-300"
-                    >
-                        <Image
-                            src={partner.logo}
-                            alt={partner.name}
-                            fill
-                            className="object-contain"
-                            unoptimized
-                        />
-                    </motion.div>
-                ))}
-             </div>
-          </div>
+    <section className="py-20 bg-white border-y border-slate-50 overflow-hidden">
+      <div className="container mx-auto px-4 relative">
+        {/* Decorative Gradients for Fading Edges */}
+        <div className="absolute left-0 top-0 bottom-0 w-32 bg-gradient-to-r from-white to-transparent z-10 pointer-events-none" />
+        <div className="absolute right-0 top-0 bottom-0 w-32 bg-gradient-to-l from-white to-transparent z-10 pointer-events-none" />
 
-          <button className="absolute right-0 z-10 p-2 text-red-600 opacity-0 group-hover:opacity-100 transition-opacity">
-            <ChevronRight size={32} />
-          </button>
+        <div className="flex overflow-hidden">
+          <motion.div
+            className="flex gap-20 items-center justify-start py-4"
+            animate={{
+              x: ['0%', '-50%'], 
+            }}
+            transition={{
+              x: {
+                repeat: Infinity,
+                repeatType: "loop",
+                duration: 40,
+                ease: "linear",
+              },
+            }}
+            whileHover={{ scale: 1.02 }}
+            onMouseEnter={() => {}} // Placeholder to trigger hover state logic if needed
+            style={{ width: 'fit-content' }}
+          >
+            {sliderPartners.map((partner, index) => (
+              <motion.div
+                key={`${partner.name}-${index}`}
+                className="relative h-16 w-48 shrink-0 flex items-center justify-center grayscale opacity-60 hover:grayscale-0 hover:opacity-100 transition-all duration-500"
+              >
+                <Image
+                  src={partner.logo}
+                  alt={partner.name}
+                  fill
+                  className="object-contain"
+                  unoptimized
+                />
+              </motion.div>
+            ))}
+          </motion.div>
         </div>
       </div>
     </section>
