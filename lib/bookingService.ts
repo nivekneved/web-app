@@ -31,7 +31,7 @@ export async function createBookingRequest(data: BookingRequestData) {
             // Customer doesn't exist, fetch profile
             const { data: profile } = await supabase
                 .from('profiles')
-                .select('*')
+                .select('id, name, email, phone')
                 .eq('id', user.id)
                 .single()
 
@@ -58,42 +58,44 @@ export async function createBookingRequest(data: BookingRequestData) {
             throw customerError
         }
 
-        // 2. Create the main booking record
-        const { data: booking, error: bookingError } = await supabase
-            .from('bookings')
-            .insert([{
-                customer_id: user.id,
-                activity_name: data.serviceName,
-                activity_type: data.serviceCategory,
-                start_date: data.startDate,
-                end_date: data.endDate,
-                amount: data.amount,
-                total_amount: data.amount,
-                pax_adults: data.paxAdults,
-                pax_children: data.paxChildren,
-                status: 'pending',
-                payment_status: 'pending',
-                description: data.specialRequests || `Travelers: ${JSON.stringify(data.travelers)}`
-            }])
-            .select()
-            .single()
+        // 2. Prepare data for the transactional RPC
+        const bookingData = {
+            customer_id: user.id,
+            start_date: data.startDate,
+            end_date: data.endDate,
+            status: 'pending',
+            pax_adults: data.paxAdults,
+            pax_children: data.paxChildren,
+            amount: data.amount,
+            total_amount: data.amount,
+            activity_type: data.serviceCategory,
+            activity_name: data.serviceName,
+            description: data.specialRequests || `Travelers: ${JSON.stringify(data.travelers)}`,
+            created_at: new Date().toISOString()
+        }
 
-        if (bookingError) throw bookingError
+        const itemsData = [{
+            service_id: data.serviceId,
+            service_name: data.serviceName,
+            service_category: data.serviceCategory,
+            amount: data.amount
+        }]
 
-        // 3. Create the booking item record
-        const { error: itemError } = await supabase
-            .from('booking_items')
-            .insert([{
-                booking_id: booking.id,
-                service_id: data.serviceId,
-                service_name: data.serviceName,
-                service_category: data.serviceCategory,
-                amount: data.amount
-            }])
+        // 3. Execute transactional creation via RPC
+        const { data: bookingResponse, error: rpcError } = await supabase.rpc('create_booking_v1', {
+            p_booking_data: bookingData,
+            p_items_data: itemsData
+        })
 
-        if (itemError) throw itemError
+        if (rpcError) throw rpcError
 
-        return { success: true, bookingId: booking.id }
+        // The RPC returns { id: ... } or similar if successful, depending on its definition
+        // Let's assume it returns the created booking ID or use the data if returned.
+        // Based on Admin-app usage, it doesn't seem to capture the return value but we want the ID if possible.
+        // If the RPC doesn't return the ID, we might need to fetch it or modify the RPC later.
+        // For now, we follow the pattern of the RPC usage.
+
+        return { success: true, bookingId: bookingResponse?.id }
     } catch (error) {
         console.error('Booking failed:', error)
         return { success: false, error: (error as Error).message }

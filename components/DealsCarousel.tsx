@@ -31,7 +31,7 @@ export default function DealsCarousel() {
         try {
             const { data, error } = await supabase
                 .from('services')
-                .select('*')
+                .select('id, name, base_price, image_url, duration_days, duration_hours, service_type, rating')
                 .limit(4)
                 .order('rating', { ascending: false })
 

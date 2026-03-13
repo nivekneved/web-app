@@ -12,7 +12,11 @@ import { CurrencyProvider } from '@/contexts/CurrencyContext'
 import BackToTop from '@/components/BackToTop'
 
 
-const outfit = Outfit({ subsets: ['latin'] })
+const outfit = Outfit({ 
+  subsets: ['latin'],
+  display: 'swap',
+  weight: ['300', '400', '500', '600', '700', '800', '900'],
+})
 
 export const metadata: Metadata = {
   title: 'Travel Lounge | Your Gateway to Extraordinary Journeys',

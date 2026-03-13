@@ -27,7 +27,7 @@ export default function FlightsPage() {
         try {
             const { data, error } = await supabase
                 .from('popular_destinations')
-                .select('*')
+                .select('id, destination, country, return_price, image_url')
                 .eq('is_featured', true)
                 .order('destination', { ascending: true })
 

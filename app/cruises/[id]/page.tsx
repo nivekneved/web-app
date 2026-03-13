@@ -39,7 +39,7 @@ export default function CruiseDetailPage() {
         try {
             const { data, error } = await supabase
                 .from('services')
-                .select('*')
+                .select('id, name, description, location, region, base_price, rating, image_url, amenities, duration_days')
                 .eq('id', id)
                 .eq('service_type', 'cruise')
                 .single()

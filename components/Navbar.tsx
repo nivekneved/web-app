@@ -47,7 +47,7 @@ export default function Navbar() {
         try {
             const { data, error } = await supabase
                 .from('navigations')
-                .select('*')
+                .select('id, label, link, parent_id, display_order, is_active')
                 .eq('is_active', true)
                 .order('display_order', { ascending: true })
 
@@ -88,7 +88,7 @@ export default function Navbar() {
         try {
             const { data, error } = await supabase
                 .from('site_settings')
-                .select('*')
+                .select('key, value')
 
             if (error) throw error
 

@@ -35,7 +35,7 @@ export default function NewsArticlePage() {
         try {
             const { data, error } = await supabase
                 .from('editorial_posts')
-                .select('*')
+                .select('id, title, slug, content, excerpt, featured_image, published_at, tags')
                 .eq('slug', slug)
                 .eq('status', 'published')
                 .single()

@@ -29,7 +29,7 @@ export default function AnnouncementPopup() {
         const now = new Date().toISOString()
         const { data, error } = await supabase
           .from('popup_ads')
-          .select('*')
+          .select('id, title, content, media_url, media_type, cta_text, cta_link, display_frequency, is_active, start_at, end_at, created_at')
           .eq('is_active', true)
           .or(`start_at.is.null,start_at.lte.${now}`)
           .or(`end_at.is.null,end_at.gte.${now}`)

@@ -41,7 +41,7 @@ export default function DashboardPage() {
             try {
                 const { data, error } = await supabase
                     .from('profiles')
-                    .select('*')
+                    .select('id, name, email, phone, created_at')
                     .eq('id', user?.id)
                     .single()
 
@@ -56,7 +56,7 @@ export default function DashboardPage() {
             try {
                 const { data, error } = await supabase
                     .from('bookings')
-                    .select('*')
+                    .select('id, service_type, service_name, check_in_date, check_out_date, total_price, status, created_at')
                     .eq('customer_id', user?.id)
                     .order('created_at', { ascending: false })
 

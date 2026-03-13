@@ -26,7 +26,7 @@ export default function ToursPage() {
             setLoading(true)
             let query = supabase
                 .from('services')
-                .select('*')
+                .select('id, name, location, base_price, image_url, duration_days')
                 .eq('service_type', 'tour')
 
             if (filter !== 'all') {

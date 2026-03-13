@@ -30,7 +30,7 @@ export default function NewsPage() {
         try {
             const { data, error } = await supabase
                 .from('editorial_posts')
-                .select('*')
+                .select('id, title, slug, excerpt, featured_image, published_at, tags')
                 .eq('status', 'published')
                 .order('published_at', { ascending: false })
 

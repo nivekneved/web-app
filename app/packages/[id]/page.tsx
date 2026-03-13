@@ -59,7 +59,7 @@ export default function PackageDetailPage() {
         try {
             const { data, error } = await supabase
                 .from('services')
-                .select('*')
+                .select('id, name, description, location, region, base_price, rating, image_url, amenities, duration')
                 .eq('id', id)
                 .single()
 

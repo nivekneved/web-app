@@ -57,7 +57,7 @@ export default function AboutPage() {
         try {
             const { data, error } = await supabase
                 .from('content_blocks')
-                .select('*')
+                .select('section_key, content')
                 .eq('page_slug', 'about')
 
             if (error) throw error

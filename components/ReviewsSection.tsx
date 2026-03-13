@@ -36,7 +36,7 @@ export default function ReviewsSection({ serviceId, serviceType }: ReviewsSectio
             try {
                 const { data, error } = await supabase
                     .from('reviews')
-                    .select('*')
+                    .select('id, customer_name, rating, comment, created_at, status')
                     .eq('service_id', serviceId)
                     .eq('status', 'approved')
                     .order('created_at', { ascending: false })

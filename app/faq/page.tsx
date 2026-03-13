@@ -35,7 +35,7 @@ export default function FAQPage() {
         try {
             const { data, error } = await supabase
                 .from('faqs')
-                .select('*')
+                .select('id, category, question, answer, order_index')
                 .eq('is_published', true)
                 .order('order_index', { ascending: true })
 

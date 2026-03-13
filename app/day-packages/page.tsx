@@ -29,7 +29,7 @@ export default function DayPackagesPage() {
         try {
             const { data, error } = await supabase
                 .from('services')
-                .select('*')
+                .select('id, name, location, base_price, image_url, rating, service_type')
                 .eq('service_type', 'activity') // Assuming day packages are categorized as activities or we filter by category
                 // For now, let's fetch services and maybe there's a specific 'Day Package' tag or category
                 // Looking at the database schema, we might need to filter by a specific category name

@@ -29,7 +29,7 @@ export default function HotelDayPackagesPage() {
         try {
             const { data, error } = await supabase
                 .from('services')
-                .select('*')
+                .select('id, name, location, base_price, image_url, rating, service_type')
                 .eq('service_type', 'hotel') // For hotel day packages, we might be filtering hotels that offer day passes
                 .order('name', { ascending: true })
 

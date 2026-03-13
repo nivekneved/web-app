@@ -30,7 +30,7 @@ export default function HotelPackagesPage() {
         try {
             const { data, error } = await supabase
                 .from('services')
-                .select('*')
+                .select('id, name, location, base_price, image_url, rating, service_type')
                 .eq('service_type', 'hotel')
                 .eq('region', 'Mauritius') // Local Deals focus on Mauritius
                 .order('name', { ascending: true })

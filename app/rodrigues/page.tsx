@@ -28,7 +28,7 @@ export default function RodriguesPage() {
         try {
             const { data, error } = await supabase
                 .from('services')
-                .select('*')
+                .select('id, name, location, base_price, image_url, service_type')
                 .eq('region', 'Rodrigues')
                 .order('name', { ascending: true })
 

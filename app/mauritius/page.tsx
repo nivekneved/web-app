@@ -36,7 +36,7 @@ export default function MauritiusPage() {
                         <h2 className="text-3xl md:text-5xl font-black text-slate-900 mb-6 italic">Island of Inspiration</h2>
                         <p className="text-lg md:text-xl text-slate-600 leading-relaxed">
                             From the best local hotels to exclusive spa deals and activities, we ensure you a hassle-free stay. 
-                            Discover why Mauritius is more than just a destination—it's a vibrant tapestry of cultures, 
+                            Discover why Mauritius is more than just a destination—it&apos;s a vibrant tapestry of cultures, 
                             landscapes, and experiences waiting to be explored.
                         </p>
                     </div>

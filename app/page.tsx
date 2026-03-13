@@ -39,7 +39,7 @@ export default function HomePage() {
       try {
         const { data, error } = await supabase
           .from('hero_slides')
-          .select('*')
+          .select('id, title, subtitle, description, cta_text, cta_link, image_url, media_type, video_url, order_index')
           .eq('is_active', true)
           .order('order_index', { ascending: true })
 

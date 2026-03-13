@@ -64,7 +64,7 @@ export default function ActivityDetailPage() {
         try {
             const { data, error } = await supabase
                 .from('services')
-                .select('*')
+                .select('id, name, description, location, region, base_price, rating, image_url, amenities, duration_hours')
                 .eq('id', id)
                 .eq('service_type', 'activity')
                 .single()

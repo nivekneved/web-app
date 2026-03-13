@@ -30,7 +30,7 @@ export default function PackagesPage() {
                 setLoading(true)
                 let query = supabase
                     .from('services')
-                    .select('*')
+                    .select('id, name, location, base_price, image_url, duration, service_type')
                     .eq('service_type', 'activity')
 
                 if (filter !== 'all') {

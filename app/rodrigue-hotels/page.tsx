@@ -29,7 +29,7 @@ export default function RodriguesHotelsPage() {
         try {
             const { data, error } = await supabase
                 .from('services')
-                .select('*')
+                .select('id, name, location, base_price, image_url, rating, service_type')
                 .eq('service_type', 'hotel')
                 .eq('region', 'Rodrigues')
                 .order('name', { ascending: true })

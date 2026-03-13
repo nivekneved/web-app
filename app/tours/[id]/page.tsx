@@ -40,7 +40,7 @@ export default function TourDetailPage() {
         try {
             const { data, error } = await supabase
                 .from('services')
-                .select('*')
+                .select('id, name, description, location, region, base_price, rating, image_url, amenities, duration_days, max_group_size, service_type')
                 .eq('id', id)
                 .eq('service_type', 'tour')
                 .single()

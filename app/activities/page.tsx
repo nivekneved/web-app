@@ -51,7 +51,7 @@ export default function ActivitiesPage() {
         try {
             const { data, error } = await supabase
                 .from('services')
-                .select('*')
+                .select('id, name, description, location, region, base_price, rating, image_url, amenities, duration_hours')
                 .eq('service_type', 'activity')
                 .order('name', { ascending: true })
 

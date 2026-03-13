@@ -31,7 +31,7 @@ export default function CruisesPage() {
         try {
             const { data, error } = await supabase
                 .from('services')
-                .select('*')
+                .select('id, name, location, base_price, image_url, duration_days, service_type')
                 .eq('service_type', 'cruise')
 
             if (error) throw error

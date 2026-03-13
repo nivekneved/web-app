@@ -34,7 +34,7 @@ export default function ComparePage() {
             if (compareIds.length > 0) {
                 const { data, error } = await supabase
                     .from('services')
-                    .select('*')
+                    .select('id, name, service_type, location, base_price, rating, image_url, amenities')
                     .in('id', compareIds)
 
                 if (error) throw error
