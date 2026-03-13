@@ -160,7 +160,7 @@ export default function Navbar() {
             {/* Main Navigation */}
             <nav
                 className={cn(
-                    "sticky top-0 z-50 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md transition-all duration-300",
+                    "sticky top-0 z-50 bg-white transition-all duration-300",
                     isScrolled ? "shadow-lg py-2" : "border-b border-slate-100 dark:border-slate-800 py-4"
                 )}
                 role="navigation"
@@ -173,9 +173,9 @@ export default function Navbar() {
                             <Image
                                 src="/logo.png"
                                 alt={siteTitle}
-                                width={160}
-                                height={40}
-                                className="h-8 md:h-10 w-auto object-contain"
+                                width={200}
+                                height={50}
+                                className="h-10 md:h-12 w-auto object-contain"
                             />
                         </Link>
 
