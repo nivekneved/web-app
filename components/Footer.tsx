@@ -201,7 +201,10 @@ export default function Footer() {
                                     <Link href="/contact" className="hover:text-red-600 transition-colors">Contact Us</Link>
                                 </li>
                                 <li>
-                                    <Link href="/faq" className="hover:text-red-600 transition-colors">FAQ</Link>
+                                    <Link href="/privacy-policy" className="hover:text-red-600 transition-colors">Privacy Policy</Link>
+                                </li>
+                                <li>
+                                    <Link href="/terms-conditions" className="hover:text-red-600 transition-colors">Terms & Conditions</Link>
                                 </li>
                             </ul>
                         </div>
@@ -220,7 +223,7 @@ export default function Footer() {
                                 <button 
                                     type="submit"
                                     disabled={submitting}
-                                    className="w-full py-2.5 bg-red-600 text-black rounded-xl font-bold hover:bg-red-700 transition-colors text-sm flex items-center justify-center"
+                                    className="w-full py-2.5 bg-red-600 text-white rounded-xl font-bold hover:bg-red-700 transition-colors text-sm flex items-center justify-center"
                                 >
                                     {submitting ? <Loader2 size={16} className="animate-spin" /> : 'Subscribe'}
                                 </button>

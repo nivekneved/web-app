@@ -3,7 +3,6 @@
 import React, { useState, useEffect } from 'react'
 import Image from 'next/image'
 import {
-  Globe,
   Award,
 } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
@@ -12,7 +11,6 @@ import DealsCarousel from '@/components/DealsCarousel'
 import AnnouncementPopup from '@/components/AnnouncementPopup'
 import PartnerSlider from '@/components/PartnerSlider'
 
-import { toast } from 'sonner'
 import { createClient } from '@/lib/supabase'
 
 const supabase = createClient()
@@ -272,69 +270,15 @@ export default function HomePage() {
       </section>
 
       {/* Partner Logos */}
-      <PartnerSlider />
-
-      {/* Newsletter */}
-      <section className="py-24 bg-white">
+      <div className="bg-slate-50 py-16">
         <div className="container mx-auto px-6">
-          <div className="bg-slate-50 rounded-[3rem] p-12 lg:p-20 text-center relative overflow-hidden">
-            <div className="absolute top-0 right-0 p-12 opacity-5">
-              <Globe size={300} strokeWidth={1} />
-            </div>
-            <div className="relative z-10 max-w-2xl mx-auto">
-              <h2 className="text-3xl md:text-4xl font-black text-slate-900 mb-6">Join the Elite Club</h2>
-              <p className="text-lg text-slate-500 mb-10">
-                Receive exclusive travel inspirations, hidden gems, and premium offers directly in your inbox.
-              </p>
-              <form onSubmit={async (e: React.FormEvent<HTMLFormElement>) => {
-                e.preventDefault();
-                const form = e.currentTarget;
-                const emailInput = form.elements.namedItem('email') as HTMLInputElement;
-                const email = emailInput?.value;
-                if (!email) return;
-
-                const submitButton = form.querySelector('button') as HTMLButtonElement;
-                submitButton.disabled = true;
-                submitButton.innerHTML = 'Subscribing...';
-
-                try {
-                  const { error } = await supabase
-                    .from('subscribers')
-                    .insert([{ email }]);
-
-                  if (error) {
-                    if (error.code === '23505') {
-                      toast.error('You are already subscribed!');
-                    } else {
-                      throw error;
-                    }
-                  } else {
-                    toast.success('Thank you for subscribing!');
-                    form.reset();
-                  }
-                } catch (err) {
-                  console.error('Error subscribing:', err);
-                  toast.error('Failed to subscribe. Please try again.');
-                } finally {
-                  submitButton.disabled = false;
-                  submitButton.innerHTML = 'Subscribe';
-                }
-              }} className="flex flex-col md:flex-row gap-4">
-                <input
-                  type="email"
-                  name="email"
-                  required
-                  placeholder="Enter your email"
-                  className="flex-1 px-6 py-4 bg-white border border-slate-200 rounded-xl focus:outline-hidden focus:ring-2 focus:ring-red-600 transition-all font-medium text-slate-900"
-                />
-                <button type="submit" className="px-8 py-4 bg-slate-900 text-white rounded-xl font-bold hover:bg-red-600 transition-all transform hover:scale-105">
-                  Subscribe
-                </button>
-              </form>
-            </div>
+          <div className="text-center mb-12">
+            <h2 className="text-4xl font-black text-slate-900 mb-4 tracking-tight">OUR TRUSTED PARTNERS</h2>
+            <div className="w-20 h-1.5 bg-red-600 mx-auto rounded-full"></div>
           </div>
+          <PartnerSlider />
         </div>
-      </section>
+      </div>
       <AnnouncementPopup />
     </div>
   )

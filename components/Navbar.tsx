@@ -3,7 +3,7 @@
 import Link from 'next/link'
 import { useState, useEffect, useCallback } from 'react'
 import Image from 'next/image'
-import { Menu, X, Heart, Moon, Sun, Phone, Mail, Facebook, Instagram } from 'lucide-react'
+import { Menu, X, Heart, Moon, Sun, Phone, Mail, Facebook, Instagram, MessageCircle } from 'lucide-react'
 import { useWishlist } from '@/contexts/WishlistContext'
 import { useTheme } from '@/contexts/ThemeContext'
 import { createClient } from '@/lib/supabase'
@@ -116,8 +116,6 @@ export default function Navbar() {
     }, [fetchSettings, fetchNavigations])
 
     const siteTitle = settings?.general_config?.siteTitle || 'Travel Lounge'
-    const contactEmail = settings?.general_config?.contactEmail || 'reservation@travellounge.mu'
-    const contactPhone = settings?.general_config?.contactPhone || '(+230) 212 4070'
     const facebookUrl = settings?.general_config?.facebookUrl || 'https://www.facebook.com/cqf.xeh.mybluehost.me/website_6dd3f772/'
     const instagramUrl = settings?.general_config?.instagramUrl || 'https://www.instagram.com/travellounge_ltd?igsh=MWljeWRiNG43aDN0OQ=='
 
@@ -127,14 +125,22 @@ export default function Navbar() {
             <div className="bg-red-600 text-white py-1 hidden md:block">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <div className="flex items-center justify-between text-sm">
-                        <div className="flex items-center gap-6">
-                            <a href={`tel:${contactPhone.replace(/\s/g, '')}`} className="flex items-center gap-2 hover:bg-white/10 p-1 rounded transition-colors">
+                        <div className="flex flex-wrap items-center gap-4 md:gap-6">
+                            <a href="tel:+2302124070" className="flex items-center gap-2 hover:bg-white/10 p-1 rounded transition-colors whitespace-nowrap">
                                 <Phone size={14} />
-                                <span>{contactPhone}</span>
+                                <span>(+230) 212 4070</span>
                             </a>
-                            <a href={`mailto:${contactEmail}`} className="flex items-center gap-2 hover:bg-white/10 p-1 rounded transition-colors">
+                            <a href="https://wa.me/23059407701" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 hover:bg-white/10 p-1 rounded transition-colors whitespace-nowrap">
+                                <MessageCircle size={14} className="text-green-400" />
+                                <span>5940 7701</span>
+                            </a>
+                            <a href="https://wa.me/23059407711" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 hover:bg-white/10 p-1 rounded transition-colors whitespace-nowrap">
+                                <MessageCircle size={14} className="text-green-400" />
+                                <span>5940 7711</span>
+                            </a>
+                            <a href="mailto:reservation@travellounge.mu" className="flex items-center gap-2 hover:bg-white/10 p-1 rounded transition-colors whitespace-nowrap">
                                 <Mail size={14} />
-                                <span>{contactEmail}</span>
+                                <span>reservation@travellounge.mu</span>
                             </a>
                         </div>
 
