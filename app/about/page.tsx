@@ -109,16 +109,16 @@ export default function AboutPage() {
 
     const identity = content?.identity || {
         subtitle: "About Travel Lounge",
-        title: "A One-Stop <br /><span class=\"text-red-600\">Travel Solutions</span> Provider",
-        description: "Located in the heart of Port Louis, Travel Lounge Ltd is an IATA accredited travel agency specializing in corporate business and personalized holiday leisure travel deals.",
-        quote: "Our mission is to provide dedicated support and personal advice throughout your journey, always putting customer delight at the forefront.",
+        title: "Your Peace of Mind <br />is <span class=\"text-red-600\">Our Business</span>",
+        description: "Located in the heart of the city center of Port Louis, since 2014 TRAVEL LOUNGE LTD is an IATA accredited travel agency specializing in corporate business and personalized holiday leisure travel deals to Mauritian and international travelers. Discover the best local hotels, activities, and spa deals on our beautiful island. Don’t believe it? Check out our Mauritius section. We ensure you a hassle-free stay. Your piece of mind is our business.",
+        quote: "Travel Lounge Ltd is a one stop travel solutions provider which aims to continuously grow across borders, in products and services, and always putting the customer’s delight at first place.",
         stats_label: "Years of Excellence",
         stats_value: "10+"
     }
 
     const vision = content?.vision || {
         title: "Our Vision",
-        description: "To be a one-stop travel solutions provider which aims to continuously grow across borders, in premium services, and always putting the customer's delight at first place."
+        description: "Travel Lounge Ltd is a one stop travel solutions provider which aims to continuously grow across borders, in products and services, and always putting the customer’s delight at first place."
     }
 
     const mission = content?.mission || {
@@ -256,9 +256,9 @@ export default function AboutPage() {
 
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-16">
                         {[
-                            { icon: Star, title: "Tailor-made Specialists", desc: "Customize your trips including accommodation, transport, activities, or places of interest of your choice." },
-                            { icon: Trophy, title: "Guaranteed Quality", desc: "A dedicated team to secure the best hotel rates in most popular destinations. Book with confidence." },
-                            { icon: Clock, title: "24/7 Expert Support", desc: "Our agents are genuine travel specialists. Enjoy peace of mind while we assist you on your planning." }
+                            { icon: Star, title: "Tailor-made Specialists", desc: "At Travel Lounge, you can customize your trips including accommodation, transport, activities, or places of interest of your choice." },
+                            { icon: Trophy, title: "Guaranteed Quality Service", desc: "We have a dedicated team to secure the best hotel rates in the most popular destination. Search and book your next holiday now!" },
+                            { icon: ShieldCheck, title: "IATA Accredited", desc: "Our agents are genuine travel and holiday specialists. Enjoy peace of mind while we assist you on your plannings." }
                         ].map((v, i) => (
                             <div key={i} className="flex flex-col items-center">
                                 <div className="w-20 h-20 bg-slate-50 rounded-3xl flex items-center justify-center text-red-600 mb-8 border border-slate-100 shadow-sm">
