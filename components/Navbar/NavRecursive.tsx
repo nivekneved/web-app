@@ -74,9 +74,14 @@ const NavItem: React.FC<{ item: NavMenuItem; level: number; onClose?: () => void
             ? "text-slate-800 hover:text-primary font-bold py-6 text-sm uppercase tracking-wide" 
             : "px-4 py-2 text-sm text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg font-medium"
         )}
-        onClick={() => {
-          setIsOpen(false);
-          onClose?.();
+        onClick={(e) => {
+          if (item.href === '#') {
+            e.preventDefault();
+            setIsOpen(!isOpen);
+          } else {
+            setIsOpen(false);
+            onClose?.();
+          }
         }}
         aria-haspopup={hasChildren ? "true" : "false"}
         aria-expanded={isOpen}

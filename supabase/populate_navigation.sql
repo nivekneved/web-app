@@ -4,13 +4,13 @@ TRUNCATE TABLE public.navigations CASCADE;
 -- Root level items
 INSERT INTO public.navigations (id, label, link, display_order, is_active) VALUES
 ('01db9e64-1111-4444-8888-000000000001', 'Home', '/', 1, true),
-('01db9e64-1111-4444-8888-000000000002', 'Destinations', '/destinations', 2, true),
-('01db9e64-1111-4444-8888-000000000003', 'Hotels', '/hotels', 3, true),
+('01db9e64-1111-4444-8888-000000000002', 'Travel Abroad', '#', 2, true),
+('01db9e64-1111-4444-8888-000000000003', 'Hotels', '#', 3, true),
 ('01db9e64-1111-4444-8888-000000000004', 'Holiday Packages', '/packages', 4, true),
 ('01db9e64-1111-4444-8888-000000000005', 'Experiences', '/experiences', 5, true),
 ('01db9e64-1111-4444-8888-000000000006', 'Cruises', '/cruises', 6, true),
 ('01db9e64-1111-4444-8888-000000000007', 'Travel Guide', '/travel-guide', 7, true),
-('01db9e64-1111-4444-8888-000000000008', 'About', '/about', 8, true),
+('01db9e64-1111-4444-8888-000000000008', 'About', '#', 8, true),
 ('01db9e64-1111-4444-8888-000000000009', 'Contact', '/contact', 9, true);
 
 -- Destinations sub-menu

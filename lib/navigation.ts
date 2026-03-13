@@ -19,8 +19,8 @@ export const navigationConfig: NavConfig = {
       href: "/"
     },
     {
-      label: "Destinations",
-      href: "/destinations",
+      label: "Travel Abroad",
+      href: "#",
       children: [
         {
           label: "Mauritius",
@@ -44,7 +44,7 @@ export const navigationConfig: NavConfig = {
     },
     {
       label: "Hotels",
-      href: "/hotels",
+      href: "#",
       children: [
         { "label": "All Hotels", "href": "/hotels" },
         { "label": "Luxury Resorts", "href": "/hotels/luxury-resorts" },
@@ -102,7 +102,7 @@ export const navigationConfig: NavConfig = {
     },
     {
       label: "About",
-      href: "/about",
+      href: "#",
       children: [
         { "label": "Our Story", "href": "/about" },
         { "label": "Our Team", "href": "/about/team" },

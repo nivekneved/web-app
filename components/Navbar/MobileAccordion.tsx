@@ -39,8 +39,13 @@ const MobileNavItem: React.FC<{ item: NavMenuItem; level: number; onClose: () =>
             "flex-grow py-3 transition-colors duration-200 text-slate-900 dark:text-slate-100 font-bold",
             level === 0 ? "text-base uppercase" : "text-sm font-semibold"
           )}
-          onClick={() => {
-            if (!hasChildren) onClose();
+          onClick={(e) => {
+            if (item.href === '#') {
+              e.preventDefault();
+              if (hasChildren) setIsOpen(!isOpen);
+            } else if (!hasChildren) {
+              onClose();
+            }
           }}
         >
           {item.label}
