@@ -9,7 +9,6 @@ import {
   Mail, 
   Clock, 
   CheckCircle2, 
-  Briefcase, 
   Building2,
   PhoneCall,
   MessageCircle

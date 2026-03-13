@@ -74,7 +74,6 @@ export default function Footer() {
 
     const contactEmail = settings?.contactEmail || 'reservation@travellounge.mu'
     const contactPhone = settings?.contactPhone || '(+230) 212 4070'
-    const officeAddress = settings?.officeAddress || 'Ground Floor Newton Tower, Corner Sir William Newton and Remy Ollier Street, Port Louis, Mauritius'
     const workingHours = settings?.workingHours || 'Mon - Fri: 08:30 - 17:00'
     const facebookUrl = settings?.facebookUrl || '#'
     const instagramUrl = settings?.instagramUrl || '#'
