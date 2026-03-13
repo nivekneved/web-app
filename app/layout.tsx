@@ -9,6 +9,8 @@ import { AuthProvider } from '@/contexts/AuthContext'
 import { WishlistProvider } from '@/contexts/WishlistContext'
 import { ThemeProvider } from '@/contexts/ThemeContext'
 import { CurrencyProvider } from '@/contexts/CurrencyContext'
+import BackToTop from '@/components/BackToTop'
+
 
 const outfit = Outfit({ subsets: ['latin'] })
 
@@ -34,6 +36,7 @@ export default function RootLayout({
                   {children}
                 </main>
                 <Footer />
+                <BackToTop />
                 <FloatingSocial />
                 <Toaster position="top-right" richColors />
               </WishlistProvider>
