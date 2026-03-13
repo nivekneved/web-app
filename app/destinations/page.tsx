@@ -36,9 +36,9 @@ export default function DestinationsPage() {
         <div className="container mx-auto px-4">
              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
                 {[
-                    { name: 'Mauritius', desc: 'Our home and your tropical paradise.', link: '/mauritius', img: '/assets/hero/mauritius_destination_hero_1773391482617.png' },
-                    { name: 'Rodrigues', desc: 'The authentic alternative island escape.', link: '/rodrigues', img: '/assets/hero/rodrigues_hotels_hero_1773391499243.png' },
-                    { name: 'Europe', desc: 'Culture, history, and unbeatable luxury.', link: '/packages', img: '/assets/hero/flight_booking_hero_1773391370829.png' },
+                    { name: 'Mauritius', desc: 'Our home and your tropical paradise.', link: '/destinations/mauritius', img: '/assets/hero/mauritius_destination_hero_1773391482617.png' },
+                    { name: 'Rodrigues', desc: 'The authentic alternative island escape.', link: '/destinations/rodrigues', img: '/assets/hero/rodrigues_hotels_hero_1773391499243.png' },
+                    { name: 'International', desc: 'Experience the world with our premium packages.', link: '/destinations/international', img: '/assets/hero/flight_booking_hero_1773391370829.png' },
                     { name: 'Asia', desc: 'Vibrant cities and serene landscapes.', link: '/packages', img: '/assets/hero/group_tours_hero_1773391421071.png' },
                     { name: 'Middle East', desc: 'Modern wonders and ancient traditions.', link: '/packages', img: '/assets/hero/tailormade_travel_hero_1773391405705.png' },
                     { name: 'Africa', desc: 'Untamed wildlife and cultural heritage.', link: '/packages', img: '/assets/hero/day_packages_hero_1773391515388.png' },

@@ -12,49 +12,69 @@
 Γû▓ Next.js 16.1.2 (Turbopack)
 - Environments: .env.local, .env
 
+ΓÜá The "middleware" file convention is deprecated. Please use "proxy" instead. Learn more: https://nextjs.org/docs/messages/middleware-to-proxy
   Creating an optimized production build ...
+Γ£ô Compiled successfully in 2.5s
+  Running TypeScript ...
+  Collecting page data using 19 workers ...
+  Generating static pages using 19 workers (0/41) ...
+  Generating static pages using 19 workers (10/41) 
+  Generating static pages using 19 workers (20/41) 
+  Generating static pages using 19 workers (30/41) 
+Γ£ô Generating static pages using 19 workers (41/41) in 633.5ms
+  Finalizing page optimization ...
 
-> Build error occurred
-Error: Turbopack build failed with 2 errors:
-./Desktop/web-app/components/Footer.tsx:1:27
-Ecmascript file had an error
-> 1 | import React, { useState, useEffect, useCallback } from 'react'
-    |                           ^^^^^^^^^
-  2 | import Link from 'next/link'
-  3 | import { MapPin, Phone, Mail, Clock, Facebook, Instagram, Linkedin, Loader2 } from 'lucide-react'
-  4 | import { createClient } from '@/lib/supabase'
+Route (app)
+Γöî Γùï /
+Γö£ Γùï /_not-found
+Γö£ Γùï /about
+Γö£ Γùï /about/team
+Γö£ Γùï /activities
+Γö£ ╞Æ /activities/[id]
+Γö£ Γùï /booking-confirmation
+Γö£ Γùï /compare
+Γö£ Γùï /contact
+Γö£ Γùï /cruises
+Γö£ ╞Æ /cruises/[id]
+Γö£ Γùï /dashboard
+Γö£ Γùï /day-packages
+Γö£ Γùï /destinations
+Γö£ Γùï /destinations/international
+Γö£ Γùï /destinations/mauritius
+Γö£ Γùï /destinations/rodrigues
+Γö£ Γùï /faq
+Γö£ Γùï /flight
+Γö£ Γùï /flights
+Γö£ Γùï /guided-group-tours
+Γö£ Γùï /hotel-day-packages
+Γö£ Γùï /hotel-packages
+Γö£ Γùï /hotels
+Γö£ ╞Æ /hotels/[id]
+Γö£ Γùï /local-deals
+Γö£ Γùï /login
+Γö£ Γùï /news
+Γö£ ╞Æ /news/[slug]
+Γö£ Γùï /packages
+Γö£ ╞Æ /packages/[id]
+Γö£ Γùï /payment
+Γö£ Γùï /plan-my-trip
+Γö£ Γùï /privacy-policy
+Γö£ Γùï /rodrigue-hotels
+Γö£ ╞Æ /rodrigues/[slug]
+Γö£ Γùï /safety
+Γö£ Γùï /saved-searches
+Γö£ Γùï /services
+Γö£ Γùï /tailormade
+Γö£ Γùï /terms-conditions
+Γö£ Γùï /tours
+Γö£ ╞Æ /tours/[id]
+Γö£ Γùï /transfers
+Γö£ Γùï /visa-services
+Γöö Γùï /wishlist
 
-You're importing a component that needs `useEffect`. This React Hook only works in a Client Component. To fix, mark the file (or its parent) with the `"use client"` directive.
 
- Learn more: https://nextjs.org/docs/app/api-reference/directives/use-client
+╞Æ Proxy (Middleware)
 
+Γùï  (Static)   prerendered as static content
+╞Æ  (Dynamic)  server-rendered on demand
 
-
-Import trace:
-  Server Component:
-    ./Desktop/web-app/components/Footer.tsx
-    ./Desktop/web-app/app/layout.tsx
-
-
-./Desktop/web-app/components/Footer.tsx:1:17
-Ecmascript file had an error
-> 1 | import React, { useState, useEffect, useCallback } from 'react'
-    |                 ^^^^^^^^
-  2 | import Link from 'next/link'
-  3 | import { MapPin, Phone, Mail, Clock, Facebook, Instagram, Linkedin, Loader2 } from 'lucide-react'
-  4 | import { createClient } from '@/lib/supabase'
-
-You're importing a component that needs `useState`. This React Hook only works in a Client Component. To fix, mark the file (or its parent) with the `"use client"` directive.
-
- Learn more: https://nextjs.org/docs/app/api-reference/directives/use-client
-
-
-
-Import trace:
-  Server Component:
-    ./Desktop/web-app/components/Footer.tsx
-    ./Desktop/web-app/app/layout.tsx
-
-
-    at <unknown> (./Desktop/web-app/components/Footer.tsx:1:27)
-    at <unknown> (./Desktop/web-app/components/Footer.tsx:1:17)
