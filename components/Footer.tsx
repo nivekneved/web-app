@@ -167,58 +167,58 @@ export default function Footer() {
                         </div>
                     </div>
 
-                    {/* Quick Links */}
-                    <div>
-                        <h4 className="text-lg font-black mb-4">Quick Links</h4>
-                        <ul className="grid grid-cols-2 gap-x-4 gap-y-2 text-slate-300 text-sm">
-                            <li>
-                                <Link href="/" className="hover:text-red-600 transition-colors">Home</Link>
-                            </li>
-                            <li>
-                                <Link href="/about" className="hover:text-red-600 transition-colors">About Us</Link>
-                            </li>
-                            <li>
-                                <Link href="/cruises" className="hover:text-red-600 transition-colors">Cruises</Link>
-                            </li>
-                            <li>
-                                <Link href="/tours" className="hover:text-red-600 transition-colors">Group Tours</Link>
-                            </li>
-                            <li>
-                                <Link href="/hotels" className="hover:text-red-600 transition-colors">Hotels</Link>
-                            </li>
-                            <li>
-                                <Link href="/activities" className="hover:text-red-600 transition-colors">Activities</Link>
-                            </li>
-                            <li>
-                                <Link href="/contact" className="hover:text-red-600 transition-colors">Contact Us</Link>
-                            </li>
-                            <li>
-                                <Link href="/faq" className="hover:text-red-600 transition-colors">FAQ</Link>
-                            </li>
-                        </ul>
-                    </div>
+                    {/* Quick Links & Newsletter */}
+                    <div className="md:col-span-2 lg:col-span-1">
+                        <div className="mb-8">
+                            <h4 className="text-lg font-black mb-4">Quick Links</h4>
+                            <ul className="grid grid-cols-2 gap-x-4 gap-y-2 text-slate-300 text-sm">
+                                <li>
+                                    <Link href="/" className="hover:text-red-600 transition-colors">Home</Link>
+                                </li>
+                                <li>
+                                    <Link href="/about" className="hover:text-red-600 transition-colors">About Us</Link>
+                                </li>
+                                <li>
+                                    <Link href="/cruises" className="hover:text-red-600 transition-colors">Cruises</Link>
+                                </li>
+                                <li>
+                                    <Link href="/tours" className="hover:text-red-600 transition-colors">Group Tours</Link>
+                                </li>
+                                <li>
+                                    <Link href="/hotels" className="hover:text-red-600 transition-colors">Hotels</Link>
+                                </li>
+                                <li>
+                                    <Link href="/activities" className="hover:text-red-600 transition-colors">Activities</Link>
+                                </li>
+                                <li>
+                                    <Link href="/contact" className="hover:text-red-600 transition-colors">Contact Us</Link>
+                                </li>
+                                <li>
+                                    <Link href="/faq" className="hover:text-red-600 transition-colors">FAQ</Link>
+                                </li>
+                            </ul>
+                        </div>
 
-                    {/* Newsletter - Moved into grid, spans 2 columns */}
-                    <div className="md:col-span-2 lg:pt-0 lg:mt-0 mt-0">
-                        <h4 className="text-lg font-black mb-2">Newsletter</h4>
-                        <p className="text-slate-300 mb-4 text-sm">Stay up to date with our latest news, exclusive deals, and more.</p>
-                        <form onSubmit={handleSubscribe} className="flex gap-2">
-                            <input
-                                type="email"
-                                placeholder="Enter email"
-                                required
-                                value={email}
-                                onChange={(e) => setEmail(e.target.value)}
-                                className="flex-1 px-4 py-2.5 bg-slate-800 border border-slate-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-red-600 text-white text-sm"
-                            />
-                            <button 
-                                type="submit"
-                                disabled={submitting}
-                                className="px-5 py-2.5 bg-red-600 text-black rounded-xl font-bold hover:bg-red-700 transition-colors text-sm whitespace-nowrap min-w-[100px] flex items-center justify-center"
-                            >
-                                {submitting ? <Loader2 size={16} className="animate-spin" /> : 'Subscribe'}
-                            </button>
-                        </form>
+                        <div>
+                            <h4 className="text-sm font-black mb-3 uppercase tracking-wider text-slate-400">Newsletter</h4>
+                            <form onSubmit={handleSubscribe} className="flex flex-col gap-2">
+                                <input
+                                    type="email"
+                                    placeholder="enter email to subscribe here"
+                                    required
+                                    value={email}
+                                    onChange={(e) => setEmail(e.target.value)}
+                                    className="w-full px-4 py-2.5 bg-slate-800 border border-slate-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-red-600 text-white text-sm"
+                                />
+                                <button 
+                                    type="submit"
+                                    disabled={submitting}
+                                    className="w-full py-2.5 bg-red-600 text-black rounded-xl font-bold hover:bg-red-700 transition-colors text-sm flex items-center justify-center"
+                                >
+                                    {submitting ? <Loader2 size={16} className="animate-spin" /> : 'Subscribe'}
+                                </button>
+                            </form>
+                        </div>
                     </div>
                 </div>
 
