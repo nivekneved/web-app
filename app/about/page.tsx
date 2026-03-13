@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect, useMemo, useCallback } from 'react'
 import Image from 'next/image'
-import { Globe, Trophy, MapPin, Clock, ShieldCheck, Star, Loader2 } from 'lucide-react'
+import { Globe, Trophy, MapPin, ShieldCheck, Star, Loader2 } from 'lucide-react'
 import { motion } from 'framer-motion'
 import { createClient } from '@/lib/supabase'
 

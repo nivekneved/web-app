@@ -71,7 +71,7 @@ INSERT INTO public.navigations (label, link, parent_id, display_order, is_active
 
 -- About sub-menu
 INSERT INTO public.navigations (label, link, parent_id, display_order, is_active) VALUES
-('Our Story', '/about/our-story', '01db9e64-1111-4444-8888-000000000008', 1, true),
+('Our Story', '/about', '01db9e64-1111-4444-8888-000000000008', 1, true),
 ('Our Team', '/about/team', '01db9e64-1111-4444-8888-000000000008', 2, true),
 ('News & Updates', '/news', '01db9e64-1111-4444-8888-000000000008', 3, true);
 
