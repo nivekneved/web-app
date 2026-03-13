@@ -170,7 +170,7 @@ export default function HomePage() {
                     >
                       <a
                         href={heroSlides[currentSlide].link}
-                        className="inline-flex items-center gap-2 px-8 py-4 bg-red-600 text-black rounded-xl font-bold hover:bg-white hover:text-slate-900 transition-all transform hover:scale-105 shadow-xl shadow-red-600/20"
+                        className="inline-flex items-center gap-2 px-8 py-4 bg-red-600 text-white rounded-xl font-bold hover:bg-white hover:text-slate-900 transition-all transform hover:scale-105 shadow-xl shadow-red-600/20"
                       >
                         {heroSlides[currentSlide].cta}
                       </a>
