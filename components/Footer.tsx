@@ -180,16 +180,25 @@ export default function Footer() {
                             <h4 className="text-sm font-black mb-6 uppercase tracking-[0.2em] text-white">Quick Links</h4>
                             <ul className="grid grid-cols-2 gap-x-4 gap-y-3 text-slate-400 text-sm font-medium">
                                 <li>
-                                    <Link href="/cruises" className="hover:text-red-600 transition-colors">Cruises</Link>
+                                    <Link href="/packages" className="hover:text-red-600 transition-colors">Holiday Packages</Link>
                                 </li>
                                 <li>
-                                    <Link href="/tours" className="hover:text-red-600 transition-colors">Group Tours</Link>
+                                    <Link href="/tours" className="hover:text-red-600 transition-colors">All Tours</Link>
                                 </li>
                                 <li>
-                                    <Link href="/hotels" className="hover:text-red-600 transition-colors">Hotels</Link>
+                                    <Link href="/transfers" className="hover:text-red-600 transition-colors">Transfers</Link>
                                 </li>
                                 <li>
-                                    <Link href="/activities" className="hover:text-red-600 transition-colors">Activities</Link>
+                                    <Link href="/news" className="hover:text-red-600 transition-colors">Latest News</Link>
+                                </li>
+                                <li>
+                                    <Link href="/faq" className="hover:text-red-600 transition-colors">FAQ</Link>
+                                </li>
+                                <li>
+                                    <Link href="/safety" className="hover:text-red-600 transition-colors">Safety & Security</Link>
+                                </li>
+                                <li>
+                                    <Link href="/wishlist" className="hover:text-red-600 transition-colors">My Wishlist</Link>
                                 </li>
                                 <li>
                                     <Link href="/privacy-policy" className="hover:text-red-600 transition-colors">Privacy Policy</Link>
