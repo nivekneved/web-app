@@ -81,7 +81,7 @@ export default function Footer() {
     return (
         <footer className="bg-slate-900 text-white">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-x-12 gap-y-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-x-12 gap-y-10 lg:gap-y-4">
                     {/* Company Info */}
                     <div className="md:col-span-2 lg:col-span-1">
                         <Link href="/" className="inline-block mb-6">
@@ -227,7 +227,7 @@ export default function Footer() {
                 <div className="mt-8 pt-6 border-t border-slate-800 text-center text-slate-400 text-sm">
                     <p>
                         © {new Date().getFullYear()} Travel Lounge and Leisure. All rights reserved.
-                        {' '}- Developed by <a href="https://www.ebox.mu" target="_blank" rel="noopener noreferrer" className="text-red-600 hover:text-red-500 font-bold">EBOX</a>
+                        {' '}- Developed by <span className="text-red-600 font-bold">Deven</span>
                     </p>
                 </div>
             </div>

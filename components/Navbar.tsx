@@ -181,7 +181,7 @@ export default function Navbar() {
                         </Link>
 
                         {/* Desktop Navigation */}
-                        <div className="hidden lg:block">
+                        <div className="hidden xl:block">
                             <NavRecursive items={items.length > 0 ? items : navigationConfig.menu} />
                         </div>
 
@@ -220,10 +220,9 @@ export default function Navbar() {
                                     )}
                                 </Link>
 
-                                {/* Mobile Menu Button */}
                                 <button
                                     onClick={() => setIsOpen(!isOpen)}
-                                    className="lg:hidden p-2 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg transition-colors"
+                                    className="xl:hidden p-2 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg transition-colors"
                                     aria-expanded={isOpen}
                                     aria-controls="mobile-menu"
                                     aria-label="Toggle mobile menu"
@@ -239,7 +238,7 @@ export default function Navbar() {
                 <div 
                     id="mobile-menu"
                     className={cn(
-                        "lg:hidden fixed inset-x-0 top-[64px] bottom-0 bg-white dark:bg-slate-900 z-40 transition-transform duration-300 ease-in-out transform",
+                        "xl:hidden fixed inset-x-0 top-[64px] bottom-0 bg-white dark:bg-slate-900 z-40 transition-transform duration-300 ease-in-out transform",
                         isOpen ? "translate-x-0" : "-translate-x-full"
                     )}
                 >

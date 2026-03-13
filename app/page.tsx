@@ -90,7 +90,7 @@ export default function HomePage() {
   return (
     <div className="min-h-screen bg-white selection:bg-red-100 selection:text-red-900">
       {/* Hero Section */}
-      <section className="relative h-[65vh] min-h-[500px] flex items-center overflow-hidden">
+      <section className="relative h-[60vh] md:h-[65vh] min-h-[400px] md:min-h-[500px] flex items-center overflow-hidden">
         <AnimatePresence mode="wait">
           {!loading && heroSlides.length > 0 && (
             <motion.div
@@ -141,7 +141,7 @@ export default function HomePage() {
                     initial={{ y: 20, opacity: 0 }}
                     animate={{ y: 0, opacity: 1 }}
                     transition={{ delay: 0.3 }}
-                    className="text-5xl md:text-7xl font-black text-white mb-6 leading-tight drop-shadow-lg"
+                    className="text-4xl md:text-6xl lg:text-7xl font-black text-white mb-6 leading-[1.1] drop-shadow-lg"
                   >
                     {heroSlides[currentSlide].title}
                   </motion.h1>
@@ -202,7 +202,7 @@ export default function HomePage() {
             className="max-w-4xl mx-auto"
           >
             <h2 className="text-sm font-bold text-red-600 uppercase tracking-[0.4em] mb-4">Travel Lounge</h2>
-            <h3 className="text-4xl md:text-5xl font-black text-slate-900 mb-8 uppercase tracking-tight">
+            <h3 className="text-3xl md:text-5xl font-black text-slate-900 mb-8 uppercase tracking-tight">
               Your Local and International <span className="text-red-600">Holiday Provider</span>
             </h3>
             <p className="text-xl text-slate-600 leading-relaxed font-medium">

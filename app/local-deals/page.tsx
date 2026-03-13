@@ -13,7 +13,7 @@ export default function LocalDealsPage() {
   return (
     <div className="bg-white">
       {/* Hero Section */}
-      <section className="relative h-[60vh] flex items-center min-h-[400px]">
+      <section className="relative h-[50vh] md:h-[60vh] flex items-center min-h-[350px] md:min-h-[400px]">
         <div className="absolute inset-0 z-0">
           <Image
             src="/assets/hero/local_deals_hero_1773391387665.png"
@@ -26,9 +26,9 @@ export default function LocalDealsPage() {
         </div>
         
         <div className="container mx-auto px-4 relative z-10 text-white">
-          <div className="max-w-2xl">
-            <h1 className="text-4xl md:text-8xl font-bold mb-6 font-serif">Island Escapes, Rediscovered</h1>
-            <p className="text-xl md:text-2xl mb-10 text-white/90 font-light max-w-2xl mx-auto">Discover the best local hotels, activities, and spa deals on our beautiful island. We ensure you a hassle-free stay because your peace of mind is our business.</p>
+          <div className="max-w-2xl px-4 md:px-0">
+            <h1 className="text-4xl md:text-7xl lg:text-8xl font-bold mb-6 font-serif leading-tight">Island Escapes, Rediscovered</h1>
+            <p className="text-lg md:text-2xl mb-10 text-white/90 font-light max-w-2xl mx-auto md:mx-0">Discover the best local hotels, activities, and spa deals on our beautiful island. We ensure you a hassle-free stay because your peace of mind is our business.</p>
             <div className="flex flex-wrap gap-4">
               <Link 
                 href="/packages"
