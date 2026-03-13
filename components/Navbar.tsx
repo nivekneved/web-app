@@ -3,7 +3,7 @@
 import Link from 'next/link'
 import { useState, useEffect, useCallback } from 'react'
 import Image from 'next/image'
-import { Menu, X, Heart, Moon, Sun, Phone, Mail, Facebook, Instagram, Linkedin } from 'lucide-react'
+import { Menu, X, Heart, Moon, Sun, Phone, Mail, Facebook, Instagram } from 'lucide-react'
 import { useWishlist } from '@/contexts/WishlistContext'
 import { useTheme } from '@/contexts/ThemeContext'
 import { createClient } from '@/lib/supabase'
@@ -30,7 +30,6 @@ interface SiteSettings {
         contactPhone?: string;
         facebookUrl?: string;
         instagramUrl?: string;
-        linkedinUrl?: string;
     };
     [key: string]: unknown;
 }
@@ -121,7 +120,6 @@ export default function Navbar() {
     const contactPhone = settings?.general_config?.contactPhone || '(+230) 212 4070'
     const facebookUrl = settings?.general_config?.facebookUrl || 'https://www.facebook.com/cqf.xeh.mybluehost.me/website_6dd3f772/'
     const instagramUrl = settings?.general_config?.instagramUrl || 'https://www.instagram.com/travellounge_ltd?igsh=MWljeWRiNG43aDN0OQ=='
-    const linkedinUrl = settings?.general_config?.linkedinUrl || '#'
 
     return (
         <header className="w-full">
@@ -147,9 +145,6 @@ export default function Navbar() {
                                 </a>
                                 <a href={instagramUrl} target="_blank" rel="noopener noreferrer" className="hover:bg-white/10 p-1 rounded transition-colors">
                                     <Instagram size={16} />
-                                </a>
-                                <a href={linkedinUrl} target="_blank" rel="noopener noreferrer" className="hover:bg-white/10 p-1 rounded transition-colors">
-                                    <Linkedin size={16} />
                                 </a>
                             </div>
                         </div>

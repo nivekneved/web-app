@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react'
 import Image from 'next/image'
-import { Linkedin, Mail, ArrowRight, Loader2 } from 'lucide-react'
+import { Mail, ArrowRight, Loader2 } from 'lucide-react'
 import { motion } from 'framer-motion'
 import Link from 'next/link'
 import { createClient } from '@/lib/supabase'
@@ -13,7 +13,6 @@ interface TeamMember {
     role: string
     bio: string
     photo_url: string | null
-    linkedin_url: string | null
     email: string
 }
 
@@ -37,7 +36,7 @@ export default function TeamPage() {
             try {
                 const { data, error } = await supabase
                     .from('admins')
-                    .select('id, name, role, bio, photo_url, linkedin_url, email')
+                    .select('id, name, role, bio, photo_url, email')
                     .eq('is_active', true)
                     .eq('show_on_front_page', true)
                     .order('display_order', { ascending: true })
@@ -100,16 +99,10 @@ export default function TeamPage() {
                                         />
                                         <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
 
-                                        {/* Social Overlay */}
                                         <div className="absolute bottom-6 left-6 right-6 flex gap-3 translate-y-12 group-hover:translate-y-0 transition-transform duration-500">
                                             <div className="flex gap-2 bg-white/10 backdrop-blur-md p-2 rounded-2xl w-full justify-around border border-white/20">
-                                                {member.linkedin_url && (
-                                                    <a href={member.linkedin_url} target="_blank" rel="noopener noreferrer" className="text-white hover:text-red-600 transition-colors p-2">
-                                                        <Linkedin size={20} />
-                                                    </a>
-                                                )}
-                                                <a href={`mailto:${member.email}`} className="text-white hover:text-red-600 transition-colors p-2">
-                                                    <Mail size={20} />
+                                                <a href={`mailto:${member.email}`} className="text-white hover:text-red-600 transition-colors p-2 text-center w-full">
+                                                    <Mail size={20} className="mx-auto" />
                                                 </a>
                                             </div>
                                         </div>

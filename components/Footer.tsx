@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect, useCallback } from 'react'
 import Link from 'next/link'
-import { MapPin, Phone, Mail, Clock, Facebook, Instagram, Linkedin, MessageCircle, Loader2 } from 'lucide-react'
+import { MapPin, Phone, Mail, Clock, Facebook, Instagram, MessageCircle, Loader2 } from 'lucide-react'
 import { createClient } from '@/lib/supabase'
 import { toast } from 'sonner'
 
@@ -14,7 +14,6 @@ interface GeneralConfig {
     workingHours?: string;
     facebookUrl?: string;
     instagramUrl?: string;
-    linkedinUrl?: string;
 }
 
 export default function Footer() {
@@ -77,7 +76,6 @@ export default function Footer() {
     const workingHours = settings?.workingHours || 'Mon - Fri: 08:30 - 17:00'
     const facebookUrl = settings?.facebookUrl || 'https://www.facebook.com/cqf.xeh.mybluehost.me/website_6dd3f772/'
     const instagramUrl = settings?.instagramUrl || 'https://www.instagram.com/travellounge_ltd?igsh=MWljeWRiNG43aDN0OQ=='
-    const linkedinUrl = settings?.linkedinUrl || '#'
 
     return (
         <footer className="bg-slate-900 text-white">
@@ -100,9 +98,6 @@ export default function Footer() {
                             </a>
                             <a href="https://wa.me/23059407701" target="_blank" rel="noopener noreferrer" className="w-9 h-9 bg-slate-800 rounded-lg flex items-center justify-center hover:bg-green-600 transition-colors">
                                 <MessageCircle size={18} />
-                            </a>
-                            <a href={linkedinUrl} target="_blank" rel="noopener noreferrer" className="w-9 h-9 bg-slate-800 rounded-lg flex items-center justify-center hover:bg-red-600 transition-colors">
-                                <Linkedin size={18} />
                             </a>
                         </div>
                     </div>
