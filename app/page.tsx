@@ -193,8 +193,28 @@ export default function HomePage() {
         </div>
       </section>
 
+      {/* Brand Introduction */}
+      <section className="py-24 bg-white relative z-20">
+        <div className="container mx-auto px-6 text-center">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="max-w-4xl mx-auto"
+          >
+            <h2 className="text-sm font-bold text-red-600 uppercase tracking-[0.4em] mb-4">Travel Lounge</h2>
+            <h3 className="text-4xl md:text-5xl font-black text-slate-900 mb-8 uppercase tracking-tight">
+              Your Local and International <span className="text-red-600">Holiday Provider</span>
+            </h3>
+            <p className="text-xl text-slate-600 leading-relaxed font-medium">
+              At Travel Lounge, we give you the freedom to either create tailor-made trips with our agents or book your next hotel in Mauritius online in few clicks! Enjoy safe, secure and memorable holidays with the assistance of our IATA accredited travel agents.
+            </p>
+          </motion.div>
+        </div>
+      </section>
+
       {/* Categories Grid */}
-      <div className="-mt-16 relative z-30">
+      <div className="relative z-30">
         <CategoryGrid />
       </div>
 
