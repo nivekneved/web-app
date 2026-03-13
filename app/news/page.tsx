@@ -1,10 +1,10 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 import { createClient } from '@/lib/supabase'
-import { Calendar } from 'lucide-react'
+import { Calendar, ArrowRight, Tag } from 'lucide-react'
 
 const supabase = createClient()
 
@@ -44,75 +44,96 @@ export default function NewsPage() {
     }
 
     return (
-        <div className="min-h-screen bg-slate-50">
-            {/* Header */}
-            <div className="bg-gradient-to-r from-red-600 to-slate-900 text-white py-20">
-                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                    <h1 className="text-5xl font-black mb-4">Travel News & Insights</h1>
-                    <p className="text-xl text-red-100">Discover the latest travel trends, destinations, and tips</p>
+        <div className="min-h-screen bg-slate-50 pb-20">
+            {/* Hero */}
+            <div className="relative h-[400px] flex items-center justify-center overflow-hidden">
+                <Image
+                    src="/assets/hero/tailormade_travel_hero_1773391405705.png"
+                    alt="Travel News"
+                    fill
+                    className="object-cover"
+                    priority
+                />
+                <div className="absolute inset-0 bg-black/40" />
+                <div className="relative z-10 text-center text-white px-4">
+                    <h1 className="text-5xl md:text-6xl font-black mb-4 uppercase tracking-tight">Travel Insights</h1>
+                    <p className="text-xl md:text-2xl text-slate-200 max-w-2xl mx-auto font-light">
+                        Discover the latest trends, guides, and stories from our local experts.
+                    </p>
                 </div>
             </div>
 
-            {/* Posts Grid */}
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+            {/* Content */}
+            <div className="container mx-auto px-4 -mt-20 relative z-20">
+                <div className="bg-white rounded-3xl p-8 shadow-xl border border-slate-100 mb-12">
+                    <div className="flex flex-wrap gap-4 items-center justify-between">
+                        <h2 className="text-3xl font-black text-slate-900 italic">Latest Articles</h2>
+                        <div className="flex gap-2">
+                            <button className="px-6 py-2 bg-red-600 rounded-lg font-bold text-white shadow-lg shadow-red-600/20">All Topics</button>
+                            <button className="px-6 py-2 bg-slate-100 rounded-lg font-bold text-slate-600 hover:bg-slate-200 transition-colors">Destinations</button>
+                        </div>
+                    </div>
+                </div>
+
                 {loading ? (
-                    <div className="text-center py-20">
-                        <div className="animate-spin rounded-full h-12 w-12 border-4 border-red-600 border-t-transparent mx-auto"></div>
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                        {[...Array(3)].map((_, i) => (
+                            <div key={i} className="animate-pulse bg-white rounded-[2.5rem] h-[450px] border border-slate-100" />
+                        ))}
                     </div>
-                ) : posts.length === 0 ? (
-                    <div className="text-center py-20">
-                        <p className="text-slate-400 text-lg italic">No articles published yet</p>
-                    </div>
-                ) : (
+                ) : posts.length > 0 ? (
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                         {posts.map((post) => (
                             <Link
                                 key={post.id}
                                 href={`/news/${post.slug}`}
-                                className="bg-white rounded-[2rem] overflow-hidden border border-slate-100 hover:border-red-600 transition-all group shadow-sm hover:shadow-xl"
+                                className="group bg-white rounded-[2.5rem] overflow-hidden border border-slate-100 hover:border-red-600 transition-all duration-500 shadow-sm hover:shadow-2xl flex flex-col h-full"
                             >
-                                {post.featured_image ? (
-                                    <div className="aspect-video bg-slate-200 overflow-hidden relative">
-                                        <Image
-                                            src={post.featured_image}
-                                            alt={post.title}
-                                            fill
-                                            className="object-cover group-hover:scale-105 transition-transform duration-300"
-                                        />
-                                    </div>
-                                ) : (
-                                    <div className="aspect-video bg-gradient-to-br from-red-500 to-slate-700" />
-                                )}
-
-                                <div className="p-6">
-                                    <div className="flex items-center gap-4 text-xs text-slate-500 mb-3">
-                                        <span className="flex items-center gap-1">
-                                            <Calendar size={14} />
-                                            {new Date(post.published_at).toLocaleDateString()}
+                                <div className="aspect-[16/10] bg-slate-200 overflow-hidden relative">
+                                    <Image
+                                        src={post.featured_image || "/assets/hero/tailormade_travel_hero_1773391405705.png"}
+                                        alt={post.title}
+                                        fill
+                                        className="object-cover transition-transform duration-700 group-hover:scale-110"
+                                    />
+                                    <div className="absolute top-4 left-4">
+                                        <span className="bg-red-600 text-white px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest shadow-lg">
+                                            {post.tags?.[0] || 'TRAVEL'}
                                         </span>
                                     </div>
+                                </div>
 
-                                    <h2 className="text-2xl font-black text-slate-900 mb-3 group-hover:text-red-600 transition-colors">
+                                <div className="p-8 flex flex-col flex-grow">
+                                    <div className="flex items-center gap-3 text-xs text-slate-400 mb-4 font-bold">
+                                        <Calendar size={14} className="text-red-600" />
+                                        {new Date(post.published_at).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}
+                                    </div>
+
+                                    <h3 className="text-2xl font-black text-slate-900 mb-4 group-hover:text-red-600 transition-colors leading-tight">
                                         {post.title}
-                                    </h2>
+                                    </h3>
 
-                                    <p className="text-slate-600 mb-4 line-clamp-3">{post.excerpt}</p>
+                                    <p className="text-slate-600 mb-8 line-clamp-3 text-sm font-light leading-relaxed">
+                                        {post.excerpt}
+                                    </p>
 
-                                    {post.tags && post.tags.length > 0 && (
-                                        <div className="flex flex-wrap gap-2">
-                                            {post.tags.slice(0, 3).map((tag, idx) => (
-                                                <span
-                                                    key={idx}
-                                                    className="px-3 py-1 bg-slate-100 text-slate-600 rounded-lg text-xs font-medium"
-                                                >
-                                                    {tag}
-                                                </span>
+                                    <div className="mt-auto pt-6 border-t border-slate-50 flex items-center justify-between">
+                                        <span className="text-xs font-black text-red-600 flex items-center gap-2 group-hover:gap-3 transition-all uppercase tracking-widest">
+                                            Read More <ArrowRight size={16} />
+                                        </span>
+                                        <div className="flex gap-1">
+                                            {post.tags?.slice(1, 3).map((tag, idx) => (
+                                                <Tag key={idx} size={14} className="text-slate-300" />
                                             ))}
                                         </div>
-                                    )}
+                                    </div>
                                 </div>
                             </Link>
                         ))}
+                    </div>
+                ) : (
+                    <div className="text-center py-20 bg-white rounded-3xl border border-slate-100">
+                        <p className="text-slate-500 text-lg">No articles discovered yet.</p>
                     </div>
                 )}
             </div>
