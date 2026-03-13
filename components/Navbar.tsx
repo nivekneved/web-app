@@ -23,6 +23,18 @@ interface NavRow {
     updated_at: string;
 }
 
+interface SiteSettings {
+    general_config?: {
+        siteTitle?: string;
+        contactEmail?: string;
+        contactPhone?: string;
+        facebookUrl?: string;
+        instagramUrl?: string;
+        linkedinUrl?: string;
+    };
+    [key: string]: unknown;
+}
+
 export default function Navbar() {
     const [isOpen, setIsOpen] = useState(false)
     const [isScrolled, setIsScrolled] = useState(false)
