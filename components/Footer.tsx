@@ -108,13 +108,42 @@ export default function Footer() {
                     {/* Visit Us */}
                     <div>
                         <h4 className="text-lg font-black mb-4">Visit Us</h4>
-                        <div className="space-y-4 text-slate-300">
+                        <div className="space-y-6 text-slate-300">
                             <div>
-                                <p className="font-bold text-white mb-1">Our Office</p>
-                                <p className="text-sm flex items-start gap-2">
-                                    <MapPin size={16} className="mt-1 flex-shrink-0 text-red-600" />
-                                    <span>{officeAddress}</span>
+                                <p className="font-bold text-white mb-1 uppercase text-xs tracking-widest flex items-center gap-2">
+                                    <span className="w-1.5 h-1.5 bg-red-600 rounded-full"></span>
+                                    Port Louis
                                 </p>
+                                <p className="text-xs leading-relaxed mb-2">
+                                    Ground Floor Newton Tower, Corner Sir William Newton and Remy Ollier Street, Port Louis
+                                </p>
+                                <a 
+                                    href="https://www.google.com/maps/dir/?api=1&destination=Newton+Tower+Port+Louis" 
+                                    target="_blank" 
+                                    rel="noopener noreferrer"
+                                    className="text-[10px] font-black text-red-500 hover:text-red-400 flex items-center gap-1 uppercase tracking-tighter"
+                                >
+                                    <MapPin size={10} />
+                                    Get Directions
+                                </a>
+                            </div>
+                            <div>
+                                <p className="font-bold text-white mb-1 uppercase text-xs tracking-widest flex items-center gap-2">
+                                    <span className="w-1.5 h-1.5 bg-red-600 rounded-full"></span>
+                                    Ebene
+                                </p>
+                                <p className="text-xs leading-relaxed mb-2">
+                                    Ground Floor, 57 Ebene Mews, Rue Du Savoir, Ebene Cybercity
+                                </p>
+                                <a 
+                                    href="https://www.google.com/maps/dir/?api=1&destination=Ebene+Mews+57" 
+                                    target="_blank" 
+                                    rel="noopener noreferrer"
+                                    className="text-[10px] font-black text-red-500 hover:text-red-400 flex items-center gap-1 uppercase tracking-tighter"
+                                >
+                                    <MapPin size={10} />
+                                    Get Directions
+                                </a>
                             </div>
                         </div>
                     </div>
