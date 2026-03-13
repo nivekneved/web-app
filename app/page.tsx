@@ -10,6 +10,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import CategoryGrid from '@/components/CategoryGrid'
 import DealsCarousel from '@/components/DealsCarousel'
 import AnnouncementPopup from '@/components/AnnouncementPopup'
+import PartnerSlider from '@/components/PartnerSlider'
 
 import { toast } from 'sonner'
 import { createClient } from '@/lib/supabase'
@@ -269,6 +270,9 @@ export default function HomePage() {
           </div>
         </div>
       </section>
+
+      {/* Partner Logos */}
+      <PartnerSlider />
 
       {/* Newsletter */}
       <section className="py-24 bg-white">
