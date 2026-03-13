@@ -202,21 +202,21 @@ export default function Footer() {
 
                         <div>
                             <h4 className="text-[10px] font-black mb-4 uppercase tracking-[0.25em] text-slate-500">Newsletter</h4>
-                            <form onSubmit={handleSubscribe} className="flex flex-col gap-3">
+                            <form onSubmit={handleSubscribe} className="flex gap-2">
                                 <input
                                     type="email"
-                                    placeholder="enter email to subscribe here"
+                                    placeholder="enter email"
                                     required
                                     value={email}
                                     onChange={(e) => setEmail(e.target.value)}
-                                    className="w-full px-4 py-2.5 bg-slate-800 border border-slate-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-red-600 text-white text-sm"
+                                    className="flex-grow px-4 py-2 bg-slate-800 border border-slate-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-600 text-white text-sm"
                                 />
                                 <button 
                                     type="submit"
                                     disabled={submitting}
-                                    className="w-full py-2.5 bg-red-600 text-white rounded-xl font-bold hover:bg-red-700 transition-colors text-sm flex items-center justify-center"
+                                    className="px-6 py-2 bg-red-600 text-white rounded-lg font-bold hover:bg-red-700 transition-colors text-sm flex items-center justify-center shrink-0 uppercase tracking-widest"
                                 >
-                                    {submitting ? <Loader2 size={16} className="animate-spin" /> : 'Subscribe'}
+                                    {submitting ? <Loader2 size={16} className="animate-spin" /> : 'Go'}
                                 </button>
                             </form>
                         </div>
