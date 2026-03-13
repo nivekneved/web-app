@@ -119,8 +119,8 @@ export default function Navbar() {
     const siteTitle = settings?.general_config?.siteTitle || 'Travel Lounge'
     const contactEmail = settings?.general_config?.contactEmail || 'reservation@travellounge.mu'
     const contactPhone = settings?.general_config?.contactPhone || '(+230) 212 4070'
-    const facebookUrl = settings?.general_config?.facebookUrl || '#'
-    const instagramUrl = settings?.general_config?.instagramUrl || '#'
+    const facebookUrl = settings?.general_config?.facebookUrl || 'https://www.facebook.com/cqf.xeh.mybluehost.me/website_6dd3f772/'
+    const instagramUrl = settings?.general_config?.instagramUrl || 'https://www.instagram.com/travellounge_ltd?igsh=MWljeWRiNG43aDN0OQ=='
     const linkedinUrl = settings?.general_config?.linkedinUrl || '#'
 
     return (
