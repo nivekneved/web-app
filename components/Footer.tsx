@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect, useCallback } from 'react'
 import Link from 'next/link'
+import Image from 'next/image'
 import { MapPin, Phone, Mail, Clock, Facebook, Instagram, MessageCircle, Loader2 } from 'lucide-react'
 import { createClient } from '@/lib/supabase'
 import { toast } from 'sonner'
@@ -83,10 +84,16 @@ export default function Footer() {
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-x-12 gap-y-4">
                     {/* Company Info */}
                     <div className="md:col-span-2 lg:col-span-1">
-                        <h3 className="text-2xl font-black mb-4">
-                            Travel<span className="text-red-600">Lounge</span>
-                        </h3>
-                        <p className="text-slate-300 mb-4 leading-relaxed text-sm">
+                        <Link href="/" className="inline-block mb-6">
+                            <Image 
+                                src="/logo-white.png" 
+                                alt="Travel Lounge" 
+                                width={200} 
+                                height={60} 
+                                className="h-12 w-auto object-contain"
+                            />
+                        </Link>
+                        <p className="text-slate-400 mb-6 leading-relaxed text-sm font-medium">
                             Your local and international holiday provider. IATA accredited travel agents for safe and memorable holidays.
                         </p>
                         <div className="flex gap-3">
@@ -104,8 +111,8 @@ export default function Footer() {
 
                     {/* Visit Us */}
                     <div>
-                        <h4 className="text-lg font-black mb-4">Visit Us</h4>
-                        <div className="space-y-6 text-slate-300">
+                        <h4 className="text-sm font-black mb-6 uppercase tracking-[0.2em] text-white">Visit Us</h4>
+                        <div className="space-y-6 text-slate-400">
                             <div>
                                 <p className="font-bold text-white mb-1 uppercase text-xs tracking-widest flex items-center gap-2">
                                     <span className="w-1.5 h-1.5 bg-red-600 rounded-full"></span>
@@ -147,8 +154,8 @@ export default function Footer() {
 
                     {/* Contact Us */}
                     <div>
-                        <h4 className="text-lg font-black mb-4">Contact Us</h4>
-                        <div className="space-y-3 text-slate-300">
+                        <h4 className="text-sm font-black mb-6 uppercase tracking-[0.2em] text-white">Contact Us</h4>
+                        <div className="space-y-4 text-slate-400 font-medium">
                             <a href={`tel:${contactPhone.replace(/\s/g, '')}`} className="flex items-center gap-2 hover:text-red-600 transition-colors">
                                 <Phone size={16} className="text-red-600" />
                                 <span>{contactPhone}</span>
@@ -169,9 +176,9 @@ export default function Footer() {
 
                     {/* Quick Links & Newsletter */}
                     <div className="md:col-span-2 lg:col-span-1">
-                        <div className="mb-8">
-                            <h4 className="text-lg font-black mb-4">Quick Links</h4>
-                            <ul className="grid grid-cols-2 gap-x-4 gap-y-2 text-slate-300 text-sm">
+                        <div className="mb-10">
+                            <h4 className="text-sm font-black mb-6 uppercase tracking-[0.2em] text-white">Quick Links</h4>
+                            <ul className="grid grid-cols-2 gap-x-4 gap-y-3 text-slate-400 text-sm font-medium">
                                 <li>
                                     <Link href="/" className="hover:text-red-600 transition-colors">Home</Link>
                                 </li>
@@ -200,8 +207,8 @@ export default function Footer() {
                         </div>
 
                         <div>
-                            <h4 className="text-sm font-black mb-3 uppercase tracking-wider text-slate-400">Newsletter</h4>
-                            <form onSubmit={handleSubscribe} className="flex flex-col gap-2">
+                            <h4 className="text-[10px] font-black mb-4 uppercase tracking-[0.25em] text-slate-500">Newsletter</h4>
+                            <form onSubmit={handleSubscribe} className="flex flex-col gap-3">
                                 <input
                                     type="email"
                                     placeholder="enter email to subscribe here"
