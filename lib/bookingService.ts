@@ -11,7 +11,7 @@ export type BookingRequestData = {
     endDate?: string
     paxAdults: number
     paxChildren: number
-    travelers: Record<string, any>[]
+    travelers: Record<string, unknown>[]
     specialRequests?: string
 }
 

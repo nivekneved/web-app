@@ -1,0 +1,40 @@
+
+> web@0.1.0 lint
+> eslint
+
+
+C:\Users\deven\Desktop\web-app\app\about\our-story\page.tsx
+  4:8  warning  'Link' is defined but never used  @typescript-eslint/no-unused-vars
+
+C:\Users\deven\Desktop\web-app\app\local-deals\page.tsx
+   5:10   warning  'Tag' is defined but never used                                  @typescript-eslint/no-unused-vars
+   5:15   warning  'Calendar' is defined but never used                             @typescript-eslint/no-unused-vars
+   5:25   warning  'MapPin' is defined but never used                               @typescript-eslint/no-unused-vars
+   5:33   warning  'Star' is defined but never used                                 @typescript-eslint/no-unused-vars
+   5:39   warning  'Heart' is defined but never used                                @typescript-eslint/no-unused-vars
+  50:83   error    `'` can be escaped with `&apos;`, `&lsquo;`, `&#39;`, `&rsquo;`  react/no-unescaped-entities
+  50:219  error    `'` can be escaped with `&apos;`, `&lsquo;`, `&#39;`, `&rsquo;`  react/no-unescaped-entities
+
+C:\Users\deven\Desktop\web-app\app\mauritius\page.tsx
+  5:10  warning  'Sun' is defined but never used       @typescript-eslint/no-unused-vars
+  5:15  warning  'Waves' is defined but never used     @typescript-eslint/no-unused-vars
+  5:22  warning  'PalmTree' is defined but never used  @typescript-eslint/no-unused-vars
+  5:41  warning  'Map' is defined but never used       @typescript-eslint/no-unused-vars
+  5:46  warning  'Info' is defined but never used      @typescript-eslint/no-unused-vars
+
+C:\Users\deven\Desktop\web-app\app\rodrigue-hotels\page.tsx
+   5:28   warning  'MapPin' is defined but never used                               @typescript-eslint/no-unused-vars
+  31:214  error    `'` can be escaped with `&apos;`, `&lsquo;`, `&#39;`, `&rsquo;`  react/no-unescaped-entities
+
+C:\Users\deven\Desktop\web-app\lib\bookingService.ts
+  14:31  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+C:\Users\deven\Desktop\web-app\scripts\get_navs.js
+  2:26  error  A `require()` style import is forbidden  @typescript-eslint/no-require-imports
+  3:1   error  A `require()` style import is forbidden  @typescript-eslint/no-require-imports
+
+C:\Users\deven\Desktop\web-app\scripts\get_navs_lite.js
+  2:15  error  A `require()` style import is forbidden  @typescript-eslint/no-require-imports
+
+Γ£û 19 problems (7 errors, 12 warnings)
+
