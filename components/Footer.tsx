@@ -90,7 +90,7 @@ export default function Footer() {
                                 alt="Travel Lounge" 
                                 width={200} 
                                 height={60} 
-                                className="h-12 w-auto object-contain"
+                                className="h-12 w-auto object-contain brightness-[1.5] contrast-125"
                             />
                         </Link>
                         <p className="text-slate-400 mb-6 leading-relaxed text-sm font-medium">
@@ -180,12 +180,6 @@ export default function Footer() {
                             <h4 className="text-sm font-black mb-6 uppercase tracking-[0.2em] text-white">Quick Links</h4>
                             <ul className="grid grid-cols-2 gap-x-4 gap-y-3 text-slate-400 text-sm font-medium">
                                 <li>
-                                    <Link href="/" className="hover:text-red-600 transition-colors">Home</Link>
-                                </li>
-                                <li>
-                                    <Link href="/about" className="hover:text-red-600 transition-colors">About Us</Link>
-                                </li>
-                                <li>
                                     <Link href="/cruises" className="hover:text-red-600 transition-colors">Cruises</Link>
                                 </li>
                                 <li>
@@ -196,9 +190,6 @@ export default function Footer() {
                                 </li>
                                 <li>
                                     <Link href="/activities" className="hover:text-red-600 transition-colors">Activities</Link>
-                                </li>
-                                <li>
-                                    <Link href="/contact" className="hover:text-red-600 transition-colors">Contact Us</Link>
                                 </li>
                                 <li>
                                     <Link href="/privacy-policy" className="hover:text-red-600 transition-colors">Privacy Policy</Link>
