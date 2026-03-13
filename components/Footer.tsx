@@ -214,7 +214,7 @@ export default function Footer() {
                             <button 
                                 type="submit"
                                 disabled={submitting}
-                                className="px-5 py-2.5 bg-red-600 text-white rounded-xl font-bold hover:bg-red-700 transition-colors text-sm whitespace-nowrap min-w-[100px] flex items-center justify-center"
+                                className="px-5 py-2.5 bg-red-600 text-black rounded-xl font-bold hover:bg-red-700 transition-colors text-sm whitespace-nowrap min-w-[100px] flex items-center justify-center"
                             >
                                 {submitting ? <Loader2 size={16} className="animate-spin" /> : 'Subscribe'}
                             </button>

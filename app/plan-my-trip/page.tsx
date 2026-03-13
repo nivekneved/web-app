@@ -142,7 +142,8 @@ export default function PlanMyTrip() {
                             <label className="text-sm font-bold text-slate-700 ml-1">Adults *</label>
                             <select 
                                 name="adults"
-                                className="w-full px-4 py-4 bg-slate-50 border-none rounded-2xl focus:ring-2 focus:ring-primary/20 transition-all font-medium text-slate-900 appearance-none"
+                                required
+                                className="w-full px-4 py-4 bg-white border border-slate-300 rounded-2xl focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all font-medium text-slate-900 appearance-none outline-none"
                             >
                                 {[1,2,3,4,5,6,7,8,9,10].map(n => <option key={n} value={n.toString()}>{n}</option>)}
                             </select>
@@ -151,7 +152,7 @@ export default function PlanMyTrip() {
                             <label className="text-sm font-bold text-slate-700 ml-1">Children</label>
                             <select 
                                 name="children"
-                                className="w-full px-4 py-4 bg-slate-50 border-none rounded-2xl focus:ring-2 focus:ring-primary/20 transition-all font-medium text-slate-900 appearance-none"
+                                className="w-full px-4 py-4 bg-white border border-slate-300 rounded-2xl focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all font-medium text-slate-900 appearance-none outline-none"
                             >
                                 {[0,1,2,3,4,5,6].map(n => <option key={n} value={n.toString()}>{n}</option>)}
                             </select>
@@ -166,7 +167,7 @@ export default function PlanMyTrip() {
                         name="budget"
                         required 
                         placeholder="e.g. 50,000 - 100,000"
-                        className="w-full px-4 py-4 bg-slate-50 border-none rounded-2xl focus:ring-2 focus:ring-primary/20 transition-all font-medium text-slate-900" 
+                        className="w-full px-4 py-4 bg-white border border-slate-300 rounded-2xl focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all font-medium text-slate-900 outline-none" 
                       />
                     </div>
 
@@ -175,8 +176,8 @@ export default function PlanMyTrip() {
                       <label className="text-sm font-bold text-slate-700 ml-1">Preferred Accommodation</label>
                       <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
                         {['Standard', 'Boutique', 'Luxury', 'All-Inclusive'].map((type) => (
-                           <label key={type} className="flex items-center gap-2 p-4 bg-slate-50 rounded-2xl cursor-pointer hover:bg-slate-100 transition-colors">
-                             <input type="radio" name="accommodation" value={type} className="w-4 h-4 text-primary" />
+                           <label key={type} className="flex items-center gap-2 p-4 bg-white border border-slate-300 rounded-2xl cursor-pointer hover:border-primary/50 transition-colors">
+                             <input type="radio" name="accommodation" value={type} className="w-4 h-4 text-primary focus:ring-primary" />
                              <span className="text-sm font-medium text-slate-700">{type}</span>
                            </label>
                         ))}
@@ -194,7 +195,7 @@ export default function PlanMyTrip() {
                         type="text" 
                         name="name"
                         required 
-                        className="w-full px-4 py-4 bg-slate-50 border-none rounded-2xl focus:ring-2 focus:ring-primary/20 transition-all font-medium text-slate-900" 
+                        className="w-full px-4 py-4 bg-white border border-slate-300 rounded-2xl focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all font-medium text-slate-900 outline-none" 
                       />
                     </div>
                     <div className="space-y-2">
@@ -203,7 +204,7 @@ export default function PlanMyTrip() {
                         type="email" 
                         name="email"
                         required 
-                        className="w-full px-4 py-4 bg-slate-50 border-none rounded-2xl focus:ring-2 focus:ring-primary/20 transition-all font-medium text-slate-900" 
+                        className="w-full px-4 py-4 bg-white border border-slate-300 rounded-2xl focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all font-medium text-slate-900 outline-none" 
                       />
                     </div>
                     <div className="space-y-2">
@@ -212,7 +213,7 @@ export default function PlanMyTrip() {
                         type="tel" 
                         name="phone"
                         required 
-                        className="w-full px-4 py-4 bg-slate-50 border-none rounded-2xl focus:ring-2 focus:ring-primary/20 transition-all font-medium text-slate-900" 
+                        className="w-full px-4 py-4 bg-white border border-slate-300 rounded-2xl focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all font-medium text-slate-900 outline-none" 
                       />
                     </div>
                   </div>
@@ -223,7 +224,7 @@ export default function PlanMyTrip() {
                       name="message"
                       rows={4}
                       placeholder="Share any specific interests, dietary requirements, or special occasions..."
-                      className="w-full px-4 py-4 bg-slate-50 border-none rounded-2xl focus:ring-2 focus:ring-primary/20 transition-all font-medium text-slate-900 resize-none" 
+                      className="w-full px-4 py-4 bg-white border border-slate-300 rounded-2xl focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all font-medium text-slate-900 resize-none outline-none" 
                     ></textarea>
                   </div>
 
@@ -231,7 +232,7 @@ export default function PlanMyTrip() {
                     <button 
                       type="submit"
                       disabled={isSubmitting}
-                      className="w-full md:w-auto px-12 py-5 bg-primary hover:bg-primary/90 !text-white font-bold rounded-2xl transition-all shadow-xl shadow-primary/20 flex items-center justify-center gap-3 disabled:opacity-70 disabled:cursor-not-allowed group"
+                      className="w-full md:w-auto px-12 py-5 bg-primary hover:bg-primary/90 !text-black font-bold rounded-2xl transition-all shadow-xl shadow-primary/20 flex items-center justify-center gap-3 disabled:opacity-70 disabled:cursor-not-allowed group"
                     >
                       {isSubmitting ? (
                         <div className="w-6 h-6 border-3 border-white/30 border-t-white rounded-full animate-spin" />
