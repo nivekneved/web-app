@@ -189,7 +189,7 @@ export default function Navbar() {
                             {/* CTA Button */}
                             <Link
                                 href={navigationConfig.cta.href}
-                                className="hidden md:flex items-center justify-center px-5 py-2.5 bg-primary hover:bg-primary/90 text-white font-bold rounded-full transition-all hover:scale-105 active:scale-95 shadow-lg shadow-primary/20"
+                                className="hidden md:flex items-center justify-center px-5 py-2.5 bg-primary hover:bg-primary/90 text-black font-bold rounded-full transition-all hover:scale-105 active:scale-95 shadow-lg shadow-primary/20"
                             >
                                 {navigationConfig.cta.label}
                             </Link>
@@ -250,7 +250,7 @@ export default function Navbar() {
                              <Link
                                 href={navigationConfig.cta.href}
                                 onClick={() => setIsOpen(false)}
-                                className="flex items-center justify-center w-full px-5 py-4 bg-primary text-white font-bold rounded-xl shadow-lg shadow-primary/20"
+                                className="flex items-center justify-center w-full px-5 py-4 bg-primary text-black font-bold rounded-xl shadow-lg shadow-primary/20"
                             >
                                 {navigationConfig.cta.label}
                             </Link>
