@@ -200,18 +200,18 @@ export default function Navbar() {
                             <div className="flex items-center gap-1 md:gap-2">
                                 <button
                                     onClick={toggleTheme}
-                                    className="p-2 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg transition-colors"
+                                    className="p-2 hover:bg-slate-100 rounded-lg transition-colors"
                                     aria-label="Toggle theme"
                                 >
-                                    {theme === 'dark' ? <Sun size={20} className="text-slate-400" /> : <Moon size={20} className="text-slate-600" />}
+                                    {theme === 'dark' ? <Sun size={20} className="text-slate-400" /> : <Moon size={20} className="text-slate-800" />}
                                 </button>
 
                                 <Link
                                     href="/wishlist"
-                                    className="relative p-2 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg transition-colors"
+                                    className="relative p-2 hover:bg-slate-100 rounded-lg transition-colors"
                                     aria-label={`View Wishlist (${wishlist.length} items)`}
                                 >
-                                    <Heart size={20} className="text-slate-600 dark:text-slate-400" />
+                                    <Heart size={20} className="text-slate-800" />
                                     {wishlist.length > 0 && (
                                         <span className="absolute -top-1 -right-1 bg-primary text-white text-[10px] font-bold rounded-full w-5 h-5 flex items-center justify-center">
                                             {wishlist.length}
