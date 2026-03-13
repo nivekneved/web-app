@@ -26,15 +26,15 @@ const sliderPartners = [...partners, ...partners];
 
 export default function PartnerSlider() {
   return (
-    <section className="py-20 bg-white border-y border-slate-50 overflow-hidden">
+    <section className="py-20 bg-transparent overflow-hidden">
       <div className="container mx-auto px-4 relative">
-        {/* Decorative Gradients for Fading Edges */}
-        <div className="absolute left-0 top-0 bottom-0 w-32 bg-gradient-to-r from-white to-transparent z-10 pointer-events-none" />
-        <div className="absolute right-0 top-0 bottom-0 w-32 bg-gradient-to-l from-white to-transparent z-10 pointer-events-none" />
+        {/* Decorative Gradients for Fading Edges - Matching the slate-50 background of the home section */}
+        <div className="absolute left-0 top-0 bottom-0 w-32 bg-gradient-to-r from-slate-50 to-transparent z-10 pointer-events-none" />
+        <div className="absolute right-0 top-0 bottom-0 w-32 bg-gradient-to-l from-slate-50 to-transparent z-10 pointer-events-none" />
 
         <div className="flex overflow-hidden">
           <motion.div
-            className="flex gap-20 items-center justify-start py-4"
+            className="flex gap-24 items-center justify-start py-4"
             animate={{
               x: ['0%', '-50%'], 
             }}
@@ -46,20 +46,19 @@ export default function PartnerSlider() {
                 ease: "linear",
               },
             }}
-            whileHover={{ scale: 1.02 }}
-            onMouseEnter={() => {}} // Placeholder to trigger hover state logic if needed
+            whileHover={{ scale: 1.01 }}
             style={{ width: 'fit-content' }}
           >
             {sliderPartners.map((partner, index) => (
               <motion.div
                 key={`${partner.name}-${index}`}
-                className="relative h-16 w-48 shrink-0 flex items-center justify-center grayscale opacity-60 hover:grayscale-0 hover:opacity-100 transition-all duration-500"
+                className="relative h-24 w-60 shrink-0 flex items-center justify-center grayscale opacity-80 hover:grayscale-0 hover:opacity-100 transition-all duration-500"
               >
                 <Image
                   src={partner.logo}
                   alt={partner.name}
                   fill
-                  className="object-contain"
+                  className="object-contain mix-blend-multiply"
                   unoptimized
                 />
               </motion.div>
