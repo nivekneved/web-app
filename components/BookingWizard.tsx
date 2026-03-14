@@ -20,6 +20,7 @@ type BookingWizardProps = {
     serviceCategory: string
     onComplete: (data: BookingWizardData) => void
     isLoading?: boolean
+    initialData?: Partial<BookingWizardData>
 }
 
 export type BookingWizardData = {
@@ -32,16 +33,16 @@ export type BookingWizardData = {
     roomPreference?: string
 }
 
-export default function BookingWizard({ serviceName, servicePrice, onComplete, isLoading }: BookingWizardProps) {
+export default function BookingWizard({ serviceName, servicePrice, onComplete, isLoading, initialData }: BookingWizardProps) {
     const [currentStep, setCurrentStep] = React.useState<BookingWizardStep>(1)
     const [formData, setFormData] = React.useState<BookingWizardData>({
-        checkIn: '',
-        checkOut: '',
-        guests: 1,
-        travelers: [{ firstName: '', lastName: '', email: '', phone: '' }],
-        specialRequests: '',
-        mealPreference: 'none',
-        roomPreference: 'standard'
+        checkIn: initialData?.checkIn || '',
+        checkOut: initialData?.checkOut || '',
+        guests: initialData?.guests || 1,
+        travelers: initialData?.travelers || [{ firstName: '', lastName: '', email: '', phone: '' }],
+        specialRequests: initialData?.specialRequests || '',
+        mealPreference: initialData?.mealPreference || 'none',
+        roomPreference: initialData?.roomPreference || 'standard'
     })
 
     function updateFormData(updates: Partial<BookingWizardData>) {

@@ -276,6 +276,11 @@ export default function HotelClientWrapper({ hotel }: { hotel: Hotel }) {
                             serviceName={hotel.name}
                             servicePrice={hotel.base_price}
                             serviceCategory="hotel"
+                            initialData={{
+                                checkIn,
+                                checkOut,
+                                guests
+                            }}
                             onComplete={onBookingConfirm}
                             isLoading={bookingLoading}
                         />
