@@ -1,6 +1,8 @@
-export default function LoadingSkeleton() {
+import { cn } from '@/lib/utils';
+
+export default function LoadingSkeleton({ className }: { className?: string }) {
     return (
-        <div className="animate-pulse space-y-4">
+        <div className={cn("animate-pulse space-y-4", className)}>
             <div className="h-8 bg-slate-200 dark:bg-slate-700 rounded-xl w-3/4"></div>
             <div className="h-4 bg-slate-200 dark:bg-slate-700 rounded-lg w-full"></div>
             <div className="h-4 bg-slate-200 dark:bg-slate-700 rounded-lg w-5/6"></div>
@@ -9,9 +11,15 @@ export default function LoadingSkeleton() {
     )
 }
 
-export function CardSkeleton() {
+export function Skeleton({ className }: { className?: string }) {
     return (
-        <div className="bg-white dark:bg-slate-800 rounded-2xl p-6 border border-slate-200 dark:border-slate-700 animate-pulse">
+        <div className={cn("animate-pulse bg-slate-200 dark:bg-slate-700 rounded-lg", className)} />
+    )
+}
+
+export function CardSkeleton({ className }: { className?: string }) {
+    return (
+        <div className={cn("bg-white dark:bg-slate-800 rounded-2xl p-6 border border-slate-200 dark:border-slate-700 animate-pulse", className)}>
             <div className="space-y-4">
                 <div className="aspect-video bg-slate-200 dark:bg-slate-700 rounded-xl"></div>
                 <div className="h-6 bg-slate-200 dark:bg-slate-700 rounded-lg w-3/4"></div>
@@ -26,9 +34,9 @@ export function CardSkeleton() {
     )
 }
 
-export function GridSkeleton({ count = 6 }: { count?: number }) {
+export function GridSkeleton({ count = 6, className }: { count?: number; className?: string }) {
     return (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className={cn("grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6", className)}>
             {Array.from({ length: count }).map((_, i) => (
                 <CardSkeleton key={i} />
             ))}

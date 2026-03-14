@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { MapPin, Star, Check, ArrowLeft, Calendar, Users, Heart } from 'lucide-react'
+import { MapPin, Star, Check, ArrowLeft, Calendar, Users, Heart, X } from 'lucide-react'
 import Link from 'next/link'
 import Image from 'next/image'
 import { toast } from 'sonner'
@@ -9,6 +9,10 @@ import { useWishlist } from '@/contexts/WishlistContext'
 import ReviewsSection from '@/components/ReviewsSection'
 import BookingWizard, { BookingWizardData } from '@/components/BookingWizard'
 import { createBookingRequest } from '@/lib/bookingService'
+import { Breadcrumbs } from './ui/Breadcrumbs'
+import { Badge } from './ui/Badge'
+import { Button } from './ui/Button'
+import { cn } from '@/lib/utils'
 
 type Hotel = {
     id: string
@@ -91,7 +95,7 @@ export default function HotelClientWrapper({ hotel }: { hotel: Hotel }) {
 
     return (
         <div className="min-h-screen bg-white">
-            <div className="relative h-[60vh] w-full">
+            <div className="relative h-[65vh] w-full overflow-hidden">
                 <Image
                     src={hotel.image_url || 'https://images.unsplash.com/photo-1566073771259-6a8506099945'}
                     alt={hotel.name}
@@ -99,64 +103,84 @@ export default function HotelClientWrapper({ hotel }: { hotel: Hotel }) {
                     className="object-cover"
                     priority
                 />
-                <div className="absolute inset-0 bg-black/30" />
-                <div className="absolute top-8 left-8 right-8 flex justify-between items-center">
-                    <Link
-                        href="/hotels"
-                        className="p-3 bg-white/20 backdrop-blur-md rounded-full text-white hover:bg-white/40 transition-all"
+                <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-transparent to-black/60" />
+                
+                <div className="absolute top-8 left-8 right-8 flex justify-between items-center z-10">
+                    <Button
+                        variant="ghost"
+                        size="icon"
+                        asChild
+                        className="bg-white/10 backdrop-blur-md text-white hover:bg-white/30 rounded-full"
                     >
-                        <ArrowLeft size={24} />
-                    </Link>
-                    <button
+                        <Link href="/hotels">
+                            <ArrowLeft size={20} />
+                        </Link>
+                    </Button>
+                    <Button
+                        variant="ghost"
+                        size="icon"
                         onClick={toggleWishlist}
-                        className={`p-3 backdrop-blur-md rounded-full transition-all ${
-                            isInWishlist(hotel.id) ? 'bg-red-500 text-white' : 'bg-white/20 text-white hover:bg-white/40'
-                        }`}
+                        className={cn(
+                            "backdrop-blur-md rounded-full text-white transition-all",
+                            isInWishlist(hotel.id) ? 'bg-red-500 hover:bg-red-600' : 'bg-white/10 hover:bg-white/30'
+                        )}
+                        aria-label={isInWishlist(hotel.id) ? 'Remove from wishlist' : 'Add to wishlist'}
                     >
-                        <Heart size={24} fill={isInWishlist(hotel.id) ? 'currentColor' : 'none'} />
-                    </button>
+                        <Heart size={20} fill={isInWishlist(hotel.id) ? 'currentColor' : 'none'} />
+                    </Button>
                 </div>
-                <div className="absolute bottom-12 left-8 right-8">
+
+                <div className="absolute bottom-16 left-8 right-8">
                     <div className="max-w-7xl mx-auto">
-                        <div className="flex flex-wrap items-center gap-3 mb-4">
-                            <span className="px-4 py-1.5 bg-brand-red text-white text-xs font-bold rounded-full uppercase tracking-wider">
+                        <div className="flex flex-wrap items-center gap-4 mb-6">
+                            <Badge variant="destructive" className="px-4 py-1.5 shadow-xl shadow-red-600/20">
                                 Luxury Stay
-                            </span>
-                            <div className="flex items-center gap-1 px-3 py-1.5 bg-white/20 backdrop-blur-md rounded-full text-white text-xs font-bold">
+                            </Badge>
+                            <div className="flex items-center gap-2 px-4 py-1.5 bg-white/10 backdrop-blur-md border border-white/20 rounded-full text-white text-[10px] font-black uppercase tracking-widest">
                                 <Star size={14} className="fill-yellow-400 text-yellow-400" />
                                 {hotel.rating} Rating
                             </div>
                         </div>
-                        <h1 className="text-5xl md:text-7xl font-bold text-white mb-4 tracking-tight">
+                        <h1 className="text-5xl md:text-7xl lg:text-8xl font-black text-white mb-6 tracking-tighter leading-[1.1]">
                             {hotel.name}
                         </h1>
-                        <div className="flex items-center gap-2 text-white/90 font-medium">
-                            <MapPin size={20} className="text-brand-red" />
+                        <div className="flex items-center gap-3 text-white/90 font-medium text-lg">
+                            <MapPin size={22} className="text-red-500" />
                             {hotel.location}, {hotel.region}
                         </div>
                     </div>
                 </div>
             </div>
 
-            <div className="max-w-7xl mx-auto px-8 py-16">
-                <div className="grid grid-cols-1 lg:grid-cols-3 gap-16">
-                    <div className="lg:col-span-2">
-                        <section className="mb-12">
-                            <h2 className="text-3xl font-bold text-gray-900 mb-6">About this hotel</h2>
-                            <p className="text-lg text-gray-600 leading-relaxed">
+            <div className="max-w-7xl mx-auto px-8 pb-32">
+                <Breadcrumbs 
+                    items={[
+                        { label: 'Hotels', href: '/hotels' },
+                        { label: hotel.name, active: true }
+                    ]}
+                    className="mb-8"
+                />
+
+                <div className="grid grid-cols-1 lg:grid-cols-3 gap-24">
+                    <div className="lg:col-span-2 space-y-20">
+                        <section>
+                            <h2 className="text-xs font-black text-red-600 uppercase tracking-[0.4em] mb-6">Introduction</h2>
+                            <h3 className="text-4xl font-black text-slate-900 mb-8 leading-tight">About this destination</h3>
+                            <p className="text-xl text-slate-500 leading-relaxed font-medium">
                                 {hotel.description}
                             </p>
                         </section>
 
-                        <section className="mb-12">
-                            <h2 className="text-2xl font-bold text-gray-900 mb-8">Premium Amenities</h2>
+                        <section>
+                            <h2 className="text-xs font-black text-red-600 uppercase tracking-[0.4em] mb-6">Experience</h2>
+                            <h3 className="text-4xl font-black text-slate-900 mb-10 leading-tight">Premium Amenities</h3>
                             <div className="grid grid-cols-2 md:grid-cols-3 gap-6">
                                 {hotel.amenities?.map((amenity, idx) => (
-                                    <div key={idx} className="flex items-center gap-3 p-4 bg-gray-50 rounded-2xl border border-gray-100">
-                                        <div className="w-10 h-10 bg-white rounded-xl flex items-center justify-center text-brand-red shadow-sm">
+                                    <div key={idx} className="flex items-center gap-4 p-6 bg-slate-50 rounded-[2rem] border border-slate-100 hover:bg-white hover:shadow-xl hover:shadow-slate-200/50 transition-all duration-300">
+                                        <div className="w-12 h-12 bg-white rounded-2xl flex items-center justify-center text-red-600 shadow-sm">
                                             <Check size={20} />
                                         </div>
-                                        <span className="font-semibold text-gray-700">{amenity}</span>
+                                        <span className="font-black text-xs uppercase tracking-widest text-slate-600">{amenity}</span>
                                     </div>
                                 ))}
                             </div>
@@ -167,33 +191,33 @@ export default function HotelClientWrapper({ hotel }: { hotel: Hotel }) {
 
                     <div className="lg:col-span-1">
                         <div className="sticky top-24">
-                            <div className="bg-white rounded-[2.5rem] border border-gray-200 p-8 shadow-2xl shadow-gray-200/50">
-                                <div className="flex items-end gap-2 mb-8">
-                                    <span className="text-4xl font-bold text-gray-900">MUR {hotel.base_price.toLocaleString()}</span>
-                                    <span className="text-gray-500 font-medium mb-1">/ night</span>
+                            <div className="bg-white rounded-[3rem] border border-slate-100 p-10 shadow-[0_50px_100px_-20px_rgba(0,0,0,0.08)]">
+                                <div className="flex items-end gap-2 mb-10">
+                                    <span className="text-5xl font-black text-slate-900 tracking-tighter">MUR {hotel.base_price.toLocaleString()}</span>
+                                    <span className="text-slate-400 font-black text-[10px] uppercase tracking-widest mb-3">/ night</span>
                                 </div>
 
-                                <div className="space-y-6">
+                                <div className="space-y-8">
                                     <div className="grid grid-cols-2 gap-4">
-                                        <div className="space-y-2">
-                                            <label className="text-xs font-bold text-gray-400 uppercase tracking-widest ml-1">Check In</label>
+                                        <div className="space-y-3">
+                                            <label className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] ml-2">Check In</label>
                                             <div className="relative">
-                                                <Calendar className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" size={18} />
+                                                <Calendar className="absolute left-5 top-1/2 -translate-y-1/2 text-slate-300" size={18} />
                                                 <input
                                                     type="date"
-                                                    className="w-full pl-12 pr-4 py-4 bg-gray-50 border border-gray-100 rounded-2xl focus:outline-none focus:ring-2 focus:ring-brand-red font-semibold transition-all"
+                                                    className="w-full pl-14 pr-6 py-5 bg-slate-50 border border-slate-100 rounded-2xl focus:outline-none focus:ring-2 focus:ring-red-600/50 focus:bg-white font-bold text-sm transition-all"
                                                     value={checkIn}
                                                     onChange={(e) => setCheckIn(e.target.value)}
                                                 />
                                             </div>
                                         </div>
-                                        <div className="space-y-2">
-                                            <label className="text-xs font-bold text-gray-400 uppercase tracking-widest ml-1">Check Out</label>
+                                        <div className="space-y-3">
+                                            <label className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] ml-2">Check Out</label>
                                             <div className="relative">
-                                                <Calendar className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" size={18} />
+                                                <Calendar className="absolute left-5 top-1/2 -translate-y-1/2 text-slate-300" size={18} />
                                                 <input
                                                     type="date"
-                                                    className="w-full pl-12 pr-4 py-4 bg-gray-50 border border-gray-100 rounded-2xl focus:outline-none focus:ring-2 focus:ring-brand-red font-semibold transition-all"
+                                                    className="w-full pl-14 pr-6 py-5 bg-slate-50 border border-slate-100 rounded-2xl focus:outline-none focus:ring-2 focus:ring-red-600/50 focus:bg-white font-bold text-sm transition-all"
                                                     value={checkOut}
                                                     onChange={(e) => setCheckOut(e.target.value)}
                                                 />
@@ -201,12 +225,12 @@ export default function HotelClientWrapper({ hotel }: { hotel: Hotel }) {
                                         </div>
                                     </div>
 
-                                    <div className="space-y-2">
-                                        <label className="text-xs font-bold text-gray-400 uppercase tracking-widest ml-1">Number of Guests</label>
+                                    <div className="space-y-3">
+                                        <label className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] ml-2">Number of Guests</label>
                                         <div className="relative">
-                                            <Users className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" size={18} />
+                                            <Users className="absolute left-5 top-1/2 -translate-y-1/2 text-slate-300" size={18} />
                                             <select
-                                                className="w-full pl-12 pr-4 py-4 bg-gray-50 border border-gray-100 rounded-2xl focus:outline-none focus:ring-2 focus:ring-brand-red font-semibold appearance-none transition-all"
+                                                className="w-full pl-14 pr-6 py-5 bg-slate-50 border border-slate-100 rounded-2xl focus:outline-none focus:ring-2 focus:ring-red-600/50 focus:bg-white font-bold text-sm appearance-none transition-all"
                                                 value={guests}
                                                 onChange={(e) => setGuests(parseInt(e.target.value))}
                                             >
@@ -217,14 +241,15 @@ export default function HotelClientWrapper({ hotel }: { hotel: Hotel }) {
                                         </div>
                                     </div>
 
-                                    <button
+                                    <Button
+                                        size="xl"
                                         onClick={handleBookNow}
-                                        className="w-full py-5 bg-black text-white rounded-2xl font-bold text-lg hover:bg-brand-red transition-all shadow-xl shadow-gray-200 mt-4 active:scale-[0.98]"
+                                        className="w-full"
                                     >
                                         Reserve Now
-                                    </button>
+                                    </Button>
 
-                                    <p className="text-center text-gray-400 text-sm font-medium">
+                                    <p className="text-center text-slate-400 text-[10px] font-black uppercase tracking-[0.2em]">
                                         No payment required at this stage
                                     </p>
                                 </div>
@@ -235,14 +260,17 @@ export default function HotelClientWrapper({ hotel }: { hotel: Hotel }) {
             </div>
 
             {showWizard && (
-                <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
-                    <div className="bg-white rounded-[3rem] w-full max-w-4xl max-h-[90vh] overflow-y-auto relative p-8">
-                        <button 
+                <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-md">
+                    <div className="bg-white rounded-[3rem] w-full max-w-5xl max-h-[90vh] overflow-y-auto relative p-12 shadow-2xl animate-in">
+                        <Button
+                            variant="ghost"
+                            size="icon"
                             onClick={() => setShowWizard(false)}
-                            className="absolute top-8 right-8 p-2 hover:bg-gray-100 rounded-full transition-all"
+                            className="absolute top-8 right-8 p-3 hover:bg-slate-100 rounded-full"
+                            aria-label="Close booking wizard"
                         >
-                             <ArrowLeft className="rotate-90" />
-                        </button>
+                             <X size={20} />
+                        </Button>
                         <BookingWizard
                             serviceId={hotel.id}
                             serviceName={hotel.name}

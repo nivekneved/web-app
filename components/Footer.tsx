@@ -111,10 +111,10 @@ export default function Footer() {
 
                     {/* Visit Us */}
                     <div>
-                        <h4 className="text-sm font-black mb-6 uppercase tracking-[0.2em] text-white">Visit Us</h4>
+                        <h4 className="text-[11px] font-black mb-6 uppercase tracking-[0.3em] text-white">Visit Us</h4>
                         <div className="space-y-6 text-slate-400">
                             <div>
-                                <p className="font-bold text-white mb-1 uppercase text-xs tracking-widest flex items-center gap-2">
+                                <p className="font-bold text-white mb-1 uppercase text-[10px] tracking-widest flex items-center gap-2">
                                     <span className="w-1.5 h-1.5 bg-red-600 rounded-full"></span>
                                     Port Louis
                                 </p>
@@ -125,14 +125,14 @@ export default function Footer() {
                                     href="https://www.google.com/maps/dir/?api=1&destination=Newton+Tower+Port+Louis" 
                                     target="_blank" 
                                     rel="noopener noreferrer"
-                                    className="text-sm font-black text-red-500 hover:text-red-400 flex items-center gap-1 uppercase tracking-tighter"
+                                    className="text-xs font-black text-red-500 hover:text-red-400 flex items-center gap-1 uppercase tracking-tighter"
                                 >
                                     <MapPin size={10} />
                                     Get Directions
                                 </a>
                             </div>
                             <div>
-                                <p className="font-bold text-white mb-1 uppercase text-xs tracking-widest flex items-center gap-2">
+                                <p className="font-bold text-white mb-1 uppercase text-[10px] tracking-widest flex items-center gap-2">
                                     <span className="w-1.5 h-1.5 bg-red-600 rounded-full"></span>
                                     Ebene
                                 </p>
@@ -143,7 +143,7 @@ export default function Footer() {
                                     href="https://www.google.com/maps/dir/?api=1&destination=Ebene+Mews+57" 
                                     target="_blank" 
                                     rel="noopener noreferrer"
-                                    className="text-sm font-black text-red-500 hover:text-red-400 flex items-center gap-1 uppercase tracking-tighter"
+                                    className="text-xs font-black text-red-500 hover:text-red-400 flex items-center gap-1 uppercase tracking-tighter"
                                 >
                                     <MapPin size={10} />
                                     Get Directions
@@ -154,7 +154,7 @@ export default function Footer() {
 
                     {/* Contact Us */}
                     <div>
-                        <h4 className="text-sm font-black mb-6 uppercase tracking-[0.2em] text-white">Contact Us</h4>
+                        <h4 className="text-[11px] font-black mb-6 uppercase tracking-[0.3em] text-white">Contact Us</h4>
                         <div className="space-y-4 text-slate-400 font-medium text-sm">
                             <a href={`tel:${contactPhone.replace(/\s/g, '')}`} className="flex items-center gap-2 hover:text-red-600 transition-colors">
                                 <Phone size={16} className="text-red-600" />
@@ -177,7 +177,7 @@ export default function Footer() {
                     {/* Quick Links & Newsletter */}
                     <div className="md:col-span-2 lg:col-span-1">
                         <div className="mb-10">
-                            <h4 className="text-sm font-black mb-6 uppercase tracking-[0.2em] text-white">Quick Links</h4>
+                            <h4 className="text-[11px] font-black mb-6 uppercase tracking-[0.3em] text-white">Quick Links</h4>
                             <ul className="grid grid-cols-2 gap-x-4 gap-y-3 text-slate-400 text-sm font-medium">
                                 <li>
                                     <Link href="/packages" className="hover:text-red-600 transition-colors">Holiday Packages</Link>
@@ -210,20 +210,20 @@ export default function Footer() {
                         </div>
 
                         <div>
-                            <h4 className="text-[10px] font-black mb-4 uppercase tracking-[0.25em] text-slate-500">Newsletter</h4>
-                            <form onSubmit={handleSubscribe} className="flex gap-2">
+                            <h4 className="text-[10px] font-black mb-4 uppercase tracking-[0.3em] text-slate-500">Newsletter</h4>
+                            <form onSubmit={handleSubscribe} className="flex gap-1">
                                 <input
                                     type="email"
-                                    placeholder="enter email"
+                                    placeholder="Enter your email"
                                     required
                                     value={email}
                                     onChange={(e) => setEmail(e.target.value)}
-                                    className="flex-grow px-4 py-2 bg-slate-800 border border-slate-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-600 text-white text-sm"
+                                    className="flex-grow px-4 py-3 bg-slate-800/50 border border-slate-700/50 rounded-xl focus:outline-none focus:ring-2 focus:ring-red-600/50 text-white text-xs font-bold transition-all"
                                 />
                                 <button 
                                     type="submit"
                                     disabled={submitting}
-                                    className="px-6 py-2 bg-red-600 text-white rounded-lg font-bold hover:bg-red-700 transition-colors text-sm flex items-center justify-center shrink-0 uppercase tracking-widest"
+                                    className="px-6 py-3 bg-red-600 text-white rounded-xl font-black hover:bg-white hover:text-slate-900 transition-all text-[10px] flex items-center justify-center shrink-0 uppercase tracking-[0.2em] shadow-lg shadow-red-600/20"
                                 >
                                     {submitting ? <Loader2 size={16} className="animate-spin" /> : 'Go'}
                                 </button>

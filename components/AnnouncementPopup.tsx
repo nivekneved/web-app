@@ -120,7 +120,6 @@ export default function AnnouncementPopup() {
                     alt={ad.title}
                     fill
                     className="object-cover"
-                    unoptimized
                   />
                 )}
                 {/* Gradient Overlay for media */}
@@ -130,11 +129,11 @@ export default function AnnouncementPopup() {
 
             {/* Content Area */}
             <div className="p-8 text-center">
-              <h3 className="text-2xl font-black text-slate-900 mb-4 tracking-tight leading-tight">
+              <h3 className="text-3xl font-black text-slate-900 mb-4 tracking-tighter leading-tight italic">
                 {ad.title}
               </h3>
               {ad.content && (
-                <p className="text-slate-500 mb-8 leading-relaxed font-medium">
+                <p className="text-sm text-slate-500 mb-8 leading-relaxed font-medium">
                   {ad.content}
                 </p>
               )}
@@ -144,10 +143,10 @@ export default function AnnouncementPopup() {
                 <a
                   href={ad.cta_link}
                   onClick={handleClose}
-                  className="inline-flex items-center justify-center gap-2 w-full py-4 bg-red-600 text-white rounded-2xl font-black hover:bg-slate-900 transition-all transform hover:scale-105 shadow-xl shadow-red-600/20 group"
+                  className="inline-flex items-center justify-center gap-2 w-full py-5 bg-red-600 text-white rounded-2xl text-[11px] font-black uppercase tracking-[0.2em] hover:bg-slate-900 transition-all transform hover:scale-[1.02] shadow-xl shadow-red-600/20 group"
                 >
                   {ad.cta_text}
-                  <ExternalLink size={18} className="group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
+                  <ExternalLink size={16} className="group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
                 </a>
               )}
               

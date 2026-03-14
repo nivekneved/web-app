@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react'
 import Image from 'next/image'
 import ServiceCard from '@/components/ServiceCard'
 import { createClient } from '@/lib/supabase'
+import { GridSkeleton } from '@/components/LoadingSkeleton'
 
 const supabase = createClient()
 
@@ -76,9 +77,7 @@ export default function HotelsPage() {
 
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                     {loading ? (
-                        [...Array(3)].map((_, i) => (
-                            <div key={i} className="animate-pulse bg-white rounded-3xl h-96 border border-slate-100" />
-                        ))
+                        <GridSkeleton count={3} />
                     ) : (
                         hotels.map(hotel => (
                             <ServiceCard

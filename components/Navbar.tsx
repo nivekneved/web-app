@@ -12,6 +12,7 @@ import { MobileAccordion } from './Navbar/MobileAccordion'
 import { MegaMenu } from './MegaMenu'
 import { AnimatePresence } from 'framer-motion'
 import { cn } from '@/lib/utils'
+import { Button } from './ui/Button'
 
 interface NavRow {
     id: string;
@@ -204,12 +205,16 @@ export default function Navbar() {
                         {/* Right Section */}
                         <div className="flex items-center gap-2 md:gap-4">
                             {/* CTA Button */}
-                            <Link
-                                href={navigationConfig.cta.href}
-                                className="hidden md:flex items-center justify-center px-5 py-2.5 bg-primary hover:bg-primary/90 text-black font-bold rounded-full transition-all hover:scale-105 active:scale-95 shadow-lg shadow-primary/20"
+                            <Button
+                                asChild
+                                variant="primary"
+                                size="sm"
+                                className="hidden md:flex shadow-none hover:shadow-lg transition-all"
                             >
-                                {navigationConfig.cta.label}
-                            </Link>
+                                <Link href={navigationConfig.cta.href}>
+                                    {navigationConfig.cta.label}
+                                </Link>
+                            </Button>
 
                             <div className="h-6 w-px bg-slate-200 dark:bg-slate-800 hidden md:block"></div>
 
@@ -273,13 +278,17 @@ export default function Navbar() {
                         
                         {/* Mobile CTA */}
                         <div className="mt-8 pt-6 border-t border-slate-100 dark:border-slate-800">
-                             <Link
-                                href={navigationConfig.cta.href}
+                             <Button
+                                asChild
+                                variant="primary"
+                                size="lg"
+                                className="w-full shadow-xl shadow-red-600/20"
                                 onClick={() => setIsOpen(false)}
-                                className="flex items-center justify-center w-full px-5 py-4 bg-primary text-black font-bold rounded-xl shadow-lg shadow-primary/20"
                             >
-                                {navigationConfig.cta.label}
-                            </Link>
+                                <Link href={navigationConfig.cta.href}>
+                                    {navigationConfig.cta.label}
+                                </Link>
+                            </Button>
                         </div>
                     </div>
                 </div>

@@ -2,10 +2,11 @@
 
 import React, { useState, useEffect } from 'react'
 import Image from 'next/image'
-import { Mail, ArrowRight, Loader2 } from 'lucide-react'
+import { Mail, ArrowRight } from 'lucide-react'
 import { motion } from 'framer-motion'
 import Link from 'next/link'
 import { createClient } from '@/lib/supabase'
+import { GridSkeleton } from '@/components/LoadingSkeleton'
 
 interface TeamMember {
     id: string
@@ -74,10 +75,7 @@ export default function TeamPage() {
             <section className="py-32">
                 <div className="container mx-auto px-6">
                     {loading ? (
-                        <div className="flex flex-col items-center justify-center py-20">
-                            <Loader2 className="animate-spin text-red-600 mb-4" size={48} />
-                            <p className="text-slate-500 font-bold uppercase tracking-widest text-sm">Assembling Team Data...</p>
-                        </div>
+                        <GridSkeleton count={3} />
                     ) : (
                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12">
                             {team.map((member, i) => (
@@ -95,7 +93,6 @@ export default function TeamPage() {
                                             alt={member.name}
                                             fill
                                             className="object-cover transition-transform duration-700 group-hover:scale-110"
-                                            unoptimized
                                         />
                                         <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
 

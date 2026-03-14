@@ -3,18 +3,23 @@
 import React, { useState } from 'react';
 import Image from 'next/image';
 import { 
-  Send, 
   MapPin, 
-  Phone, 
-  Mail, 
   Clock, 
   CheckCircle2, 
-  Building2,
   PhoneCall,
-  MessageCircle
+  MessageCircle,
+  Users,
+  Wallet,
+  Home,
+  Mail
 } from 'lucide-react';
 import { createClient } from '@/lib/supabase';
 import { motion, AnimatePresence } from 'framer-motion';
+import { Breadcrumbs } from '@/components/ui/Breadcrumbs';
+import { Button } from '@/components/ui/Button';
+import { Input } from '@/components/ui/Input';
+import { toast } from 'sonner';
+import { cn } from '@/lib/utils';
 
 export default function PlanMyTrip() {
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -49,200 +54,206 @@ export default function PlanMyTrip() {
       const { error } = await supabase.from('inquiries').insert([data]);
       if (error) throw error;
       setSubmitStatus('success');
+      toast.success('Your request has been sent! Our experts will contact you soon.');
       (e.target as HTMLFormElement).reset();
     } catch (error) {
       console.error('Error submitting inquiry:', error);
       setSubmitStatus('error');
+      toast.error('Something went wrong. Please try again or call us.');
     } finally {
       setIsSubmitting(false);
     }
   };
 
   return (
-    <div className="bg-slate-50 min-h-screen">
+    <div className="bg-white min-h-screen">
       {/* Hero Section */}
-      <section className="relative h-[40vh] min-h-[400px] flex items-center">
-        <div className="absolute inset-0 z-0">
-          <Image
-            src="/assets/hero/tailormade_travel_hero_1773391405705.png"
-            alt="Plan My Trip"
-            fill
-            className="object-cover"
-            priority
-          />
-          <div className="absolute inset-0 bg-black/50 backdrop-blur-[2px]" />
-        </div>
+      <section className="relative h-[50vh] min-h-[500px] flex items-center overflow-hidden bg-slate-900">
+        <Image
+          src="https://images.unsplash.com/photo-1506929197321-4674476aa6e2"
+          alt="Plan My Trip"
+          fill
+          className="object-cover opacity-60"
+          priority
+        />
+        <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-transparent to-black/60" />
         
-        <div className="container mx-auto px-4 relative z-10 text-white text-center">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-          >
-            <h1 className="text-4xl md:text-7xl font-bold mb-6 font-serif tracking-tight italic">Design Your Dream Escape</h1>
-            <p className="text-xl md:text-2xl mb-8 text-white/90 font-light max-w-2xl mx-auto">Tell us about your perfect journey, and we&apos;ll handle every detail to make it a reality.</p>
-          </motion.div>
+        <div className="container mx-auto px-6 relative z-10 text-center">
+            <span className="inline-block py-2 px-6 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-white text-[10px] font-black uppercase tracking-[0.4em] mb-8">
+                Custom Journeys
+            </span>
+            <h1 className="text-5xl md:text-8xl font-black text-white mb-6 tracking-tighter leading-[1.1]">
+                Design Your <br />
+                <span className="text-red-500 italic">Dream Escape.</span>
+            </h1>
+            <p className="text-xl text-white/70 font-medium max-w-2xl mx-auto leading-relaxed">
+                Tell us about your perfect journey, and we&apos;ll handle every detail to make it a reality.
+            </p>
         </div>
       </section>
 
-      <section className="py-20">
-        <div className="container mx-auto px-4">
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
+      <section className="py-24">
+        <div className="max-w-7xl mx-auto px-8">
+          <Breadcrumbs 
+            items={[
+                { label: 'Plan My Trip', active: true }
+            ]}
+            className="mb-16"
+          />
+
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-24">
             
             {/* Form Section */}
             <div className="lg:col-span-2">
-              <div className="bg-white rounded-[2.5rem] shadow-xl p-8 md:p-12 border border-slate-100">
-                <div className="mb-10">
-                  <h2 className="text-3xl font-bold text-slate-900 mb-2">Trip Questionnaire</h2>
-                  <p className="text-slate-500 italic">Fields marked with * are required for professional assistance.</p>
+              <div className="bg-white rounded-[3rem] border border-slate-100 p-12 shadow-[0_50px_100px_-20px_rgba(0,0,0,0.08)]">
+                <div className="mb-12">
+                  <h2 className="text-xs font-black text-red-600 uppercase tracking-[0.4em] mb-4">Inquiry</h2>
+                  <h3 className="text-4xl font-black text-slate-900 tracking-tight">Trip Questionnaire</h3>
                 </div>
 
-                <form onSubmit={handleSubmit} className="space-y-8">
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <form onSubmit={handleSubmit} className="space-y-12">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
                     {/* Destination */}
-                    <div className="space-y-2">
-                      <label className="text-sm font-bold text-slate-700 ml-1">Where would you like to go? *</label>
-                      <div className="relative">
-                        <MapPin className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" size={18} />
-                        <input 
-                          type="text" 
-                          name="destination"
-                          required 
-                          placeholder="e.g. Dubai, Paris, Maldives"
-                          className="w-full pl-12 pr-4 py-4 bg-slate-50 border-none rounded-2xl focus:ring-2 focus:ring-primary/20 transition-all font-medium text-slate-900" 
-                        />
-                      </div>
+                    <div className="space-y-3">
+                        <label className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] ml-2">Where would you like to go? *</label>
+                        <div className="relative">
+                            <MapPin className="absolute left-5 top-1/2 -translate-y-1/2 text-slate-300" size={18} />
+                            <input 
+                                type="text" 
+                                name="destination"
+                                required 
+                                placeholder="e.g. Dubai, Paris, Maldives"
+                                className="w-full pl-14 pr-6 py-5 bg-slate-50 border border-slate-100 rounded-2xl focus:outline-none focus:ring-2 focus:ring-red-600/50 focus:bg-white font-bold text-sm transition-all" 
+                            />
+                        </div>
                     </div>
 
                     {/* Dates */}
                     <div className="grid grid-cols-2 gap-4">
-                        <div className="space-y-2">
-                            <label className="text-sm font-bold text-slate-700 ml-1">Departure *</label>
+                        <div className="space-y-3">
+                            <label className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] ml-2">Departure *</label>
                             <input 
                                 type="date" 
                                 name="departure_date"
                                 required
-                                className="w-full px-4 py-4 bg-slate-50 border-none rounded-2xl focus:ring-2 focus:ring-primary/20 transition-all font-medium text-slate-900" 
+                                className="w-full px-5 py-5 bg-slate-50 border border-slate-100 rounded-2xl focus:outline-none focus:ring-2 focus:ring-red-600/50 focus:bg-white font-bold text-sm transition-all" 
                             />
                         </div>
-                        <div className="space-y-2">
-                            <label className="text-sm font-bold text-slate-700 ml-1">Return *</label>
+                        <div className="space-y-3">
+                            <label className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] ml-2">Return *</label>
                             <input 
                                 type="date" 
                                 name="return_date"
                                 required
-                                className="w-full px-4 py-4 bg-slate-50 border-none rounded-2xl focus:ring-2 focus:ring-primary/20 transition-all font-medium text-slate-900" 
+                                className="w-full px-5 py-5 bg-slate-50 border border-slate-100 rounded-2xl focus:outline-none focus:ring-2 focus:ring-red-600/50 focus:bg-white font-bold text-sm transition-all" 
                             />
                         </div>
                     </div>
 
                     {/* Travelers */}
                     <div className="grid grid-cols-2 gap-4">
-                        <div className="space-y-2">
-                            <label className="text-sm font-bold text-slate-700 ml-1">Adults *</label>
-                            <select 
-                                name="adults"
-                                required
-                                className="w-full px-4 py-4 bg-white border border-slate-300 rounded-2xl focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all font-medium text-slate-900 appearance-none outline-none"
-                            >
-                                {[1,2,3,4,5,6,7,8,9,10].map(n => <option key={n} value={n.toString()}>{n}</option>)}
-                            </select>
+                        <div className="space-y-3">
+                            <label className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] ml-2">Adults *</label>
+                            <div className="relative">
+                                <Users className="absolute left-5 top-1/2 -translate-y-1/2 text-slate-300" size={18} />
+                                <select 
+                                    name="adults"
+                                    required
+                                    className="w-full pl-14 pr-6 py-5 bg-slate-50 border border-slate-100 rounded-2xl focus:outline-none focus:ring-2 focus:ring-red-600/50 focus:bg-white font-bold text-sm transition-all appearance-none"
+                                >
+                                    {[1,2,3,4,5,6,7,8,9,10].map(n => <option key={n} value={n.toString()}>{n} Adults</option>)}
+                                </select>
+                            </div>
                         </div>
-                        <div className="space-y-2">
-                            <label className="text-sm font-bold text-slate-700 ml-1">Children</label>
-                            <select 
-                                name="children"
-                                className="w-full px-4 py-4 bg-white border border-slate-300 rounded-2xl focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all font-medium text-slate-900 appearance-none outline-none"
-                            >
-                                {[0,1,2,3,4,5,6].map(n => <option key={n} value={n.toString()}>{n}</option>)}
-                            </select>
+                        <div className="space-y-3">
+                            <label className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] ml-2">Children</label>
+                            <div className="relative">
+                                <Users className="absolute left-5 top-1/2 -translate-y-1/2 text-slate-300 pointer-events-none" size={18} />
+                                <select 
+                                    name="children"
+                                    className="w-full pl-14 pr-6 py-5 bg-slate-50 border border-slate-100 rounded-2xl focus:outline-none focus:ring-2 focus:ring-red-600/50 focus:bg-white font-bold text-sm transition-all appearance-none"
+                                >
+                                    {[0,1,2,3,4,5,6].map(n => <option key={n} value={n.toString()}>{n} Children</option>)}
+                                </select>
+                            </div>
                         </div>
                     </div>
 
                     {/* Budget */}
-                    <div className="space-y-2">
-                      <label className="text-sm font-bold text-slate-700 ml-1">Preferred Budget (Rs) *</label>
-                      <input 
-                        type="text" 
-                        name="budget"
-                        required 
-                        placeholder="e.g. 50,000 - 100,000"
-                        className="w-full px-4 py-4 bg-white border border-slate-300 rounded-2xl focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all font-medium text-slate-900 outline-none" 
-                      />
+                    <div className="space-y-3">
+                      <label className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] ml-2">Preferred Budget (Rs) *</label>
+                      <div className="relative">
+                        <Wallet className="absolute left-5 top-1/2 -translate-y-1/2 text-slate-300" size={18} />
+                        <input 
+                            type="text" 
+                            name="budget"
+                            required 
+                            placeholder="e.g. 50,000 - 100,000"
+                            className="w-full pl-14 pr-6 py-5 bg-slate-50 border border-slate-100 rounded-2xl focus:outline-none focus:ring-2 focus:ring-red-600/50 focus:bg-white font-bold text-sm transition-all" 
+                        />
+                      </div>
                     </div>
 
                     {/* Accommodation */}
-                    <div className="space-y-2 md:col-span-2">
-                      <label className="text-sm font-bold text-slate-700 ml-1">Preferred Accommodation</label>
-                      <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+                    <div className="space-y-4 md:col-span-2">
+                      <label className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] ml-2">Preferred Accommodation</label>
+                      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                         {['Standard', 'Boutique', 'Luxury', 'All-Inclusive'].map((type) => (
-                           <label key={type} className="flex items-center gap-2 p-4 bg-white border border-slate-300 rounded-2xl cursor-pointer hover:border-primary/50 transition-colors">
-                             <input type="radio" name="accommodation" value={type} className="w-4 h-4 text-primary focus:ring-primary" />
-                             <span className="text-sm font-medium text-slate-700">{type}</span>
+                           <label key={type} className="group relative flex items-center justify-center p-5 bg-slate-50 border border-slate-100 rounded-2xl cursor-pointer hover:bg-white hover:border-red-600/50 transition-all font-bold text-xs uppercase tracking-widest text-slate-600 has-[:checked]:bg-red-600 has-[:checked]:text-white has-[:checked]:border-red-600 has-[:checked]:shadow-xl has-[:checked]:shadow-red-600/20">
+                             <input type="radio" name="accommodation" value={type} className="hidden" />
+                             <Home size={16} className="mr-2" />
+                             {type}
                            </label>
                         ))}
                       </div>
                     </div>
                   </div>
 
-                  <hr className="border-slate-100 my-8" />
+                  <hr className="border-slate-50 my-12" />
 
                   {/* Contact Info */}
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-                    <div className="space-y-2">
-                      <label className="text-sm font-bold text-slate-700 ml-1">Name *</label>
-                      <input 
-                        type="text" 
+                    <Input 
+                        label="Your Name *"
                         name="name"
                         required 
-                        className="w-full px-4 py-4 bg-white border border-slate-300 rounded-2xl focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all font-medium text-slate-900 outline-none" 
-                      />
-                    </div>
-                    <div className="space-y-2">
-                      <label className="text-sm font-bold text-slate-700 ml-1">Email *</label>
-                      <input 
+                        placeholder="John Doe"
+                    />
+                    <Input 
+                        label="Email Address *"
                         type="email" 
                         name="email"
                         required 
-                        className="w-full px-4 py-4 bg-white border border-slate-300 rounded-2xl focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all font-medium text-slate-900 outline-none" 
-                      />
-                    </div>
-                    <div className="space-y-2">
-                      <label className="text-sm font-bold text-slate-700 ml-1">Phone *</label>
-                      <input 
+                        placeholder="john@example.com"
+                    />
+                    <Input 
+                        label="Phone Number *"
                         type="tel" 
                         name="phone"
                         required 
-                        className="w-full px-4 py-4 bg-white border border-slate-300 rounded-2xl focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all font-medium text-slate-900 outline-none" 
-                      />
-                    </div>
+                        placeholder="+230"
+                    />
                   </div>
 
-                  <div className="space-y-2">
-                    <label className="text-sm font-bold text-slate-700 ml-1">Special Requests / Message</label>
+                  <div className="space-y-3">
+                    <label className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] ml-2">Special Requests / Message</label>
                     <textarea 
                       name="message"
                       rows={4}
                       placeholder="Share any specific interests, dietary requirements, or special occasions..."
-                      className="w-full px-4 py-4 bg-white border border-slate-300 rounded-2xl focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all font-medium text-slate-900 resize-none outline-none" 
+                      className="w-full px-6 py-5 bg-slate-50 border border-slate-100 rounded-2xl focus:outline-none focus:ring-2 focus:ring-red-600/50 focus:bg-white font-bold text-sm transition-all resize-none" 
                     ></textarea>
                   </div>
 
-                  <div className="flex flex-col items-center gap-4 pt-4">
-                    <button 
+                  <div className="flex flex-col items-center gap-6 pt-6">
+                    <Button 
                       type="submit"
-                      disabled={isSubmitting}
-                      className="w-full md:w-auto px-12 py-5 bg-primary hover:bg-primary/90 text-black font-bold rounded-2xl transition-all shadow-xl shadow-primary/20 flex items-center justify-center gap-3 disabled:opacity-70 disabled:cursor-not-allowed group"
+                      size="xl"
+                      isLoading={isSubmitting}
+                      className="w-full md:w-auto min-w-[300px] shadow-2xl shadow-red-600/20"
                     >
-                      {isSubmitting ? (
-                        <div className="w-6 h-6 border-3 border-white/30 border-t-white rounded-full animate-spin" />
-                      ) : (
-                        <>
-                          <Send size={20} className="group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
-                          Send My Request
-                        </>
-                      )}
-                    </button>
+                      Send My Request
+                    </Button>
 
                     <AnimatePresence mode="wait">
                       {submitStatus === 'success' && (
@@ -250,20 +261,10 @@ export default function PlanMyTrip() {
                           initial={{ opacity: 0, y: 10 }}
                           animate={{ opacity: 1, y: 0 }}
                           exit={{ opacity: 0 }}
-                          className="flex items-center gap-2 text-green-600 font-bold bg-green-50 px-6 py-3 rounded-xl border border-green-100"
+                          className="flex items-center gap-3 text-green-600 font-bold bg-green-50 px-8 py-4 rounded-2xl border border-green-100"
                         >
-                          <CheckCircle2 size={18} />
+                          <CheckCircle2 size={20} />
                           Request sent successfully! Our team will contact you soon.
-                        </motion.div>
-                      )}
-                      {submitStatus === 'error' && (
-                        <motion.div 
-                          initial={{ opacity: 0, y: 10 }}
-                          animate={{ opacity: 1, y: 0 }}
-                          exit={{ opacity: 0 }}
-                          className="text-red-600 font-bold bg-red-50 px-6 py-3 rounded-xl border border-red-100"
-                        >
-                          Oops! Something went wrong. Please try again or call us directly.
                         </motion.div>
                       )}
                     </AnimatePresence>
@@ -273,80 +274,77 @@ export default function PlanMyTrip() {
             </div>
 
             {/* Sidebar / Contact Info */}
-            <div className="space-y-8">
+            <div className="space-y-12">
               {/* Office Locations */}
-              <div className="bg-white rounded-[2rem] shadow-lg p-8 border border-slate-100">
-                <h3 className="text-2xl font-bold text-slate-900 mb-8 flex items-center gap-3 border-b border-slate-50 pb-4">
-                  <Building2 className="text-primary" />
-                  Visit Us
-                </h3>
-                
+              <section>
+                <h3 className="text-xs font-black text-red-600 uppercase tracking-[0.4em] mb-8">Visit Us</h3>
                 <div className="space-y-10">
-                  <div className="space-y-3">
-                    <h4 className="font-black text-primary uppercase text-xs tracking-widest px-2 py-1 bg-red-50 inline-block rounded">Port Louis</h4>
-                    <p className="text-slate-600 leading-relaxed font-medium">
+                  <div className="space-y-4">
+                    <h4 className="font-black text-slate-900 text-lg">Port Louis</h4>
+                    <p className="text-slate-500 font-medium leading-relaxed">
                       Ground Floor Newton Tower,<br />
-                      Corner Sir William Newton and Remy Ollier Street,<br />
+                      Sir William Newton Street,<br />
                       Port Louis, Mauritius
                     </p>
                   </div>
 
-                  <div className="space-y-3">
-                    <h4 className="font-black text-primary uppercase text-xs tracking-widest px-2 py-1 bg-red-50 inline-block rounded">Ebene</h4>
-                    <p className="text-slate-600 leading-relaxed font-medium">
+                  <div className="space-y-4">
+                    <h4 className="font-black text-slate-900 text-lg">Ebene Cybercity</h4>
+                    <p className="text-slate-500 font-medium leading-relaxed">
                       Ground Floor, 57 Ebene Mews,<br />
                       Rue Du Savoir,<br />
-                      Ebene Cybercity
+                      Ebene, Mauritius
                     </p>
                   </div>
                 </div>
-              </div>
+              </section>
 
               {/* Working Hours */}
-              <div className="bg-slate-900 text-white rounded-[2rem] shadow-lg p-8 transform rotate-1">
-                <h3 className="text-2xl font-bold mb-6 flex items-center gap-3 text-red-500">
+              <div className="bg-slate-900 text-white rounded-[3rem] p-10 shadow-2xl shadow-slate-900/20">
+                <h3 className="text-xl font-black mb-8 flex items-center gap-4 text-red-500">
                   <Clock size={28} />
-                  Working Hours
+                  Hours
                 </h3>
-                <div className="space-y-4 font-light opacity-90">
-                  <div className="flex justify-between border-b border-white/10 pb-2">
-                    <span>Mon – Fri</span>
-                    <span className="font-bold">08:30 – 16:45</span>
+                <div className="space-y-6 font-medium">
+                  <div className="flex justify-between items-center border-b border-white/10 pb-4">
+                    <span className="text-white/60">Mon – Fri</span>
+                    <span className="font-black">08:30 – 17:00</span>
                   </div>
-                  <div className="flex justify-between border-b border-white/10 pb-2">
-                    <span>Saturday</span>
-                    <span className="font-bold">08:30 – 12:30</span>
+                  <div className="flex justify-between items-center border-b border-white/10 pb-4">
+                    <span className="text-white/60">Saturday</span>
+                    <span className="font-black">08:30 – 12:30</span>
                   </div>
-                  <div className="flex justify-between text-red-400">
-                    <span>Sun & Public Holidays</span>
-                    <span className="font-bold uppercase">Closed</span>
+                  <div className="flex justify-between items-center text-red-400">
+                    <span className="font-black uppercase text-[10px] tracking-widest">Sunday</span>
+                    <span className="font-black uppercase text-[10px] tracking-widest">Closed</span>
                   </div>
                 </div>
               </div>
 
               {/* Contact Numbers */}
-              <div className="bg-white rounded-[2rem] shadow-lg p-8 border border-slate-100">
-                  <h3 className="text-2xl font-bold text-slate-900 mb-6 flex items-center gap-3">
-                    <PhoneCall className="text-primary" />
-                    Quick Contact
-                  </h3>
-                  <div className="space-y-4">
+              <section>
+                  <h3 className="text-xs font-black text-red-600 uppercase tracking-[0.4em] mb-8">Concierge</h3>
+                  <div className="space-y-6">
                     {[
-                        { label: 'General', number: '(+230) 212 4070', icon: Phone },
-                        { label: 'Booking', number: '(+230) 5940 7711', icon: MessageCircle, isWhatsApp: true },
-                        { label: 'Support', number: '(+230) 5940 7701', icon: MessageCircle, isWhatsApp: true },
-                        { label: 'Reservation', number: 'reservation@travellounge.mu', icon: Mail }
+                        { label: 'General', number: '(+230) 212 4070', icon: PhoneCall },
+                        { label: 'WhatsApp', number: '(+230) 5940 7711', icon: MessageCircle, isWhatsApp: true },
+                        { label: 'Email', number: 'reservation@travellounge.mu', icon: Mail }
                     ].map((item, i) => (
-                        <div key={i} className="flex flex-col gap-1 p-3 hover:bg-slate-50 rounded-xl transition-all">
-                            <span className="text-[10px] uppercase font-black text-slate-400 tracking-tighter">{item.label}</span>
-                            <div className="flex items-center gap-3">
-                                <item.icon className={item.isWhatsApp ? "text-green-500" : "text-primary"} size={16} />
-                                <span className="font-bold text-slate-900">{item.number}</span>
+                        <div key={i} className="group flex items-center gap-5 p-4 hover:bg-slate-50 rounded-2xl transition-all duration-300">
+                            <div className={cn(
+                                "w-12 h-12 rounded-xl flex items-center justify-center transition-colors",
+                                item.isWhatsApp ? "bg-green-50 text-green-600 group-hover:bg-green-600 group-hover:text-white" : "bg-slate-50 text-slate-900 group-hover:bg-red-600 group-hover:text-white"
+                            )}>
+                                <item.icon size={20} />
+                            </div>
+                            <div className="flex flex-col">
+                                <span className="text-[10px] uppercase font-black text-slate-400 tracking-widest mb-0.5">{item.label}</span>
+                                <span className="font-black text-slate-900 group-hover:text-red-600 transition-colors">{item.number}</span>
                             </div>
                         </div>
                     ))}
                   </div>
-              </div>
+              </section>
             </div>
           </div>
         </div>

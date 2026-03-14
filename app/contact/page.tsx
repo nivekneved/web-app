@@ -1,9 +1,11 @@
-'use client'
-
 import React, { useState, useEffect, useCallback } from 'react'
-import { MapPin, Phone, Mail, Clock, Send, Loader2 } from 'lucide-react'
+import { MapPin, Phone, Mail, MessageCircle } from 'lucide-react'
 import { toast } from 'sonner'
 import { createClient } from '@/lib/supabase'
+import { Breadcrumbs } from '@/components/ui/Breadcrumbs'
+import { Button } from '@/components/ui/Button'
+import { Input } from '@/components/ui/Input'
+import Image from 'next/image'
 
 interface GeneralConfig {
     siteTitle?: string;
@@ -16,9 +18,6 @@ interface GeneralConfig {
     office2Title?: string;
     office2Address?: string;
     workingHours?: string;
-    facebookUrl?: string;
-    instagramUrl?: string;
-    linkedinUrl?: string;
 }
 
 export default function ContactPage() {
@@ -64,7 +63,10 @@ export default function ContactPage() {
         try {
             const { error } = await supabase
                 .from('inquiries')
-                .insert([formData])
+                .insert([{
+                    ...formData,
+                    status: 'unread'
+                }])
 
             if (error) throw error
 
@@ -72,7 +74,7 @@ export default function ContactPage() {
             setFormData({ name: '', email: '', phone: '', subject: '', message: '' })
         } catch (error) {
             console.error('Error sending message:', error)
-            toast.error('Failed to send message. Please try again later.')
+            toast.error('Failed to send message. Please try again.')
         } finally {
             setSubmitting(false)
         }
@@ -81,203 +83,186 @@ export default function ContactPage() {
     const contactEmail = settings?.contactEmail || 'reservation@travellounge.mu'
     const contactPhone = settings?.contactPhone || '(+230) 212 4070'
     const whatsapp1 = settings?.whatsappNumber1 || '+230 5940 7711'
-    const whatsapp2 = settings?.whatsappNumber2 || '+230 5940 7701'
     const office1Title = settings?.office1Title || 'Port Louis Office'
     const office1Address = settings?.office1Address || 'Ground Floor Newton Tower, Corner Sir William Newton and Remy Ollier Street, Port Louis, Mauritius'
     const office2Title = settings?.office2Title || 'Ebene Office'
     const office2Address = settings?.office2Address || 'Ground Floor, 57 Ebene Mews, Rue Du Savoir, Ebene Cybercity, Mauritius'
-    const workingHours = settings?.workingHours || 'Mon - Fri: 08:30 - 17:00'
 
     if (loading) {
         return (
-            <div className="min-h-screen flex flex-col items-center justify-center bg-slate-50 dark:bg-slate-900">
-                <Loader2 className="animate-spin text-red-600 mb-4" size={48} />
-                <p className="text-slate-500 font-bold uppercase tracking-widest text-sm">Getting in touch...</p>
+            <div className="min-h-screen flex items-center justify-center bg-white">
+                <div className="animate-spin rounded-full h-12 w-12 border-4 border-red-600 border-t-transparent"></div>
             </div>
         )
     }
 
     return (
-        <div className="min-h-screen bg-slate-50 dark:bg-slate-900">
-            {/* Hero */}
-            <div className="bg-gradient-to-r from-red-600 to-slate-900 text-white py-20">
-                <div className="max-w-7xl auto px-6">
-                    <h1 className="text-5xl font-black mb-4">Contact Us</h1>
-                    <p className="text-xl text-red-100">Get in touch with our IATA accredited travel agents</p>
+        <div className="min-h-screen bg-white">
+            {/* Hero Section */}
+            <div className="relative h-[40vh] w-full overflow-hidden bg-slate-900">
+                <Image
+                    src="https://images.unsplash.com/photo-1423666639041-f56000c27a9a"
+                    alt="Contact Us"
+                    fill
+                    className="object-cover opacity-60"
+                    priority
+                />
+                <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-transparent to-black/60" />
+                
+                <div className="absolute inset-0 flex items-center justify-center text-center">
+                    <div className="max-w-4xl mx-auto px-6">
+                        <span className="inline-block py-2 px-6 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-white text-[10px] font-black uppercase tracking-[0.4em] mb-8">
+                            Get In Touch
+                        </span>
+                        <h1 className="text-5xl md:text-7xl font-black text-white mb-6 tracking-tighter leading-tight">
+                            We&apos;re Here To <br />
+                            <span className="text-red-500 italic">Help You.</span>
+                        </h1>
+                    </div>
                 </div>
             </div>
 
-            <div className="max-w-7xl mx-auto px-6 py-16">
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
-                    {/* Contact Information */}
-                    <div>
-                        <h2 className="text-3xl font-black text-slate-900 dark:text-white mb-8">Get In Touch</h2>
+            <div className="max-w-7xl mx-auto px-8 py-20">
+                <Breadcrumbs 
+                    items={[
+                        { label: 'Contact', active: true }
+                    ]}
+                    className="mb-16"
+                />
 
-                        {/* Offices */}
-                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-12">
-                            <div className="bg-white dark:bg-slate-800 rounded-2xl p-6 shadow-lg h-full">
-                                <h3 className="text-xl font-black text-slate-900 dark:text-white mb-4 flex items-center gap-2">
-                                    <MapPin className="text-red-600" size={24} />
-                                    {office1Title}
-                                </h3>
-                                <p className="text-slate-600 dark:text-slate-300 mb-4 whitespace-pre-line text-sm">
-                                    {office1Address}
-                                </p>
-                            </div>
-
-                            {(office2Address || settings?.office2Title) && (
-                                <div className="bg-white dark:bg-slate-800 rounded-2xl p-6 shadow-lg h-full">
-                                    <h3 className="text-xl font-black text-slate-900 dark:text-white mb-4 flex items-center gap-2">
-                                        <MapPin className="text-red-600" size={24} />
-                                        {office2Title}
-                                    </h3>
-                                    <p className="text-slate-600 dark:text-slate-300 mb-4 whitespace-pre-line text-sm">
-                                        {office2Address}
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-24">
+                    {/* Contact Info */}
+                    <div className="space-y-20">
+                        <section>
+                            <h2 className="text-xs font-black text-red-600 uppercase tracking-[0.4em] mb-6">Concierge</h2>
+                            <h3 className="text-4xl font-black text-slate-900 mb-8 leading-tight">Our Global Headquarters</h3>
+                            
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                                <div className="space-y-4 p-8 bg-slate-50 rounded-[2.5rem] border border-slate-100">
+                                    <div className="w-12 h-12 bg-white rounded-2xl flex items-center justify-center text-red-600 shadow-sm mb-4">
+                                        <MapPin size={24} />
+                                    </div>
+                                    <h4 className="font-black text-lg text-slate-900">{office1Title}</h4>
+                                    <p className="text-slate-500 font-medium leading-relaxed text-sm">
+                                        {office1Address}
                                     </p>
                                 </div>
-                            )}
-                        </div>
+                                
+                                <div className="space-y-4 p-8 bg-slate-50 rounded-[2.5rem] border border-slate-100">
+                                    <div className="w-12 h-12 bg-white rounded-2xl flex items-center justify-center text-red-600 shadow-sm mb-4">
+                                        <MapPin size={24} />
+                                    </div>
+                                    <h4 className="font-black text-lg text-slate-900">{office2Title}</h4>
+                                    <p className="text-slate-500 font-medium leading-relaxed text-sm">
+                                        {office2Address || 'Ground Floor, 57 Ebene Mews, Rue Du Savoir, Ebene Cybercity'}
+                                    </p>
+                                </div>
+                            </div>
+                        </section>
 
-                        {/* Contact Details */}
-                        <div className="bg-white dark:bg-slate-800 rounded-2xl p-6 shadow-lg mb-8">
-                            <h3 className="text-xl font-black text-slate-900 dark:text-white mb-4">Contact Details</h3>
-                            <div className="space-y-4">
-                                <a href={`tel:${contactPhone.replace(/\s/g, '')}`} className="flex items-center gap-3 text-slate-600 dark:text-slate-300 hover:text-red-600 transition-colors">
-                                    <Phone size={20} className="text-red-600" />
-                                    <span>{contactPhone}</span>
+                        <section>
+                            <h2 className="text-xs font-black text-red-600 uppercase tracking-[0.4em] mb-6">Support</h2>
+                            <div className="grid grid-cols-1 gap-6">
+                                <a href={`tel:${contactPhone}`} className="group flex items-center gap-6 p-6 hover:bg-slate-50 rounded-3xl transition-all duration-300">
+                                    <div className="w-14 h-14 bg-slate-900 text-white rounded-2xl flex items-center justify-center group-hover:bg-red-600 transition-colors">
+                                        <Phone size={24} />
+                                    </div>
+                                    <div>
+                                        <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">Direct Line</p>
+                                        <p className="text-xl font-black text-slate-900">{contactPhone}</p>
+                                    </div>
                                 </a>
-                                <a href={`https://wa.me/${whatsapp1.replace(/\D/g, '')}`} target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 text-slate-600 dark:text-slate-300 hover:text-red-600 transition-colors">
-                                    <Phone size={20} className="text-red-600" />
-                                    <span>{whatsapp1} (WhatsApp)</span>
+                                
+                                <a href={`https://wa.me/${whatsapp1.replace(/\D/g, '')}`} className="group flex items-center gap-6 p-6 hover:bg-slate-50 rounded-3xl transition-all duration-300">
+                                    <div className="w-14 h-14 bg-green-600 text-white rounded-2xl flex items-center justify-center group-hover:scale-110 transition-transform">
+                                        <MessageCircle size={24} />
+                                    </div>
+                                    <div>
+                                        <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">WhatsApp Concierge</p>
+                                        <p className="text-xl font-black text-slate-900">{whatsapp1}</p>
+                                    </div>
                                 </a>
-                                <a href={`https://wa.me/${whatsapp2.replace(/\D/g, '')}`} target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 text-slate-600 dark:text-slate-300 hover:text-red-600 transition-colors">
-                                    <Phone size={20} className="text-red-600" />
-                                    <span>{whatsapp2} (WhatsApp)</span>
-                                </a>
-                                <a href={`mailto:${contactEmail}`} className="flex items-center gap-3 text-slate-600 dark:text-slate-300 hover:text-red-600 transition-colors">
-                                    <Mail size={20} className="text-red-600" />
-                                    <span>{contactEmail}</span>
+
+                                <a href={`mailto:${contactEmail}`} className="group flex items-center gap-6 p-6 hover:bg-slate-50 rounded-3xl transition-all duration-300">
+                                    <div className="w-14 h-14 bg-blue-600 text-white rounded-2xl flex items-center justify-center group-hover:scale-110 transition-transform">
+                                        <Mail size={24} />
+                                    </div>
+                                    <div>
+                                        <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">Email Inquiry</p>
+                                        <p className="text-xl font-black text-slate-900">{contactEmail}</p>
+                                    </div>
                                 </a>
                             </div>
-                        </div>
-
-                        {/* Working Hours */}
-                        <div className="bg-white dark:bg-slate-800 rounded-2xl p-6 shadow-lg">
-                            <h3 className="text-xl font-black text-slate-900 dark:text-white mb-4 flex items-center gap-2">
-                                <Clock size={24} className="text-red-600" />
-                                Working Hours
-                            </h3>
-                            <div className="space-y-2 text-slate-600 dark:text-slate-300 whitespace-pre-line">
-                                {workingHours}
-                            </div>
-                        </div>
+                        </section>
                     </div>
 
                     {/* Contact Form */}
                     <div>
-                        <div className="bg-white dark:bg-slate-800 rounded-2xl p-8 shadow-lg">
-                            <h2 className="text-3xl font-black text-slate-900 dark:text-white mb-6">Send Us A Message</h2>
-                            <form onSubmit={handleSubmit} className="space-y-6">
-                                <div>
-                                    <label className="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-2">
-                                        Full Name *
-                                    </label>
-                                    <input
-                                        type="text"
+                        <div className="sticky top-24">
+                            <div className="bg-white rounded-[3rem] border border-slate-100 p-12 shadow-[0_50px_100px_-20px_rgba(0,0,0,0.08)]">
+                                <h3 className="text-3xl font-black text-slate-900 mb-10 tracking-tight">Direct Inquiry</h3>
+                                
+                                <form onSubmit={handleSubmit} className="space-y-8">
+                                    <Input
+                                        label="Full Name"
                                         required
                                         value={formData.name}
                                         onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                                        className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-700 border border-slate-200 dark:border-slate-600 rounded-xl focus:outline-none focus:ring-4 focus:ring-red-600/20 dark:text-white"
-                                        placeholder="John Doe"
+                                        placeholder="Enter your name"
                                     />
-                                </div>
+                                    
+                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                                        <Input
+                                            label="Email Address"
+                                            type="email"
+                                            required
+                                            value={formData.email}
+                                            onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                                            placeholder="your@email.com"
+                                        />
+                                        <Input
+                                            label="Phone Number"
+                                            type="tel"
+                                            value={formData.phone}
+                                            onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+                                            placeholder="+230"
+                                        />
+                                    </div>
 
-                                <div>
-                                    <label className="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-2">
-                                        Email Address *
-                                    </label>
-                                    <input
-                                        type="email"
-                                        required
-                                        value={formData.email}
-                                        onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                                        className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-700 border border-slate-200 dark:border-slate-600 rounded-xl focus:outline-none focus:ring-4 focus:ring-red-600/20 dark:text-white"
-                                        placeholder="john@example.com"
-                                    />
-                                </div>
-
-                                <div>
-                                    <label className="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-2">
-                                        Phone Number
-                                    </label>
-                                    <input
-                                        type="tel"
-                                        value={formData.phone}
-                                        onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                                        className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-700 border border-slate-200 dark:border-slate-600 rounded-xl focus:outline-none focus:ring-4 focus:ring-red-600/20 dark:text-white"
-                                        placeholder="+230 123 4567"
-                                    />
-                                </div>
-
-                                <div>
-                                    <label className="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-2">
-                                        Subject *
-                                    </label>
-                                    <input
-                                        type="text"
+                                    <Input
+                                        label="Subject"
                                         required
                                         value={formData.subject}
                                         onChange={(e) => setFormData({ ...formData, subject: e.target.value })}
-                                        className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-700 border border-slate-200 dark:border-slate-600 rounded-xl focus:outline-none focus:ring-4 focus:ring-red-600/20 dark:text-white"
-                                        placeholder="Inquiry about cruise packages"
+                                        placeholder="What can we help you with?"
                                     />
-                                </div>
 
-                                <div>
-                                    <label className="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-2">
-                                        Message *
-                                    </label>
-                                    <textarea
-                                        required
-                                        rows={6}
-                                        value={formData.message}
-                                        onChange={(e) => setFormData({ ...formData, message: e.target.value })}
-                                        className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-700 border border-slate-200 dark:border-slate-600 rounded-xl focus:outline-none focus:ring-4 focus:ring-red-600/20 dark:text-white resize-none"
-                                        placeholder="Tell us about your travel plans..."
-                                    />
-                                </div>
+                                    <div className="space-y-3">
+                                        <label className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] ml-2">Message</label>
+                                        <textarea
+                                            required
+                                            rows={5}
+                                            value={formData.message}
+                                            onChange={(e) => setFormData({ ...formData, message: e.target.value })}
+                                            className="w-full px-6 py-5 bg-slate-50 border border-slate-100 rounded-2xl focus:outline-none focus:ring-2 focus:ring-red-600/50 focus:bg-white font-bold text-sm transition-all resize-none"
+                                            placeholder="Tell us about your travel plans..."
+                                        />
+                                    </div>
 
-                                <button
-                                    type="submit"
-                                    disabled={submitting}
-                                    className="w-full px-6 py-4 bg-red-600 text-white rounded-xl font-bold hover:bg-slate-900 transition-all flex items-center justify-center gap-2 disabled:opacity-50"
-                                >
-                                    {submitting ? (
-                                        <Loader2 size={20} className="animate-spin" />
-                                    ) : (
-                                        <Send size={20} />
-                                    )}
-                                    {submitting ? 'Sending...' : 'Send Message'}
-                                </button>
-                            </form>
-                        </div>
+                                    <Button
+                                        size="xl"
+                                        type="submit"
+                                        isLoading={submitting}
+                                        className="w-full shadow-2xl shadow-red-600/20"
+                                    >
+                                        Send Message
+                                    </Button>
 
-                        {/* Quick Actions */}
-                        <div className="mt-6 grid grid-cols-2 gap-4">
-                            <a
-                                href={`https://wa.me/${whatsapp1.replace(/\D/g, '')}`}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="px-6 py-4 bg-green-600 text-white rounded-xl font-bold hover:bg-green-700 transition-all text-center"
-                            >
-                                WhatsApp Us
-                            </a>
-                            <a
-                                href={`tel:${contactPhone.replace(/\s/g, '')}`}
-                                className="px-6 py-4 bg-blue-600 text-white rounded-xl font-bold hover:bg-blue-700 transition-all text-center"
-                            >
-                                Call Now
-                            </a>
+                                    <p className="text-center text-slate-400 text-[10px] font-black uppercase tracking-[0.2em]">
+                                        Response time: &lt; 24 Hours
+                                    </p>
+                                </form>
+                            </div>
                         </div>
                     </div>
                 </div>

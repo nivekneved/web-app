@@ -6,6 +6,7 @@ import Link from 'next/link'
 import { motion } from 'framer-motion'
 import { ArrowRight, Clock } from 'lucide-react'
 import { createClient } from '@/lib/supabase'
+import { GridSkeleton } from '@/components/LoadingSkeleton'
 
 const supabase = createClient()
 
@@ -58,9 +59,7 @@ export default function DealsCarousel() {
 
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
                     {loading ? (
-                        [...Array(4)].map((_, i) => (
-                            <div key={i} className="animate-pulse bg-white rounded-2xl h-96 border border-slate-100" />
-                        ))
+                        <GridSkeleton count={4} />
                     ) : (
                         deals.map((deal, index) => (
                             <motion.div

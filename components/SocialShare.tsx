@@ -1,8 +1,9 @@
 'use client'
 
 import React from 'react'
-import { Share2, Facebook, Twitter, Linkedin, Mail, Link as LinkIcon } from 'lucide-react'
+import { Share2, Facebook, Twitter, Linkedin, Mail, Link as LinkIcon, X } from 'lucide-react'
 import { toast } from 'sonner'
+import { Button } from './ui/Button'
 
 type SocialShareProps = {
     url: string
@@ -37,56 +38,76 @@ export default function SocialShare({ url, title, description }: SocialShareProp
 
     return (
         <div className="relative">
-            <button
+            <Button
+                variant="outline"
+                size="md"
                 onClick={() => setIsOpen(!isOpen)}
-                className="px-4 py-2 bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-300 rounded-xl font-bold hover:bg-slate-200 dark:hover:bg-slate-600 transition-all flex items-center gap-2"
+                className="gap-2"
+                aria-haspopup="true"
+                aria-expanded={isOpen}
+                aria-label="Open share menu"
             >
-                <Share2 size={18} />
+                <Share2 size={16} />
                 Share
-            </button>
+            </Button>
 
             {isOpen && (
                 <>
-                    <div
-                        className="fixed inset-0 z-40"
+                    <button
+                        className="fixed inset-0 z-40 bg-black/5 cursor-default"
                         onClick={() => setIsOpen(false)}
+                        aria-label="Close share menu"
                     />
-                    <div className="absolute right-0 mt-2 w-64 bg-white dark:bg-slate-800 rounded-2xl shadow-xl border border-slate-200 dark:border-slate-700 p-4 z-50">
-                        <h3 className="font-bold text-slate-900 dark:text-white mb-3">Share this</h3>
-                        <div className="space-y-2">
+                    <div className="absolute right-0 mt-3 w-72 bg-white dark:bg-slate-800 rounded-3xl shadow-2xl border border-slate-200 dark:border-slate-700 p-6 z-50 animate-in">
+                        <div className="flex items-center justify-between mb-6">
+                            <h3 className="text-xs font-black text-slate-900 dark:text-white uppercase tracking-[0.2em]">Share this</h3>
+                            <button 
+                                onClick={() => setIsOpen(false)}
+                                className="p-2 hover:bg-slate-100 dark:hover:bg-slate-700 rounded-full transition-colors"
+                                aria-label="Close menu"
+                            >
+                                <X size={14} />
+                            </button>
+                        </div>
+                        <div className="space-y-3">
                             <button
                                 onClick={shareOnFacebook}
-                                className="w-full flex items-center gap-3 px-4 py-3 bg-[#1877F2] text-white rounded-xl hover:opacity-90 transition-all"
+                                className="w-full flex items-center gap-4 px-5 py-4 bg-[#1877F2] text-white rounded-2xl hover:opacity-90 transition-all font-bold text-xs"
+                                aria-label="Share on Facebook"
                             >
-                                <Facebook size={20} />
-                                Share on Facebook
+                                <Facebook size={18} />
+                                Facebook
                             </button>
                             <button
                                 onClick={shareOnTwitter}
-                                className="w-full flex items-center gap-3 px-4 py-3 bg-[#1DA1F2] text-white rounded-xl hover:opacity-90 transition-all"
+                                className="w-full flex items-center gap-4 px-5 py-4 bg-[#1DA1F2] text-white rounded-2xl hover:opacity-90 transition-all font-bold text-xs"
+                                aria-label="Share on Twitter"
                             >
-                                <Twitter size={20} />
-                                Share on Twitter
+                                <Twitter size={18} />
+                                Twitter (X)
                             </button>
                             <button
                                 onClick={shareOnLinkedIn}
-                                className="w-full flex items-center gap-3 px-4 py-3 bg-[#0A66C2] text-white rounded-xl hover:opacity-90 transition-all"
+                                className="w-full flex items-center gap-4 px-5 py-4 bg-[#0A66C2] text-white rounded-2xl hover:opacity-90 transition-all font-bold text-xs"
+                                aria-label="Share on LinkedIn"
                             >
-                                <Linkedin size={20} />
-                                Share on LinkedIn
+                                <Linkedin size={18} />
+                                LinkedIn
                             </button>
                             <button
                                 onClick={shareViaEmail}
-                                className="w-full flex items-center gap-3 px-4 py-3 bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-300 rounded-xl hover:bg-slate-200 dark:hover:bg-slate-600 transition-all"
+                                className="w-full flex items-center gap-4 px-5 py-4 bg-slate-50 dark:bg-slate-700 text-slate-700 dark:text-slate-300 rounded-2xl hover:bg-slate-100 dark:hover:bg-slate-600 transition-all font-bold text-xs"
+                                aria-label="Share via Email"
                             >
-                                <Mail size={20} />
-                                Share via Email
+                                <Mail size={18} />
+                                Email
                             </button>
                             <button
                                 onClick={copyLink}
-                                className="w-full flex items-center gap-3 px-4 py-3 bg-red-600 text-white rounded-xl hover:bg-slate-900 transition-all"
+                                className="w-full flex items-center gap-4 px-5 py-4 bg-red-600 text-white rounded-2xl hover:bg-slate-900 transition-all font-bold text-xs"
+                                aria-label="Copy link to clipboard"
                             >
-                                <LinkIcon size={20} />
+                                <LinkIcon size={18} />
                                 Copy Link
                             </button>
                         </div>

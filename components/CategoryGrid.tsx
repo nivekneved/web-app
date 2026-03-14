@@ -73,7 +73,6 @@ export default function CategoryGrid() {
                                     alt={cat.name}
                                     fill
                                     className="object-cover group-hover:scale-110 transition-transform duration-700"
-                                    unoptimized
                                 />
                                 <div className="absolute inset-0 bg-linear-to-t from-black/80 via-black/20 to-transparent opacity-80 group-hover:opacity-90 transition-opacity" />
                                 <div className="absolute bottom-0 left-0 right-0 p-6 flex flex-col items-center text-center">

@@ -36,8 +36,8 @@ const MobileNavItem: React.FC<{ item: NavMenuItem; level: number; onClose: () =>
         <Link
           href={item.href}
           className={cn(
-            "flex-grow py-3 transition-colors duration-200 text-slate-900 dark:text-slate-100 font-bold",
-            level === 0 ? "text-base uppercase" : "text-sm font-semibold"
+            "flex-grow py-3 transition-colors duration-200 text-slate-900 dark:text-slate-100",
+            level === 0 ? "text-[11px] font-black uppercase tracking-[0.2em]" : "text-sm font-bold"
           )}
           onClick={(e) => {
             if (item.href === '#') {

@@ -5,8 +5,13 @@ import { createClient } from '@/lib/supabase'
 import { useParams } from 'next/navigation'
 import { MapPin, Star, Check, ArrowLeft, Clock, Heart } from 'lucide-react'
 import Link from 'next/link'
+import Image from 'next/image'
 import { toast } from 'sonner'
 import { useWishlist } from '@/contexts/WishlistContext'
+import { Breadcrumbs } from '@/components/ui/Breadcrumbs'
+import { Badge } from '@/components/ui/Badge'
+import { Button } from '@/components/ui/Button'
+import { cn } from '@/lib/utils'
 
 const supabase = createClient()
 
@@ -94,138 +99,174 @@ export default function PackageDetailPage() {
             <div className="min-h-screen flex items-center justify-center">
                 <div className="text-center">
                     <h1 className="text-4xl font-black text-slate-900 mb-4">Package Not Found</h1>
-                    <Link href="/packages" className="text-red-600 font-bold hover:underline">
-                        ← Back to Packages
-                    </Link>
+                    <Button variant="outline" asChild>
+                        <Link href="/packages">
+                            Back to Packages
+                        </Link>
+                    </Button>
                 </div>
             </div>
         )
     }
 
     return (
-        <div className="min-h-screen bg-slate-50">
-            {/* Back Button */}
-            <div className="bg-white border-b border-slate-100">
-                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
-                    <Link href="/packages" className="inline-flex items-center gap-2 text-slate-600 hover:text-red-600 font-medium transition-colors">
-                        <ArrowLeft size={18} />
-                        Back to Packages
-                    </Link>
+        <div className="min-h-screen bg-white">
+            {/* Hero Section */}
+            <div className="relative h-[65vh] w-full overflow-hidden">
+                <Image
+                    src={pkg.image_url || 'https://images.unsplash.com/photo-1544551763-46a013bb70d5'}
+                    alt={pkg.name}
+                    fill
+                    className="object-cover"
+                    priority
+                />
+                <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-transparent to-black/60" />
+                
+                <div className="absolute top-8 left-8 right-8 flex justify-between items-center z-10">
+                    <Button
+                        variant="ghost"
+                        size="icon"
+                        asChild
+                        className="bg-white/10 backdrop-blur-md text-white hover:bg-white/30 rounded-full"
+                    >
+                        <Link href="/packages">
+                            <ArrowLeft size={20} />
+                        </Link>
+                    </Button>
+                    <Button
+                        variant="ghost"
+                        size="icon"
+                        onClick={toggleWishlist}
+                        className={cn(
+                            "backdrop-blur-md rounded-full text-white transition-all",
+                            isInWishlist(pkg.id) ? 'bg-red-500 hover:bg-red-600' : 'bg-white/10 hover:bg-white/30'
+                        )}
+                        aria-label={isInWishlist(pkg.id) ? 'Remove from wishlist' : 'Add to wishlist'}
+                    >
+                        <Heart size={20} fill={isInWishlist(pkg.id) ? 'currentColor' : 'none'} />
+                    </Button>
+                </div>
+
+                <div className="absolute bottom-16 left-8 right-8">
+                    <div className="max-w-7xl mx-auto">
+                        <div className="flex flex-wrap items-center gap-4 mb-6">
+                            <Badge variant="success" className="px-4 py-1.5 shadow-xl shadow-green-600/20">
+                                Popular Activity
+                            </Badge>
+                            <div className="flex items-center gap-2 px-4 py-1.5 bg-white/10 backdrop-blur-md border border-white/20 rounded-full text-white text-[10px] font-black uppercase tracking-widest">
+                                <Star size={14} className="fill-yellow-400 text-yellow-400" />
+                                {pkg.rating} Rating
+                            </div>
+                        </div>
+                        <h1 className="text-5xl md:text-7xl lg:text-8xl font-black text-white mb-6 tracking-tighter leading-[1.1]">
+                            {pkg.name}
+                        </h1>
+                        <div className="flex flex-wrap items-center gap-6 text-white/90 font-medium text-lg">
+                            <div className="flex items-center gap-2">
+                                <MapPin size={22} className="text-red-500" />
+                                {pkg.location}
+                            </div>
+                            <div className="flex items-center gap-2">
+                                <Clock size={22} className="text-white/60" />
+                                {pkg.duration || 'Full Day'}
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
 
-            {/* Hero Image */}
-            <div className="relative h-[500px]">
-                {pkg.image_url ? (
-                    <div className="absolute inset-0 bg-cover bg-center" style={{ backgroundImage: `url(${pkg.image_url})` }} />
-                ) : (
-                    <div className="absolute inset-0 bg-gradient-to-br from-red-600 to-slate-900" />
-                )}
-                <div className="absolute inset-0 bg-black/30" />
-            </div>
+            <div className="max-w-7xl mx-auto px-8 pb-32">
+                <Breadcrumbs 
+                    items={[
+                        { label: 'Packages', href: '/packages' },
+                        { label: pkg.name, active: true }
+                    ]}
+                    className="mb-12 mt-8"
+                />
 
-            {/* Content Section */}
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 -mt-64 pb-20">
-                {/* Floating Info Card */}
-                <div className="bg-white rounded-[3rem] shadow-2xl p-8 border border-slate-100 mb-12">
-                            <div className="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-6">
-                                <div className="flex-1">
-                                    <div className="flex items-start justify-between gap-3 mb-4">
-                                        <div>
-                                            <h1 className="text-4xl font-black text-slate-900 mb-2">{pkg.name}</h1>
-                                            <div className="flex items-center gap-3 flex-wrap">
-                                                <div className="flex items-center gap-1 text-slate-600">
-                                                    <MapPin size={18} />
-                                                    <span className="font-medium">{pkg.location}</span>
-                                                </div>
-                                                <div className="flex items-center gap-1 text-slate-600">
-                                                    <Clock size={18} />
-                                                    <span className="font-medium">{pkg.duration || 'Full Day'}</span>
-                                                </div>
-                                                {pkg.rating && (
-                                                    <div className="flex items-center gap-1 px-3 py-1 bg-amber-50 rounded-lg">
-                                                        <Star size={16} className="text-amber-600 fill-amber-600" />
-                                                        <span className="font-bold text-amber-700">{pkg.rating}</span>
-                                                    </div>
-                                                )}
+                <div className="grid grid-cols-1 lg:grid-cols-3 gap-24">
+                    <div className="lg:col-span-2 space-y-20">
+                        {/* Description */}
+                        <section>
+                            <h2 className="text-xs font-black text-red-600 uppercase tracking-[0.4em] mb-6">Journey</h2>
+                            <h3 className="text-4xl font-black text-slate-900 mb-8 leading-tight">About this package</h3>
+                            <p className="text-xl text-slate-500 leading-relaxed font-medium">
+                                {pkg.description}
+                            </p>
+                        </section>
+
+                        {/* Inclusions */}
+                        {pkg.amenities && pkg.amenities.length > 0 && (
+                            <section>
+                                <h2 className="text-xs font-black text-red-600 uppercase tracking-[0.4em] mb-6">Details</h2>
+                                <h3 className="text-4xl font-black text-slate-900 mb-10 leading-tight">What&apos;s Included</h3>
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                    {pkg.amenities.map((amenity, idx) => (
+                                        <div key={idx} className="flex items-center gap-4 p-6 bg-slate-50 rounded-[2rem] border border-slate-100 hover:bg-white hover:shadow-xl hover:shadow-slate-200/50 transition-all duration-300">
+                                            <div className="w-12 h-12 bg-white rounded-2xl flex items-center justify-center text-red-600 shadow-sm">
+                                                <Check size={20} />
                                             </div>
+                                            <span className="font-black text-xs uppercase tracking-widest text-slate-600">{amenity}</span>
                                         </div>
-                                        <button
-                                            onClick={toggleWishlist}
-                                            className="p-3 hover:bg-red-50 rounded-xl transition-colors"
-                                        >
-                                            <Heart
-                                                size={24}
-                                                className={isInWishlist(pkg.id) ? 'text-red-600 fill-red-600' : 'text-slate-400'}
-                                            />
-                                        </button>
-                                    </div>
+                                    ))}
+                                </div>
+                            </section>
+                        )}
+                    </div>
 
-                                    {pkg.description && (
-                                        <p className="text-slate-600 leading-relaxed">{pkg.description}</p>
-                                    )}
+                    {/* Booking Sidebar */}
+                    <div className="lg:col-span-1">
+                        <div className="sticky top-24">
+                            <div className="bg-white rounded-[3rem] border border-slate-100 p-10 shadow-[0_50px_100px_-20px_rgba(0,0,0,0.08)]">
+                                <div className="flex items-end gap-2 mb-10">
+                                    <span className="text-5xl font-black text-slate-900 tracking-tighter">MUR {pkg.base_price?.toLocaleString()}</span>
+                                    <span className="text-slate-400 font-black text-[10px] uppercase tracking-widest mb-3">/ person</span>
                                 </div>
 
-                                <div className="lg:w-96 bg-slate-50 rounded-2xl p-6 border border-slate-200">
-                                    <div className="text-center mb-6">
-                                        <div className="text-sm text-slate-500 mb-1">Price</div>
-                                        <div className="text-4xl font-black text-slate-900">Rs {pkg.base_price?.toLocaleString()}</div>
-                                        <div className="text-sm text-slate-500">per person</div>
-                                    </div>
-
-                                    <div className="space-y-4">
-                                        <div>
-                                            <label className="block text-xs font-bold text-slate-600 uppercase tracking-wide mb-2">
-                                                Date
-                                            </label>
+                                <div className="space-y-8">
+                                    <div className="space-y-3">
+                                        <label className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] ml-2">Preferred Date</label>
+                                        <div className="relative">
+                                            <Clock className="absolute left-5 top-1/2 -translate-y-1/2 text-slate-300" size={18} />
                                             <input
                                                 type="date"
                                                 value={date}
                                                 onChange={(e) => setDate(e.target.value)}
-                                                className="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl focus:outline-none focus:ring-4 focus:ring-red-600/20 focus:border-red-600 transition-all"
+                                                className="w-full pl-14 pr-6 py-5 bg-slate-50 border border-slate-100 rounded-2xl focus:outline-none focus:ring-2 focus:ring-red-600/50 focus:bg-white font-bold text-sm transition-all"
                                             />
                                         </div>
+                                    </div>
 
-                                        <div>
-                                            <label className="block text-xs font-bold text-slate-600 uppercase tracking-wide mb-2">
-                                                Participants
-                                            </label>
+                                    <div className="space-y-3">
+                                        <label className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] ml-2">Number of Participants</label>
+                                        <div className="relative">
+                                            <Star className="absolute left-5 top-1/2 -translate-y-1/2 text-slate-300" size={18} />
                                             <input
                                                 type="number"
                                                 min="1"
                                                 value={participants}
                                                 onChange={(e) => setParticipants(parseInt(e.target.value))}
-                                                className="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl focus:outline-none focus:ring-4 focus:ring-red-600/20 focus:border-red-600 transition-all"
+                                                className="w-full pl-14 pr-6 py-5 bg-slate-50 border border-slate-100 rounded-2xl focus:outline-none focus:ring-2 focus:ring-red-600/50 focus:bg-white font-bold text-sm transition-all"
                                             />
                                         </div>
-
-                                        <button
-                                            onClick={handleBookNow}
-                                            className="w-full px-6 py-4 bg-red-600 text-white rounded-xl font-black uppercase tracking-wider hover:bg-slate-900 transition-all shadow-lg shadow-red-600/20"
-                                        >
-                                            Book Now
-                                        </button>
                                     </div>
+
+                                    <Button
+                                        size="xl"
+                                        onClick={handleBookNow}
+                                        className="w-full shadow-2xl shadow-red-600/20"
+                                    >
+                                        Book This Experience
+                                    </Button>
+
+                                    <p className="text-center text-slate-400 text-[10px] font-black uppercase tracking-[0.2em]">
+                                        Secure your spot today
+                                    </p>
                                 </div>
                             </div>
                         </div>
-
-                {/* Inclusions */}
-                {pkg.amenities && pkg.amenities.length > 0 && (
-                    <div className="bg-white rounded-[2rem] p-8 border border-slate-100 shadow-sm">
-                        <h2 className="text-2xl font-black text-slate-900 mb-6">What&apos;s Included</h2>
-                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                            {pkg.amenities.map((amenity, idx) => (
-                                <div key={idx} className="flex items-center gap-3">
-                                    <div className="p-2 bg-red-50 rounded-lg">
-                                        <Check size={16} className="text-red-600" />
-                                    </div>
-                                    <span className="text-slate-700 font-medium">{amenity}</span>
-                                </div>
-                            ))}
-                        </div>
                     </div>
-                )}
+                </div>
             </div>
         </div>
     )

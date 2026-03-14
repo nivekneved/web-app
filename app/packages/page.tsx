@@ -6,6 +6,7 @@ import ServiceCard from '@/components/ServiceCard'
 
 import { useState, useEffect } from 'react'
 import { createClient } from '@/lib/supabase'
+import { GridSkeleton } from '@/components/LoadingSkeleton'
 
 const supabase = createClient()
 
@@ -95,9 +96,7 @@ export default function PackagesPage() {
 
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                     {loading ? (
-                        [...Array(3)].map((_, i) => (
-                            <div key={i} className="animate-pulse bg-white rounded-3xl h-96 border border-slate-100" />
-                        ))
+                        <GridSkeleton count={3} />
                     ) : (
                         packages.map(pkg => (
                             <ServiceCard

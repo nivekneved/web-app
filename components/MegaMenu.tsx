@@ -19,7 +19,7 @@ export const MegaMenu: React.FC<MegaMenuProps> = ({ items, onClose }) => {
             exit={{ opacity: 0, y: -10 }}
             transition={{ duration: 0.2, ease: "easeOut" }}
             className={cn(
-                "absolute top-full left-0 w-full bg-white border-b border-slate-100 shadow-2xl z-50 py-12 px-6 overflow-hidden"
+                "absolute top-full left-0 w-full bg-white border-b border-slate-100 shadow-2xl z-50 py-12 px-6 overflow-y-auto max-h-[calc(100vh-100px)]"
             )}
             onMouseLeave={onClose}
         >

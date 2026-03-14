@@ -128,7 +128,6 @@ export default function HomePage() {
                   fill
                   className="object-cover"
                   priority
-                  unoptimized
                 />
               )}
               <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/20 to-transparent" />
@@ -155,7 +154,7 @@ export default function HomePage() {
               </h1>
 
               <p className="text-lg md:text-xl text-white/70 font-medium mb-12 max-w-2xl mx-auto leading-relaxed">
-                {heroSlides[currentSlide]?.subtitle.replace('<br />', ' ')}
+                {heroSlides[currentSlide]?.subtitle ? heroSlides[currentSlide].subtitle.replace('<br />', ' ') : ''}
               </p>
 
               <div className="flex flex-wrap items-center justify-center gap-6">
