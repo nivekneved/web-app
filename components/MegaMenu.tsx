@@ -1,3 +1,4 @@
+/*
 'use client'
 
 import React from 'react'
@@ -48,7 +49,6 @@ export const MegaMenu: React.FC<MegaMenuProps> = ({ items, onClose }) => {
                                             <span className="text-sm font-bold text-slate-800 group-hover:text-red-600 transition-colors">
                                                 {child.label}
                                             </span>
-                                            {/* Optional description placeholder if needed in future */}
                                         </Link>
                                     </li>
                                 ))}
@@ -57,7 +57,6 @@ export const MegaMenu: React.FC<MegaMenuProps> = ({ items, onClose }) => {
                     </div>
                 ))}
 
-                {/* Promotional / Featured Column */}
                 <div className="lg:col-span-1 xl:col-span-1 border-l border-slate-100 pl-12 hidden lg:block">
                     <div className="bg-slate-50 rounded-2xl p-6 relative overflow-hidden group">
                         <h4 className="text-lg font-black text-slate-900 mb-2 leading-tight">Plan Your Paradise</h4>
@@ -76,7 +75,6 @@ export const MegaMenu: React.FC<MegaMenuProps> = ({ items, onClose }) => {
                 </div>
             </div>
             
-            {/* Minimalist Bottom Bar */}
             <div className="max-w-7xl mx-auto mt-12 pt-8 border-t border-slate-50 flex items-center justify-between text-[10px] font-black tracking-[0.2em] text-slate-400 uppercase">
                 <div className="flex gap-8">
                     <span>Exclusive Offers</span>
@@ -88,3 +86,5 @@ export const MegaMenu: React.FC<MegaMenuProps> = ({ items, onClose }) => {
         </motion.div>
     )
 }
+*/
+export const MegaMenu = () => null;

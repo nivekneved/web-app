@@ -9,8 +9,6 @@ import { useTheme } from '@/contexts/ThemeContext'
 import { createClient } from '@/lib/supabase'
 import { navigationConfig, type NavMenuItem } from '@/lib/navigation'
 import { MobileAccordion } from './Navbar/MobileAccordion'
-import { MegaMenu } from './MegaMenu'
-import { AnimatePresence } from 'framer-motion'
 import { cn } from '@/lib/utils'
 import { Button } from './ui/Button'
 
@@ -41,7 +39,6 @@ export default function Navbar() {
     const [isScrolled, setIsScrolled] = useState(false)
     const [settings, setSettings] = useState<SiteSettings | null>(null)
     const [items, setItems] = useState<NavMenuItem[]>([])
-    const [isMegaOpen, setIsMegaOpen] = useState(false)
     const { wishlist } = useWishlist()
     const { theme, toggleTheme } = useTheme()
     const supabase = createClient()
@@ -189,7 +186,6 @@ export default function Navbar() {
                                 <div 
                                     key={idx}
                                     className="relative group py-6"
-                                    onMouseEnter={() => item.children && item.children.length > 0 && setIsMegaOpen(true)}
                                 >
                                     <Link
                                         href={item.href}
@@ -255,15 +251,6 @@ export default function Navbar() {
                     </div>
                 </div>
 
-                {/* MegaMenu Overlay */}
-                <AnimatePresence>
-                    {isMegaOpen && (
-                        <MegaMenu 
-                            items={items.length > 0 ? items : navigationConfig.menu} 
-                            onClose={() => setIsMegaOpen(false)} 
-                        />
-                    )}
-                </AnimatePresence>
 
                 {/* Mobile Menu Overlay */}
                 <div 
