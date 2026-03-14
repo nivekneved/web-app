@@ -75,7 +75,7 @@ export default function HotelClientWrapper({ hotel }: { hotel: Hotel }) {
                 paxAdults: formData.guests || guests,
                 paxChildren: 0,
                 travelers: formData.travelers as Record<string, unknown>[],
-                specialRequests: formData.specialRequests
+                specialRequests: formData.notes
             })
 
             if (success) {

@@ -100,8 +100,8 @@ export default function ActivityDetailPage() {
             endDate: data.checkOut,
             paxAdults: data.guests || participants,
             paxChildren: 0,
-            travelers: data.travelers,
-            specialRequests: data.specialRequests
+            travelers: data.travelers as Record<string, unknown>[],
+            specialRequests: data.notes
         })
 
         if (result.success) {

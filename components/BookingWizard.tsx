@@ -7,6 +7,7 @@ type TravelerDetails = {
     lastName: string
     email: string
     phone: string
+    mobile?: string
     age?: number
     passportNumber?: string
 }
@@ -27,8 +28,13 @@ export type BookingWizardData = {
     checkIn: string
     checkOut: string
     guests: number
+    firstName: string
+    lastName: string
+    email: string
+    phone: string
+    mobile: string
+    notes: string
     travelers: TravelerDetails[]
-    specialRequests: string
     mealPreference?: string
     roomPreference?: string
 }
@@ -39,8 +45,13 @@ export default function BookingWizard({ serviceName, servicePrice, onComplete, i
         checkIn: initialData?.checkIn || '',
         checkOut: initialData?.checkOut || '',
         guests: initialData?.guests || 1,
-        travelers: initialData?.travelers || [{ firstName: '', lastName: '', email: '', phone: '' }],
-        specialRequests: initialData?.specialRequests || '',
+        firstName: initialData?.firstName || '',
+        lastName: initialData?.lastName || '',
+        email: initialData?.email || '',
+        phone: initialData?.phone || '',
+        mobile: initialData?.mobile || '',
+        notes: initialData?.notes || '',
+        travelers: initialData?.travelers || [],
         mealPreference: initialData?.mealPreference || 'none',
         roomPreference: initialData?.roomPreference || 'standard'
     })
@@ -113,18 +124,19 @@ export default function BookingWizard({ serviceName, servicePrice, onComplete, i
 
             {/* Step Content */}
             <div className="bg-white dark:bg-slate-800 rounded-[3rem] p-8 border border-slate-200 dark:border-slate-700">
-                {/* Step 1: Dates & Guests */}
+                {/* Step 1: Booking Details */}
                 {currentStep === 1 && (
                     <div className="space-y-6">
-                        <h2 className="text-2xl font-black text-slate-900 dark:text-white mb-4">Select Dates & Guests</h2>
-                        <div className="grid grid-cols-2 gap-4">
+                        <h2 className="text-2xl font-black text-slate-900 dark:text-white mb-4">Complete Your Reservation</h2>
+                        
+                        <div className="grid grid-cols-2 gap-4 p-6 bg-slate-50 dark:bg-slate-700/50 rounded-2xl border border-slate-100 dark:border-slate-700">
                             <div>
                                 <label className="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-2">Check-in</label>
                                 <input
                                     type="date"
                                     value={formData.checkIn}
                                     onChange={(e) => updateFormData({ checkIn: e.target.value })}
-                                    className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-700 border border-slate-200 dark:border-slate-600 rounded-xl focus:outline-none focus:ring-4 focus:ring-red-600/20 dark:text-white"
+                                    className="w-full px-4 py-3 bg-white dark:bg-slate-700 border border-slate-200 dark:border-slate-600 rounded-xl focus:outline-none focus:ring-4 focus:ring-red-600/20 dark:text-white"
                                 />
                             </div>
                             <div>
@@ -133,20 +145,83 @@ export default function BookingWizard({ serviceName, servicePrice, onComplete, i
                                     type="date"
                                     value={formData.checkOut}
                                     onChange={(e) => updateFormData({ checkOut: e.target.value })}
-                                    className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-700 border border-slate-200 dark:border-slate-600 rounded-xl focus:outline-none focus:ring-4 focus:ring-red-600/20 dark:text-white"
+                                    className="w-full px-4 py-3 bg-white dark:bg-slate-700 border border-slate-200 dark:border-slate-600 rounded-xl focus:outline-none focus:ring-4 focus:ring-red-600/20 dark:text-white"
+                                />
+                            </div>
+                            <div className="col-span-2">
+                                <label className="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-2">Number of Guests</label>
+                                <input
+                                    type="number"
+                                    min="1"
+                                    max="10"
+                                    value={formData.guests}
+                                    onChange={(e) => updateFormData({ guests: parseInt(e.target.value) })}
+                                    className="w-full px-4 py-3 bg-white dark:bg-slate-700 border border-slate-200 dark:border-slate-600 rounded-xl focus:outline-none focus:ring-4 focus:ring-red-600/20 dark:text-white"
                                 />
                             </div>
                         </div>
-                        <div>
-                            <label className="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-2">Number of Guests</label>
-                            <input
-                                type="number"
-                                min="1"
-                                max="10"
-                                value={formData.guests}
-                                onChange={(e) => updateFormData({ guests: parseInt(e.target.value) })}
-                                className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-700 border border-slate-200 dark:border-slate-600 rounded-xl focus:outline-none focus:ring-4 focus:ring-red-600/20 dark:text-white"
-                            />
+
+                        <div className="grid grid-cols-2 gap-4">
+                            <div>
+                                <label className="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-2">First Name</label>
+                                <input
+                                    type="text"
+                                    placeholder="First Name"
+                                    value={formData.firstName}
+                                    onChange={(e) => updateFormData({ firstName: e.target.value })}
+                                    className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-700 border border-slate-200 dark:border-slate-600 rounded-xl focus:outline-none focus:ring-4 focus:ring-red-600/20 dark:text-white"
+                                />
+                            </div>
+                            <div>
+                                <label className="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-2">Last Name</label>
+                                <input
+                                    type="text"
+                                    placeholder="Last Name"
+                                    value={formData.lastName}
+                                    onChange={(e) => updateFormData({ lastName: e.target.value })}
+                                    className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-700 border border-slate-200 dark:border-slate-600 rounded-xl focus:outline-none focus:ring-4 focus:ring-red-600/20 dark:text-white"
+                                />
+                            </div>
+                            <div className="col-span-2">
+                                <label className="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-2">Email Address</label>
+                                <input
+                                    type="email"
+                                    placeholder="Email"
+                                    value={formData.email}
+                                    onChange={(e) => updateFormData({ email: e.target.value })}
+                                    className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-700 border border-slate-200 dark:border-slate-600 rounded-xl focus:outline-none focus:ring-4 focus:ring-red-600/20 dark:text-white"
+                                />
+                            </div>
+                            <div>
+                                <label className="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-2">Phone</label>
+                                <input
+                                    type="tel"
+                                    placeholder="Phone"
+                                    value={formData.phone}
+                                    onChange={(e) => updateFormData({ phone: e.target.value })}
+                                    className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-700 border border-slate-200 dark:border-slate-600 rounded-xl focus:outline-none focus:ring-4 focus:ring-red-600/20 dark:text-white"
+                                />
+                            </div>
+                            <div>
+                                <label className="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-2">Mobile</label>
+                                <input
+                                    type="tel"
+                                    placeholder="Mobile"
+                                    value={formData.mobile}
+                                    onChange={(e) => updateFormData({ mobile: e.target.value })}
+                                    className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-700 border border-slate-200 dark:border-slate-600 rounded-xl focus:outline-none focus:ring-4 focus:ring-red-600/20 dark:text-white"
+                                />
+                            </div>
+                            <div className="col-span-2">
+                                <label className="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-2">Notes</label>
+                                <textarea
+                                    value={formData.notes}
+                                    onChange={(e) => updateFormData({ notes: e.target.value })}
+                                    rows={3}
+                                    placeholder="Any special requirements or messages for the host..."
+                                    className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-700 border border-slate-200 dark:border-slate-600 rounded-xl focus:outline-none focus:ring-4 focus:ring-red-600/20 dark:text-white"
+                                />
+                            </div>
                         </div>
                     </div>
                 )}
@@ -242,16 +317,6 @@ export default function BookingWizard({ serviceName, servicePrice, onComplete, i
                                 <option value="connecting">Connecting Rooms</option>
                             </select>
                         </div>
-                        <div>
-                            <label className="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-2">Special Requests</label>
-                            <textarea
-                                value={formData.specialRequests}
-                                onChange={(e) => updateFormData({ specialRequests: e.target.value })}
-                                rows={4}
-                                placeholder="Any special requirements or requests..."
-                                className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-700 border border-slate-200 dark:border-slate-600 rounded-xl focus:outline-none focus:ring-4 focus:ring-red-600/20 dark:text-white"
-                            />
-                        </div>
                     </div>
                 )}
 
@@ -262,11 +327,19 @@ export default function BookingWizard({ serviceName, servicePrice, onComplete, i
                         <div className="space-y-4">
                             <div className="p-4 bg-slate-50 dark:bg-slate-700 rounded-xl">
                                 <h3 className="font-bold text-slate-900 dark:text-white mb-2">{serviceName}</h3>
-                                <div className="grid grid-cols-2 gap-2 text-sm text-slate-600 dark:text-slate-400">
-                                    <div>Check-in: {formData.checkIn}</div>
-                                    <div>Check-out: {formData.checkOut}</div>
-                                    <div>Guests: {formData.guests}</div>
-                                    <div>Travelers: {formData.travelers.length}</div>
+                                <div className="grid grid-cols-2 gap-4 text-sm text-slate-600 dark:text-slate-400">
+                                    <div><strong>Check-in:</strong> {formData.checkIn}</div>
+                                    <div><strong>Check-out:</strong> {formData.checkOut}</div>
+                                    <div><strong>Guests:</strong> {formData.guests}</div>
+                                    <div><strong>Travelers:</strong> {formData.travelers.length + 1}</div>
+                                    <div className="col-span-2 border-t border-slate-200 dark:border-slate-600 pt-2 mt-2">
+                                        <strong>Primary Contact:</strong> {formData.firstName} {formData.lastName} ({formData.email})
+                                    </div>
+                                    {formData.notes && (
+                                        <div className="col-span-2 italic">
+                                            <strong>Notes:</strong> {formData.notes}
+                                        </div>
+                                    )}
                                 </div>
                             </div>
                             <div className="p-4 bg-red-50 dark:bg-red-900/20 rounded-xl">
