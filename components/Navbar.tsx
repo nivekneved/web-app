@@ -8,8 +8,9 @@ import { useWishlist } from '@/contexts/WishlistContext'
 import { useTheme } from '@/contexts/ThemeContext'
 import { createClient } from '@/lib/supabase'
 import { navigationConfig, type NavMenuItem } from '@/lib/navigation'
-import { NavRecursive } from './Navbar/NavRecursive'
 import { MobileAccordion } from './Navbar/MobileAccordion'
+import { MegaMenu } from './MegaMenu'
+import { AnimatePresence } from 'framer-motion'
 import { cn } from '@/lib/utils'
 
 interface NavRow {
@@ -39,6 +40,7 @@ export default function Navbar() {
     const [isScrolled, setIsScrolled] = useState(false)
     const [settings, setSettings] = useState<SiteSettings | null>(null)
     const [items, setItems] = useState<NavMenuItem[]>([])
+    const [isMegaOpen, setIsMegaOpen] = useState(false)
     const { wishlist } = useWishlist()
     const { theme, toggleTheme } = useTheme()
     const supabase = createClient()
@@ -181,8 +183,22 @@ export default function Navbar() {
                         </Link>
 
                         {/* Desktop Navigation */}
-                        <div className="hidden xl:block">
-                            <NavRecursive items={items.length > 0 ? items : navigationConfig.menu} />
+                        <div className="hidden xl:flex items-center gap-8">
+                            {(items.length > 0 ? items : navigationConfig.menu).map((item, idx) => (
+                                <div 
+                                    key={idx}
+                                    className="relative group py-6"
+                                    onMouseEnter={() => item.children && item.children.length > 0 && setIsMegaOpen(true)}
+                                >
+                                    <Link
+                                        href={item.href}
+                                        className="text-xs font-black text-slate-900 uppercase tracking-[0.2em] hover:text-red-600 transition-colors"
+                                    >
+                                        {item.label}
+                                    </Link>
+                                    <div className="absolute bottom-0 left-0 w-0 h-0.5 bg-red-600 transition-all group-hover:w-full" />
+                                </div>
+                            ))}
                         </div>
 
                         {/* Right Section */}
@@ -233,6 +249,16 @@ export default function Navbar() {
                         </div>
                     </div>
                 </div>
+
+                {/* MegaMenu Overlay */}
+                <AnimatePresence>
+                    {isMegaOpen && (
+                        <MegaMenu 
+                            items={items.length > 0 ? items : navigationConfig.menu} 
+                            onClose={() => setIsMegaOpen(false)} 
+                        />
+                    )}
+                </AnimatePresence>
 
                 {/* Mobile Menu Overlay */}
                 <div 

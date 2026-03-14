@@ -1,11 +1,12 @@
 'use client'
 
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import Image from 'next/image'
+import Link from 'next/link'
 import {
   Award,
 } from 'lucide-react'
-import { motion, AnimatePresence } from 'framer-motion'
+import { motion, AnimatePresence, useScroll, useTransform } from 'framer-motion'
 import CategoryGrid from '@/components/CategoryGrid'
 import DealsCarousel from '@/components/DealsCarousel'
 import AnnouncementPopup from '@/components/AnnouncementPopup'
@@ -33,6 +34,16 @@ export default function HomePage() {
   const [currentSlide, setCurrentSlide] = useState(0)
   const [heroSlides, setHeroSlides] = useState<HeroSlide[]>([])
   const [loading, setLoading] = useState(true)
+  
+  const targetRef = useRef(null)
+  const { scrollYProgress } = useScroll({
+    target: targetRef,
+    offset: ["start start", "end start"]
+  })
+
+  const y = useTransform(scrollYProgress, [0, 1], ["0%", "50%"])
+  const opacity = useTransform(scrollYProgress, [0, 0.5], [1, 0])
+  const scale = useTransform(scrollYProgress, [0, 1], [1.05, 1.2])
 
   useEffect(() => {
     async function loadHeroSlides() {
@@ -54,7 +65,6 @@ export default function HomePage() {
             tag: 'PREMIUM TRAVEL',
           })))
         } else {
-          // Fallback to defaults if no data
           setHeroSlides([
             {
               title: "Elevate Your Journey",
@@ -88,17 +98,18 @@ export default function HomePage() {
   }, [heroSlides.length])
 
   return (
-    <div className="min-h-screen bg-white selection:bg-red-100 selection:text-red-900">
-      {/* Hero Section */}
-      <section className="relative h-[60vh] md:h-[65vh] min-h-[400px] md:min-h-[500px] flex items-center overflow-hidden">
+    <div className="min-h-screen bg-white selection:bg-red-100 selection:text-red-900 overflow-x-hidden">
+      {/* Hero Section with Parallax */}
+      <section ref={targetRef} className="relative h-[85vh] min-h-[600px] flex items-center overflow-hidden bg-slate-900">
         <AnimatePresence mode="wait">
           {!loading && heroSlides.length > 0 && (
             <motion.div
               key={currentSlide}
+              style={{ y, opacity, scale }}
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              transition={{ duration: 1 }}
+              transition={{ duration: 1.5, ease: "easeOut" }}
               className="absolute inset-0"
             >
               {heroSlides[currentSlide].media_type === 'video' && heroSlides[currentSlide].video_url ? (
@@ -108,149 +119,129 @@ export default function HomePage() {
                   loop
                   muted
                   playsInline
-                  className="absolute inset-0 w-full h-full object-cover scale-105"
+                  className="absolute inset-0 w-full h-full object-cover"
                 />
               ) : (
                 <Image
                   src={heroSlides[currentSlide]?.image_url || heroSlides[currentSlide]?.image || '/hero-placeholder.png'}
                   alt={heroSlides[currentSlide]?.title || 'Hero Slide'}
                   fill
-                  className="object-cover scale-105"
+                  className="object-cover"
                   priority
                   unoptimized
                 />
               )}
-              {/* Darker overlay for better text contrast */}
-              <div className="absolute inset-0 bg-black/40" />
-
-              {/* Text Content */}
-              <div className="absolute inset-0 flex items-center justify-center text-center z-10">
-                <div className="max-w-4xl mx-auto px-4">
-                  {heroSlides[currentSlide].tag && (
-                    <motion.div
-                      initial={{ y: 20, opacity: 0 }}
-                      animate={{ y: 0, opacity: 1 }}
-                      transition={{ delay: 0.2 }}
-                      className="inline-block py-1 px-3 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-white text-xs font-bold uppercase tracking-widest mb-6"
-                    >
-                      {heroSlides[currentSlide].tag}
-                    </motion.div>
-                  )}
-
-                  <motion.h1
-                    initial={{ y: 20, opacity: 0 }}
-                    animate={{ y: 0, opacity: 1 }}
-                    transition={{ delay: 0.3 }}
-                    className="text-4xl md:text-6xl lg:text-7xl font-black text-white mb-6 leading-[1.1] drop-shadow-lg"
-                  >
-                    {heroSlides[currentSlide].title}
-                  </motion.h1>
-
-                  <motion.div
-                    initial={{ y: 20, opacity: 0 }}
-                    animate={{ y: 0, opacity: 1 }}
-                    transition={{ delay: 0.4 }}
-                    className="text-xl md:text-2xl text-white/90 font-medium mb-10 max-w-2xl mx-auto drop-shadow-md"
-                  >
-                    {heroSlides[currentSlide].subtitle.split('<br />').map((line, idx) => (
-                      <React.Fragment key={idx}>
-                        {idx > 0 && <br />}
-                        <span dangerouslySetInnerHTML={{ __html: line }} />
-                      </React.Fragment>
-                    ))}
-                  </motion.div>
-
-                  {heroSlides[currentSlide].cta && heroSlides[currentSlide].link && (
-                    <motion.div
-                      initial={{ y: 20, opacity: 0 }}
-                      animate={{ y: 0, opacity: 1 }}
-                      transition={{ delay: 0.5 }}
-                    >
-                      <a
-                        href={heroSlides[currentSlide].link}
-                        className="inline-flex items-center gap-2 px-8 py-4 bg-red-600 text-white rounded-xl font-bold hover:bg-white hover:text-slate-900 transition-all transform hover:scale-105 shadow-xl shadow-red-600/20"
-                      >
-                        {heroSlides[currentSlide].cta}
-                      </a>
-                    </motion.div>
-                  )}
-                </div>
-              </div>
+              <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/20 to-transparent" />
             </motion.div>
           )}
         </AnimatePresence>
 
-        {/* Indicators */}
-        <div className="absolute bottom-8 left-1/2 -translate-x-1/2 z-20 flex gap-2">
+        {/* Floating Text Content - Minimalist */}
+        <div className="absolute inset-0 flex items-center justify-center text-center z-10 pt-20">
+          <div className="max-w-5xl mx-auto px-6">
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 1, delay: 0.2 }}
+            >
+              {!loading && heroSlides[currentSlide]?.tag && (
+                <span className="inline-block py-2 px-6 rounded-full bg-white/5 backdrop-blur-sm border border-white/10 text-white text-[10px] font-black uppercase tracking-[0.4em] mb-8">
+                  {heroSlides[currentSlide].tag}
+                </span>
+              )}
+              
+              <h1 className="text-5xl md:text-7xl lg:text-8xl font-black text-white mb-8 leading-[1.05] tracking-tight">
+                {heroSlides[currentSlide]?.title}
+              </h1>
+
+              <p className="text-lg md:text-xl text-white/70 font-medium mb-12 max-w-2xl mx-auto leading-relaxed">
+                {heroSlides[currentSlide]?.subtitle.replace('<br />', ' ')}
+              </p>
+
+              <div className="flex flex-wrap items-center justify-center gap-6">
+                <Link
+                  href={heroSlides[currentSlide]?.link || '#'}
+                  className="px-10 py-4 bg-red-600 text-white rounded-full font-black text-xs tracking-[0.2em] hover:bg-white hover:text-slate-900 transition-all transform hover:scale-105 shadow-2xl shadow-red-600/20 uppercase"
+                >
+                  {heroSlides[currentSlide]?.cta || 'Explore Now'}
+                </Link>
+                <button className="px-10 py-4 bg-white/5 backdrop-blur-md border border-white/10 text-white rounded-full font-black text-xs tracking-[0.2em] hover:bg-white/10 transition-all uppercase">
+                  Discover More
+                </button>
+              </div>
+            </motion.div>
+          </div>
+        </div>
+
+        {/* Scroll Indicator */}
+        <motion.div 
+            animate={{ y: [0, 10, 0] }}
+            transition={{ repeat: Infinity, duration: 2 }}
+            className="absolute bottom-12 left-1/2 -translate-x-1/2 z-20 flex flex-col items-center gap-3"
+        >
+            <div className="w-px h-12 bg-gradient-to-b from-white to-transparent" />
+            <span className="text-[10px] font-black text-white/40 uppercase tracking-[0.5em]">Scroll</span>
+        </motion.div>
+
+        {/* Slide Indicators - Minimalist */}
+        <div className="absolute right-12 top-1/2 -translate-y-1/2 z-20 flex flex-col gap-4">
           {heroSlides.map((_, i) => (
             <button
               key={i}
               onClick={() => setCurrentSlide(i)}
-              className={`h-2 transition-all duration-500 rounded-full shadow-lg ${i === currentSlide ? 'bg-red-600 w-12' : 'bg-white/50 w-6 hover:bg-white'}`}
+              className={`h-1.5 transition-all duration-700 rounded-full ${i === currentSlide ? 'bg-red-600 w-8' : 'bg-white/20 w-4 hover:bg-white/50'}`}
             />
           ))}
         </div>
       </section>
 
-      {/* Brand Introduction */}
-      <section className="py-24 bg-white relative z-20">
-        <div className="container mx-auto px-6 text-center">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="max-w-4xl mx-auto"
-          >
-            <h2 className="text-sm font-bold text-red-600 uppercase tracking-[0.4em] mb-4">Travel Lounge</h2>
-            <h3 className="text-3xl md:text-5xl font-black text-slate-900 mb-8 uppercase tracking-tight">
-              Your Local and International <span className="text-red-600">Holiday Provider</span>
-            </h3>
-            <p className="text-xl text-slate-600 leading-relaxed font-medium">
-              At Travel Lounge, we give you the freedom to either create tailor-made trips with our agents or book your next hotel in Mauritius online in few clicks! Enjoy safe, secure and memorable holidays with the assistance of our IATA accredited travel agents.
-            </p>
-          </motion.div>
+      {/* Luxury Intro Section - More Whitespace */}
+      <section className="py-32 bg-white relative">
+        <div className="container mx-auto px-6">
+          <div className="flex flex-col md:flex-row items-end justify-between gap-12 mb-20">
+            <motion.div 
+                initial={{ opacity: 0, x: -50 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                className="max-w-2xl"
+            >
+                <h2 className="text-xs font-black text-red-600 uppercase tracking-[0.5em] mb-6">Premium Travel</h2>
+                <h3 className="text-4xl md:text-6xl font-black text-slate-900 leading-[1.1] tracking-tighter">
+                    Crafting Unforgettable <br /> 
+                    <span className="text-slate-300">Global Vacations.</span>
+                </h3>
+            </motion.div>
+            <motion.p 
+                initial={{ opacity: 0, x: 50 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                className="max-w-md text-slate-500 font-medium leading-relaxed"
+            >
+                We specialize in luxury escapes that go beyond the ordinary. 
+                From private islands to hidden cultural gems, every journey 
+                is meticulously planned for the discerning traveler.
+            </motion.p>
+          </div>
+
+          <div className="relative z-30">
+            <CategoryGrid />
+          </div>
         </div>
       </section>
 
-      {/* Categories Grid */}
-      <div className="relative z-30">
-        <CategoryGrid />
-      </div>
+      {/* Deals Carousel with clean background */}
+      <section className="bg-slate-50 py-32 overflow-hidden">
+         <DealsCarousel />
+      </section>
 
-      {/* Deals Carousel */}
-      <DealsCarousel />
-
-      {/* Trust & Experience Section (Kept for Premium Feel) */}
-      <section className="py-24 relative overflow-hidden bg-slate-900 text-white">
-        <div className="container mx-auto px-6 relative z-10">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-24 items-center">
-            <div>
-              <h2 className="text-sm font-bold text-red-500 uppercase tracking-[0.3em] mb-4">Why Travel Lounge</h2>
-              <p className="text-4xl lg:text-5xl font-black mb-8 leading-tight">
-                Authentic experiences <br />
-                <span className="text-slate-400">crafted with care.</span>
-              </p>
-              <p className="text-lg text-slate-400 mb-12 leading-relaxed max-w-xl">
-                As an IATA accredited travel provider, we&apos;ve spent over 15 years perfecting the art of travel.
-              </p>
-
-              <div className="grid grid-cols-2 gap-8">
-                {[
-                  { label: "Years Experience", value: "15+" },
-                  { label: "Global Partners", value: "500+" },
-                  { label: "Happy Travelers", value: "10K+" },
-                  { label: "Accreditation", value: "IATA" }
-                ].map((stat, i) => (
-                  <div key={i} className="border-l-2 border-red-600 pl-6">
-                    <div className="text-3xl font-black mb-1">{stat.value}</div>
-                    <div className="text-slate-500 text-xs font-bold uppercase tracking-widest">{stat.label}</div>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            <div className="relative hidden lg:block">
-              <div className="aspect-square relative rounded-[3rem] overflow-hidden border-8 border-slate-800 shadow-2xl">
+      {/* Enhanced Experience Section */}
+      <section className="py-32 relative overflow-hidden bg-white">
+        <div className="container mx-auto px-6">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-32 items-center">
+            <motion.div
+                initial={{ opacity: 0, scale: 0.9 }}
+                whileInView={{ opacity: 1, scale: 1 }}
+                className="relative"
+            >
+              <div className="aspect-[4/5] relative rounded-[2rem] overflow-hidden shadow-[0_50px_100px_-20px_rgba(0,0,0,0.15)]">
                 <Image
                   src="/hero-hotel.png"
                   alt="Premium Experience"
@@ -258,27 +249,57 @@ export default function HomePage() {
                   className="object-cover"
                 />
               </div>
-              <div className="absolute -bottom-10 -left-10 bg-red-600 p-10 rounded-3xl shadow-2xl">
-                <Award size={40} className="text-white mb-4" />
-                <p className="text-white font-black text-lg leading-tight">
-                  Award Winning <br />Service 2024
+              <div className="absolute -bottom-10 -right-10 bg-slate-900 p-12 rounded-[2rem] shadow-2xl text-white">
+                <Award size={40} className="text-red-600 mb-6" />
+                <p className="font-black text-2xl leading-tight mb-2 tracking-tight">
+                  Accredited & <br />Awarded
                 </p>
+                <p className="text-xs font-bold text-slate-500 uppercase tracking-widest">Global Travel Excellence 2024</p>
+              </div>
+            </motion.div>
+
+            <div className="space-y-12">
+              <div className="space-y-6">
+                <h2 className="text-[10px] font-black text-red-600 uppercase tracking-[0.5em]">The TL Advantage</h2>
+                <p className="text-4xl lg:text-5xl font-black text-slate-900 leading-[1.1] tracking-tighter">
+                  Where Expertise Meets <br />
+                  <span className="text-slate-300 italic">Pure Inspiration.</span>
+                </p>
+                <p className="text-lg text-slate-500 font-medium leading-relaxed max-w-xl">
+                  As IATA accredited travel agents, we provide an unparalleled level of security, 
+                  access, and personalization. Join over 10,000 satisfied travelers who have 
+                  discovered the world through our lens.
+                </p>
+              </div>
+
+              <div className="grid grid-cols-2 gap-12 pt-8">
+                {[
+                  { label: "Elite Partners", value: "500+" },
+                  { label: "Client Satisfaction", value: "99%" },
+                ].map((stat, i) => (
+                  <div key={i} className="space-y-2">
+                    <div className="text-4xl font-black text-slate-900 tracking-tighter">{stat.value}</div>
+                    <div className="text-[10px] font-black text-slate-400 uppercase tracking-[0.3em]">{stat.label}</div>
+                  </div>
+                ))}
               </div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Partner Logos */}
-      <div className="bg-slate-50 py-16">
+      {/* Partner Slider - Minimalist Overlay */}
+      <section className="bg-slate-900 py-32 text-white">
         <div className="container mx-auto px-6">
-          <div className="text-center mb-12">
-            <h2 className="text-4xl font-black text-slate-900 mb-4 tracking-tight">OUR TRUSTED PARTNERS</h2>
-            <div className="w-20 h-1.5 bg-red-600 mx-auto rounded-full"></div>
+          <div className="flex items-center gap-8 mb-20">
+             <div className="h-px flex-1 bg-white/10" />
+             <h2 className="text-[10px] font-black uppercase tracking-[0.6em] text-white/40">Our Global Partners</h2>
+             <div className="h-px flex-1 bg-white/10" />
           </div>
           <PartnerSlider />
         </div>
-      </div>
+      </section>
+
       <AnnouncementPopup />
     </div>
   )
