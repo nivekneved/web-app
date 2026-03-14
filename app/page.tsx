@@ -100,7 +100,7 @@ export default function HomePage() {
   return (
     <div className="min-h-screen bg-white selection:bg-red-100 selection:text-red-900 overflow-x-hidden">
       {/* Hero Section with Parallax */}
-      <section ref={targetRef} className="relative h-[85vh] min-h-[600px] flex items-center overflow-hidden bg-slate-900">
+      <section ref={targetRef} className="relative h-[70vh] min-h-[500px] flex items-center overflow-hidden bg-slate-900">
         <AnimatePresence mode="wait">
           {!loading && heroSlides.length > 0 && (
             <motion.div
