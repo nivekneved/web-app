@@ -3,7 +3,8 @@
 import Link from 'next/link'
 import { useState, useEffect, useCallback } from 'react'
 import Image from 'next/image'
-import { Menu, X, Heart, Moon, Sun, Phone, Mail, Facebook, Instagram, MessageCircle } from 'lucide-react'
+import { Menu, X, Heart, Moon, Sun, Phone, Mail, Facebook, Instagram, MessageCircle, ChevronDown } from 'lucide-react'
+import { motion, AnimatePresence } from 'framer-motion'
 import { useWishlist } from '@/contexts/WishlistContext'
 import { useTheme } from '@/contexts/ThemeContext'
 import { createClient } from '@/lib/supabase'
@@ -183,18 +184,7 @@ export default function Navbar() {
                         {/* Desktop Navigation */}
                         <div className="hidden xl:flex items-center gap-8">
                             {(items.length > 0 ? items : navigationConfig.menu).map((item, idx) => (
-                                <div 
-                                    key={idx}
-                                    className="relative group py-6"
-                                >
-                                    <Link
-                                        href={item.href}
-                                        className="text-xs font-black text-slate-900 uppercase tracking-[0.2em] hover:text-red-600 transition-colors"
-                                    >
-                                        {item.label}
-                                    </Link>
-                                    <div className="absolute bottom-0 left-0 w-0 h-0.5 bg-red-600 transition-all group-hover:w-full" />
-                                </div>
+                                <DropdownMenuItem key={idx} item={item} />
                             ))}
                         </div>
 
@@ -282,4 +272,86 @@ export default function Navbar() {
             </nav>
         </header>
     )
+}
+
+function DropdownMenuItem({ item }: { item: NavMenuItem }) {
+    const [isHovered, setIsHovered] = useState(false);
+    const hasChildren = item.children && item.children.length > 0;
+
+    return (
+        <div 
+            className="relative py-6"
+            onMouseEnter={() => setIsHovered(true)}
+            onMouseLeave={() => setIsHovered(false)}
+        >
+            <Link
+                href={item.href}
+                className={cn(
+                    "text-xs font-black text-slate-900 uppercase tracking-[0.2em] hover:text-red-600 transition-all flex items-center gap-1.5",
+                    isHovered && "text-red-600"
+                )}
+            >
+                {item.label}
+                {hasChildren && (
+                    <ChevronDown 
+                        size={12} 
+                        className={cn("transition-transform duration-300", isHovered && "rotate-180")} 
+                    />
+                )}
+            </Link>
+            <div className={cn(
+                "absolute bottom-0 left-0 h-0.5 bg-red-600 transition-all",
+                isHovered ? "w-full" : "w-0"
+            )} />
+
+            {hasChildren && (
+                <AnimatePresence>
+                    {isHovered && (
+                        <motion.div
+                            initial={{ opacity: 0, y: 10, scale: 0.95 }}
+                            animate={{ opacity: 1, y: 0, scale: 1 }}
+                            exit={{ opacity: 0, y: 10, scale: 0.95 }}
+                            transition={{ duration: 0.2, ease: "easeOut" }}
+                            className="absolute top-full left-1/2 -translate-x-1/2 pt-2 z-50 min-w-[280px]"
+                        >
+                            <div className="bg-white rounded-2xl shadow-[0_20px_50px_rgba(0,0,0,0.15)] border border-slate-100 py-4 overflow-hidden">
+                                {item.children?.map((child, cIdx) => (
+                                    <div key={cIdx} className="relative group/sub">
+                                        <Link
+                                            href={child.href}
+                                            className="block px-8 py-3.5 text-xs font-black text-slate-600 uppercase tracking-[0.15em] hover:bg-slate-50 hover:text-red-600 transition-all"
+                                        >
+                                            {child.label}
+                                        </Link>
+                                        {child.children && child.children.length > 0 && (
+                                            <div className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-300">
+                                                <ChevronDown size={12} className="-rotate-90" />
+                                            </div>
+                                        )}
+                                        
+                                        {/* Recursive sub-menu for deep nesting if needed */}
+                                        {child.children && child.children.length > 0 && (
+                                            <div className="hidden group-hover/sub:block absolute left-full top-0 ml-1">
+                                                <div className="bg-white rounded-2xl shadow-[0_20px_50px_rgba(0,0,0,0.15)] border border-slate-100 py-4 min-w-[280px]">
+                                                    {child.children.map((grandChild, gIdx) => (
+                                                        <Link
+                                                            key={gIdx}
+                                                            href={grandChild.href}
+                                                            className="block px-8 py-3.5 text-xs font-black text-slate-600 uppercase tracking-[0.15em] hover:bg-slate-50 hover:text-red-600 transition-all"
+                                                        >
+                                                            {grandChild.label}
+                                                        </Link>
+                                                    ))}
+                                                </div>
+                                            </div>
+                                        )}
+                                    </div>
+                                ))}
+                            </div>
+                        </motion.div>
+                    )}
+                </AnimatePresence>
+            )}
+        </div>
+    );
 }
