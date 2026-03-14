@@ -260,17 +260,18 @@ export default function HotelClientWrapper({ hotel }: { hotel: Hotel }) {
             </div>
 
             {showWizard && (
-                <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-md">
-                    <div className="bg-white rounded-[3rem] w-full max-w-5xl max-h-[90vh] overflow-y-auto relative p-12 shadow-2xl animate-in">
-                        <Button
-                            variant="ghost"
-                            size="icon"
+                <div className="fixed inset-0 z-[100] bg-white dark:bg-slate-900 overflow-y-auto animate-in fade-in slide-in-from-bottom duration-500">
+                    <div className="max-w-7xl mx-auto px-4 py-12 md:px-8 md:py-20 relative">
+                        <button 
                             onClick={() => setShowWizard(false)}
-                            className="absolute top-8 right-8 p-3 hover:bg-slate-100 rounded-full"
-                            aria-label="Close booking wizard"
+                            className="absolute top-12 right-8 md:right-12 p-3 text-slate-400 hover:text-slate-600 dark:hover:text-white transition-colors z-[110]"
                         >
-                             <X size={20} />
-                        </Button>
+                            <X size={28} />
+                        </button>
+                        <div className="mb-12">
+                            <h2 className="text-sm font-black text-red-600 uppercase tracking-[0.4em] mb-4">Reservation</h2>
+                            <h1 className="text-4xl md:text-6xl font-black text-slate-900 dark:text-white tracking-tighter">Your Stay at {hotel.name}</h1>
+                        </div>
                         <BookingWizard
                             serviceId={hotel.id}
                             serviceName={hotel.name}

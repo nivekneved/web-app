@@ -93,7 +93,7 @@ export default function BookingWizard({ serviceName, servicePrice, onComplete, i
     }
 
     return (
-        <div className="max-w-3xl mx-auto">
+        <div className="w-full">
             {/* Progress Steps */}
             <div className="mb-8">
                 <div className="flex items-center justify-between">
@@ -123,7 +123,7 @@ export default function BookingWizard({ serviceName, servicePrice, onComplete, i
             </div>
 
             {/* Step Content */}
-            <div className="bg-white dark:bg-slate-800 rounded-[3rem] p-8 border border-slate-200 dark:border-slate-700">
+            <div className="bg-white dark:bg-slate-800 rounded-[3rem] p-8 md:p-12 border border-slate-200 dark:border-slate-700 shadow-sm">
                 {/* Step 1: Booking Details */}
                 {currentStep === 1 && (
                     <div className="space-y-6">
