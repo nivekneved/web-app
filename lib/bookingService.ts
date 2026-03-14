@@ -13,54 +13,97 @@ export type BookingRequestData = {
     paxChildren: number
     travelers: Record<string, unknown>[]
     specialRequests?: string
+    // Contact Info for Guest/New Customers
+    firstName?: string
+    lastName?: string
+    email?: string
+    phone?: string
 }
 
 export async function createBookingRequest(data: BookingRequestData) {
     try {
         const { data: { user } } = await supabase.auth.getUser()
-        if (!user) throw new Error('User not authenticated')
+        
+        let customerId: string | undefined
 
-        // 1. Ensure customer record exists (Bridge between Auth/Profile and Admin Customers)
-        const { error: customerError } = await supabase
-            .from('customers')
-            .select('id')
-            .eq('id', user.id)
-            .single()
-
-        if (customerError && customerError.code === 'PGRST116') {
-            // Customer doesn't exist, fetch profile
-            const { data: profile } = await supabase
-                .from('profiles')
-                .select('id, name, email, phone')
+        if (user) {
+            // 1a. Logged in user - Ensure customer record exists
+            const { data: customer } = await supabase
+                .from('customers')
+                .select('id')
                 .eq('id', user.id)
                 .single()
 
-            if (profile) {
-                const names = profile.name.split(' ')
-                const firstName = names[0]
-                const lastName = names.slice(1).join(' ') || 'User'
+            if (!customer) {
+                // Fetch profile to sync
+                const { data: profile } = await supabase
+                    .from('profiles')
+                    .select('id, name, email, phone')
+                    .eq('id', user.id)
+                    .single()
 
-                const { error: insertError } = await supabase
+                if (profile) {
+                    const names = profile.name.split(' ')
+                    const firstName = names[0]
+                    const lastName = names.slice(1).join(' ') || 'User'
+
+                    const { data: newCustomer, error: insertError } = await supabase
+                        .from('customers')
+                        .insert([{
+                            id: user.id,
+                            first_name: firstName,
+                            last_name: lastName,
+                            email: profile.email,
+                            phone: profile.phone,
+                            status: 'Active'
+                        }])
+                        .select()
+                        .single()
+
+                    if (insertError) throw insertError
+                    customerId = newCustomer?.id
+                } else {
+                    customerId = user.id
+                }
+            } else {
+                customerId = customer.id
+            }
+        } else {
+            // 1b. Guest user - Use provided contact details
+            if (!data.email) throw new Error('Email is required for guest booking')
+
+            const { data: existingCustomer } = await supabase
+                .from('customers')
+                .select('id')
+                .eq('email', data.email)
+                .maybeSingle()
+
+            if (existingCustomer) {
+                customerId = existingCustomer.id
+            } else {
+                // Create new guest customer
+                const { data: newGuest, error: guestError } = await supabase
                     .from('customers')
                     .insert([{
-                        id: user.id,
-                        first_name: firstName,
-                        last_name: lastName,
-                        email: profile.email,
-                        phone: profile.phone,
-                        status: 'active'
+                        first_name: data.firstName || 'Guest',
+                        last_name: data.lastName || 'User',
+                        email: data.email,
+                        phone: data.phone,
+                        status: 'Lead'
                     }])
+                    .select()
+                    .single()
 
-                if (insertError) throw insertError
-                // customer = newCustomer (assigned but never used in the flow below, but step 2 uses user.id)
+                if (guestError) throw guestError
+                customerId = newGuest?.id
             }
-        } else if (customerError) {
-            throw customerError
         }
+
+        if (!customerId) throw new Error('Could not identify or create customer')
 
         // 2. Prepare data for the transactional RPC
         const bookingData = {
-            customer_id: user.id,
+            customer_id: customerId,
             start_date: data.startDate,
             end_date: data.endDate,
             status: 'pending',

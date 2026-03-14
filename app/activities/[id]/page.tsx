@@ -101,7 +101,11 @@ export default function ActivityDetailPage() {
             paxAdults: data.guests || participants,
             paxChildren: 0,
             travelers: data.travelers as Record<string, unknown>[],
-            specialRequests: data.notes
+            specialRequests: data.notes,
+            firstName: data.firstName,
+            lastName: data.lastName,
+            email: data.email,
+            phone: data.phone
         })
 
         if (result.success) {
