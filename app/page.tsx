@@ -194,10 +194,10 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Luxury Intro Section - More Whitespace */}
-      <section className="py-32 bg-white relative">
+      {/* Luxury Intro Section - Reduced spacing */}
+      <section className="py-16 bg-white relative">
         <div className="container mx-auto px-6">
-          <div className="flex flex-col md:flex-row items-end justify-between gap-12 mb-20">
+          <div className="flex flex-col md:flex-row items-end justify-between gap-12 mb-12">
             <motion.div 
                 initial={{ opacity: 0, x: -50 }}
                 whileInView={{ opacity: 1, x: 0 }}
@@ -226,15 +226,15 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Deals Carousel with clean background */}
-      <section className="bg-slate-50 py-32 overflow-hidden">
+      {/* Deals Carousel - Reduced spacing */}
+      <section className="bg-slate-50 py-16 overflow-hidden">
          <DealsCarousel />
       </section>
 
-      {/* Enhanced Experience Section */}
-      <section className="py-32 relative overflow-hidden bg-white">
+      {/* Enhanced Experience Section - Reduced spacing */}
+      <section className="py-16 relative overflow-hidden bg-white">
         <div className="container mx-auto px-6">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-32 items-center">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
             <motion.div
                 initial={{ opacity: 0, scale: 0.9 }}
                 whileInView={{ opacity: 1, scale: 1 }}
@@ -287,10 +287,10 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Partner Slider - Minimalist Overlay */}
-      <section className="bg-slate-900 py-32 text-white">
+      {/* Partner Slider - Reduced spacing */}
+      <section className="bg-slate-900 py-16 text-white">
         <div className="container mx-auto px-6">
-          <div className="flex items-center gap-8 mb-20">
+          <div className="flex items-center gap-8 mb-12">
              <div className="h-px flex-1 bg-white/10" />
              <h2 className="text-[10px] font-black uppercase tracking-[0.6em] text-white/40">Our Global Partners</h2>
              <div className="h-px flex-1 bg-white/10" />

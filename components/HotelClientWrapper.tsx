@@ -156,7 +156,7 @@ export default function HotelClientWrapper({ hotel }: { hotel: Hotel }) {
                 </div>
             </div>
 
-            <div className="max-w-7xl mx-auto px-8 pb-32">
+            <div className="max-w-7xl mx-auto px-8 pb-16">
                 <Breadcrumbs 
                     items={[
                         { label: 'Hotels', href: '/hotels' },
@@ -165,8 +165,8 @@ export default function HotelClientWrapper({ hotel }: { hotel: Hotel }) {
                     className="mb-8"
                 />
 
-                <div className="grid grid-cols-1 lg:grid-cols-3 gap-24">
-                    <div className="lg:col-span-2 space-y-20">
+                <div className="grid grid-cols-1 lg:grid-cols-3 gap-16">
+                    <div className="lg:col-span-2 space-y-12">
                         <section>
                             <h2 className="text-xs font-black text-red-600 uppercase tracking-[0.4em] mb-6">Introduction</h2>
                             <h3 className="text-4xl font-black text-slate-900 mb-8 leading-tight">About this destination</h3>
