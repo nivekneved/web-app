@@ -4,7 +4,7 @@ import React, { useState, useEffect, useMemo } from 'react'
 import Image from 'next/image'
 import ServiceCard from '@/components/ServiceCard'
 import { createClient } from '@/lib/supabase'
-import { Filter, Star, Clock, MapPin, ChevronDown, Check } from 'lucide-react'
+import { Filter, Star, Check } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
 
 const supabase = createClient()
@@ -35,7 +35,6 @@ export default function DestinationListing({
     subtitle,
     heroImage,
     regions,
-    serviceTypes: initialServiceTypes,
     tag
 }: DestinationListingProps) {
     const [services, setServices] = useState<Service[]>([])
@@ -44,13 +43,8 @@ export default function DestinationListing({
     const [filterPrice, setFilterPrice] = useState<number>(200000)
     const [selectedTypes, setSelectedTypes] = useState<string[]>([])
     const [selectedRatings, setSelectedRatings] = useState<number[]>([])
-    const [isFilterOpen, setIsFilterOpen] = useState(false) // For mobile
 
-    useEffect(() => {
-        loadServices()
-    }, [regions])
-
-    async function loadServices() {
+    const loadServices = React.useCallback(async () => {
         try {
             setLoading(true)
             let query = supabase
@@ -70,7 +64,11 @@ export default function DestinationListing({
         } finally {
             setLoading(false)
         }
-    }
+    }, [regions])
+
+    useEffect(() => {
+        loadServices()
+    }, [loadServices])
 
     const availableTypes = useMemo(() => {
         const types = new Set(services.map(s => s.service_type))
@@ -340,7 +338,7 @@ export default function DestinationListing({
                                         </div>
                                     </motion.div>
                                 ) : (
-                                    processedServices.map((service, idx) => (
+                                    processedServices.map((service) => (
                                         <ServiceCard
                                             key={service.id}
                                             title={service.name}
