@@ -1,3 +1,5 @@
+'use client'
+
 import React, { useState, useEffect, useCallback } from 'react'
 import { MapPin, Phone, Mail, MessageCircle } from 'lucide-react'
 import { toast } from 'sonner'

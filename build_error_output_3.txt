@@ -1,0 +1,84 @@
+
+> web@0.1.0 build
+> next build
+
+ΓÜá Warning: Next.js inferred your workspace root, but it may not be correct.
+ We detected multiple lockfiles and selected the directory of C:\Users\deven\package-lock.json as the root directory.
+ To silence this warning, set `turbopack.root` in your Next.js config, or consider removing one of the lockfiles if it's not needed.
+   See https://nextjs.org/docs/app/api-reference/config/next-config-js/turbopack#root-directory for more information.
+ Detected additional lockfiles: 
+   * C:\Users\deven\Desktop\web-app\package-lock.json
+
+Γû▓ Next.js 16.1.2 (Turbopack)
+- Environments: .env.local, .env
+
+ΓÜá The "middleware" file convention is deprecated. Please use "proxy" instead. Learn more: https://nextjs.org/docs/messages/middleware-to-proxy
+  Creating an optimized production build ...
+Γ£ô Compiled successfully in 2.5s
+  Running TypeScript ...
+  Collecting page data using 19 workers ...
+  Generating static pages using 19 workers (0/45) ...
+  Generating static pages using 19 workers (11/45) 
+  Generating static pages using 19 workers (22/45) 
+  Generating static pages using 19 workers (33/45) 
+Γ£ô Generating static pages using 19 workers (45/45) in 542.6ms
+  Finalizing page optimization ...
+
+Route (app)
+Γöî Γùï /
+Γö£ Γùï /_not-found
+Γö£ Γùï /about
+Γö£ Γùï /about/team
+Γö£ Γùï /activities
+Γö£ ╞Æ /activities/[id]
+Γö£ Γùï /booking-confirmation
+Γö£ Γùï /compare
+Γö£ Γùï /contact
+Γö£ Γùï /cruises
+Γö£ ╞Æ /cruises/[id]
+Γö£ Γùï /dashboard
+Γö£ Γùï /day-packages
+Γö£ Γùï /destinations
+Γö£ Γùï /destinations/international
+Γö£ Γùï /destinations/mauritius
+Γö£ Γùï /destinations/mauritius/east
+Γö£ Γùï /destinations/mauritius/north
+Γö£ Γùï /destinations/mauritius/south
+Γö£ Γùï /destinations/mauritius/west
+Γö£ Γùï /destinations/rodrigues
+Γö£ Γùï /faq
+Γö£ Γùï /flight
+Γö£ Γùï /flights
+Γö£ Γùï /guided-group-tours
+Γö£ Γùï /hotel-day-packages
+Γö£ Γùï /hotel-packages
+Γö£ Γùï /hotels
+Γö£ ╞Æ /hotels/[id]
+Γö£ Γùï /local-deals
+Γö£ Γùï /login
+Γö£ Γùï /news
+Γö£ ╞Æ /news/[slug]
+Γö£ Γùï /packages
+Γö£ ╞Æ /packages/[id]
+Γö£ Γùï /payment
+Γö£ Γùï /plan-my-trip
+Γö£ Γùï /privacy-policy
+Γö£ Γùï /rodrigue-hotels
+Γö£ ╞Æ /rodrigues/[slug]
+Γö£ Γùï /safety
+Γö£ Γùï /saved-searches
+Γö£ Γùï /services
+Γö£ Γùï /tailormade
+Γö£ Γùï /terms-conditions
+Γö£ Γùï /tours
+Γö£ ╞Æ /tours/[id]
+Γö£ Γùï /transfers
+Γö£ Γùï /visa-services
+Γöö Γùï /wishlist
+
+
+╞Æ Proxy (Middleware)
+
+Γùï  (Static)   prerendered as static content
+╞Æ  (Dynamic)  server-rendered on demand
+
