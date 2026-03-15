@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react'
 import { createClient } from '@/lib/supabase'
 import { useParams } from 'next/navigation'
-import { MapPin, Star, Check, ArrowLeft, Clock, Heart } from 'lucide-react'
+import { MapPin, Check, ArrowLeft, Clock, Heart, Users, Calendar } from 'lucide-react'
 import Link from 'next/link'
 import Image from 'next/image'
 import { toast } from 'sonner'
@@ -12,10 +12,12 @@ import { Breadcrumbs } from '@/components/ui/Breadcrumbs'
 import { Badge } from '@/components/ui/Badge'
 import { Button } from '@/components/ui/Button'
 import { cn } from '@/lib/utils'
+import StarRating from '@/components/ui/StarRating'
+import ReviewsSection from '@/components/ReviewsSection'
 
 const supabase = createClient()
 
-type ActivityService = {
+type PackageService = {
     id: string
     name: string
     description: string
@@ -26,11 +28,12 @@ type ActivityService = {
     image_url: string
     amenities: string[]
     duration: string
+    itinerary?: { time: string; title: string; description: string }[]
 }
 
 export default function PackageDetailPage() {
     const params = useParams()
-    const [pkg, setPkg] = useState<ActivityService | null>(null)
+    const [pkg, setPkg] = useState<PackageService | null>(null)
     const [loading, setLoading] = useState(true)
     const [date, setDate] = useState('')
     const [participants, setParticipants] = useState(2)
@@ -44,7 +47,7 @@ export default function PackageDetailPage() {
         } else {
             addToWishlist({
                 id: pkg.id,
-                service_type: 'activity',
+                service_type: 'package',
                 name: pkg.name,
                 image_url: pkg.image_url,
                 base_price: pkg.base_price,
@@ -64,7 +67,7 @@ export default function PackageDetailPage() {
         try {
             const { data, error } = await supabase
                 .from('services')
-                .select('id, name, description, location, region, base_price, rating, image_url, amenities, duration')
+                .select('id, name, description, location, region, base_price, rating, image_url, amenities, duration, itinerary')
                 .eq('id', id)
                 .single()
 
@@ -151,11 +154,11 @@ export default function PackageDetailPage() {
                     <div className="max-w-7xl mx-auto">
                         <div className="flex flex-wrap items-center gap-4 mb-6">
                             <Badge variant="success" className="px-4 py-1.5 shadow-xl shadow-green-600/20">
-                                Popular Activity
+                                Popular Package
                             </Badge>
-                            <div className="flex items-center gap-2 px-4 py-1.5 bg-white/10 backdrop-blur-md border border-white/20 rounded-full text-white text-[10px] font-black uppercase tracking-widest">
-                                <Star size={14} className="fill-yellow-400 text-yellow-400" />
-                                {pkg.rating} Rating
+                            <div className="flex items-center gap-2">
+                                <StarRating rating={pkg.rating} size={14} />
+                                <span className="text-[10px] font-black uppercase tracking-widest text-white/90">{pkg.rating} Rating</span>
                             </div>
                         </div>
                         <h1 className="text-5xl md:text-7xl lg:text-8xl font-black text-white mb-6 tracking-tighter leading-[1.1]">
@@ -195,6 +198,39 @@ export default function PackageDetailPage() {
                             </p>
                         </section>
 
+                        {/* Itinerary Section */}
+                        {pkg.itinerary && pkg.itinerary.length > 0 && (
+                            <section className="bg-white rounded-[2rem] p-10 border border-slate-100 shadow-sm relative overflow-hidden">
+                                <h2 className="text-xs font-black text-green-600 uppercase tracking-[0.4em] mb-6">Plan</h2>
+                                <h3 className="text-4xl font-black text-slate-900 mb-10 leading-tight">Detailed Itinerary</h3>
+                                <div className="space-y-0">
+                                    {pkg.itinerary.map((item, idx) => (
+                                        <div key={idx} className="relative pl-12 pb-12 last:pb-0">
+                                            {/* Timeline Line */}
+                                            {idx !== pkg.itinerary!.length - 1 && (
+                                                <div className="absolute left-[15px] top-[30px] bottom-0 w-0.5 bg-slate-100" />
+                                            )}
+                                            {/* Timeline Dot */}
+                                            <div className="absolute left-0 top-1.5 w-8 h-8 bg-white border-2 border-green-600 rounded-full flex items-center justify-center z-10">
+                                                <div className="w-2 h-2 bg-green-600 rounded-full" />
+                                            </div>
+                                            <div className="space-y-3">
+                                                <div className="flex items-center gap-3">
+                                                    <span className="px-3 py-1 bg-slate-100 rounded-lg text-[10px] font-black uppercase tracking-widest text-slate-500">
+                                                        {item.time}
+                                                    </span>
+                                                    <h4 className="text-xl font-black text-slate-900 leading-none">{item.title}</h4>
+                                                </div>
+                                                <p className="text-slate-500 font-medium leading-relaxed max-w-2xl">
+                                                    {item.description}
+                                                </p>
+                                            </div>
+                                        </div>
+                                    ))}
+                                </div>
+                            </section>
+                        )}
+
                         {/* Inclusions */}
                         {pkg.amenities && pkg.amenities.length > 0 && (
                             <section>
@@ -227,7 +263,7 @@ export default function PackageDetailPage() {
                                     <div className="space-y-3">
                                         <label className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] ml-2">Preferred Date</label>
                                         <div className="relative">
-                                            <Clock className="absolute left-5 top-1/2 -translate-y-1/2 text-slate-300" size={18} />
+                                            <Calendar className="absolute left-5 top-1/2 -translate-y-1/2 text-slate-300" size={18} />
                                             <input
                                                 type="date"
                                                 value={date}
@@ -240,7 +276,7 @@ export default function PackageDetailPage() {
                                     <div className="space-y-3">
                                         <label className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] ml-2">Number of Participants</label>
                                         <div className="relative">
-                                            <Star className="absolute left-5 top-1/2 -translate-y-1/2 text-slate-300" size={18} />
+                                            <Users className="absolute left-5 top-1/2 -translate-y-1/2 text-slate-300" size={18} />
                                             <input
                                                 type="number"
                                                 min="1"
@@ -266,6 +302,10 @@ export default function PackageDetailPage() {
                             </div>
                         </div>
                     </div>
+                </div>
+
+                <div className="mt-20">
+                    <ReviewsSection serviceId={pkg.id} serviceType="package" />
                 </div>
             </div>
         </div>

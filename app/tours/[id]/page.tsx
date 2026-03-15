@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react'
 import { createClient } from '@/lib/supabase'
 import { useParams } from 'next/navigation'
-import { MapPin, Star, Check, ArrowLeft, Calendar, Users, Heart } from 'lucide-react'
+import { MapPin, Check, ArrowLeft, Calendar, Users, Heart } from 'lucide-react'
 import Link from 'next/link'
 import Image from 'next/image'
 import { toast } from 'sonner'
@@ -12,6 +12,8 @@ import { Breadcrumbs } from '@/components/ui/Breadcrumbs'
 import { Badge } from '@/components/ui/Badge'
 import { Button } from '@/components/ui/Button'
 import { cn } from '@/lib/utils'
+import StarRating from '@/components/ui/StarRating'
+import ReviewsSection from '@/components/ReviewsSection'
 
 const supabase = createClient()
 
@@ -27,6 +29,7 @@ type Tour = {
     amenities: string[]
     duration_days: number
     max_group_size: number
+    itinerary?: { time: string; title: string; description: string }[]
 }
 
 export default function TourDetailPage() {
@@ -47,7 +50,7 @@ export default function TourDetailPage() {
         try {
             const { data, error } = await supabase
                 .from('services')
-                .select('id, name, description, location, region, base_price, rating, image_url, amenities, duration_days, max_group_size, service_type')
+                .select('id, name, description, location, region, base_price, rating, image_url, amenities, duration_days, max_group_size, service_type, itinerary')
                 .eq('id', id)
                 .eq('service_type', 'tour')
                 .single()
@@ -159,9 +162,9 @@ export default function TourDetailPage() {
                             <Badge variant="warning" className="px-4 py-1.5 shadow-xl shadow-amber-600/20">
                                 Top Rated Tour
                             </Badge>
-                            <div className="flex items-center gap-2 px-4 py-1.5 bg-white/10 backdrop-blur-md border border-white/20 rounded-full text-white text-[10px] font-black uppercase tracking-widest">
-                                <Star size={14} className="fill-yellow-400 text-yellow-400" />
-                                {tour.rating} Rating
+                            <div className="flex items-center gap-2">
+                                <StarRating rating={tour.rating} size={14} />
+                                <span className="text-[10px] font-black uppercase tracking-widest text-white/90">{tour.rating} Rating</span>
                             </div>
                         </div>
                         <h1 className="text-5xl md:text-7xl lg:text-8xl font-black text-white mb-6 tracking-tighter leading-[1.1]">
@@ -204,6 +207,39 @@ export default function TourDetailPage() {
                                 {tour.description}
                             </p>
                         </section>
+
+                        {/* Itinerary Section */}
+                        {tour.itinerary && tour.itinerary.length > 0 && (
+                            <section className="bg-white rounded-[2rem] p-10 border border-slate-100 shadow-sm relative overflow-hidden">
+                                <h2 className="text-xs font-black text-red-600 uppercase tracking-[0.4em] mb-6">Experience</h2>
+                                <h3 className="text-4xl font-black text-slate-900 mb-10 leading-tight">Detailed Itinerary</h3>
+                                <div className="space-y-0">
+                                    {tour.itinerary.map((item, idx) => (
+                                        <div key={idx} className="relative pl-12 pb-12 last:pb-0">
+                                            {/* Timeline Line */}
+                                            {idx !== tour.itinerary!.length - 1 && (
+                                                <div className="absolute left-[15px] top-[30px] bottom-0 w-0.5 bg-slate-100" />
+                                            )}
+                                            {/* Timeline Dot */}
+                                            <div className="absolute left-0 top-1.5 w-8 h-8 bg-white border-2 border-red-600 rounded-full flex items-center justify-center z-10">
+                                                <div className="w-2 h-2 bg-red-600 rounded-full" />
+                                            </div>
+                                            <div className="space-y-3">
+                                                <div className="flex items-center gap-3">
+                                                    <span className="px-3 py-1 bg-slate-100 rounded-lg text-[10px] font-black uppercase tracking-widest text-slate-500">
+                                                        {item.time}
+                                                    </span>
+                                                    <h4 className="text-xl font-black text-slate-900 leading-none">{item.title}</h4>
+                                                </div>
+                                                <p className="text-slate-500 font-medium leading-relaxed max-w-2xl">
+                                                    {item.description}
+                                                </p>
+                                            </div>
+                                        </div>
+                                    ))}
+                                </div>
+                            </section>
+                        )}
 
                         {/* Inclusions */}
                         {tour.amenities && tour.amenities.length > 0 && (
@@ -278,6 +314,10 @@ export default function TourDetailPage() {
                             </div>
                         </div>
                     </div>
+                </div>
+                
+                <div className="mt-20">
+                    <ReviewsSection serviceId={tour.id} serviceType="tour" />
                 </div>
             </div>
         </div>

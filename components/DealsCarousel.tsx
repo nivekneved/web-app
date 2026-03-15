@@ -7,6 +7,7 @@ import { motion } from 'framer-motion'
 import { ArrowRight, Clock } from 'lucide-react'
 import { createClient } from '@/lib/supabase'
 import { GridSkeleton } from '@/components/LoadingSkeleton'
+import StarRating from '@/components/ui/StarRating'
 
 const supabase = createClient()
 
@@ -18,6 +19,7 @@ type Deal = {
     duration_days?: number
     duration_hours?: number
     service_type: string
+    rating?: number
 }
 
 export default function DealsCarousel() {
@@ -45,9 +47,9 @@ export default function DealsCarousel() {
         }
     }
     return (
-        <section className="py-12 bg-slate-50">
+        <section className="py-8 bg-slate-50">
             <div className="container mx-auto px-4">
-                <div className="flex justify-between items-end mb-12">
+                <div className="flex justify-between items-end mb-6">
                     <div>
                         <h2 className="text-sm font-bold text-red-600 uppercase tracking-widest mb-2">Exclusive Offers</h2>
                         <h3 className="text-4xl font-black text-slate-900">Seasonal Deals</h3>
@@ -68,7 +70,7 @@ export default function DealsCarousel() {
                                 whileInView={{ opacity: 1, y: 0 }}
                                 viewport={{ once: true }}
                                 transition={{ delay: index * 0.1 }}
-                                className="bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 group"
+                                className="bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 group flex flex-col h-full"
                             >
                                 <div className="relative h-64 overflow-hidden">
                                     <Image
@@ -81,20 +83,23 @@ export default function DealsCarousel() {
                                         Limited Time
                                     </div>
                                 </div>
-                                <div className="p-6">
+                                <div className="p-6 flex flex-col flex-1">
                                     <div className="flex items-center gap-2 text-slate-400 text-xs font-bold uppercase mb-3">
                                         <Clock size={14} />
                                         {deal.duration_days ? `${deal.duration_days} Days` : deal.duration_hours ? `${deal.duration_hours} Hours` : 'Special'}
                                     </div>
-                                    <h4 className="text-xl font-bold text-slate-900 mb-2 leading-tight group-hover:text-red-600 transition-colors">
+                                    <h4 className="text-xl font-bold text-slate-900 mb-2 leading-tight group-hover:text-red-600 transition-colors line-clamp-1">
                                         {deal.name}
                                     </h4>
-                                    <div className="flex items-end justify-between mt-6">
+                                    <div className="mb-4">
+                                        <StarRating rating={deal.rating || 0} size={14} showNumber={true} />
+                                    </div>
+                                    <div className="mt-auto flex items-end justify-between border-t border-slate-50 pt-4">
                                         <div>
                                             <span className="text-xs text-slate-400 font-bold block">From</span>
                                             <span className="text-xl font-black text-slate-900">Rs {deal.base_price.toLocaleString()}</span>
                                         </div>
-                                        <Link href={`/${deal.service_type}s/${deal.id}`} className="w-10 h-10 rounded-full bg-slate-100 flex items-center justify-center text-slate-900 group-hover:bg-red-600 group-hover:text-white transition-all">
+                                        <Link href={`/${deal.service_type === 'hotel' ? 'hotels' : 'search/details'}/${deal.id}`} className="w-10 h-10 rounded-full bg-slate-100 flex items-center justify-center text-slate-900 group-hover:bg-red-600 group-hover:text-white transition-all">
                                             <ArrowRight size={18} />
                                         </Link>
                                     </div>
@@ -104,7 +109,7 @@ export default function DealsCarousel() {
                     )}
                 </div>
 
-                <div className="mt-12 text-center md:hidden">
+                <div className="mt-6 text-center md:hidden">
                     <Link href="/packages" className="inline-flex items-center gap-2 text-slate-900 font-bold hover:text-red-600 transition-colors">
                         View All Offers <ArrowRight size={20} />
                     </Link>

@@ -136,24 +136,23 @@ export default function HomePage() {
         </AnimatePresence>
 
         {/* Floating Text Content - Minimalist */}
-        <div className="absolute inset-0 flex items-center justify-center text-center z-10 pt-20">
+        <div className="absolute inset-0 flex items-center justify-center text-center z-10 pt-10">
           <div className="max-w-5xl mx-auto px-6">
             <motion.div
-              initial={{ opacity: 0, y: 30 }}
+              initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 1, delay: 0.2 }}
+              transition={{ duration: 0.8, delay: 0.1 }}
             >
               {!loading && heroSlides[currentSlide]?.tag && (
-                <span className="inline-block py-2 px-6 rounded-full bg-white/5 backdrop-blur-sm border border-white/10 text-white text-[10px] font-black uppercase tracking-[0.4em] mb-8">
+                <span className="inline-block py-2 px-6 rounded-full bg-white/5 backdrop-blur-sm border border-white/10 text-white text-[10px] font-black uppercase tracking-[0.4em] mb-4">
                   {heroSlides[currentSlide].tag}
                 </span>
               )}
               
-              <h1 className="text-5xl md:text-7xl lg:text-8xl font-black text-white mb-8 leading-[1.05] tracking-tight">
+              <h1 className="text-5xl md:text-7xl lg:text-8xl font-black text-white mb-6 leading-[1.05] tracking-tight">
                 {heroSlides[currentSlide]?.title}
               </h1>
-
-              <p className="text-lg md:text-xl text-white/70 font-medium mb-12 max-w-2xl mx-auto leading-relaxed">
+<p className="text-lg md:text-xl text-white/70 font-medium mb-8 max-w-2xl mx-auto leading-relaxed">
                 {heroSlides[currentSlide]?.subtitle ? heroSlides[currentSlide].subtitle.replace('<br />', ' ') : ''}
               </p>
 
@@ -195,9 +194,9 @@ export default function HomePage() {
       </section>
 
       {/* Luxury Intro Section - Reduced spacing */}
-      <section className="py-16 bg-white relative">
+      <section className="py-10 bg-white relative">
         <div className="container mx-auto px-6">
-          <div className="flex flex-col md:flex-row items-end justify-between gap-12 mb-12">
+          <div className="flex flex-col md:flex-row items-end justify-between gap-12 mb-6">
             <motion.div 
                 initial={{ opacity: 0, x: -50 }}
                 whileInView={{ opacity: 1, x: 0 }}
@@ -227,12 +226,12 @@ export default function HomePage() {
       </section>
 
       {/* Deals Carousel - Reduced spacing */}
-      <section className="bg-slate-50 py-16 overflow-hidden">
+      <section className="bg-slate-50 py-10 overflow-hidden">
          <DealsCarousel />
       </section>
 
       {/* Enhanced Experience Section - Reduced spacing */}
-      <section className="py-16 relative overflow-hidden bg-white">
+      <section className="py-10 relative overflow-hidden bg-white">
         <div className="container mx-auto px-6">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
             <motion.div
@@ -257,8 +256,8 @@ export default function HomePage() {
               </div>
             </motion.div>
 
-            <div className="space-y-12">
-              <div className="space-y-6">
+            <div className="space-y-8">
+              <div className="space-y-4">
                 <h2 className="text-[10px] font-black text-red-600 uppercase tracking-[0.5em]">The TL Advantage</h2>
                 <p className="text-4xl lg:text-5xl font-black text-slate-900 leading-[1.1] tracking-tighter">
                   Where Expertise Meets <br />
@@ -288,9 +287,9 @@ export default function HomePage() {
       </section>
 
       {/* Partner Slider - Reduced spacing */}
-      <section className="bg-slate-900 py-16 text-white">
+      <section className="bg-slate-900 py-10 text-white">
         <div className="container mx-auto px-6">
-          <div className="flex items-center gap-8 mb-12">
+          <div className="flex items-center gap-8 mb-6">
              <div className="h-px flex-1 bg-white/10" />
              <h2 className="text-[10px] font-black uppercase tracking-[0.6em] text-white/40">Our Global Partners</h2>
              <div className="h-px flex-1 bg-white/10" />

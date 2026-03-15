@@ -341,13 +341,15 @@ export default function DestinationListing({
                                     processedServices.map((service) => (
                                         <ServiceCard
                                             key={service.id}
+                                            id={service.id}
                                             title={service.name}
                                             location={service.location}
-                                            price={`Rs ${service.base_price.toLocaleString()}`}
+                                            price={Number(service.base_price)}
                                             image={service.image_url || "/hero-hotel.png"}
                                             duration={service.duration_days ? `${service.duration_days} Days` : service.duration_hours ? `${service.duration_hours} Hours` : ''}
                                             link={getServiceLink(service)}
                                             tag={tag || service.service_type.toUpperCase()}
+                                            rating={service.rating}
                                         />
                                     ))
                                 )}

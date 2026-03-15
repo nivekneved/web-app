@@ -5,6 +5,7 @@ import { Star, User } from 'lucide-react'
 import { createClient } from '@/lib/supabase'
 import { toast } from 'sonner'
 import { useAuth } from '@/contexts/AuthContext'
+import StarRating from '@/components/ui/StarRating'
 
 const supabase = createClient()
 
@@ -96,27 +97,29 @@ export default function ReviewsSection({ serviceId, serviceType }: ReviewsSectio
         }
     }
 
-    const averageRating = reviews.length > 0
-        ? (reviews.reduce((sum, r) => sum + r.rating, 0) / reviews.length).toFixed(1)
-        : '0.0'
+    const avgRatingValue = reviews.length > 0
+        ? (reviews.reduce((sum, r) => sum + r.rating, 0) / reviews.length)
+        : 0
 
     return (
-        <div className="bg-white rounded-[2rem] p-8 border border-slate-100 shadow-sm">
-            <div className="flex items-center justify-between mb-6">
+        <div className="bg-white rounded-[2rem] p-6 border border-slate-100 shadow-sm">
+            <div className="flex items-center justify-between mb-4">
                 <div>
                     <h2 className="text-2xl font-black text-slate-900">Reviews</h2>
-                    <div className="flex items-center gap-2 mt-2">
-                        <div className="flex items-center gap-1">
-                            <Star size={20} className="text-amber-600 fill-amber-600" />
-                            <span className="text-xl font-bold text-slate-900">{averageRating}</span>
+                    <div className="flex items-center gap-4 mt-2">
+                        <div className="flex items-center gap-2">
+                            <StarRating rating={avgRatingValue} size={20} />
+                            <span className="text-xl font-black text-slate-900 leading-none">{avgRatingValue.toFixed(1)}</span>
                         </div>
-                        <span className="text-slate-500">({reviews.length} reviews)</span>
+                        <span className="text-slate-500 font-bold uppercase text-[10px] tracking-widest leading-none">
+                            {reviews.length} {reviews.length === 1 ? 'review' : 'reviews'}
+                        </span>
                     </div>
                 </div>
                 {user && !showForm && (
                     <button
                         onClick={() => setShowForm(true)}
-                        className="px-6 py-3 bg-red-600 text-white rounded-xl font-bold hover:bg-slate-900 transition-all"
+                        className="px-6 py-3 bg-red-600 text-white rounded-xl font-bold hover:bg-slate-900 transition-all text-xs uppercase tracking-widest shadow-lg shadow-red-600/20"
                     >
                         Write Review
                     </button>
@@ -125,52 +128,52 @@ export default function ReviewsSection({ serviceId, serviceType }: ReviewsSectio
 
             {/* Review Form */}
             {showForm && (
-                <form onSubmit={handleSubmit} className="mb-8 p-6 bg-slate-50 rounded-2xl">
-                    <h3 className="text-lg font-bold text-slate-900 mb-4">Write Your Review</h3>
+                <form onSubmit={handleSubmit} className="mb-6 p-6 bg-slate-50 rounded-[2rem] border border-slate-100">
+                    <h3 className="text-lg font-black text-slate-900 mb-4 uppercase tracking-widest">Your Experience</h3>
 
-                    <div className="mb-4">
-                        <label className="block text-sm font-bold text-slate-700 mb-2">Rating</label>
-                        <div className="flex gap-2">
+                    <div className="mb-6">
+                        <label className="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-3 ml-1">Rating</label>
+                        <div className="flex gap-2 p-2 bg-white rounded-2xl w-fit border border-slate-100 shadow-sm">
                             {[1, 2, 3, 4, 5].map((value) => (
                                 <button
                                     key={value}
                                     type="button"
                                     onClick={() => setRating(value)}
-                                    className="p-2 hover:bg-white rounded-lg transition-colors"
+                                    className="p-2 hover:bg-slate-50 rounded-xl transition-all"
                                 >
                                     <Star
-                                        size={24}
-                                        className={value <= rating ? 'text-amber-600 fill-amber-600' : 'text-slate-300'}
+                                        size={28}
+                                        className={value <= rating ? 'text-amber-500 fill-amber-500' : 'text-slate-200 fill-slate-100'}
                                     />
                                 </button>
                             ))}
                         </div>
                     </div>
 
-                    <div className="mb-4">
-                        <label className="block text-sm font-bold text-slate-700 mb-2">Your Review</label>
+                    <div className="mb-6">
+                        <label className="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-3 ml-1">Your Review</label>
                         <textarea
                             value={comment}
                             onChange={(e) => setComment(e.target.value)}
                             required
                             rows={4}
-                            className="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl focus:outline-none focus:ring-4 focus:ring-red-600/20 focus:border-red-600 transition-all"
+                            className="w-full px-6 py-5 bg-white border border-slate-100 rounded-2xl focus:outline-none focus:ring-4 focus:ring-red-600/10 focus:border-red-600 transition-all font-medium text-slate-600"
                             placeholder="Share your experience..."
                         />
                     </div>
 
-                    <div className="flex gap-3">
+                    <div className="flex gap-4">
                         <button
                             type="button"
                             onClick={() => setShowForm(false)}
-                            className="px-6 py-3 border-2 border-slate-200 text-slate-600 rounded-xl font-bold hover:bg-slate-50 transition-all"
+                            className="px-8 py-4 border border-slate-200 text-slate-400 rounded-2xl font-black text-xs uppercase tracking-widest hover:bg-white hover:text-slate-600 transition-all"
                         >
                             Cancel
                         </button>
                         <button
                             type="submit"
                             disabled={submitting}
-                            className="px-6 py-3 bg-red-600 text-white rounded-xl font-bold hover:bg-slate-900 transition-all disabled:opacity-50"
+                            className="px-8 py-4 bg-red-600 text-white rounded-2xl font-black text-xs uppercase tracking-widest hover:bg-slate-900 transition-all disabled:opacity-50 shadow-lg shadow-red-600/20 flex-1"
                         >
                             {submitting ? 'Submitting...' : 'Submit Review'}
                         </button>
@@ -180,36 +183,35 @@ export default function ReviewsSection({ serviceId, serviceType }: ReviewsSectio
 
             {/* Reviews List */}
             {loading ? (
-                <div className="text-center py-8">
+                <div className="text-center py-12">
                     <div className="animate-spin rounded-full h-8 w-8 border-4 border-red-600 border-t-transparent mx-auto"></div>
                 </div>
             ) : reviews.length === 0 ? (
-                <div className="text-center py-12">
-                    <p className="text-slate-400 italic">No reviews yet. Be the first to review!</p>
+                <div className="text-center py-20 bg-slate-50 rounded-[2rem] border border-dashed border-slate-200">
+                    <p className="text-slate-400 font-bold uppercase text-[10px] tracking-widest">No reviews yet. Be the first to review!</p>
                 </div>
             ) : (
-                <div className="space-y-4">
+                <div className="space-y-6">
                     {reviews.map((review) => (
-                        <div key={review.id} className="p-4 bg-slate-50 rounded-xl">
-                            <div className="flex items-start justify-between mb-2">
-                                <div className="flex items-center gap-3">
-                                    <div className="p-2 bg-white rounded-full">
-                                        <User size={20} className="text-slate-400" />
+                        <div key={review.id} className="p-6 bg-slate-50 rounded-[2.5rem] border border-slate-100 group hover:bg-white hover:shadow-xl hover:shadow-slate-200/50 transition-all duration-300">
+                            <div className="flex flex-col md:flex-row md:items-start justify-between gap-6 mb-4">
+                                <div className="flex items-center gap-4">
+                                    <div className="w-14 h-14 bg-white rounded-2xl flex items-center justify-center text-slate-200 shadow-sm">
+                                        <User size={24} />
                                     </div>
                                     <div>
-                                        <div className="font-bold text-slate-900">{review.customer_name}</div>
-                                        <div className="flex items-center gap-1">
-                                            {Array.from({ length: review.rating }).map((_, i) => (
-                                                <Star key={i} size={14} className="text-amber-600 fill-amber-600" />
-                                            ))}
+                                        <div className="font-black text-slate-900 uppercase text-xs tracking-widest mb-1">{review.customer_name}</div>
+                                        <div className="flex items-center gap-2">
+                                            <StarRating rating={review.rating} size={14} />
+                                            <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest">{review.rating} / 5</span>
                                         </div>
                                     </div>
                                 </div>
-                                <div className="text-sm text-slate-500">
-                                    {new Date(review.created_at).toLocaleDateString()}
+                                <div className="text-[10px] font-black text-slate-400 uppercase tracking-widest">
+                                    {new Date(review.created_at).toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: 'numeric' })}
                                 </div>
                             </div>
-                            <p className="text-slate-700">{review.comment}</p>
+                            <p className="text-slate-600 font-medium leading-relaxed italic">&ldquo;{review.comment}&rdquo;</p>
                         </div>
                     ))}
                 </div>

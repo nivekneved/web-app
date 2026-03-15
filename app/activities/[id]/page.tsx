@@ -3,12 +3,14 @@
 import { useState, useEffect } from 'react'
 import { createClient } from '@/lib/supabase'
 import { useParams, useRouter } from 'next/navigation'
-import { MapPin, Star, Check, ArrowLeft, Clock, Heart } from 'lucide-react'
+import { MapPin, Check, ArrowLeft, Clock, Heart } from 'lucide-react'
 import Link from 'next/link'
 import { toast } from 'sonner'
 import { useWishlist } from '@/contexts/WishlistContext'
 import BookingWizard, { BookingWizardData } from '@/components/BookingWizard'
 import { createBookingRequest } from '@/lib/bookingService'
+import StarRating from '@/components/ui/StarRating'
+import ReviewsSection from '@/components/ReviewsSection'
 
 const supabase = createClient()
 
@@ -23,6 +25,7 @@ type ActivityService = {
     image_url: string
     amenities: string[]
     duration_hours: number
+    itinerary?: { time: string; title: string; description: string }[]
 }
 
 export default function ActivityDetailPage() {
@@ -64,7 +67,7 @@ export default function ActivityDetailPage() {
         try {
             const { data, error } = await supabase
                 .from('services')
-                .select('id, name, description, location, region, base_price, rating, image_url, amenities, duration_hours')
+                .select('id, name, description, location, region, base_price, rating, image_url, amenities, duration_hours, itinerary')
                 .eq('id', id)
                 .eq('service_type', 'activity')
                 .single()
@@ -202,12 +205,10 @@ export default function ActivityDetailPage() {
                                                     <Clock size={18} />
                                                     <span className="font-medium">{activity.duration_hours} hours</span>
                                                 </div>
-                                                {activity.rating && (
-                                                    <div className="flex items-center gap-1 px-3 py-1 bg-amber-50 rounded-lg">
-                                                        <Star size={16} className="text-amber-600 fill-amber-600" />
-                                                        <span className="font-bold text-amber-700">{activity.rating}</span>
-                                                    </div>
-                                                )}
+                                                <div className="flex items-center gap-2 px-4 py-1.5 bg-amber-50 rounded-full border border-amber-100">
+                                                    <StarRating rating={activity.rating} size={16} />
+                                                    <span className="font-bold text-xs text-amber-700">{activity.rating}</span>
+                                                </div>
                                             </div>
                                         </div>
                                         <button
@@ -270,22 +271,62 @@ export default function ActivityDetailPage() {
                             </div>
                         </div>
 
+                {/* Itinerary Section */}
+                {activity.itinerary && activity.itinerary.length > 0 && (
+                    <div className="bg-white rounded-[2rem] p-10 border border-slate-100 shadow-sm mb-12">
+                        <section>
+                            <h2 className="text-xs font-black text-red-600 uppercase tracking-[0.4em] mb-6">Experience</h2>
+                            <h3 className="text-4xl font-black text-slate-900 mb-10 leading-tight">Detailed Itinerary</h3>
+                            <div className="space-y-0">
+                                {activity.itinerary.map((item, idx) => (
+                                    <div key={idx} className="relative pl-12 pb-12 last:pb-0">
+                                        {/* Timeline Line */}
+                                        {idx !== activity.itinerary!.length - 1 && (
+                                            <div className="absolute left-[15px] top-[30px] bottom-0 w-0.5 bg-slate-100" />
+                                        )}
+                                        {/* Timeline Dot */}
+                                        <div className="absolute left-0 top-1.5 w-8 h-8 bg-white border-2 border-red-600 rounded-full flex items-center justify-center z-10">
+                                            <div className="w-2 h-2 bg-red-600 rounded-full" />
+                                        </div>
+                                        <div className="space-y-3">
+                                            <div className="flex items-center gap-3">
+                                                <span className="px-3 py-1 bg-slate-100 rounded-lg text-[10px] font-black uppercase tracking-widest text-slate-500">
+                                                    {item.time}
+                                                </span>
+                                                <h4 className="text-xl font-black text-slate-900 leading-none">{item.title}</h4>
+                                            </div>
+                                            <p className="text-slate-500 font-medium leading-relaxed max-w-3xl">
+                                                {item.description}
+                                            </p>
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                        </section>
+                    </div>
+                )}
+
                 {/* Inclusions */}
                 {activity.amenities && activity.amenities.length > 0 && (
-                    <div className="bg-white rounded-[2rem] p-8 border border-slate-100 shadow-sm">
-                        <h2 className="text-2xl font-black text-slate-900 mb-6">What&apos;s Included</h2>
-                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                    <div className="bg-white rounded-[2rem] p-10 border border-slate-100 shadow-sm mb-12">
+                        <h2 className="text-xs font-black text-red-600 uppercase tracking-[0.4em] mb-6">Service Details</h2>
+                        <h3 className="text-4xl font-black text-slate-900 mb-10 leading-tight">What&apos;s Included</h3>
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                             {activity.amenities.map((amenity, idx) => (
-                                <div key={idx} className="flex items-center gap-3">
-                                    <div className="p-2 bg-red-50 rounded-lg">
-                                        <Check size={16} className="text-red-600" />
+                                <div key={idx} className="flex items-center gap-4 p-6 bg-slate-50 rounded-[2rem] border border-slate-100 hover:bg-white hover:shadow-xl hover:shadow-slate-200/50 transition-all duration-300">
+                                    <div className="w-10 h-10 bg-white rounded-xl flex items-center justify-center text-red-600 shadow-sm">
+                                        <Check size={18} />
                                     </div>
-                                    <span className="text-slate-700 font-medium">{amenity}</span>
+                                    <span className="font-black text-xs uppercase tracking-widest text-slate-600">{amenity}</span>
                                 </div>
                             ))}
                         </div>
                     </div>
                 )}
+
+                <div className="mb-12">
+                    <ReviewsSection serviceId={activity.id} serviceType="activity" />
+                </div>
             </div>
         </div>
     )

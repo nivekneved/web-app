@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { MapPin, Star, Check, ArrowLeft, Calendar, Users, Heart, X } from 'lucide-react'
+import { MapPin, Check, ArrowLeft, Calendar, Users, Heart, X } from 'lucide-react'
 import Link from 'next/link'
 import Image from 'next/image'
 import { toast } from 'sonner'
@@ -13,6 +13,7 @@ import { Breadcrumbs } from './ui/Breadcrumbs'
 import { Badge } from './ui/Badge'
 import { Button } from './ui/Button'
 import { cn } from '@/lib/utils'
+import StarRating from './ui/StarRating'
 
 type Hotel = {
     id: string
@@ -140,9 +141,9 @@ export default function HotelClientWrapper({ hotel }: { hotel: Hotel }) {
                             <Badge variant="destructive" className="px-4 py-1.5 shadow-xl shadow-red-600/20">
                                 Luxury Stay
                             </Badge>
-                            <div className="flex items-center gap-2 px-4 py-1.5 bg-white/10 backdrop-blur-md border border-white/20 rounded-full text-white text-[10px] font-black uppercase tracking-widest">
-                                <Star size={14} className="fill-yellow-400 text-yellow-400" />
-                                {hotel.rating} Rating
+                            <div className="flex items-center gap-3 px-6 py-2 bg-white/10 backdrop-blur-md border border-white/20 rounded-full text-white">
+                                <StarRating rating={hotel.rating} size={16} />
+                                <span className="text-[10px] font-black uppercase tracking-widest leading-none">{hotel.rating} / 5</span>
                             </div>
                         </div>
                         <h1 className="text-5xl md:text-7xl lg:text-8xl font-black text-white mb-6 tracking-tighter leading-[1.1]">
@@ -165,19 +166,19 @@ export default function HotelClientWrapper({ hotel }: { hotel: Hotel }) {
                     className="mb-8"
                 />
 
-                <div className="grid grid-cols-1 lg:grid-cols-3 gap-16">
-                    <div className="lg:col-span-2 space-y-12">
+                <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                    <div className="lg:col-span-2 space-y-8">
                         <section>
-                            <h2 className="text-xs font-black text-red-600 uppercase tracking-[0.4em] mb-6">Introduction</h2>
-                            <h3 className="text-4xl font-black text-slate-900 mb-8 leading-tight">About this destination</h3>
+                            <h2 className="text-xs font-black text-red-600 uppercase tracking-[0.4em] mb-3">Introduction</h2>
+                            <h3 className="text-4xl font-black text-slate-900 mb-4 leading-tight">About this destination</h3>
                             <p className="text-xl text-slate-500 leading-relaxed font-medium">
                                 {hotel.description}
                             </p>
                         </section>
 
                         <section>
-                            <h2 className="text-xs font-black text-red-600 uppercase tracking-[0.4em] mb-6">Experience</h2>
-                            <h3 className="text-4xl font-black text-slate-900 mb-10 leading-tight">Premium Amenities</h3>
+                            <h2 className="text-xs font-black text-red-600 uppercase tracking-[0.4em] mb-3">Experience</h2>
+                            <h3 className="text-4xl font-black text-slate-900 mb-6 leading-tight">Premium Amenities</h3>
                             <div className="grid grid-cols-2 md:grid-cols-3 gap-6">
                                 {hotel.amenities?.map((amenity, idx) => (
                                     <div key={idx} className="flex items-center gap-4 p-6 bg-slate-50 rounded-[2rem] border border-slate-100 hover:bg-white hover:shadow-xl hover:shadow-slate-200/50 transition-all duration-300">
