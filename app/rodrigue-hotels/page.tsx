@@ -84,9 +84,10 @@ export default function RodriguesHotelsPage() {
                         hotels.map(hotel => (
                             <ServiceCard
                                 key={hotel.id}
+                                id={hotel.id}
                                 title={hotel.name}
                                 location={hotel.location}
-                                price={`Rs ${hotel.base_price.toLocaleString()} / night`}
+                                price={hotel.base_price}
                                 image={hotel.image_url || "/assets/hero/rodrigues_hotels_hero_1773391499243.png"}
                                 duration={`${hotel.rating} Stars`}
                                 link={`/hotels/${hotel.id}`}

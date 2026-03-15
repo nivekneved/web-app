@@ -82,9 +82,10 @@ export default function HotelPackagesPage() {
                         hotels.map(hotel => (
                             <ServiceCard
                                 key={hotel.id}
+                                id={hotel.id}
                                 title={hotel.name}
                                 location={hotel.location}
-                                price={`Rs ${hotel.base_price.toLocaleString()} / night`}
+                                price={hotel.base_price}
                                 image={hotel.image_url || "/hero-hotel.png"}
                                 duration={`${hotel.rating} Stars`}
                                 link={`/hotels/${hotel.id}`}

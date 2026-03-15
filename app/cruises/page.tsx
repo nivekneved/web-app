@@ -119,9 +119,10 @@ export default function CruisesPage() {
                         processedCruises.map(cruise => (
                             <ServiceCard
                                 key={cruise.id}
+                                id={cruise.id}
                                 title={cruise.name}
                                 location={cruise.location}
-                                price={`Rs ${cruise.base_price.toLocaleString()}`}
+                                price={cruise.base_price}
                                 image={cruise.image_url || "/hero-cruise.png"}
                                 duration={`${cruise.duration_days} Days`}
                                 link={`/cruises/${cruise.id}`}

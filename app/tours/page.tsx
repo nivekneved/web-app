@@ -103,9 +103,10 @@ export default function ToursPage() {
                         tours.map(tour => (
                             <ServiceCard
                                 key={tour.id}
+                                id={tour.id}
                                 title={tour.name}
                                 location={tour.location}
-                                price={`Rs ${tour.base_price.toLocaleString()}`}
+                                price={tour.base_price}
                                 image={tour.image_url || "/hero-adventure.png"}
                                 duration={`${tour.duration_days} Days`}
                                 link={`/tours/${tour.id}`}

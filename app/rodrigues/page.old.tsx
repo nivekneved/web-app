@@ -76,9 +76,10 @@ export default function RodriguesPage() {
                         services.map(service => (
                             <ServiceCard
                                 key={service.id}
+                                id={service.id}
                                 title={service.name}
                                 location={service.location}
-                                price={`Rs ${service.base_price.toLocaleString()}`}
+                                price={service.base_price}
                                 image={service.image_url || "/hero-hotel.png"}
                                 link={`/${service.service_type === 'activity' ? 'activities' : service.service_type + 's'}/${service.id}`}
                                 tag={service.service_type.toUpperCase()}

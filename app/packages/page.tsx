@@ -101,9 +101,10 @@ export default function PackagesPage() {
                         packages.map(pkg => (
                             <ServiceCard
                                 key={pkg.id}
+                                id={pkg.id}
                                 title={pkg.name}
                                 location={pkg.location}
-                                price={`Rs ${pkg.base_price.toLocaleString()}`}
+                                price={pkg.base_price}
                                 image={pkg.image_url || "/hero-adventure.png"}
                                 duration={pkg.duration}
                                 link={`/packages/${pkg.id}`}

@@ -85,9 +85,10 @@ export default function DayPackagesPage() {
                         services.map(service => (
                             <ServiceCard
                                 key={service.id}
+                                id={service.id}
                                 title={service.name}
                                 location={service.location}
-                                price={`Rs ${service.base_price.toLocaleString()}`}
+                                price={service.base_price}
                                 image={service.image_url || "/assets/hero/day_packages_hero_1773391515388.png"}
                                 duration="Full Day"
                                 link={`/activities/${service.id}`}
