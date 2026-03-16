@@ -178,9 +178,9 @@ export default function Navbar() {
                                 src="/logo.png"
                                 alt={siteTitle}
                                 width={200}
-                                height={50}
-                                className="h-10 md:h-12 w-auto object-contain dark:invert dark:brightness-200"
-                                style={{ filter: 'hue-rotate(-140deg) saturate(1.5)' }}
+                                height={60}
+                                className="h-12 w-auto object-contain transition-transform duration-300 hover:scale-105"
+                                priority
                             />
                         </Link>
 
