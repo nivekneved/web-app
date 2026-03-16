@@ -59,7 +59,7 @@ export default function DayPackagesPage() {
                 <div className="relative z-10 text-center text-white px-4">
                     <h1 className="text-5xl md:text-6xl font-black mb-4 uppercase tracking-tight">One Perfect Day</h1>
                     <p className="text-xl md:text-2xl text-slate-200 max-w-2xl mx-auto font-light">
-                        Luxury resort lifestyle for the day. Premium amenities and gourmet dining included.
+                        Enjoy our resort lifestyle for the day. High quality amenities and great dining included.
                     </p>
                 </div>
             </div>

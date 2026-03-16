@@ -3,7 +3,7 @@ import DestinationListing from '@/components/DestinationListing'
 
 export const metadata = {
     title: 'International Destinations | Travel Lounge',
-    description: 'Explore our premium travel packages across Europe, Asia, and the Middle East.',
+    description: 'Explore our quality travel packages across Europe, Asia, and the Middle East.',
 }
 
 export default function InternationalDestinationPage() {

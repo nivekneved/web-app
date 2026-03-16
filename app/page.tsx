@@ -62,17 +62,17 @@ export default function HomePage() {
             cta: slide.cta_text || 'Explore',
             link: slide.cta_link || '/search',
             image: slide.image_url,
-            tag: 'PREMIUM TRAVEL',
+            tag: 'TRAVEL DEALS',
           })))
         } else {
           setHeroSlides([
             {
               title: "Elevate Your Journey",
-              subtitle: "Experience luxury travel redefined with our exclusive flight deals.",
+              subtitle: "Travel with ease and comfort with our best flight deals.",
               cta: "Book Your Flight",
               link: "/flights",
               image: "/hero-flight.png",
-              tag: "PREMIUM TRAVEL",
+              tag: "TRAVEL DEALS",
               media_type: 'image',
               video_url: null,
               image_url: "/hero-flight.png"
@@ -202,7 +202,7 @@ export default function HomePage() {
                 whileInView={{ opacity: 1, x: 0 }}
                 className="max-w-2xl"
             >
-                <h2 className="text-xs font-black text-red-600 uppercase tracking-[0.5em] mb-6">Premium Travel</h2>
+                <h2 className="text-xs font-black text-red-600 uppercase tracking-[0.5em] mb-6">Our Services</h2>
                 <h3 className="text-4xl md:text-6xl font-black text-slate-900 leading-[1.1] tracking-tighter">
                     Crafting Unforgettable <br /> 
                     <span className="text-slate-300">Global Vacations.</span>
@@ -213,7 +213,7 @@ export default function HomePage() {
                 whileInView={{ opacity: 1, x: 0 }}
                 className="max-w-md text-slate-500 font-medium leading-relaxed"
             >
-                We specialize in luxury escapes that go beyond the ordinary. 
+                We specialize in comfortable escapes that go beyond the ordinary. 
                 From private islands to hidden cultural gems, every journey 
                 is meticulously planned for the discerning traveler.
             </motion.p>
@@ -242,7 +242,7 @@ export default function HomePage() {
               <div className="aspect-[4/3] relative rounded-[2rem] overflow-hidden shadow-[0_50px_100px_-20px_rgba(0,0,0,0.15)]">
                 <Image
                   src="/hero-hotel.png"
-                  alt="Premium Experience"
+                  alt="Modern Experience"
                   fill
                   className="object-cover"
                 />

@@ -3,10 +3,10 @@
 import Link from 'next/link'
 import { useState, useEffect, useCallback } from 'react'
 import Image from 'next/image'
-import { Menu, X, Heart, Moon, Sun, Phone, Mail, Facebook, Instagram, MessageCircle, ChevronDown } from 'lucide-react'
+import { Menu, X, Heart, Phone, Mail, Facebook, Instagram, MessageCircle, ChevronDown } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useWishlist } from '@/contexts/WishlistContext'
-import { useTheme } from '@/contexts/ThemeContext'
+// import { useTheme } from '@/contexts/ThemeContext'
 import { createClient } from '@/lib/supabase'
 import { navigationConfig, type NavMenuItem } from '@/lib/navigation'
 import { MobileAccordion } from './Navbar/MobileAccordion'
@@ -43,7 +43,7 @@ export default function Navbar() {
     const [items, setItems] = useState<NavMenuItem[]>([])
     // const [activeMegaMenu, setActiveMegaMenu] = useState<NavMenuItem | null>(null)
     const { wishlist } = useWishlist()
-    const { theme, toggleTheme } = useTheme()
+    // const { theme, toggleTheme } = useTheme()
     const supabase = createClient()
 
     const fetchNavigations = useCallback(async () => {
@@ -214,27 +214,8 @@ export default function Navbar() {
 
                             <div className="h-6 w-px bg-slate-200 dark:bg-slate-300 hidden md:block"></div>
 
-                            {/* Theme & Wishlist */}
+                            {/* Wishlist */}
                             <div className="flex items-center gap-1 md:gap-3">
-                                <motion.button
-                                    whileTap={{ scale: 0.9 }}
-                                    onClick={toggleTheme}
-                                    className="w-10 h-10 flex items-center justify-center bg-slate-100 dark:bg-slate-800 rounded-full text-slate-900 dark:text-white transition-all hover:ring-4 hover:ring-red-600/10"
-                                    aria-label="Toggle theme"
-                                >
-                                    <AnimatePresence mode="wait">
-                                        <motion.div
-                                            key={theme}
-                                            initial={{ opacity: 0, rotate: -90, scale: 0.5 }}
-                                            animate={{ opacity: 1, rotate: 0, scale: 1 }}
-                                            exit={{ opacity: 0, rotate: 90, scale: 0.5 }}
-                                            transition={{ duration: 0.2 }}
-                                        >
-                                            {theme === 'dark' ? <Sun size={18} /> : <Moon size={18} />}
-                                        </motion.div>
-                                    </AnimatePresence>
-                                </motion.button>
-                                
                                 <motion.div whileTap={{ scale: 0.9 }}>
                                     <Link
                                         href="/wishlist"

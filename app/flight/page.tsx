@@ -6,7 +6,7 @@ import { Plane, Globe, Shield, CreditCard, Clock, MapPin } from 'lucide-react';
 
 export const metadata = {
   title: 'Flight Bookings | Travel Lounge',
-  description: 'Book your international and domestic flights with Travel Lounge. We offer the best rates and premium service for all your travel needs.',
+  description: 'Book your international and domestic flights with Travel Lounge. We offer the best rates and excellent service for all your travel needs.',
 };
 
 export default function FlightPage() {
@@ -17,7 +17,7 @@ export default function FlightPage() {
         <div className="absolute inset-0 z-0">
           <Image
             src="/assets/hero/flight_booking_hero_1773391370829.png"
-            alt="Luxury Flight Booking"
+            alt="Flight Booking"
             fill
             className="object-cover"
             priority
@@ -54,7 +54,7 @@ export default function FlightPage() {
               { icon: CreditCard, title: 'Best Price Guarantee', desc: 'We negotiate the best rates to ensure you get value for your money.' },
               { icon: Clock, title: '24/7 Support', desc: 'Our dedicated team is available around the clock to assist with any travel changes.' },
               { icon: MapPin, title: 'Airport Transfers', desc: 'Seamlessly connect your flight with reliable airport transfers.' },
-              { icon: Plane, title: 'Premium Comfort', desc: 'Exclusive access to airport lounges and premium cabin upgrades.' },
+              { icon: Plane, title: 'Top Comfort', desc: 'Special access to airport lounges and comfortable cabin upgrades.' },
             ].map((feature, i) => (
               <div key={i} className="flex flex-col items-center text-center p-8 bg-slate-50 rounded-2xl hover:shadow-xl transition-all">
                 <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center text-primary mb-6">

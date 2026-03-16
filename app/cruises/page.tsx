@@ -72,9 +72,9 @@ export default function CruisesPage() {
                 />
                 <div className="absolute inset-0 bg-black/40" />
                 <div className="relative z-10 text-center text-white px-4">
-                    <h1 className="text-5xl md:text-6xl font-black mb-4">Luxury Cruises</h1>
+                    <h1 className="text-5xl md:text-6xl font-black mb-4">Cruise Holidays</h1>
                     <p className="text-xl md:text-2xl text-slate-200 max-w-2xl mx-auto">
-                        Set sail for extraordinary destinations with our premium cruise partners.
+                        Set sail for amazing destinations with our trusted cruise partners.
                     </p>
                 </div>
             </div>

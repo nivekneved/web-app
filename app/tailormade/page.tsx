@@ -198,7 +198,7 @@ export default function TailorMadePage() {
                     <div className="space-y-4 md:col-span-2">
                       <label className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] ml-2">Preferred Accommodation</label>
                       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                        {['Standard', 'Boutique', 'Luxury', 'All-Inclusive'].map((type) => (
+                        {['Standard', 'Boutique', 'Quality', 'All-Inclusive'].map((type) => (
                            <label key={type} className="group relative flex items-center justify-center p-5 bg-slate-50 border border-slate-100 rounded-2xl cursor-pointer hover:bg-white hover:border-red-600/50 transition-all font-bold text-xs uppercase tracking-widest text-slate-600 has-[:checked]:bg-red-600 has-[:checked]:text-white has-[:checked]:border-red-600 has-[:checked]:shadow-xl has-[:checked]:shadow-red-600/20">
                              <input type="radio" name="accommodation" value={type} className="hidden" />
                              <Home size={16} className="mr-2" />

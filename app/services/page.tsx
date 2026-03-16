@@ -13,9 +13,9 @@ export default function ServicesPage() {
     const allServices = [
         {
             icon: Ship,
-            title: "Luxury Cruises",
-            desc: "Embark on an extraordinary voyage with our curated selection of world-class cruises.",
-            features: ["Premium Cabins", "Global Itineraries", "All-Inclusive Options"],
+            title: "Cruises",
+            desc: "Set sail on an amazing voyage with our selected cruise options.",
+            features: ["Comfortable Cabins", "Global Itineraries", "All-Inclusive Options"],
             path: "/cruises",
             color: "bg-blue-600",
             image: "/hero-cruise.png"
@@ -23,7 +23,7 @@ export default function ServicesPage() {
         {
             icon: Plane,
             title: "Global Flights",
-            desc: "Fly to any corner of the globe with premier airlines and exclusive perks.",
+            desc: "Fly to any corner of the globe with reliable airlines and special perks.",
             features: ["Best Price Guarantee", "Priority Support", "Flexible Booking"],
             path: "/flights",
             color: "bg-red-600",

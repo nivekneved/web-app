@@ -1,8 +1,8 @@
 import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
-    title: 'Luxury Cruises | Travel Lounge Mauritius',
-    description: 'Set sail for extraordinary destinations with our premium cruise partners. Browse our selection of luxury cruise packages.',
+    title: 'Cruise Holidays | Travel Lounge Mauritius',
+    description: 'Set sail for amazing destinations with our trusted cruise partners. Browse our selection of cruise packages.',
 }
 
 export default function CruisesLayout({

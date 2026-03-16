@@ -6,7 +6,7 @@ import { ArrowRight } from 'lucide-react';
 
 export const metadata = {
   title: 'Local Deals Mauritius | Travel Lounge',
-  description: 'Discover the best local deals and hotel offers in Mauritius. Exclusive discounts for residents and travelers alike.',
+  description: 'Discover the best local deals and hotel offers in Mauritius. Special discounts for residents and travelers alike.',
 };
 
 export default function LocalDealsPage() {
@@ -46,7 +46,7 @@ export default function LocalDealsPage() {
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto text-center">
                 <h2 className="text-3xl md:text-5xl font-bold text-slate-900 mb-6 font-serif">Mauritius&apos; Best Kept Secrets</h2>
-                <p className="text-lg text-slate-600">From exclusive resort day passes to adventurous catamaran cruises, find the best deals at the island&apos;s most loved spots.</p>
+                <p className="text-lg text-slate-600">From special resort day passes to adventurous catamaran cruises, find the best deals at the island&apos;s most loved spots.</p>
           </div>
         </div>
       </section>

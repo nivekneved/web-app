@@ -59,7 +59,7 @@ export default function HotelPackagesPage() {
                 <div className="relative z-10 text-center text-white px-4">
                     <h1 className="text-5xl md:text-6xl font-black mb-4 italic font-serif">Local Island Escapes</h1>
                     <p className="text-xl md:text-2xl text-slate-200 max-w-2xl mx-auto">
-                        Exclusive hotel stays and resident offers across Mauritius.
+                        Special hotel stays and resident offers across Mauritius.
                     </p>
                 </div>
             </div>

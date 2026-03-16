@@ -8,8 +8,8 @@ export default function RodriguesDetailPage() {
 
     const mockData = {
         title: "Tekoma Boutik Hotel",
-        subtitle: "Barefoot Luxury in Rodrigues",
-        description: "Nestled on the beautiful Anse Ally beach, Tekoma offers an intimate and exclusive experience. Discover the authentic charm of Rodrigues in a setting of understated luxury.",
+        subtitle: "Barefoot Comfort in Rodrigues",
+        description: "Nestled on the beautiful Anse Ally beach, Tekoma offers an intimate and special experience. Discover the authentic charm of Rodrigues in a setting of understated comfort.",
         price: "Rs 18,000",
         images: ["/hero-hotel.png", "/hero-hotel.png", "/hero-hotel.png"],
         highlights: [

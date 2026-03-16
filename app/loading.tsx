@@ -13,7 +13,7 @@ export default function Loading() {
           Synchronizing
         </h2>
         <p className="text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-[0.2em] max-w-[200px] leading-relaxed mx-auto">
-          Optimizing your luxury travel experience. Please stand by.
+          Preparing your travel experience. Please stand by.
         </p>
       </div>
 

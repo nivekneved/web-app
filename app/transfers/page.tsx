@@ -12,7 +12,7 @@ export default function TransfersPage() {
             <section className="relative h-[600px] flex items-center overflow-hidden">
                 <Image
                     src="/hero-adventure.png"
-                    alt="Premium Transfers"
+                    alt="Reliable Transfers"
                     fill
                     className="object-cover"
                     priority
@@ -30,10 +30,10 @@ export default function TransfersPage() {
                             VIP TRANSFERS
                         </span>
                         <h1 className="text-5xl md:text-7xl font-black text-white mb-6 leading-tight">
-                            Seamless Luxury <br />Door-to-Door
+                            Seamless Comfort <br />Door-to-Door
                         </h1>
                         <p className="text-xl text-slate-200 mb-8 leading-relaxed max-w-2xl">
-                            From airport arrivals to hotel departures, experience stress-free transportation with our premium fleet and professional chauffeurs.
+                            From airport arrivals to hotel departures, enjoy stress-free transportation with our modern fleet and professional chauffeurs.
                         </p>
                     </motion.div>
                 </div>
@@ -83,8 +83,8 @@ export default function TransfersPage() {
 
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
                         {[
-                            { type: "Premium Executive", capacity: "3 Passengers", bags: "2 Large", price: "From $45", image: "/hero-hotel.png" },
-                            { type: "Luxury Van", capacity: "7 Passengers", bags: "5 Large", price: "From $65", image: "/hero-adventure.png" },
+                            { type: "Executive Class", capacity: "3 Passengers", bags: "2 Large", price: "From $45", image: "/hero-hotel.png" },
+                            { type: "Large Van", capacity: "7 Passengers", bags: "5 Large", price: "From $65", image: "/hero-adventure.png" },
                             { type: "VIP Private Coach", capacity: "15+ Passengers", bags: "15 Large", price: "Contact Us", image: "/hero-cruise.png" }
                         ].map((v, i) => (
                             <div key={i} className="group bg-slate-50 rounded-[2.5rem] overflow-hidden border border-slate-100 hover:shadow-2xl hover:shadow-slate-200 transition-all">
@@ -125,7 +125,7 @@ export default function TransfersPage() {
                             { icon: Shield, title: "Fixed Pricing", desc: "No hidden costs or surge pricing. What you see is what you pay." },
                             { icon: Clock, title: "Flight Tracking", desc: "Our chauffeurs track your flight and wait even if you're delayed." },
                             { icon: CheckCircle2, title: "Professional", desc: "Uniformed, multilingual drivers with local expertise." },
-                            { icon: Star, title: "Premium Comfort", desc: "Modern, air-conditioned vehicles with complimentary water/WiFi." }
+                            { icon: Star, title: "Modern Comfort", desc: "Modern, air-conditioned vehicles with complimentary water/WiFi." }
                         ].map((f, i) => (
                             <div key={i} className="space-y-4">
                                 <div className="w-12 h-12 bg-red-600 rounded-xl flex items-center justify-center">
@@ -147,7 +147,7 @@ export default function TransfersPage() {
                 <div className="max-w-2xl mx-auto">
                     <h2 className="text-4xl font-black text-slate-900 mb-6">Need a Large Group Transfer?</h2>
                     <p className="text-lg text-slate-500 mb-12">
-                        For groups larger than 15 or special event requirements, our team can provide custom luxury transport solutions.
+                        For groups larger than 15 or special event requirements, our team can provide custom transport solutions.
                     </p>
                     <div className="flex justify-center gap-4">
                         <Link href="/contact" className="px-10 py-5 bg-red-600 text-white rounded-2xl font-bold hover:bg-slate-900 transition-all transform hover:scale-105 shadow-xl">
