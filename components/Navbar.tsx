@@ -10,6 +10,7 @@ import { useTheme } from '@/contexts/ThemeContext'
 import { createClient } from '@/lib/supabase'
 import { navigationConfig, type NavMenuItem } from '@/lib/navigation'
 import { MobileAccordion } from './Navbar/MobileAccordion'
+import { MegaMenu } from './MegaMenu'
 import { cn } from '@/lib/utils'
 import { Button } from './ui/Button'
 
@@ -40,6 +41,7 @@ export default function Navbar() {
     const [isScrolled, setIsScrolled] = useState(false)
     const [settings, setSettings] = useState<SiteSettings | null>(null)
     const [items, setItems] = useState<NavMenuItem[]>([])
+    const [activeMegaMenu, setActiveMegaMenu] = useState<NavMenuItem | null>(null)
     const { wishlist } = useWishlist()
     const { theme, toggleTheme } = useTheme()
     const supabase = createClient()
@@ -120,8 +122,10 @@ export default function Navbar() {
     const facebookUrl = settings?.general_config?.facebookUrl || 'https://www.facebook.com/cqf.xeh.mybluehost.me/website_6dd3f772/'
     const instagramUrl = settings?.general_config?.instagramUrl || 'https://www.instagram.com/travellounge_ltd?igsh=MWljeWRiNG43aDN0OQ=='
 
+    const menuItems = items.length > 0 ? items : navigationConfig.menu
+
     return (
-        <header className="w-full">
+        <header className="w-full" onMouseLeave={() => setActiveMegaMenu(null)}>
             {/* Topbar */}
             <div className="bg-red-600 text-white py-1 hidden md:block">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -186,8 +190,18 @@ export default function Navbar() {
 
                         {/* Desktop Navigation */}
                         <div className="hidden xl:flex items-center gap-8">
-                            {(items.length > 0 ? items : navigationConfig.menu).map((item, idx) => (
-                                <DropdownMenuItem key={idx} item={item} />
+                            {menuItems.map((item, idx) => (
+                                <DropdownMenuItem 
+                                    key={idx} 
+                                    item={item} 
+                                    onHover={() => {
+                                        if (item.children && item.children.length > 0) {
+                                            setActiveMegaMenu(item)
+                                        } else {
+                                            setActiveMegaMenu(null)
+                                        }
+                                    }}
+                                />
                             ))}
                         </div>
 
@@ -260,6 +274,12 @@ export default function Navbar() {
                     </div>
                 </div>
 
+                <AnimatePresence>
+                    {activeMegaMenu && activeMegaMenu.children && activeMegaMenu.children.length > 0 && (
+                        <MegaMenu items={activeMegaMenu.children} onClose={() => setActiveMegaMenu(null)} />
+                    )}
+                </AnimatePresence>
+
 
                 {/* Mobile Menu Overlay */}
                 <div 
@@ -270,7 +290,7 @@ export default function Navbar() {
                     )}
                 >
                     <div className="h-full overflow-y-auto px-6 py-8">
-                        <MobileAccordion items={items.length > 0 ? items : navigationConfig.menu} onClose={() => setIsOpen(false)} />
+                        <MobileAccordion items={menuItems} onClose={() => setIsOpen(false)} />
                         
                         {/* Mobile CTA */}
                         <div className="mt-8 pt-6 border-t border-slate-100 dark:border-slate-200">
@@ -293,14 +313,19 @@ export default function Navbar() {
     )
 }
 
-function DropdownMenuItem({ item }: { item: NavMenuItem }) {
+function DropdownMenuItem({ item, onHover }: { item: NavMenuItem, onHover: () => void }) {
     const [isHovered, setIsHovered] = useState(false);
     const hasChildren = item.children && item.children.length > 0;
+
+    const handleMouseEnter = () => {
+        setIsHovered(true);
+        onHover();
+    };
 
     return (
         <div 
             className="relative py-6"
-            onMouseEnter={() => setIsHovered(true)}
+            onMouseEnter={handleMouseEnter}
             onMouseLeave={() => setIsHovered(false)}
         >
             <Link
@@ -322,55 +347,6 @@ function DropdownMenuItem({ item }: { item: NavMenuItem }) {
                 "absolute bottom-0 left-0 h-0.5 bg-red-600 transition-all",
                 isHovered ? "w-full" : "w-0"
             )} />
-
-            {hasChildren && (
-                <AnimatePresence>
-                    {isHovered && (
-                        <motion.div
-                            initial={{ opacity: 0, y: 10, scale: 0.95 }}
-                            animate={{ opacity: 1, y: 0, scale: 1 }}
-                            exit={{ opacity: 0, y: 10, scale: 0.95 }}
-                            transition={{ duration: 0.2, ease: "easeOut" }}
-                            className="absolute top-full left-1/2 -translate-x-1/2 pt-2 z-50 min-w-[280px]"
-                        >
-                            <div className="bg-white dark:bg-slate-50 rounded-2xl shadow-[0_20px_50px_rgba(0,0,0,0.15)] border border-slate-100 dark:border-slate-200 py-4 overflow-hidden">
-                                {item.children?.map((child, cIdx) => (
-                                    <div key={cIdx} className="relative group/sub">
-                                        <Link
-                                            href={child.href}
-                                            className="block px-8 py-3.5 text-xs font-black text-slate-600 dark:text-slate-700 uppercase tracking-[0.15em] hover:bg-slate-50 dark:hover:bg-slate-100 hover:text-red-600 dark:hover:text-red-700 transition-all"
-                                        >
-                                            {child.label}
-                                        </Link>
-                                        {child.children && child.children.length > 0 && (
-                                            <div className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-300">
-                                                <ChevronDown size={12} className="-rotate-90" />
-                                            </div>
-                                        )}
-                                        
-                                        {/* Recursive sub-menu for deep nesting if needed */}
-                                        {child.children && child.children.length > 0 && (
-                                            <div className="hidden group-hover/sub:block absolute left-full top-0 ml-1">
-                                                <div className="bg-white rounded-2xl shadow-[0_20px_50px_rgba(0,0,0,0.15)] border border-slate-100 py-4 min-w-[280px]">
-                                                    {child.children.map((grandChild, gIdx) => (
-                                                        <Link
-                                                            key={gIdx}
-                                                            href={grandChild.href}
-                                                            className="block px-8 py-3.5 text-xs font-black text-slate-600 uppercase tracking-[0.15em] hover:bg-slate-50 hover:text-red-600 transition-all"
-                                                        >
-                                                            {grandChild.label}
-                                                        </Link>
-                                                    ))}
-                                                </div>
-                                            </div>
-                                        )}
-                                    </div>
-                                ))}
-                            </div>
-                        </motion.div>
-                    )}
-                </AnimatePresence>
-            )}
         </div>
     );
 }

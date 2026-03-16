@@ -1,10 +1,9 @@
-/*
 'use client'
 
 import React from 'react'
 import Link from 'next/link'
 import { motion } from 'framer-motion'
-import { NavMenuItem } from '@/lib/navigation'
+import { type NavMenuItem } from '@/lib/navigation'
 import { cn } from '@/lib/utils'
 
 interface MegaMenuProps {
@@ -86,5 +85,4 @@ export const MegaMenu: React.FC<MegaMenuProps> = ({ items, onClose }) => {
         </motion.div>
     )
 }
-*/
-export const MegaMenu = () => null;
+
