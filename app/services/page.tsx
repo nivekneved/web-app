@@ -18,7 +18,7 @@ export default function ServicesPage() {
             features: ["Comfortable Cabins", "Global Itineraries", "All-Inclusive Options"],
             path: "/cruises",
             color: "bg-blue-600",
-            image: "/hero-cruise.png"
+            image: "/categories/cruises.png"
         },
         {
             icon: Plane,
@@ -27,7 +27,7 @@ export default function ServicesPage() {
             features: ["Best Price Guarantee", "Priority Support", "Flexible Booking"],
             path: "/flights",
             color: "bg-red-600",
-            image: "/hero-flight.png"
+            image: "/categories/flights.png"
         },
         {
             icon: Hotel,
@@ -36,7 +36,7 @@ export default function ServicesPage() {
             features: ["VIP Upgrades", "Best Room Rates", "Local Expertise"],
             path: "/hotels",
             color: "bg-teal-600",
-            image: "/hero-hotel.png"
+            image: "/categories/hotels.png"
         },
         {
             icon: MapPin,
@@ -45,7 +45,7 @@ export default function ServicesPage() {
             features: ["Local Guides", "Unique Experiences", "Small Group Focus"],
             path: "/tours",
             color: "bg-amber-600",
-            image: "/hero-adventure.png"
+            image: "/categories/group_tours.png"
         },
         {
             icon: Activity,
@@ -54,7 +54,7 @@ export default function ServicesPage() {
             features: ["Private Tours", "Authentic Dining", "Hidden Gems"],
             path: "/activities",
             color: "bg-indigo-600",
-            image: "/hero-adventure.png"
+            image: "/categories/activities.png"
         },
         {
             icon: Car,
