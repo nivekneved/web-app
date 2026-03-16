@@ -17,7 +17,7 @@ export const MobileAccordion: React.FC<MobileAccordionProps> = ({ items, level =
   return (
     <ul className={cn(
       "flex flex-col w-full",
-      level > 0 && "pl-4 mt-1 border-l border-slate-100 dark:border-slate-800"
+      level > 0 && "pl-4 mt-1 border-l border-slate-100 dark:border-slate-200"
     )}>
       {items.map((item, index) => (
         <MobileNavItem key={`${item.href}-${index}`} item={item} level={level} onClose={onClose} />
@@ -36,7 +36,7 @@ const MobileNavItem: React.FC<{ item: NavMenuItem; level: number; onClose: () =>
         <Link
           href={item.href}
           className={cn(
-            "flex-grow py-3 transition-colors duration-200 text-slate-900 dark:text-slate-100",
+            "flex-grow py-3 transition-colors duration-200 text-slate-900 dark:text-slate-800",
             level === 0 ? "text-[11px] font-black uppercase tracking-[0.2em]" : "text-sm font-bold"
           )}
           onClick={(e) => {

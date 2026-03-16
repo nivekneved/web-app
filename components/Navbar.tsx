@@ -164,8 +164,8 @@ export default function Navbar() {
                 className={cn(
                     "sticky top-0 z-50 transition-all duration-300",
                     isScrolled 
-                        ? "bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl shadow-lg py-2" 
-                        : "bg-white dark:bg-slate-900 border-b border-slate-100 dark:border-slate-800 py-4"
+                        ? "bg-white/95 dark:bg-slate-50/95 backdrop-blur-xl shadow-lg py-2" 
+                        : "bg-white dark:bg-slate-50 border-b border-slate-100 dark:border-slate-200 py-4"
                 )}
                 role="navigation"
                 aria-label="Main Navigation"
@@ -205,14 +205,14 @@ export default function Navbar() {
                                 </Link>
                             </Button>
 
-                            <div className="h-6 w-px bg-slate-200 dark:bg-slate-800 hidden md:block"></div>
+                            <div className="h-6 w-px bg-slate-200 dark:bg-slate-300 hidden md:block"></div>
 
                             {/* Theme & Wishlist */}
                             <div className="flex items-center gap-1 md:gap-3">
                                 <motion.button
                                     whileTap={{ scale: 0.9 }}
                                     onClick={toggleTheme}
-                                    className="w-10 h-10 flex items-center justify-center bg-slate-100 dark:bg-slate-800 rounded-full text-slate-900 dark:text-white transition-all hover:ring-4 hover:ring-red-600/10"
+                                    className="w-10 h-10 flex items-center justify-center bg-slate-100 dark:bg-slate-200 rounded-full text-slate-900 dark:text-slate-900 transition-all hover:ring-4 hover:ring-red-600/10"
                                     aria-label="Toggle theme"
                                 >
                                     <AnimatePresence mode="wait">
@@ -231,7 +231,7 @@ export default function Navbar() {
                                 <motion.div whileTap={{ scale: 0.9 }}>
                                     <Link
                                         href="/wishlist"
-                                        className="relative w-10 h-10 flex items-center justify-center bg-slate-100 dark:bg-slate-800 rounded-full text-slate-900 dark:text-white transition-all hover:ring-4 hover:ring-red-600/10"
+                                        className="relative w-10 h-10 flex items-center justify-center bg-slate-100 dark:bg-slate-200 rounded-full text-slate-900 dark:text-slate-900 transition-all hover:ring-4 hover:ring-red-600/10"
                                         aria-label={`View Wishlist (${wishlist.length} items)`}
                                     >
                                         <Heart 
@@ -248,7 +248,7 @@ export default function Navbar() {
 
                                 <button
                                     onClick={() => setIsOpen(!isOpen)}
-                                    className="xl:hidden p-2 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg transition-colors"
+                                    className="xl:hidden p-2 hover:bg-slate-100 dark:hover:bg-slate-200 rounded-lg transition-colors text-slate-900 dark:text-slate-900"
                                     aria-expanded={isOpen}
                                     aria-controls="mobile-menu"
                                     aria-label="Toggle mobile menu"
@@ -265,7 +265,7 @@ export default function Navbar() {
                 <div 
                     id="mobile-menu"
                     className={cn(
-                        "xl:hidden fixed inset-x-0 top-[64px] bottom-0 bg-white dark:bg-slate-900 z-40 transition-transform duration-300 ease-in-out transform",
+                        "xl:hidden fixed inset-x-0 top-[64px] bottom-0 bg-white dark:bg-slate-50 z-40 transition-transform duration-300 ease-in-out transform",
                         isOpen ? "translate-x-0" : "-translate-x-full"
                     )}
                 >
@@ -273,7 +273,7 @@ export default function Navbar() {
                         <MobileAccordion items={items.length > 0 ? items : navigationConfig.menu} onClose={() => setIsOpen(false)} />
                         
                         {/* Mobile CTA */}
-                        <div className="mt-8 pt-6 border-t border-slate-100 dark:border-slate-800">
+                        <div className="mt-8 pt-6 border-t border-slate-100 dark:border-slate-200">
                              <Button
                                 asChild
                                 variant="primary"
@@ -306,8 +306,8 @@ function DropdownMenuItem({ item }: { item: NavMenuItem }) {
             <Link
                 href={item.href}
                 className={cn(
-                    "text-xs font-black text-slate-900 dark:text-slate-300 uppercase tracking-[0.2em] hover:text-red-600 dark:hover:text-white transition-all flex items-center gap-1.5",
-                    isHovered && "text-red-600 dark:text-white"
+                    "text-xs font-black text-slate-900 dark:text-slate-800 uppercase tracking-[0.2em] hover:text-red-600 dark:hover:text-red-700 transition-all flex items-center gap-1.5",
+                    isHovered && "text-red-600 dark:text-red-700"
                 )}
             >
                 {item.label}
@@ -333,12 +333,12 @@ function DropdownMenuItem({ item }: { item: NavMenuItem }) {
                             transition={{ duration: 0.2, ease: "easeOut" }}
                             className="absolute top-full left-1/2 -translate-x-1/2 pt-2 z-50 min-w-[280px]"
                         >
-                            <div className="bg-white dark:bg-slate-900 rounded-2xl shadow-[0_20px_50px_rgba(0,0,0,0.15)] border border-slate-100 dark:border-slate-800 py-4 overflow-hidden">
+                            <div className="bg-white dark:bg-slate-50 rounded-2xl shadow-[0_20px_50px_rgba(0,0,0,0.15)] border border-slate-100 dark:border-slate-200 py-4 overflow-hidden">
                                 {item.children?.map((child, cIdx) => (
                                     <div key={cIdx} className="relative group/sub">
                                         <Link
                                             href={child.href}
-                                            className="block px-8 py-3.5 text-xs font-black text-slate-600 dark:text-slate-400 uppercase tracking-[0.15em] hover:bg-slate-50 dark:hover:bg-slate-800 hover:text-red-600 dark:hover:text-white transition-all"
+                                            className="block px-8 py-3.5 text-xs font-black text-slate-600 dark:text-slate-700 uppercase tracking-[0.15em] hover:bg-slate-50 dark:hover:bg-slate-100 hover:text-red-600 dark:hover:text-red-700 transition-all"
                                         >
                                             {child.label}
                                         </Link>
