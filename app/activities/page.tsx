@@ -2,7 +2,8 @@
 
 import { useState, useEffect } from 'react'
 import { createClient } from '@/lib/supabase'
-import { Search, MapPin, Star, Filter, Clock, Activity } from 'lucide-react'
+import { Search, Filter } from 'lucide-react'
+import ServiceCard from '@/components/ServiceCard'
 
 const supabase = createClient()
 
@@ -129,75 +130,17 @@ export default function ActivitiesPage() {
                 ) : (
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                         {filteredActivities.map((activity) => (
-                            <div
+                            <ServiceCard
                                 key={activity.id}
-                                className="group bg-white rounded-[2rem] overflow-hidden border border-slate-100 hover:border-red-600 hover:shadow-2xl transition-all"
-                            >
-                                {activity.image_url ? (
-                                    <div
-                                        className="h-64 bg-cover bg-center group-hover:scale-105 transition-transform duration-500"
-                                        style={{ backgroundImage: `url(${activity.image_url})` }}
-                                    />
-                                ) : (
-                                    <div className="h-64 bg-gradient-to-br from-red-600 to-slate-900 flex items-center justify-center">
-                                        <Activity size={64} className="text-white/30" />
-                                    </div>
-                                )}
-
-                                <div className="p-6">
-                                    <div className="flex items-start justify-between mb-3">
-                                        <div className="flex-1">
-                                            <h3 className="text-2xl font-black text-slate-900 mb-2 group-hover:text-red-600 transition-colors">
-                                                {activity.name}
-                                            </h3>
-                                            <div className="flex items-center gap-2 text-sm text-slate-600 mb-1">
-                                                <MapPin size={14} />
-                                                {activity.location}
-                                            </div>
-                                            {activity.duration_hours && (
-                                                <div className="flex items-center gap-2 text-sm text-slate-600">
-                                                    <Clock size={14} />
-                                                    {activity.duration_hours} hours
-                                                </div>
-                                            )}
-                                        </div>
-                                        {activity.rating && (
-                                            <div className="flex items-center gap-1 px-3 py-1 bg-amber-50 rounded-lg">
-                                                <Star size={14} className="text-amber-600 fill-amber-600" />
-                                                <span className="text-sm font-bold text-amber-700">{activity.rating}</span>
-                                            </div>
-                                        )}
-                                    </div>
-
-                                    {activity.description && (
-                                        <p className="text-sm text-slate-600 mb-4 line-clamp-2">{activity.description}</p>
-                                    )}
-
-                                    {activity.amenities && activity.amenities.length > 0 && (
-                                        <div className="flex flex-wrap gap-2 mb-4">
-                                            {activity.amenities.slice(0, 3).map((amenity, idx) => (
-                                                <span
-                                                    key={idx}
-                                                    className="px-2 py-1 bg-slate-100 text-slate-600 text-xs rounded-lg font-medium"
-                                                >
-                                                    {amenity}
-                                                </span>
-                                            ))}
-                                        </div>
-                                    )}
-
-                                    <div className="flex items-center justify-between pt-4 border-t border-slate-100">
-                                        <div className="flex items-baseline gap-1">
-                                            <span className="text-sm text-slate-500">From</span>
-                                            <span className="text-2xl font-black text-slate-900">Rs {activity.base_price?.toLocaleString()}</span>
-                                            <span className="text-sm text-slate-500">/person</span>
-                                        </div>
-                                        <button className="px-4 py-2 bg-red-600 text-white rounded-lg font-bold hover:bg-slate-900 transition-all text-sm">
-                                            Book Now
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
+                                id={activity.id}
+                                title={activity.name}
+                                location={activity.location}
+                                price={activity.base_price}
+                                image={activity.image_url || "/hero-adventure.png"}
+                                duration={activity.duration_hours ? `${activity.duration_hours} Hours` : undefined}
+                                link={`/activities/${activity.id}`}
+                                tag="ACTIVITY"
+                            />
                         ))}
                     </div>
                 )}

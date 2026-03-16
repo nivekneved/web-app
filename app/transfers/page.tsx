@@ -1,11 +1,47 @@
-'use client'
-
 import Image from 'next/image'
 import Link from 'next/link'
-import { Car, MapPin, Clock, Shield, CheckCircle2, Star, Calendar, Users } from 'lucide-react'
+import { Car, MapPin, Clock, Shield, CheckCircle2, Star, Calendar } from 'lucide-react'
 import { motion } from 'framer-motion'
+import { useState, useEffect } from 'react'
+import { createClient } from '@/lib/supabase'
+import ServiceCard from '@/components/ServiceCard'
+
+const supabase = createClient()
+
+type TransferService = {
+    id: string
+    name: string
+    location: string
+    base_price: number
+    image_url: string
+    rating: number
+    service_type: string
+}
 
 export default function TransfersPage() {
+    const [transfers, setTransfers] = useState<TransferService[]>([])
+    const [loading, setLoading] = useState(true)
+
+    useEffect(() => {
+        async function loadTransfers() {
+            try {
+                const { data, error } = await supabase
+                    .from('services')
+                    .select('id, name, location, base_price, image_url, rating, service_type')
+                    .eq('service_type', 'transfer')
+                    .order('name', { ascending: true })
+
+                if (error) throw error
+                setTransfers(data || [])
+            } catch (error) {
+                console.error('Error loading transfers:', error)
+            } finally {
+                setLoading(false)
+            }
+        }
+        loadTransfers()
+    }, [])
+
     return (
         <div className="min-h-screen bg-white">
             {/* Hero Section */}
@@ -82,37 +118,24 @@ export default function TransfersPage() {
                     </div>
 
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-                        {[
-                            { type: "Executive Class", capacity: "3 Passengers", bags: "2 Large", price: "From $45", image: "/hero-hotel.png" },
-                            { type: "Large Van", capacity: "7 Passengers", bags: "5 Large", price: "From $65", image: "/hero-adventure.png" },
-                            { type: "VIP Private Coach", capacity: "15+ Passengers", bags: "15 Large", price: "Contact Us", image: "/hero-cruise.png" }
-                        ].map((v, i) => (
-                            <div key={i} className="group bg-slate-50 rounded-[2.5rem] overflow-hidden border border-slate-100 hover:shadow-2xl hover:shadow-slate-200 transition-all">
-                                <div className="h-64 relative bg-slate-200">
-                                    <Image src={v.image} alt={v.type} fill className="object-cover group-hover:scale-110 transition-transform duration-500 opacity-80" />
-                                </div>
-                                <div className="p-8">
-                                    <h3 className="text-2xl font-black text-slate-900 mb-4">{v.type}</h3>
-                                    <div className="space-y-2 mb-8">
-                                        <p className="flex items-center gap-2 text-slate-600 text-sm font-medium">
-                                            <Users size={16} className="text-red-600" /> {v.capacity}
-                                        </p>
-                                        <p className="flex items-center gap-2 text-slate-600 text-sm font-medium">
-                                            <Shield size={16} className="text-red-600" /> {v.bags} Bags
-                                        </p>
-                                        <p className="flex items-center gap-2 text-slate-600 text-sm font-medium">
-                                            <Clock size={16} className="text-red-600" /> Meet & Greet Included
-                                        </p>
-                                    </div>
-                                    <div className="flex items-center justify-between border-t border-slate-200 pt-6">
-                                        <span className="text-slate-900 font-black text-xl">{v.price}</span>
-                                        <button className="px-6 py-2 bg-red-600 text-white rounded-xl font-bold text-sm hover:bg-slate-900 transition-colors">
-                                            Book Now
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-                        ))}
+                        {loading ? (
+                            [...Array(3)].map((_, i) => (
+                                <div key={i} className="animate-pulse bg-slate-50 rounded-[2.5rem] h-96 border border-slate-100" />
+                            ))
+                        ) : (
+                            transfers.map((transfer) => (
+                                <ServiceCard
+                                    key={transfer.id}
+                                    id={transfer.id}
+                                    title={transfer.name}
+                                    location={transfer.location}
+                                    price={transfer.base_price}
+                                    image={transfer.image_url || "/hero-adventure.png"}
+                                    link={`/transfers/${transfer.id}`}
+                                    tag="TRANSFER"
+                                />
+                            ))
+                        )}
                     </div>
                 </div>
             </section>
