@@ -18,13 +18,12 @@ interface TeamMember {
 }
 
 const roleLabels: Record<string, string> = {
-    'admin': 'Universal Root Administrator',
-    'manager': 'Operations Manager',
-    'staff': 'Standard Staff',
-    'receptionist': 'Receptionist',
-    'editor': 'Content Manager',
-    'sales': 'Sales Consultant',
-    'accountant': 'Accounts Representative'
+    'director': 'Managing Director',
+    'sales_corporate': 'Senior Sales Executive Corporate',
+    'sales_corporate_sr': 'Senior Sales Executive Corporate',
+    'sales_leisure': 'Senior Sales Executive Leisure',
+    'consultant': 'Travel Consultant',
+    'accountant': 'Account Clerk'
 }
 
 export default function TeamPage() {
