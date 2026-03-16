@@ -180,6 +180,7 @@ export default function Navbar() {
                                 width={200}
                                 height={50}
                                 className="h-10 md:h-12 w-auto object-contain dark:invert dark:brightness-200"
+                                style={{ filter: 'hue-rotate(-140deg) saturate(1.5)' }}
                             />
                         </Link>
 

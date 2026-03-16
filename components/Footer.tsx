@@ -91,6 +91,7 @@ export default function Footer() {
                                 width={200} 
                                 height={60} 
                                 className="h-12 w-auto object-contain brightness-[1.5] contrast-125"
+                                style={{ filter: 'hue-rotate(-140deg) saturate(1.5)' }}
                             />
                         </Link>
                         <p className="text-slate-400 mb-6 leading-relaxed text-sm font-medium">
