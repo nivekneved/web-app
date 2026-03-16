@@ -1,3 +1,4 @@
+/*
 'use client'
 
 import React from 'react'
@@ -59,4 +60,5 @@ export const MegaMenu: React.FC<MegaMenuProps> = ({ items, onClose }) => {
         </motion.div>
     )
 }
+*/
 

@@ -10,7 +10,7 @@ import { useTheme } from '@/contexts/ThemeContext'
 import { createClient } from '@/lib/supabase'
 import { navigationConfig, type NavMenuItem } from '@/lib/navigation'
 import { MobileAccordion } from './Navbar/MobileAccordion'
-import { MegaMenu } from './MegaMenu'
+// import { MegaMenu } from './MegaMenu'
 import { cn } from '@/lib/utils'
 import { Button } from './ui/Button'
 
@@ -41,7 +41,7 @@ export default function Navbar() {
     const [isScrolled, setIsScrolled] = useState(false)
     const [settings, setSettings] = useState<SiteSettings | null>(null)
     const [items, setItems] = useState<NavMenuItem[]>([])
-    const [activeMegaMenu, setActiveMegaMenu] = useState<NavMenuItem | null>(null)
+    // const [activeMegaMenu, setActiveMegaMenu] = useState<NavMenuItem | null>(null)
     const { wishlist } = useWishlist()
     const { theme, toggleTheme } = useTheme()
     const supabase = createClient()
@@ -125,7 +125,7 @@ export default function Navbar() {
     const menuItems = items.length > 0 ? items : navigationConfig.menu
 
     return (
-        <header className="w-full" onMouseLeave={() => setActiveMegaMenu(null)}>
+        <header className="w-full">
             {/* Topbar */}
             <div className="bg-red-600 text-white py-1 hidden md:block">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -194,13 +194,6 @@ export default function Navbar() {
                                 <DropdownMenuItem 
                                     key={idx} 
                                     item={item} 
-                                    onHover={() => {
-                                        if (item.children && item.children.length > 0) {
-                                            setActiveMegaMenu(item)
-                                        } else {
-                                            setActiveMegaMenu(null)
-                                        }
-                                    }}
                                 />
                             ))}
                         </div>
@@ -274,11 +267,7 @@ export default function Navbar() {
                     </div>
                 </div>
 
-                <AnimatePresence>
-                    {activeMegaMenu && activeMegaMenu.children && activeMegaMenu.children.length > 0 && (
-                        <MegaMenu items={activeMegaMenu.children} onClose={() => setActiveMegaMenu(null)} />
-                    )}
-                </AnimatePresence>
+                {/* Standard Dropdowns for nested items happen inside DropdownMenuItem now */}
 
 
                 {/* Mobile Menu Overlay */}
@@ -313,19 +302,14 @@ export default function Navbar() {
     )
 }
 
-function DropdownMenuItem({ item, onHover }: { item: NavMenuItem, onHover: () => void }) {
+function DropdownMenuItem({ item }: { item: NavMenuItem }) {
     const [isHovered, setIsHovered] = useState(false);
     const hasChildren = item.children && item.children.length > 0;
-
-    const handleMouseEnter = () => {
-        setIsHovered(true);
-        onHover();
-    };
 
     return (
         <div 
             className="relative py-6"
-            onMouseEnter={handleMouseEnter}
+            onMouseEnter={() => setIsHovered(true)}
             onMouseLeave={() => setIsHovered(false)}
         >
             <Link
@@ -347,6 +331,32 @@ function DropdownMenuItem({ item, onHover }: { item: NavMenuItem, onHover: () =>
                 "absolute bottom-0 left-0 h-0.5 bg-red-600 transition-all",
                 isHovered ? "w-full" : "w-0"
             )} />
+
+            {/* Standard Dropdown */}
+            <AnimatePresence>
+                {isHovered && hasChildren && (
+                    <motion.div
+                        initial={{ opacity: 0, y: 10, scale: 0.95 }}
+                        animate={{ opacity: 1, y: 0, scale: 1 }}
+                        exit={{ opacity: 0, y: 10, scale: 0.95 }}
+                        transition={{ duration: 0.15, ease: "easeOut" }}
+                        className="absolute top-full left-0 w-64 bg-white dark:bg-slate-50 shadow-2xl rounded-xl border border-slate-100 dark:border-slate-200 py-3 z-50 overflow-hidden"
+                    >
+                        <div className="flex flex-col">
+                            {item.children?.map((child, idx) => (
+                                <Link
+                                    key={idx}
+                                    href={child.href}
+                                    className="px-6 py-3 text-xs font-bold text-slate-700 dark:text-slate-800 hover:bg-slate-50 dark:hover:bg-slate-100 hover:text-red-600 transition-all flex items-center justify-between group/item"
+                                >
+                                    <span>{child.label}</span>
+                                    <div className="w-1 h-1 bg-red-600 rounded-full opacity-0 group-hover/item:opacity-100 transition-opacity" />
+                                </Link>
+                            ))}
+                        </div>
+                    </motion.div>
+                )}
+            </AnimatePresence>
         </div>
     );
 }
