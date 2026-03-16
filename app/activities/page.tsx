@@ -42,7 +42,13 @@ export default function ActivitiesPage() {
         }
 
         if (regionFilter !== 'all') {
-            filtered = filtered.filter(a => a.region === regionFilter)
+            if (regionFilter === 'sea') {
+                filtered = filtered.filter(a => a.amenities?.includes('Sea Adventure'))
+            } else if (regionFilter === 'land') {
+                filtered = filtered.filter(a => a.amenities?.includes('Land Adventure'))
+            } else {
+                filtered = filtered.filter(a => a.region === regionFilter)
+            }
         }
 
         setFilteredActivities(filtered)
@@ -110,11 +116,16 @@ export default function ActivitiesPage() {
                                 onChange={(e) => setRegionFilter(e.target.value)}
                                 className="w-full pl-12 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-4 focus:ring-red-600/20 focus:border-red-600 transition-all font-medium appearance-none"
                             >
-                                {regions.map(region => (
-                                    <option key={region} value={region}>
-                                        {region === 'all' ? 'All Regions' : region}
-                                    </option>
-                                ))}
+                                <option value="all">All Regions & Categories</option>
+                                <option value="sea">Sea Adventures</option>
+                                <option value="land">Land Adventures</option>
+                                <optgroup label="By Region">
+                                    {regions.filter(r => r !== 'all').map(region => (
+                                        <option key={region} value={region}>
+                                            {region}
+                                        </option>
+                                    ))}
+                                </optgroup>
                             </select>
                         </div>
                     </div>
