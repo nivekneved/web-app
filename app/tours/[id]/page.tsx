@@ -3,7 +3,8 @@
 import { useState, useEffect } from 'react'
 import { createClient } from '@/lib/supabase'
 import { useParams } from 'next/navigation'
-import { MapPin, Check, ArrowLeft, Calendar, Users, Heart } from 'lucide-react'
+import { MapPin, Check, ArrowLeft, Calendar, Users, Heart, X } from 'lucide-react'
+
 import Link from 'next/link'
 import Image from 'next/image'
 import { toast } from 'sonner'
@@ -14,6 +15,10 @@ import { Button } from '@/components/ui/Button'
 import { cn } from '@/lib/utils'
 import StarRating from '@/components/ui/StarRating'
 import ReviewsSection from '@/components/ReviewsSection'
+import BookingWizard, { BookingWizardData } from '@/components/BookingWizard'
+import { createBookingRequest } from '@/lib/bookingService'
+import { useRouter } from 'next/navigation'
+
 
 const supabase = createClient()
 
@@ -38,7 +43,11 @@ export default function TourDetailPage() {
     const [loading, setLoading] = useState(true)
     const [startDate, setStartDate] = useState('')
     const [guests, setGuests] = useState(2)
+    const [showWizard, setShowWizard] = useState(false)
+    const [bookingLoading, setBookingLoading] = useState(false)
+    const router = useRouter()
     const { addToWishlist, removeFromWishlist, isInWishlist } = useWishlist()
+
 
     useEffect(() => {
         if (params.id) {
@@ -92,8 +101,40 @@ export default function TourDetailPage() {
             toast.error(`Maximum group size is ${tour.max_group_size}`)
             return
         }
-        toast.success('Booking feature coming soon!')
+        setShowWizard(true)
     }
+
+    async function handleBookingComplete(data: BookingWizardData) {
+        if (!tour) return
+        setBookingLoading(true)
+        
+        const result = await createBookingRequest({
+            serviceId: tour.id,
+            serviceName: tour.name,
+            serviceCategory: 'tour',
+            amount: tour.base_price,
+            startDate: data.checkIn || startDate,
+            endDate: data.checkOut,
+            paxAdults: data.guests || guests,
+            paxChildren: 0,
+            travelers: data.travelers as Record<string, unknown>[],
+            specialRequests: data.notes,
+            firstName: data.firstName,
+            lastName: data.lastName,
+            email: data.email,
+            phone: data.phone
+        })
+
+        if (result.success) {
+            toast.success('Booking request submitted successfully!')
+            setShowWizard(false)
+            router.push(`/booking-confirmation?id=${result.bookingId}&service=${encodeURIComponent(tour.name)}&amount=${tour.base_price}`)
+        } else {
+            toast.error(result.error || 'Failed to submit booking request')
+        }
+        setBookingLoading(false)
+    }
+
 
     if (loading) {
         return (
@@ -120,7 +161,35 @@ export default function TourDetailPage() {
 
     return (
         <div className="min-h-screen bg-white">
+            {/* Booking Wizard Modal */}
+            {showWizard && (
+                <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm">
+                    <div className="bg-white dark:bg-slate-800 rounded-[3rem] w-full max-w-4xl max-h-[90vh] overflow-y-auto p-1 relative shadow-2xl">
+                        <button 
+                            onClick={() => setShowWizard(false)}
+                            className="absolute top-8 right-8 p-2 text-slate-400 hover:text-slate-600 dark:hover:text-white transition-colors z-10"
+                        >
+                            <X size={24} className="rotate-90 sm:rotate-0" />
+                        </button>
+                        <div className="p-8">
+                            <BookingWizard 
+                                serviceId={tour.id}
+                                serviceName={tour.name}
+                                servicePrice={tour.base_price}
+                                serviceCategory="tour"
+                                onComplete={handleBookingComplete}
+                                isLoading={bookingLoading}
+                                initialData={{
+                                    checkIn: startDate,
+                                    guests: guests
+                                }}
+                            />
+                        </div>
+                    </div>
+                </div>
+            )}
             {/* Hero Section */}
+
             <div className="relative h-[65vh] w-full overflow-hidden">
                 <Image
                     src={tour.image_url || 'https://images.unsplash.com/photo-1544551763-46a013bb70d5'}

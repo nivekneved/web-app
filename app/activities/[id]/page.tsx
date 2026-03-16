@@ -162,7 +162,12 @@ export default function ActivityDetailPage() {
                                 serviceCategory="activity"
                                 onComplete={handleBookingComplete}
                                 isLoading={bookingLoading}
+                                initialData={{
+                                    checkIn: date,
+                                    guests: participants
+                                }}
                             />
+
                         </div>
                     </div>
                 </div>

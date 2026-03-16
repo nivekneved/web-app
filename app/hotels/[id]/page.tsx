@@ -9,16 +9,46 @@ interface Props {
 
 async function getHotel(id: string) {
     const supabase = await createClient()
-    const { data, error } = await supabase
+    
+    // Fetch hotel details
+    const { data: hotel, error: hotelError } = await supabase
         .from('services')
-        .select('id, name, description, location, region, base_price, rating, image_url, amenities, room_types')
+        .select('id, name, description, location, region, base_price, rating, image_url, amenities')
         .eq('id', id)
         .eq('service_type', 'hotel')
         .single()
 
-    if (error || !data) return null
-    return data
+    if (hotelError || !hotel) return null
+
+    // Fetch room types from dedicated table
+    const { data: rooms } = await supabase
+        .from('room_types')
+        .select('*')
+        .eq('service_id', id)
+
+    // Map room_types table data to the structure expected by HotelClientWrapper
+    const mappedRoomTypes = (rooms || []).map(room => ({
+        type: room.name,
+        price: parseFloat(room.weekday_price || '0'),
+        prices: {
+            mon: room.weekday_price,
+            tue: room.weekday_price,
+            wed: room.weekday_price,
+            thu: room.weekday_price,
+            fri: room.weekday_price,
+            sat: room.weekend_price,
+            sun: room.weekend_price
+        },
+        image_url: room.image_url,
+        features: room.amenities || []
+    }))
+
+    return {
+        ...hotel,
+        room_types: mappedRoomTypes
+    }
 }
+
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
     const { id } = await params

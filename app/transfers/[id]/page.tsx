@@ -3,7 +3,8 @@
 import { useState, useEffect } from 'react'
 import { createClient } from '@/lib/supabase'
 import { useParams } from 'next/navigation'
-import { Car, ArrowLeft, Calendar, Users, MapPin, Heart, Shield, Clock, Luggage } from 'lucide-react'
+import { Car, ArrowLeft, Calendar, Users, MapPin, Heart, Shield, Clock, Luggage, X } from 'lucide-react'
+
 import Link from 'next/link'
 import Image from 'next/image'
 import { toast } from 'sonner'
@@ -13,6 +14,10 @@ import { Badge } from '@/components/ui/Badge'
 import { Button } from '@/components/ui/Button'
 import { cn } from '@/lib/utils'
 import ReviewsSection from '@/components/ReviewsSection'
+import BookingWizard, { BookingWizardData } from '@/components/BookingWizard'
+import { createBookingRequest } from '@/lib/bookingService'
+import { useRouter } from 'next/navigation'
+
 
 const supabase = createClient()
 
@@ -34,7 +39,11 @@ export default function TransferDetailPage() {
     const [loading, setLoading] = useState(true)
     const [pickupDate, setPickupDate] = useState('')
     const [travelers, setTravelers] = useState(2)
+    const [showWizard, setShowWizard] = useState(false)
+    const [bookingLoading, setBookingLoading] = useState(false)
+    const router = useRouter()
     const { addToWishlist, removeFromWishlist, isInWishlist } = useWishlist()
+
 
     useEffect(() => {
         if (params.id) {
@@ -84,8 +93,40 @@ export default function TransferDetailPage() {
             toast.error('Please select a pickup date')
             return
         }
-        toast.success('Transfer request received! We will confirm your chauffeur details shortly.')
+        setShowWizard(true)
     }
+
+    async function handleBookingComplete(data: BookingWizardData) {
+        if (!transfer) return
+        setBookingLoading(true)
+        
+        const result = await createBookingRequest({
+            serviceId: transfer.id,
+            serviceName: transfer.name,
+            serviceCategory: 'transfer',
+            amount: transfer.base_price,
+            startDate: data.checkIn || pickupDate,
+            endDate: data.checkOut,
+            paxAdults: data.guests || travelers,
+            paxChildren: 0,
+            travelers: data.travelers as Record<string, unknown>[],
+            specialRequests: data.notes,
+            firstName: data.firstName,
+            lastName: data.lastName,
+            email: data.email,
+            phone: data.phone
+        })
+
+        if (result.success) {
+            toast.success('Booking request submitted successfully!')
+            setShowWizard(false)
+            router.push(`/booking-confirmation?id=${result.bookingId}&service=${encodeURIComponent(transfer.name)}&amount=${transfer.base_price}`)
+        } else {
+            toast.error(result.error || 'Failed to submit booking request')
+        }
+        setBookingLoading(false)
+    }
+
 
     if (loading) {
         return (
@@ -112,7 +153,35 @@ export default function TransferDetailPage() {
 
     return (
         <div className="min-h-screen bg-white">
+            {/* Booking Wizard Modal */}
+            {showWizard && (
+                <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm">
+                    <div className="bg-white dark:bg-slate-800 rounded-[3rem] w-full max-w-4xl max-h-[90vh] overflow-y-auto p-1 relative shadow-2xl">
+                        <button 
+                            onClick={() => setShowWizard(false)}
+                            className="absolute top-8 right-8 p-2 text-slate-400 hover:text-slate-600 dark:hover:text-white transition-colors z-10"
+                        >
+                            <X size={24} />
+                        </button>
+                        <div className="p-8">
+                            <BookingWizard 
+                                serviceId={transfer.id}
+                                serviceName={transfer.name}
+                                servicePrice={transfer.base_price}
+                                serviceCategory="transfer"
+                                onComplete={handleBookingComplete}
+                                isLoading={bookingLoading}
+                                initialData={{
+                                    checkIn: pickupDate,
+                                    guests: travelers
+                                }}
+                            />
+                        </div>
+                    </div>
+                </div>
+            )}
             {/* Hero Section */}
+
             <div className="relative h-[55vh] w-full overflow-hidden">
                 <Image
                     src={transfer.image_url || '/placeholders/transfer_main.png'}

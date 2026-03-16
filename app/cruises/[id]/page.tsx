@@ -3,11 +3,17 @@
 import { useState, useEffect } from 'react'
 import { createClient } from '@/lib/supabase'
 import { useParams } from 'next/navigation'
-import { MapPin, Check, ArrowLeft, Calendar, Users, Ship } from 'lucide-react'
+import { MapPin, Check, ArrowLeft, Calendar, Users, Ship, X } from 'lucide-react'
+
 import Link from 'next/link'
 import { toast } from 'sonner'
 import StarRating from '@/components/ui/StarRating'
 import ReviewsSection from '@/components/ReviewsSection'
+import BookingWizard, { BookingWizardData } from '@/components/BookingWizard'
+import { createBookingRequest } from '@/lib/bookingService'
+import { useRouter } from 'next/navigation'
+
+
 
 const supabase = createClient()
 
@@ -31,6 +37,11 @@ export default function CruiseDetailPage() {
     const [loading, setLoading] = useState(true)
     const [departureDate, setDepartureDate] = useState('')
     const [guests, setGuests] = useState(2)
+
+    const [showWizard, setShowWizard] = useState(false)
+    const [bookingLoading, setBookingLoading] = useState(false)
+    const router = useRouter()
+
 
     useEffect(() => {
         if (params.id) {
@@ -62,8 +73,40 @@ export default function CruiseDetailPage() {
             toast.error('Please select a departure date')
             return
         }
-        toast.success('Booking feature coming soon!')
+        setShowWizard(true)
     }
+
+    async function handleBookingComplete(data: BookingWizardData) {
+        if (!cruise) return
+        setBookingLoading(true)
+        
+        const result = await createBookingRequest({
+            serviceId: cruise.id,
+            serviceName: cruise.name,
+            serviceCategory: 'cruise',
+            amount: cruise.base_price,
+            startDate: data.checkIn || departureDate,
+            endDate: data.checkOut,
+            paxAdults: data.guests || guests,
+            paxChildren: 0,
+            travelers: data.travelers as Record<string, unknown>[],
+            specialRequests: data.notes,
+            firstName: data.firstName,
+            lastName: data.lastName,
+            email: data.email,
+            phone: data.phone
+        })
+
+        if (result.success) {
+            toast.success('Booking request submitted successfully!')
+            setShowWizard(false)
+            router.push(`/booking-confirmation?id=${result.bookingId}&service=${encodeURIComponent(cruise.name)}&amount=${cruise.base_price}`)
+        } else {
+            toast.error(result.error || 'Failed to submit booking request')
+        }
+        setBookingLoading(false)
+    }
+
 
     if (loading) {
         return (
@@ -88,7 +131,35 @@ export default function CruiseDetailPage() {
 
     return (
         <div className="min-h-screen bg-slate-50">
+            {/* Booking Wizard Modal */}
+            {showWizard && (
+                <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm">
+                    <div className="bg-white dark:bg-slate-800 rounded-[3rem] w-full max-w-4xl max-h-[90vh] overflow-y-auto p-1 relative shadow-2xl">
+                        <button 
+                            onClick={() => setShowWizard(false)}
+                            className="absolute top-8 right-8 p-2 text-slate-400 hover:text-slate-600 dark:hover:text-white transition-colors z-10"
+                        >
+                            <X size={24} />
+                        </button>
+                        <div className="p-8">
+                            <BookingWizard 
+                                serviceId={cruise.id}
+                                serviceName={cruise.name}
+                                servicePrice={cruise.base_price}
+                                serviceCategory="cruise"
+                                onComplete={handleBookingComplete}
+                                isLoading={bookingLoading}
+                                initialData={{
+                                    checkIn: departureDate,
+                                    guests: guests
+                                }}
+                            />
+                        </div>
+                    </div>
+                </div>
+            )}
             {/* Back Button */}
+
             <div className="bg-white border-b border-slate-100">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
                     <Link href="/cruises" className="inline-flex items-center gap-2 text-slate-600 hover:text-red-600 font-medium transition-colors">
