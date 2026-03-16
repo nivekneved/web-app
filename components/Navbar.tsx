@@ -169,8 +169,8 @@ export default function Navbar() {
                 className={cn(
                     "sticky top-0 z-50 transition-all duration-300",
                     isScrolled 
-                        ? "bg-white/95 dark:bg-slate-50/95 backdrop-blur-xl shadow-lg py-2" 
-                        : "bg-white dark:bg-slate-50 border-b border-slate-100 dark:border-slate-200 py-4"
+                        ? "bg-white/95 dark:bg-slate-950/95 backdrop-blur-xl shadow-lg py-2" 
+                        : "bg-transparent py-4 border-b border-transparent"
                 )}
                 role="navigation"
                 aria-label="Main Navigation"
@@ -191,7 +191,7 @@ export default function Navbar() {
 
                         {/* Desktop Navigation */}
                         <div className="hidden lg:flex items-center justify-center flex-grow">
-                            <NavRecursive items={menuItems} />
+                            <NavRecursive items={menuItems} isScrolled={isScrolled} />
                         </div>
 
                         {/* Right Section */}
@@ -215,7 +215,12 @@ export default function Navbar() {
                                 <motion.div whileTap={{ scale: 0.9 }}>
                                     <Link
                                         href="/wishlist"
-                                        className="relative w-10 h-10 flex items-center justify-center bg-slate-100 dark:bg-slate-800 rounded-full text-slate-900 dark:text-white transition-all hover:ring-4 hover:ring-red-600/10"
+                                        className={cn(
+                                            "relative w-10 h-10 flex items-center justify-center rounded-full transition-all hover:ring-4 hover:ring-red-600/10",
+                                            isScrolled 
+                                                ? "bg-slate-100 dark:bg-slate-800 text-slate-900 dark:text-white" 
+                                                : "bg-white/10 backdrop-blur-md text-white border border-white/20"
+                                        )}
                                         aria-label={`View Wishlist (${wishlist.length} items)`}
                                     >
                                         <Heart 
@@ -233,12 +238,20 @@ export default function Navbar() {
                                 <motion.div whileTap={{ scale: 0.9 }} className="lg:hidden">
                                     <button
                                         onClick={() => setIsOpen(!isOpen)}
-                                        className="group p-2 flex items-center gap-3 bg-slate-100 dark:bg-slate-50 border border-slate-200 dark:border-slate-300 rounded-full pl-5 pr-2 transition-all hover:ring-4 hover:ring-red-600/10"
+                                        className={cn(
+                                            "group p-2 flex items-center gap-3 border rounded-full pl-5 pr-2 transition-all hover:ring-4 hover:ring-red-600/10",
+                                            isScrolled
+                                                ? "bg-slate-100 dark:bg-slate-950 border-slate-200 dark:border-slate-800"
+                                                : "bg-white/10 backdrop-blur-md border-white/20"
+                                        )}
                                         aria-expanded={isOpen}
                                         aria-controls="navigation-drawer"
                                         aria-label="Toggle navigation menu"
                                     >
-                                        <span className="text-[10px] font-black text-slate-900 dark:text-slate-800 tracking-[0.3em] uppercase transition-colors group-hover:text-red-600">
+                                        <span className={cn(
+                                            "text-[10px] font-black tracking-[0.3em] uppercase transition-colors group-hover:text-red-600",
+                                            isScrolled ? "text-slate-900 dark:text-slate-100" : "text-white"
+                                        )}>
                                             {isOpen ? "Close" : "Menu"}
                                         </span>
                                         <div className="w-8 h-8 flex items-center justify-center bg-white dark:bg-white rounded-full text-slate-900 shadow-sm border border-slate-100">
