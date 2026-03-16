@@ -35,6 +35,7 @@ export default function DestinationListing({
     subtitle,
     heroImage,
     regions,
+    serviceTypes,
     tag
 }: DestinationListingProps) {
     const [services, setServices] = useState<Service[]>([])
@@ -55,6 +56,10 @@ export default function DestinationListing({
                 query = query.in('region', regions)
             }
 
+            if (serviceTypes && serviceTypes.length > 0) {
+                query = query.in('service_type', serviceTypes)
+            }
+
             const { data, error } = await query
 
             if (error) throw error
@@ -64,7 +69,7 @@ export default function DestinationListing({
         } finally {
             setLoading(false)
         }
-    }, [regions])
+    }, [regions, serviceTypes])
 
     useEffect(() => {
         loadServices()

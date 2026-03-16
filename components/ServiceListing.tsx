@@ -1,6 +1,7 @@
 'use client'
 
-import React, { useState, useEffect, useMemo, useCallback } from 'react'
+import React, { useState, useEffect, useMemo, useCallback, Suspense } from 'react'
+import { useSearchParams } from 'next/navigation'
 import Image from 'next/image'
 import ServiceCard from '@/components/ServiceCard'
 import { createClient } from '@/lib/supabase'
@@ -8,6 +9,8 @@ import { Filter, Star, Check, Search } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
 
 const supabase = createClient()
+
+const MAURITIUS_REGIONS = ['North', 'East', 'South', 'West', 'Mauritius', 'North Coast', 'East Coast', 'South Coast', 'West Coast']
 
 type Service = {
     id: string
@@ -46,6 +49,37 @@ export default function ServiceListing({
     searchPlaceholder = "Search by name or location...",
     categorySlug
 }: ServiceListingProps) {
+    return (
+        <Suspense fallback={<div className="min-h-screen bg-[#F2F5F7] animate-pulse" />}>
+            <ServiceListingInner 
+                title={title}
+                subtitle={subtitle}
+                heroImage={heroImage}
+                serviceTypes={serviceTypes}
+                excludeRegions={excludeRegions}
+                includeRegions={includeRegions}
+                tag={tag}
+                searchPlaceholder={searchPlaceholder}
+                categorySlug={categorySlug}
+            />
+        </Suspense>
+    )
+}
+
+function ServiceListingInner({
+    title,
+    subtitle,
+    heroImage,
+    serviceTypes,
+    excludeRegions,
+    includeRegions,
+    tag,
+    searchPlaceholder,
+    categorySlug
+}: ServiceListingProps) {
+    const searchParams = useSearchParams()
+    const urlRegion = searchParams.get('region')
+
     const [services, setServices] = useState<Service[]>([])
     const [loading, setLoading] = useState(true)
     const [sortBy, setSortBy] = useState<string>('price-asc')
@@ -101,6 +135,12 @@ export default function ServiceListing({
         loadServices()
     }, [loadServices])
 
+    useEffect(() => {
+        if (urlRegion) {
+            setSelectedRegions([urlRegion])
+        }
+    }, [urlRegion])
+
     const availableRegions = useMemo(() => {
         const regions = new Set(services.map(s => s.region).filter(Boolean))
         return Array.from(regions).sort() as string[]
@@ -134,7 +174,14 @@ export default function ServiceListing({
         }
 
         if (selectedRegions.length > 0) {
-            result = result.filter(s => s.region && selectedRegions.includes(s.region))
+            result = result.filter(s => {
+                if (!s.region) return false
+                // If "Mauritius" is selected, include all its sub-regions
+                if (selectedRegions.includes('Mauritius')) {
+                    if (MAURITIUS_REGIONS.includes(s.region)) return true
+                }
+                return selectedRegions.includes(s.region)
+            })
         }
 
         if (selectedRatings.length > 0) {

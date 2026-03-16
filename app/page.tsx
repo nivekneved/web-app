@@ -100,7 +100,7 @@ export default function HomePage() {
   return (
     <div className="min-h-screen bg-white selection:bg-red-100 selection:text-red-900 overflow-x-hidden">
       {/* Hero Section with Parallax */}
-      <section ref={targetRef} className="relative h-[70vh] min-h-[500px] flex items-center overflow-hidden bg-slate-900">
+      <section ref={targetRef} className="relative h-[55vh] min-h-[400px] flex items-center overflow-hidden bg-slate-900">
         <AnimatePresence mode="wait">
           {!loading && heroSlides.length > 0 && (
             <motion.div
@@ -149,7 +149,7 @@ export default function HomePage() {
                 </span>
               )}
               
-              <h1 className="text-5xl md:text-7xl lg:text-8xl font-black text-white mb-6 leading-[1.05] tracking-tight">
+              <h1 className="text-4xl md:text-6xl lg:text-7xl font-black text-white mb-6 leading-[1.05] tracking-tight">
                 {heroSlides[currentSlide]?.title}
               </h1>
 <p className="text-lg md:text-xl text-white/70 font-medium mb-8 max-w-2xl mx-auto leading-relaxed">

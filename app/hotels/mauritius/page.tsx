@@ -1,0 +1,20 @@
+'use client'
+
+import React from 'react'
+import ServiceListing from '@/components/ServiceListing'
+
+const MAURITIUS_REGIONS = ['North', 'East', 'South', 'West', 'Mauritius', 'North Coast', 'East Coast', 'South Coast', 'West Coast']
+
+export default function MauritiusHotelsPage() {
+    return (
+        <ServiceListing
+            title="Mauritius Hotels"
+            subtitle="Explore our curated selection of luxury resorts and boutique hotels across Mauritius."
+            heroImage="/hero-hotel.png"
+            serviceTypes={['hotel']}
+            includeRegions={MAURITIUS_REGIONS}
+            tag="MAURITIUS"
+            searchPlaceholder="Search hotels in Mauritius..."
+        />
+    )
+}
