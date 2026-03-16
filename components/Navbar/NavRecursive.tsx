@@ -11,23 +11,22 @@ interface NavRecursiveProps {
   items: NavMenuItem[];
   level?: number;
   onClose?: () => void;
-  isScrolled?: boolean;
 }
 
-export const NavRecursive: React.FC<NavRecursiveProps> = ({ items, level = 0, onClose, isScrolled }) => {
+export const NavRecursive: React.FC<NavRecursiveProps> = ({ items, level = 0, onClose }) => {
   return (
     <ul className={cn(
       "flex",
       level === 0 ? "flex-row items-center gap-8" : "flex-col py-3 w-64 px-2"
     )}>
       {items.map((item, index) => (
-        <NavItem key={`${item.href}-${index}`} item={item} level={level} onClose={onClose} isScrolled={isScrolled} />
+        <NavItem key={`${item.href}-${index}`} item={item} level={level} onClose={onClose} />
       ))}
     </ul>
   );
 };
 
-const NavItem: React.FC<{ item: NavMenuItem; level: number; onClose?: () => void; isScrolled?: boolean }> = ({ item, level, onClose, isScrolled }) => {
+const NavItem: React.FC<{ item: NavMenuItem; level: number; onClose?: () => void }> = ({ item, level, onClose }) => {
   const [isOpen, setIsOpen] = useState(false);
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
 
@@ -72,12 +71,7 @@ const NavItem: React.FC<{ item: NavMenuItem; level: number; onClose?: () => void
         className={cn(
           "flex items-center justify-between transition-all duration-300",
           level === 0 
-            ? cn(
-                "hover:text-red-600 font-extrabold py-8 text-[11px] uppercase tracking-[0.2em]",
-                isScrolled 
-                  ? "text-slate-900 dark:text-slate-100" 
-                  : "text-white/95"
-              )
+            ? "text-slate-900 dark:text-slate-100 hover:text-red-600 font-extrabold py-8 text-[11px] uppercase tracking-[0.2em]" 
             : "px-4 py-2.5 text-sm text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 hover:text-red-600 rounded-lg font-semibold"
         )}
         onClick={(e) => {
