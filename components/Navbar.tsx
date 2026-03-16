@@ -2,8 +2,8 @@
 
 import Link from 'next/link'
 import { useState, useEffect, useCallback } from 'react'
-import Image from 'next/image'
 import { Menu, X, Heart, Phone, Mail, Facebook, Instagram, MessageCircle } from 'lucide-react'
+import Image from 'next/image'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useWishlist } from '@/contexts/WishlistContext'
 // import { useTheme } from '@/contexts/ThemeContext'
@@ -128,23 +128,23 @@ export default function Navbar() {
     return (
         <header className="w-full">
             {/* Topbar */}
-            <div className="bg-red-600 text-white py-1 hidden md:block">
+            <div className="bg-white text-gray-400 py-1 hidden md:block border-b border-gray-100">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <div className="flex items-center justify-between text-sm">
                         <div className="flex flex-wrap items-center gap-4 md:gap-6">
-                            <a href="tel:+2302124070" className="flex items-center gap-2 hover:bg-white/10 p-1 rounded transition-colors whitespace-nowrap">
+                            <a href="tel:+2302124070" className="flex items-center gap-2 hover:bg-gray-50 p-1 rounded transition-colors whitespace-nowrap">
                                 <Phone size={14} />
                                 <span>(+230) 212 4070</span>
                             </a>
-                            <a href="https://wa.me/23059407701" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 hover:bg-white/10 p-1 rounded transition-colors whitespace-nowrap">
-                                <MessageCircle size={14} className="text-green-400" />
+                            <a href="https://wa.me/23059407701" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 hover:bg-gray-50 p-1 rounded transition-colors whitespace-nowrap">
+                                <MessageCircle size={14} className="text-green-500" />
                                 <span>5940 7701</span>
                             </a>
-                            <a href="https://wa.me/23059407711" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 hover:bg-white/10 p-1 rounded transition-colors whitespace-nowrap">
-                                <MessageCircle size={14} className="text-green-400" />
+                            <a href="https://wa.me/23059407711" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 hover:bg-gray-50 p-1 rounded transition-colors whitespace-nowrap">
+                                <MessageCircle size={14} className="text-green-500" />
                                 <span>5940 7711</span>
                             </a>
-                            <a href="mailto:reservation@travellounge.mu" className="flex items-center gap-2 hover:bg-white/10 p-1 rounded transition-colors whitespace-nowrap">
+                            <a href="mailto:reservation@travellounge.mu" className="flex items-center gap-2 hover:bg-gray-50 p-1 rounded transition-colors whitespace-nowrap">
                                 <Mail size={14} />
                                 <span>reservation@travellounge.mu</span>
                             </a>
@@ -152,10 +152,10 @@ export default function Navbar() {
 
                         <div className="flex items-center gap-4">
                             <div className="flex items-center gap-2">
-                                <a href={facebookUrl} target="_blank" rel="noopener noreferrer" className="hover:bg-white/10 p-1 rounded transition-colors">
+                                <a href={facebookUrl} target="_blank" rel="noopener noreferrer" className="hover:bg-gray-50 p-1 rounded transition-colors">
                                     <Facebook size={16} />
                                 </a>
-                                <a href={instagramUrl} target="_blank" rel="noopener noreferrer" className="hover:bg-white/10 p-1 rounded transition-colors">
+                                <a href={instagramUrl} target="_blank" rel="noopener noreferrer" className="hover:bg-gray-50 p-1 rounded transition-colors">
                                     <Instagram size={16} />
                                 </a>
                             </div>

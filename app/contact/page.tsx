@@ -268,6 +268,63 @@ export default function ContactPage() {
                         </div>
                     </div>
                 </div>
+
+                {/* Directions Section */}
+                <div className="mt-32 space-y-16">
+                    <div className="text-center max-w-2xl mx-auto mb-16">
+                        <h2 className="text-xs font-black text-red-600 uppercase tracking-[0.4em] mb-6">Directions</h2>
+                        <h3 className="text-4xl font-black text-slate-900 mb-6">Visit Our Offices</h3>
+                        <p className="text-slate-500 font-medium text-lg">Find us easily with the interactive maps below. We look forward to welcoming you to our premises.</p>
+                    </div>
+
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
+                        {/* Port Louis Map */}
+                        <div className="space-y-6">
+                            <div className="bg-slate-50 rounded-[3rem] overflow-hidden border border-slate-100 h-[450px] relative group shadow-2xl shadow-slate-200/50">
+                                <iframe 
+                                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3744.912389104051!2d57.50091321744385!3d-20.162747100000003!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x217c504dafffffff%3A0x6b801a6b0c0c0c0c!2sNewton%20Tower!5e0!3m2!1sen!2smu!4v1710590000000!5m2!1sen!2smu"
+                                    width="100%" 
+                                    height="100%" 
+                                    style={{ border: 0 }} 
+                                    allowFullScreen 
+                                    loading="lazy" 
+                                    referrerPolicy="no-referrer-when-downgrade"
+                                    className="grayscale group-hover:grayscale-0 transition-all duration-1000"
+                                />
+                                <div className="absolute top-6 left-6">
+                                    <span className="bg-white/90 backdrop-blur px-4 py-2 rounded-full text-[10px] font-black uppercase tracking-widest shadow-sm">Main Branch</span>
+                                </div>
+                            </div>
+                            <div className="px-6">
+                                <h4 className="font-black text-2xl text-slate-900 mb-2">{office1Title}</h4>
+                                <p className="text-slate-500 font-medium leading-relaxed">{office1Address}</p>
+                            </div>
+                        </div>
+
+                        {/* Ebene Map */}
+                        <div className="space-y-6">
+                            <div className="bg-slate-50 rounded-[3rem] overflow-hidden border border-slate-100 h-[450px] relative group shadow-2xl shadow-slate-200/50">
+                                <iframe 
+                                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3743.90561570172!2d57.485121!3d-20.244347!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x217c5adaaaaaaa!2sEbene%20Mews!5e0!3m2!1sen!2smu!4v1710590000000!5m2!1sen!2smu"
+                                    width="100%" 
+                                    height="100%" 
+                                    style={{ border: 0 }} 
+                                    allowFullScreen 
+                                    loading="lazy" 
+                                    referrerPolicy="no-referrer-when-downgrade"
+                                    className="grayscale group-hover:grayscale-0 transition-all duration-1000"
+                                />
+                                <div className="absolute top-6 left-6">
+                                    <span className="bg-white/90 backdrop-blur px-4 py-2 rounded-full text-[10px] font-black uppercase tracking-widest shadow-sm">Cybercity Office</span>
+                                </div>
+                            </div>
+                            <div className="px-6">
+                                <h4 className="font-black text-2xl text-slate-900 mb-2">{office2Title}</h4>
+                                <p className="text-slate-500 font-medium leading-relaxed">{office2Address}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     )
