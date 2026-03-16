@@ -239,7 +239,7 @@ export default function HomePage() {
                 whileInView={{ opacity: 1, scale: 1 }}
                 className="relative"
             >
-              <div className="aspect-[4/5] relative rounded-[2rem] overflow-hidden shadow-[0_50px_100px_-20px_rgba(0,0,0,0.15)]">
+              <div className="aspect-[4/3] relative rounded-[2rem] overflow-hidden shadow-[0_50px_100px_-20px_rgba(0,0,0,0.15)]">
                 <Image
                   src="/hero-hotel.png"
                   alt="Premium Experience"
