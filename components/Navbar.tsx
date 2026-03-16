@@ -162,8 +162,10 @@ export default function Navbar() {
             {/* Main Navigation */}
             <nav
                 className={cn(
-                    "sticky top-0 z-50 bg-white transition-all duration-300",
-                    isScrolled ? "shadow-lg py-2" : "border-b border-slate-100 dark:border-slate-800 py-4"
+                    "sticky top-0 z-50 transition-all duration-300",
+                    isScrolled 
+                        ? "bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl shadow-lg py-2" 
+                        : "bg-white dark:bg-slate-900 border-b border-slate-100 dark:border-slate-800 py-4"
                 )}
                 role="navigation"
                 aria-label="Main Navigation"
@@ -177,7 +179,7 @@ export default function Navbar() {
                                 alt={siteTitle}
                                 width={200}
                                 height={50}
-                                className="h-10 md:h-12 w-auto object-contain"
+                                className="h-10 md:h-12 w-auto object-contain dark:invert dark:brightness-200"
                             />
                         </Link>
 
@@ -205,27 +207,43 @@ export default function Navbar() {
                             <div className="h-6 w-px bg-slate-200 dark:bg-slate-800 hidden md:block"></div>
 
                             {/* Theme & Wishlist */}
-                            <div className="flex items-center gap-1 md:gap-2">
-                                <button
+                            <div className="flex items-center gap-1 md:gap-3">
+                                <motion.button
+                                    whileTap={{ scale: 0.9 }}
                                     onClick={toggleTheme}
-                                    className="p-2 hover:bg-slate-100 rounded-lg transition-colors"
+                                    className="w-10 h-10 flex items-center justify-center bg-slate-100 dark:bg-slate-800 rounded-full text-slate-900 dark:text-white transition-all hover:ring-4 hover:ring-red-600/10"
                                     aria-label="Toggle theme"
                                 >
-                                    {theme === 'dark' ? <Sun size={20} className="text-slate-400" /> : <Moon size={20} className="text-slate-800" />}
-                                </button>
-
-                                <Link
-                                    href="/wishlist"
-                                    className="relative p-2 hover:bg-slate-100 rounded-lg transition-colors"
-                                    aria-label={`View Wishlist (${wishlist.length} items)`}
-                                >
-                                    <Heart size={20} className="text-slate-800" />
-                                    {wishlist.length > 0 && (
-                                        <span className="absolute -top-1 -right-1 bg-primary text-white text-[10px] font-bold rounded-full w-5 h-5 flex items-center justify-center">
-                                            {wishlist.length}
-                                        </span>
-                                    )}
-                                </Link>
+                                    <AnimatePresence mode="wait">
+                                        <motion.div
+                                            key={theme}
+                                            initial={{ opacity: 0, rotate: -90, scale: 0.5 }}
+                                            animate={{ opacity: 1, rotate: 0, scale: 1 }}
+                                            exit={{ opacity: 0, rotate: 90, scale: 0.5 }}
+                                            transition={{ duration: 0.2 }}
+                                        >
+                                            {theme === 'dark' ? <Sun size={18} /> : <Moon size={18} />}
+                                        </motion.div>
+                                    </AnimatePresence>
+                                </motion.button>
+                                
+                                <motion.div whileTap={{ scale: 0.9 }}>
+                                    <Link
+                                        href="/wishlist"
+                                        className="relative w-10 h-10 flex items-center justify-center bg-slate-100 dark:bg-slate-800 rounded-full text-slate-900 dark:text-white transition-all hover:ring-4 hover:ring-red-600/10"
+                                        aria-label={`View Wishlist (${wishlist.length} items)`}
+                                    >
+                                        <Heart 
+                                            size={18} 
+                                            className={cn(wishlist.length > 0 ? "text-red-600 fill-red-600" : "text-current")} 
+                                        />
+                                        {wishlist.length > 0 && (
+                                            <span className="absolute -top-1 -right-1 bg-red-600 text-white text-[9px] font-black rounded-full w-5 h-5 flex items-center justify-center shadow-lg shadow-red-600/40 border-2 border-white dark:border-slate-800">
+                                                {wishlist.length}
+                                            </span>
+                                        )}
+                                    </Link>
+                                </motion.div>
 
                                 <button
                                     onClick={() => setIsOpen(!isOpen)}
@@ -287,8 +305,8 @@ function DropdownMenuItem({ item }: { item: NavMenuItem }) {
             <Link
                 href={item.href}
                 className={cn(
-                    "text-xs font-black text-slate-900 uppercase tracking-[0.2em] hover:text-red-600 transition-all flex items-center gap-1.5",
-                    isHovered && "text-red-600"
+                    "text-xs font-black text-slate-900 dark:text-slate-300 uppercase tracking-[0.2em] hover:text-red-600 dark:hover:text-white transition-all flex items-center gap-1.5",
+                    isHovered && "text-red-600 dark:text-white"
                 )}
             >
                 {item.label}
@@ -314,12 +332,12 @@ function DropdownMenuItem({ item }: { item: NavMenuItem }) {
                             transition={{ duration: 0.2, ease: "easeOut" }}
                             className="absolute top-full left-1/2 -translate-x-1/2 pt-2 z-50 min-w-[280px]"
                         >
-                            <div className="bg-white rounded-2xl shadow-[0_20px_50px_rgba(0,0,0,0.15)] border border-slate-100 py-4 overflow-hidden">
+                            <div className="bg-white dark:bg-slate-900 rounded-2xl shadow-[0_20px_50px_rgba(0,0,0,0.15)] border border-slate-100 dark:border-slate-800 py-4 overflow-hidden">
                                 {item.children?.map((child, cIdx) => (
                                     <div key={cIdx} className="relative group/sub">
                                         <Link
                                             href={child.href}
-                                            className="block px-8 py-3.5 text-xs font-black text-slate-600 uppercase tracking-[0.15em] hover:bg-slate-50 hover:text-red-600 transition-all"
+                                            className="block px-8 py-3.5 text-xs font-black text-slate-600 dark:text-slate-400 uppercase tracking-[0.15em] hover:bg-slate-50 dark:hover:bg-slate-800 hover:text-red-600 dark:hover:text-white transition-all"
                                         >
                                             {child.label}
                                         </Link>
