@@ -13,6 +13,7 @@ export type BookingRequestData = {
     paxChildren: number
     travelers: Record<string, unknown>[]
     specialRequests?: string
+    roomPreference?: string
     // Contact Info for Guest/New Customers
     firstName?: string
     lastName?: string
@@ -113,7 +114,9 @@ export async function createBookingRequest(data: BookingRequestData) {
             total_amount: data.amount,
             activity_type: data.serviceCategory,
             activity_name: data.serviceName,
-            description: data.specialRequests || `Travelers: ${JSON.stringify(data.travelers)}`,
+            description: data.roomPreference 
+                ? `Room: ${data.roomPreference}. ${data.specialRequests || ''} Travelers: ${JSON.stringify(data.travelers)}`
+                : data.specialRequests || `Travelers: ${JSON.stringify(data.travelers)}`,
             created_at: new Date().toISOString()
         }
 
