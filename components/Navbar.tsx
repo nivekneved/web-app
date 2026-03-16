@@ -212,7 +212,7 @@ export default function Navbar() {
                                 <motion.button
                                     whileTap={{ scale: 0.9 }}
                                     onClick={toggleTheme}
-                                    className="w-10 h-10 flex items-center justify-center bg-slate-100 dark:bg-slate-200 rounded-full text-slate-900 dark:text-slate-900 transition-all hover:ring-4 hover:ring-red-600/10"
+                                    className="w-10 h-10 flex items-center justify-center bg-slate-100 dark:bg-slate-800 rounded-full text-slate-900 dark:text-white transition-all hover:ring-4 hover:ring-red-600/10"
                                     aria-label="Toggle theme"
                                 >
                                     <AnimatePresence mode="wait">
@@ -231,7 +231,7 @@ export default function Navbar() {
                                 <motion.div whileTap={{ scale: 0.9 }}>
                                     <Link
                                         href="/wishlist"
-                                        className="relative w-10 h-10 flex items-center justify-center bg-slate-100 dark:bg-slate-200 rounded-full text-slate-900 dark:text-slate-900 transition-all hover:ring-4 hover:ring-red-600/10"
+                                        className="relative w-10 h-10 flex items-center justify-center bg-slate-100 dark:bg-slate-800 rounded-full text-slate-900 dark:text-white transition-all hover:ring-4 hover:ring-red-600/10"
                                         aria-label={`View Wishlist (${wishlist.length} items)`}
                                     >
                                         <Heart 
