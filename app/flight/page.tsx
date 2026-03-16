@@ -27,8 +27,8 @@ export default function FlightPage() {
         
         <div className="container mx-auto px-4 relative z-10 text-white">
           <div className="max-w-2xl">
-            <h1 className="text-4xl md:text-8xl font-bold mb-6 italic tracking-tighter">Your Journey Starts Here</h1>
-            <p className="text-xl md:text-2xl mb-10 text-white/90 font-light font-sans max-w-2xl mx-auto">As an IATA accredited travel agency, we offer safe, secure, and memorable flight bookings. Benefit from the assistance of our expert agents for both local and international travel.</p>
+            <h1 className="text-4xl md:text-8xl font-black mb-6 tracking-normal">Your Journey Starts Here</h1>
+            <p className="text-xl md:text-2xl mb-10 text-white/90 font-light font-sans max-w-2xl">As an IATA accredited travel agency, we offer safe, secure, and memorable flight bookings. Benefit from the assistance of our expert agents for both local and international travel.</p>
             <Link 
               href="/contact"
               className="inline-block px-8 py-4 bg-primary text-white font-bold rounded-full hover:bg-primary/90 transition-all transform hover:scale-105"
