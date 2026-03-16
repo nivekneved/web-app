@@ -123,7 +123,7 @@ export default function PlanMyTrip() {
                                 name="destination"
                                 required 
                                 placeholder="e.g. Dubai, Paris, Maldives"
-                                className="w-full pl-14 pr-6 py-5 bg-slate-50 border border-slate-100 rounded-2xl focus:outline-none focus:ring-2 focus:ring-red-600/50 focus:bg-white font-bold text-sm transition-all" 
+                                className="w-full pl-14 pr-6 py-5 bg-slate-50 border border-slate-100 rounded-2xl focus:outline-none focus:ring-2 focus:ring-red-600/50 focus:bg-white font-bold text-sm text-slate-900 placeholder:text-slate-400 transition-all" 
                             />
                         </div>
                     </div>
@@ -136,7 +136,7 @@ export default function PlanMyTrip() {
                                 type="date" 
                                 name="departure_date"
                                 required
-                                className="w-full px-5 py-5 bg-slate-50 border border-slate-100 rounded-2xl focus:outline-none focus:ring-2 focus:ring-red-600/50 focus:bg-white font-bold text-sm transition-all" 
+                                className="w-full px-5 py-5 bg-slate-50 border border-slate-100 rounded-2xl focus:outline-none focus:ring-2 focus:ring-red-600/50 focus:bg-white font-bold text-sm text-slate-900 transition-all" 
                             />
                         </div>
                         <div className="space-y-3">
@@ -145,7 +145,7 @@ export default function PlanMyTrip() {
                                 type="date" 
                                 name="return_date"
                                 required
-                                className="w-full px-5 py-5 bg-slate-50 border border-slate-100 rounded-2xl focus:outline-none focus:ring-2 focus:ring-red-600/50 focus:bg-white font-bold text-sm transition-all" 
+                                className="w-full px-5 py-5 bg-slate-50 border border-slate-100 rounded-2xl focus:outline-none focus:ring-2 focus:ring-red-600/50 focus:bg-white font-bold text-sm text-slate-900 transition-all" 
                             />
                         </div>
                     </div>
@@ -159,7 +159,7 @@ export default function PlanMyTrip() {
                                 <select 
                                     name="adults"
                                     required
-                                    className="w-full pl-14 pr-6 py-5 bg-slate-50 border border-slate-100 rounded-2xl focus:outline-none focus:ring-2 focus:ring-red-600/50 focus:bg-white font-bold text-sm transition-all appearance-none"
+                                    className="w-full pl-14 pr-6 py-5 bg-slate-50 border border-slate-100 rounded-2xl focus:outline-none focus:ring-2 focus:ring-red-600/50 focus:bg-white font-bold text-sm text-slate-900 transition-all appearance-none"
                                 >
                                     {[1,2,3,4,5,6,7,8,9,10].map(n => <option key={n} value={n.toString()}>{n} Adults</option>)}
                                 </select>
@@ -171,7 +171,7 @@ export default function PlanMyTrip() {
                                 <Users className="absolute left-5 top-1/2 -translate-y-1/2 text-slate-300 pointer-events-none" size={18} />
                                 <select 
                                     name="children"
-                                    className="w-full pl-14 pr-6 py-5 bg-slate-50 border border-slate-100 rounded-2xl focus:outline-none focus:ring-2 focus:ring-red-600/50 focus:bg-white font-bold text-sm transition-all appearance-none"
+                                    className="w-full pl-14 pr-6 py-5 bg-slate-50 border border-slate-100 rounded-2xl focus:outline-none focus:ring-2 focus:ring-red-600/50 focus:bg-white font-bold text-sm text-slate-900 transition-all appearance-none"
                                 >
                                     {[0,1,2,3,4,5,6].map(n => <option key={n} value={n.toString()}>{n} Children</option>)}
                                 </select>
@@ -189,7 +189,7 @@ export default function PlanMyTrip() {
                             name="budget"
                             required 
                             placeholder="e.g. 50,000 - 100,000"
-                            className="w-full pl-14 pr-6 py-5 bg-slate-50 border border-slate-100 rounded-2xl focus:outline-none focus:ring-2 focus:ring-red-600/50 focus:bg-white font-bold text-sm transition-all" 
+                            className="w-full pl-14 pr-6 py-5 bg-slate-50 border border-slate-100 rounded-2xl focus:outline-none focus:ring-2 focus:ring-red-600/50 focus:bg-white font-bold text-sm text-slate-900 placeholder:text-slate-400 transition-all" 
                         />
                       </div>
                     </div>
@@ -241,7 +241,7 @@ export default function PlanMyTrip() {
                       name="message"
                       rows={4}
                       placeholder="Share any specific interests, dietary requirements, or special occasions..."
-                      className="w-full px-6 py-5 bg-slate-50 border border-slate-100 rounded-2xl focus:outline-none focus:ring-2 focus:ring-red-600/50 focus:bg-white font-bold text-sm transition-all resize-none" 
+                      className="w-full px-6 py-5 bg-slate-50 border border-slate-100 rounded-2xl focus:outline-none focus:ring-2 focus:ring-red-600/50 focus:bg-white font-bold text-sm text-slate-900 placeholder:text-slate-400 transition-all resize-none" 
                     ></textarea>
                   </div>
 
