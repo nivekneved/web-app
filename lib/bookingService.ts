@@ -111,7 +111,6 @@ export async function createBookingRequest(data: BookingRequestData) {
             pax_adults: data.paxAdults,
             pax_children: data.paxChildren,
             amount: data.amount,
-            total_amount: data.amount,
             activity_type: data.serviceCategory,
             activity_name: data.serviceName,
             description: data.roomPreference 

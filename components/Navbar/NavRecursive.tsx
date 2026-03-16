@@ -17,7 +17,7 @@ export const NavRecursive: React.FC<NavRecursiveProps> = ({ items, level = 0, on
   return (
     <ul className={cn(
       "flex",
-      level === 0 ? "flex-row items-center gap-6" : "flex-col py-2 w-56 px-2"
+      level === 0 ? "flex-row items-center gap-8" : "flex-col py-3 w-64 px-2"
     )}>
       {items.map((item, index) => (
         <NavItem key={`${item.href}-${index}`} item={item} level={level} onClose={onClose} />
@@ -69,10 +69,10 @@ const NavItem: React.FC<{ item: NavMenuItem; level: number; onClose?: () => void
       <Link
         href={item.href}
         className={cn(
-          "flex items-center justify-between transition-colors duration-200",
+          "flex items-center justify-between transition-all duration-300",
           level === 0 
-            ? "text-slate-800 hover:text-primary font-bold py-6 text-sm uppercase tracking-wide" 
-            : "px-4 py-2 text-sm text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg font-medium"
+            ? "text-slate-900 dark:text-slate-100 hover:text-red-600 font-extrabold py-8 text-[11px] uppercase tracking-[0.2em]" 
+            : "px-4 py-2.5 text-sm text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 hover:text-red-600 rounded-lg font-semibold"
         )}
         onClick={(e) => {
           if (item.href === '#') {
@@ -104,8 +104,8 @@ const NavItem: React.FC<{ item: NavMenuItem; level: number; onClose?: () => void
             exit={{ opacity: 0, y: 10, scale: 0.95 }}
             transition={{ duration: 0.2, ease: "easeOut" }}
             className={cn(
-              "absolute z-50 bg-white dark:bg-slate-900 shadow-2xl rounded-xl border border-slate-100 dark:border-slate-800",
-              level === 0 ? "top-full left-0 mt-0" : "top-0 left-full ml-1"
+              "absolute z-50 bg-white dark:bg-slate-900 shadow-[0_20px_50px_rgba(0,0,0,0.1)] rounded-2xl border border-slate-100 dark:border-slate-800 p-2",
+              level === 0 ? "top-full left-0 mt-2" : "top-0 left-full ml-2"
             )}
           >
             <NavRecursive items={item.children!} level={level + 1} onClose={onClose} />

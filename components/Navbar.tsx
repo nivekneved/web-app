@@ -3,13 +3,14 @@
 import Link from 'next/link'
 import { useState, useEffect, useCallback } from 'react'
 import Image from 'next/image'
-import { Menu, X, Heart, Phone, Mail, Facebook, Instagram, MessageCircle, ChevronDown } from 'lucide-react'
+import { Menu, X, Heart, Phone, Mail, Facebook, Instagram, MessageCircle } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useWishlist } from '@/contexts/WishlistContext'
 // import { useTheme } from '@/contexts/ThemeContext'
 import { createClient } from '@/lib/supabase'
 import { navigationConfig, type NavMenuItem } from '@/lib/navigation'
 import { MobileAccordion } from './Navbar/MobileAccordion'
+import { NavRecursive } from './Navbar/NavRecursive'
 // import { MegaMenu } from './MegaMenu'
 import { cn } from '@/lib/utils'
 import { Button } from './ui/Button'
@@ -188,7 +189,10 @@ export default function Navbar() {
                             />
                         </Link>
 
-                        {/* Desktop Navigation - Removed for minimalist redesign */}
+                        {/* Desktop Navigation */}
+                        <div className="hidden lg:flex items-center justify-center flex-grow">
+                            <NavRecursive items={menuItems} />
+                        </div>
 
                         {/* Right Section */}
                         <div className="flex items-center gap-2 md:gap-4">
@@ -226,7 +230,7 @@ export default function Navbar() {
                                     </Link>
                                 </motion.div>
 
-                                <motion.div whileTap={{ scale: 0.9 }}>
+                                <motion.div whileTap={{ scale: 0.9 }} className="lg:hidden">
                                     <button
                                         onClick={() => setIsOpen(!isOpen)}
                                         className="group p-2 flex items-center gap-3 bg-slate-100 dark:bg-slate-50 border border-slate-200 dark:border-slate-300 rounded-full pl-5 pr-2 transition-all hover:ring-4 hover:ring-red-600/10"
