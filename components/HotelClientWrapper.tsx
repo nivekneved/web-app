@@ -19,6 +19,7 @@ type RoomType = {
     type: string;
     price: number;
     image_url?: string;
+    images?: string[]; // Support for multiple images
     features?: string[];
     available?: boolean;
     prices?: Record<string, string>;
@@ -46,6 +47,8 @@ export default function HotelClientWrapper({ hotel }: { hotel: Hotel }) {
     const [selectedRoom, setSelectedRoom] = useState<RoomType | null>(null)
     const [showWizard, setShowWizard] = useState(false)
     const [bookingLoading, setBookingLoading] = useState(false)
+    const [activeGallery, setActiveGallery] = useState<{ images: string[], title: string } | null>(null)
+    const [currentGalleryIdx, setCurrentGalleryIdx] = useState(0)
 
     function toggleWishlist() {
         if (!hotel) return
@@ -222,6 +225,23 @@ export default function HotelClientWrapper({ hotel }: { hotel: Hotel }) {
                                                         fill
                                                         className="object-cover group-hover:scale-110 transition-transform duration-700"
                                                     />
+                                                    
+                                                    {room.images && room.images.length > 0 && (
+                                                        <button
+                                                            onClick={(e) => {
+                                                                e.stopPropagation();
+                                                                setActiveGallery({ images: [room.image_url || hotel.image_url, ...(room.images || [])], title: room.type });
+                                                                setCurrentGalleryIdx(0);
+                                                            }}
+                                                            className="absolute top-4 left-4 p-2.5 bg-white/90 backdrop-blur-md text-red-600 rounded-2xl opacity-0 group-hover:opacity-100 transition-all hover:scale-110 active:scale-95 shadow-lg border border-red-50"
+                                                        >
+                                                            <div className="flex items-center gap-2">
+                                                                <Users size={14} className="animate-pulse" />
+                                                                <span className="text-[9px] font-black uppercase tracking-widest leading-none">View Gallery ({room.images.length + 1})</span>
+                                                            </div>
+                                                        </button>
+                                                    )}
+
                                                     {isSelected && (
                                                         <div className="absolute inset-0 bg-red-600/20 flex items-center justify-center backdrop-blur-[2px]">
                                                             <div className="bg-white text-red-600 p-2 rounded-full shadow-lg">
@@ -393,6 +413,72 @@ export default function HotelClientWrapper({ hotel }: { hotel: Hotel }) {
                             isLoading={bookingLoading}
                             roomOptions={hotel.room_types?.map(r => r.type)}
                         />
+                    </div>
+                </div>
+            )}
+
+            {/* Room Image Gallery Modal */}
+            {activeGallery && (
+                <div className="fixed inset-0 z-[200] bg-black/95 backdrop-blur-xl flex flex-col items-center justify-center animate-in fade-in duration-300">
+                    <button 
+                        onClick={() => setActiveGallery(null)}
+                        className="absolute top-8 right-8 p-4 text-white hover:text-red-500 transition-colors z-[210] bg-white/10 rounded-full"
+                    >
+                        <X size={32} />
+                    </button>
+
+                    <div className="w-full max-w-6xl px-8 flex flex-col gap-8">
+                        <div className="flex items-center justify-between text-white">
+                            <div>
+                                <h3 className="text-[10px] font-black uppercase tracking-[0.4em] text-red-500 mb-2">Room Preview</h3>
+                                <h2 className="text-3xl font-black tracking-tight">{activeGallery.title}</h2>
+                            </div>
+                            <div className="text-right">
+                                <span className="text-[10px] font-black uppercase tracking-widest text-slate-500">Image</span>
+                                <div className="text-2xl font-black">{currentGalleryIdx + 1} / {activeGallery.images.length}</div>
+                            </div>
+                        </div>
+
+                        <div className="relative aspect-video w-full rounded-[3rem] overflow-hidden group shadow-2xl">
+                            <Image
+                                src={activeGallery.images[currentGalleryIdx]}
+                                alt={`${activeGallery.title} - ${currentGalleryIdx + 1}`}
+                                fill
+                                className="object-cover animate-in fade-in duration-500"
+                            />
+                            
+                            <div className="absolute inset-x-8 top-1/2 -translate-y-1/2 flex justify-between opacity-0 group-hover:opacity-100 transition-opacity">
+                                <button 
+                                    onClick={() => setCurrentGalleryIdx(prev => (prev > 0 ? prev - 1 : activeGallery.images.length - 1))}
+                                    className="p-5 bg-white/10 backdrop-blur-xl text-white rounded-full hover:bg-white/30 transition-all border border-white/20"
+                                >
+                                    <ArrowLeft size={32} />
+                                </button>
+                                <button 
+                                    onClick={() => setCurrentGalleryIdx(prev => (prev < activeGallery.images.length - 1 ? prev + 1 : 0))}
+                                    className="p-5 bg-brand-red text-white rounded-full hover:bg-red-600 transition-all shadow-xl shadow-red-600/20"
+                                >
+                                    <div className="rotate-180">
+                                        <ArrowLeft size={32} />
+                                    </div>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div className="flex gap-4 overflow-x-auto pb-4 px-2 custom-scrollbar">
+                            {activeGallery.images.map((img, i) => (
+                                <button
+                                    key={i}
+                                    onClick={() => setCurrentGalleryIdx(i)}
+                                    className={cn(
+                                        "relative w-24 h-24 rounded-2xl overflow-hidden shrink-0 transition-all duration-300 border-2",
+                                        currentGalleryIdx === i ? "border-red-500 scale-110 shadow-lg" : "border-transparent opacity-50 hover:opacity-100"
+                                    )}
+                                >
+                                    <Image src={img} alt={`Thumb ${i}`} fill className="object-cover" />
+                                </button>
+                            ))}
+                        </div>
                     </div>
                 </div>
             )}
