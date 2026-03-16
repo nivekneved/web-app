@@ -15,6 +15,15 @@ import { Button } from './ui/Button'
 import { cn } from '@/lib/utils'
 import StarRating from './ui/StarRating'
 
+type RoomType = {
+    type: string;
+    price: number;
+    image_url?: string;
+    features?: string[];
+    available?: boolean;
+    prices?: Record<string, string>;
+}
+
 type Hotel = {
     id: string
     name: string
@@ -25,7 +34,7 @@ type Hotel = {
     rating: number
     image_url: string
     amenities: string[]
-    room_types?: { type: string; price: number }[]
+    room_types?: RoomType[]
 }
 
 export default function HotelClientWrapper({ hotel }: { hotel: Hotel }) {
@@ -34,6 +43,7 @@ export default function HotelClientWrapper({ hotel }: { hotel: Hotel }) {
     const [checkIn, setCheckIn] = useState('')
     const [checkOut, setCheckOut] = useState('')
     const [guests, setGuests] = useState(2)
+    const [selectedRoom, setSelectedRoom] = useState<RoomType | null>(null)
     const [showWizard, setShowWizard] = useState(false)
     const [bookingLoading, setBookingLoading] = useState(false)
 
@@ -60,6 +70,12 @@ export default function HotelClientWrapper({ hotel }: { hotel: Hotel }) {
             toast.error('Please select check-in and check-out dates')
             return
         }
+        if (!selectedRoom && hotel.room_types && hotel.room_types.length > 0) {
+            toast.error('Please select a room type')
+            const element = document.getElementById('rooms-selection');
+            element?.scrollIntoView({ behavior: 'smooth' });
+            return
+        }
         setShowWizard(true)
     }
 
@@ -70,10 +86,11 @@ export default function HotelClientWrapper({ hotel }: { hotel: Hotel }) {
                 serviceId: hotel.id,
                 serviceName: hotel.name,
                 serviceCategory: 'hotel',
-                amount: hotel.base_price,
+                amount: selectedRoom ? (parseFloat(selectedRoom.prices?.[new Date().toLocaleDateString('en-US', {weekday: 'short'}).toLowerCase()] || '0') || selectedRoom.price || hotel.base_price) : hotel.base_price,
                 startDate: formData.checkIn || checkIn,
                 endDate: formData.checkOut || checkOut,
                 paxAdults: formData.guests || guests,
+                roomPreference: selectedRoom?.type,
                 paxChildren: 0,
                 travelers: formData.travelers as Record<string, unknown>[],
                 specialRequests: formData.notes,
@@ -176,6 +193,86 @@ export default function HotelClientWrapper({ hotel }: { hotel: Hotel }) {
                             </p>
                         </section>
 
+                        <section id="rooms-selection">
+                            <h2 className="text-xs font-black text-red-600 uppercase tracking-[0.4em] mb-3">Accommodation</h2>
+                            <h3 className="text-4xl font-black text-slate-900 mb-6 leading-tight">Choose Your Room</h3>
+                            <div className="space-y-6">
+                                {hotel.room_types && hotel.room_types.length > 0 ? (
+                                    hotel.room_types.map((room, idx) => {
+                                        const isSelected = selectedRoom?.type === room.type;
+                                        // Simple price logic for preview
+                                        const today = new Date().toLocaleDateString('en-US', { weekday: 'short' }).toLowerCase();
+                                        const roomPrice = parseFloat(room.prices?.[today] || room.price?.toString() || hotel.base_price.toString());
+                                        
+                                        return (
+                                            <div 
+                                                key={idx} 
+                                                onClick={() => setSelectedRoom(room)}
+                                                className={cn(
+                                                    "flex flex-col md:flex-row gap-6 p-6 rounded-[2.5rem] border transition-all duration-500 cursor-pointer group",
+                                                    isSelected 
+                                                        ? "bg-slate-900 border-slate-900 shadow-2xl shadow-slate-200 scale-[1.02]" 
+                                                        : "bg-white border-slate-100 hover:border-red-200 shadow-sm hover:shadow-xl hover:shadow-slate-100"
+                                                )}
+                                            >
+                                                <div className="relative w-full md:w-64 h-48 rounded-[2rem] overflow-hidden shrink-0">
+                                                    <Image
+                                                        src={room.image_url || hotel.image_url}
+                                                        alt={room.type}
+                                                        fill
+                                                        className="object-cover group-hover:scale-110 transition-transform duration-700"
+                                                    />
+                                                    {isSelected && (
+                                                        <div className="absolute inset-0 bg-red-600/20 flex items-center justify-center backdrop-blur-[2px]">
+                                                            <div className="bg-white text-red-600 p-2 rounded-full shadow-lg">
+                                                                <Check size={20} />
+                                                            </div>
+                                                        </div>
+                                                    )}
+                                                </div>
+                                                <div className="flex-1 flex flex-col justify-between py-2">
+                                                    <div>
+                                                        <div className="flex justify-between items-start mb-2">
+                                                            <h4 className={cn("text-2xl font-black tracking-tight", isSelected ? "text-white" : "text-slate-900")}>
+                                                                {room.type}
+                                                            </h4>
+                                                            <div className="text-right">
+                                                                <div className={cn("text-2xl font-black", isSelected ? "text-red-400" : "text-red-600")}>
+                                                                    MUR {roomPrice.toLocaleString()}
+                                                                </div>
+                                                                <div className={cn("text-[8px] font-black uppercase tracking-widest", isSelected ? "text-slate-500" : "text-slate-400")}>
+                                                                    Per Night
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <p className={cn("text-sm mb-4 font-medium leading-relaxed", isSelected ? "text-slate-400" : "text-slate-500")}>
+                                                            Indulge in our refined {room.type.toLowerCase()} featuring premium amenities and world-class comfort.
+                                                        </p>
+                                                        <div className="flex flex-wrap gap-2">
+                                                            {room.features?.map((f, i) => (
+                                                                <span key={i} className={cn(
+                                                                    "px-3 py-1 rounded-lg text-[9px] font-black uppercase tracking-widest border transition-colors",
+                                                                    isSelected 
+                                                                        ? "bg-white/5 border-white/10 text-slate-300" 
+                                                                        : "bg-slate-50 border-slate-100 text-slate-500"
+                                                                )}>
+                                                                    {f}
+                                                                </span>
+                                                            ))}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        );
+                                    })
+                                ) : (
+                                    <div className="p-12 text-center bg-slate-50 rounded-[2rem] border border-dashed border-slate-200">
+                                        <p className="text-slate-400 font-bold">Multiple room types coming soon...</p>
+                                    </div>
+                                )}
+                            </div>
+                        </section>
+
                         <section>
                             <h2 className="text-xs font-black text-red-600 uppercase tracking-[0.4em] mb-3">Experience</h2>
                             <h3 className="text-4xl font-black text-slate-900 mb-6 leading-tight">Premium Amenities</h3>
@@ -198,7 +295,11 @@ export default function HotelClientWrapper({ hotel }: { hotel: Hotel }) {
                         <div className="sticky top-24">
                             <div className="bg-white rounded-[3rem] border border-slate-100 p-10 shadow-[0_50px_100px_-20px_rgba(0,0,0,0.08)]">
                                 <div className="flex items-end gap-2 mb-10">
-                                    <span className="text-5xl font-black text-slate-900 tracking-tighter">MUR {hotel.base_price.toLocaleString()}</span>
+                                    <span className="text-5xl font-black text-slate-900 tracking-tighter">
+                                        MUR {selectedRoom 
+                                            ? parseFloat(selectedRoom.prices?.[new Date().toLocaleDateString('en-US', {weekday: 'short'}).toLowerCase()] || selectedRoom.price?.toString() || hotel.base_price.toString()).toLocaleString()
+                                            : hotel.base_price.toLocaleString()}
+                                    </span>
                                     <span className="text-slate-400 font-black text-[10px] uppercase tracking-widest mb-3">/ night</span>
                                 </div>
 
@@ -285,10 +386,12 @@ export default function HotelClientWrapper({ hotel }: { hotel: Hotel }) {
                             initialData={{
                                 checkIn,
                                 checkOut,
-                                guests
+                                guests,
+                                roomPreference: selectedRoom?.type
                             }}
                             onComplete={onBookingConfirm}
                             isLoading={bookingLoading}
+                            roomOptions={hotel.room_types?.map(r => r.type)}
                         />
                     </div>
                 </div>
