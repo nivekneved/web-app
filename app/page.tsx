@@ -287,12 +287,12 @@ export default function HomePage() {
       </section>
 
       {/* Partner Slider - Reduced spacing */}
-      <section className="bg-slate-900 py-10 text-white">
+      <section className="bg-slate-50 py-10 text-slate-900">
         <div className="container mx-auto px-6">
           <div className="flex items-center gap-8 mb-6">
-             <div className="h-px flex-1 bg-white/10" />
-             <h2 className="text-[10px] font-black uppercase tracking-[0.6em] text-white/40">Our Global Partners</h2>
-             <div className="h-px flex-1 bg-white/10" />
+             <div className="h-px flex-1 bg-slate-200" />
+             <h2 className="text-[10px] font-black uppercase tracking-[0.6em] text-slate-400">Our Global Partners</h2>
+             <div className="h-px flex-1 bg-slate-200" />
           </div>
           <PartnerSlider />
         </div>
