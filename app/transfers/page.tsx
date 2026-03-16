@@ -1,3 +1,5 @@
+'use client'
+
 import Image from 'next/image'
 import Link from 'next/link'
 import { Car, MapPin, Clock, Shield, CheckCircle2, Star, Calendar } from 'lucide-react'
