@@ -204,8 +204,8 @@ export default function HomePage() {
             >
                 <h2 className="text-xs font-black text-red-600 uppercase tracking-[0.5em] mb-6">Our Services</h2>
                 <h3 className="text-4xl md:text-6xl font-black text-slate-900 leading-[1.1] tracking-tighter">
-                    Crafting Unforgettable <br /> 
-                    <span className="text-slate-300">Global Vacations.</span>
+                    Helping You Plan <br /> 
+                    <span className="text-slate-300">Perfect Holidays.</span>
                 </h3>
             </motion.div>
             <motion.p 
@@ -213,9 +213,9 @@ export default function HomePage() {
                 whileInView={{ opacity: 1, x: 0 }}
                 className="max-w-md text-slate-500 font-medium leading-relaxed"
             >
-                We specialize in comfortable escapes that go beyond the ordinary. 
-                From private islands to hidden cultural gems, every journey 
-                is meticulously planned for the discerning traveler.
+                We specialize in comfortable escapes that everyone can enjoy. 
+                From beautiful beaches to local cultural spots, every journey 
+                is carefully planned for all travelers.
             </motion.p>
           </div>
 
