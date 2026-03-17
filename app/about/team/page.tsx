@@ -86,42 +86,50 @@ export default function TeamPage() {
                                     transition={{ delay: i * 0.1 }}
                                     className="group"
                                 >
-                                    <div className="relative aspect-[4/5] rounded-[3rem] overflow-hidden mb-8 shadow-2xl shadow-slate-200">
+                                    <div className="relative aspect-[4/5] rounded-[3rem] overflow-hidden shadow-2xl shadow-slate-200">
                                         <Image
                                             src={member.photo_url || `https://ui-avatars.com/api/?name=${encodeURIComponent(member.name)}&size=800&background=F3F4F6&color=9CA3AF`}
                                             alt={member.name}
                                             fill
                                             className="object-cover transition-transform duration-700 group-hover:scale-110"
                                         />
-                                        <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                                        
+                                        {/* Persistent Gradient for legibility */}
+                                        <div className="absolute inset-0 bg-gradient-to-t from-slate-950/90 via-slate-950/20 to-transparent" />
 
-                                        <div className="absolute bottom-6 left-6 right-6 flex gap-3 translate-y-12 group-hover:translate-y-0 transition-transform duration-500">
-                                            <div className="flex gap-2 bg-white/10 backdrop-blur-md p-2 rounded-2xl w-full justify-around border border-white/20">
-                                                <a href={`mailto:${member.email}`} className="text-white hover:text-red-600 transition-colors p-2 text-center w-full">
-                                                    <Mail size={20} className="mx-auto" />
+                                        {/* Hover Overlay for Bio */}
+                                        <div className="absolute inset-0 bg-red-600/90 backdrop-blur-sm opacity-0 group-hover:opacity-100 transition-opacity duration-500 p-10 flex flex-col justify-center text-white">
+                                            <p className="text-lg font-medium leading-relaxed mb-8">
+                                                {member.bio || "Dedicated travel professional at Travel Lounge."}
+                                            </p>
+                                            <div className="flex flex-col gap-4">
+                                                <a href={`mailto:${member.email}`} className="flex items-center gap-3 bg-white/20 hover:bg-white/30 transition-all p-4 rounded-2xl border border-white/20">
+                                                    <Mail size={20} />
+                                                    <span className="font-bold text-sm">Send Email</span>
                                                 </a>
+                                                <Link
+                                                    href={`/contact?subject=Meeting with ${member.name}`}
+                                                    className="flex items-center gap-3 bg-white text-red-600 font-bold p-4 rounded-2xl hover:bg-slate-900 hover:text-white transition-all"
+                                                >
+                                                    <ArrowRight size={20} />
+                                                    <span className="text-sm">Book Consultation</span>
+                                                </Link>
                                             </div>
                                         </div>
-                                    </div>
 
-                                    <div className="px-4">
-                                        <div className="flex items-center gap-3 mb-3">
-                                            <span className={`w-12 h-1 bg-red-600 rounded-full`} />
-                                            <span className="text-sm font-bold text-red-600 uppercase tracking-widest">
-                                                {roleLabels[member.role] || member.role}
-                                            </span>
+                                        {/* Persistent Text Overlay (Name/Role) */}
+                                        <div className="absolute bottom-10 left-10 right-10 group-hover:opacity-0 transition-opacity duration-300">
+                                            <div className="flex items-center gap-3 mb-4">
+                                                <span className="w-8 h-1 bg-red-600 rounded-full" />
+                                                <span className="text-[10px] font-black text-white/80 uppercase tracking-[0.3em]">
+                                                    {roleLabels[member.role] || member.role}
+                                                </span>
+                                            </div>
+                                            <h3 className="text-4xl font-black text-white leading-tight tracking-tighter">
+                                                {member.name.split(' ')[0]} <br />
+                                                <span className="text-red-500">{member.name.split(' ').slice(1).join(' ')}</span>
+                                            </h3>
                                         </div>
-                                        <h3 className="text-3xl font-black text-slate-900 mb-4">{member.name}</h3>
-                                        <p className="text-slate-500 leading-relaxed mb-6">
-                                            {member.bio || "Dedicated travel professional at Travel Lounge."}
-                                        </p>
-                                        <Link
-                                            href={`/contact?subject=Meeting with ${member.name}`}
-                                            className="inline-flex items-center gap-2 text-slate-900 font-bold hover:text-red-600 transition-colors group/link"
-                                        >
-                                            Book a consultation
-                                            <ArrowRight size={18} className="transform group-hover/link:translate-x-1 transition-transform" />
-                                        </Link>
                                     </div>
                                 </motion.div>
                             ))}
