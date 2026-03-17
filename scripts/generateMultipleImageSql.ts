@@ -144,4 +144,5 @@ if (require.main === module) {
   main();
 }
 
-export { fetchServicesNeedingPhotos, Service };
+export { fetchServicesNeedingPhotos };
+export type { Service };

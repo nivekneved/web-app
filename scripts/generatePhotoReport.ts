@@ -182,4 +182,5 @@ if (require.main === module) {
   main();
 }
 
-export { fetchAllServices, Service, needsNewPhoto, generateGoogleSearchUrl };
+export { fetchAllServices, needsNewPhoto, generateGoogleSearchUrl };
+export type { Service };
