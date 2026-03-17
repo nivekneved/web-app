@@ -183,12 +183,6 @@ export default function Footer() {
                                     <Link href="/packages" className="hover:text-red-600 transition-colors">Holiday Packages</Link>
                                 </li>
                                 <li>
-                                    <Link href="/tours" className="hover:text-red-600 transition-colors">All Tours</Link>
-                                </li>
-                                <li>
-                                    <Link href="/transfers" className="hover:text-red-600 transition-colors">Transfers</Link>
-                                </li>
-                                <li>
                                     <Link href="/news" className="hover:text-red-600 transition-colors">Latest News</Link>
                                 </li>
                                 <li>
