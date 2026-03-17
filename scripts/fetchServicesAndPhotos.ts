@@ -99,4 +99,5 @@ if (require.main === module) {
   main();
 }
 
-export { fetchAllServices, Service };
+export { fetchAllServices };
+export type { Service };
