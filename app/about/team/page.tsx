@@ -121,7 +121,7 @@ export default function TeamPage() {
                                         <div className="absolute bottom-10 left-10 right-10 group-hover:opacity-0 transition-opacity duration-300">
                                             <div className="flex items-center gap-3 mb-4">
                                                 <span className="w-8 h-1 bg-red-600 rounded-full" />
-                                                <span className="text-[10px] font-black text-white/80 uppercase tracking-[0.3em]">
+                                                <span className="text-[10px] font-black text-white uppercase tracking-[0.3em]">
                                                     {roleLabels[member.role] || member.role}
                                                 </span>
                                             </div>
