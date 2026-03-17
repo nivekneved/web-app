@@ -42,7 +42,7 @@ export default function TermsConditionsPage() {
     return (
         <div className="min-h-screen bg-white">
             {/* Header */}
-            <section className="pt-32 pb-16 bg-slate-900 text-white overflow-hidden relative">
+            <section className="relative h-[250px] md:h-[350px] flex items-center bg-slate-900 text-white overflow-hidden relative">
                 <div className="absolute top-0 right-0 w-1/3 h-full bg-red-600/10 skew-x-12 transform translate-x-1/2" />
                 <div className="container mx-auto px-6 relative z-10">
                     <motion.div

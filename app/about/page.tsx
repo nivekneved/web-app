@@ -137,7 +137,7 @@ export default function AboutPage() {
     return (
         <div className="min-h-screen bg-white">
             {/* Hero Section */}
-            <section className="relative h-[600px] flex items-center overflow-hidden">
+            <section className="relative h-[250px] md:h-[350px] flex items-center overflow-hidden">
                 <Image
                     src={hero.image}
                     alt="Travel Lounge Mauritius"

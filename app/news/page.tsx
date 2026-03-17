@@ -46,7 +46,7 @@ export default function NewsPage() {
     return (
         <div className="min-h-screen bg-slate-50 pb-20">
             {/* Hero */}
-            <div className="relative h-[400px] flex items-center justify-center overflow-hidden">
+            <div className="relative h-[250px] md:h-[350px] flex items-center justify-center overflow-hidden">
                 <Image
                     src="/assets/hero/tailormade_travel_hero_1773391405705.png"
                     alt="Travel News"

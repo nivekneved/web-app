@@ -70,7 +70,7 @@ export default function ServicesPage() {
     return (
         <div className="min-h-screen bg-white">
             {/* Hero Section */}
-            <section className="py-32 bg-slate-900 text-white relative overflow-hidden">
+            <section className="relative h-[250px] md:h-[350px] flex items-center overflow-hidden bg-slate-900">
                 <div className="container mx-auto px-6 relative z-10">
                     <motion.div
                         initial={{ opacity: 0, y: 30 }}

@@ -55,7 +55,7 @@ export default function TeamPage() {
     return (
         <div className="min-h-screen bg-white">
             {/* Header */}
-            <section className="bg-slate-50 py-24 border-b border-slate-100">
+            <section className="relative h-[250px] md:h-[350px] flex items-center justify-center bg-slate-50 border-b border-slate-100">
                 <div className="container mx-auto px-6 text-center">
                     <motion.div
                         initial={{ opacity: 0, y: 20 }}

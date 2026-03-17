@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react'
 import Image from 'next/image'
 import { createClient } from '@/lib/supabase'
-import { ChevronDown, HelpCircle, Loader2, Mail, Phone, MessageCircle } from 'lucide-react'
+import { ChevronDown, HelpCircle, Loader2, Mail, MessageCircle } from 'lucide-react'
 import Link from 'next/link'
 
 const supabase = createClient()
@@ -39,6 +39,8 @@ export default function FAQPage() {
                 .eq('is_published', true)
                 .order('order_index', { ascending: true })
 
+            if (error) throw error
+
             if (data && data.length > 0) {
                 const grouped: { [key: string]: GroupedFAQ } = {}
                 data.forEach((faq: FAQ) => {
@@ -49,8 +51,8 @@ export default function FAQPage() {
                 })
                 setFaqData(Object.values(grouped))
             }
-        } catch (error) {
-            console.error('Error loading FAQs:', error)
+        } catch (err) {
+            console.error('Error fetching FAQs:', err)
         } finally {
             setLoading(false)
         }
@@ -77,7 +79,7 @@ export default function FAQPage() {
     return (
         <div className="min-h-screen bg-slate-50 pb-20">
             {/* Hero */}
-            <div className="relative h-[400px] flex items-center justify-center overflow-hidden">
+            <div className="relative h-[250px] md:h-[350px] flex items-center justify-center overflow-hidden">
                 <Image
                     src="/assets/hero/local_deals_hero_1773391387665.png"
                     alt="FAQ"

@@ -131,7 +131,7 @@ export default function DestinationListing({
     return (
         <div className="min-h-screen bg-[#F2F5F7]">
             {/* MMT Style Hero - more focused */}
-            <div className="relative h-[250px] md:h-[300px] flex items-center overflow-hidden">
+            <div className="relative h-[250px] md:h-[350px] flex items-center overflow-hidden">
                 <Image
                     src={heroImage}
                     alt={title}

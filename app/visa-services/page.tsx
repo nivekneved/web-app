@@ -41,7 +41,7 @@ export default function VisaServicesPage() {
     return (
         <div className="min-h-screen bg-slate-50 pb-20">
             {/* Hero Section */}
-            <div className="relative h-[400px] flex items-center overflow-hidden bg-slate-900 rounded-b-[3rem] md:rounded-b-[5rem]">
+            <div className="relative h-[250px] md:h-[350px] flex items-center overflow-hidden bg-slate-900 rounded-b-[3rem] md:rounded-b-[5rem]">
                 <Image
                     src="/hero-flight.png"
                     alt="Travel Visa Services"

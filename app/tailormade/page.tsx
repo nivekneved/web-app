@@ -68,7 +68,7 @@ export default function TailorMadePage() {
   return (
     <div className="bg-white min-h-screen">
       {/* Hero Section */}
-      <section className="relative h-[50vh] min-h-[500px] flex items-center overflow-hidden bg-slate-900">
+      <section className="relative h-[250px] md:h-[350px] flex items-center overflow-hidden bg-slate-900">
         <Image
           src="/assets/hero/tailormade_travel_hero_1773391405705.png"
           alt="Tailor-Made Travel"
@@ -92,16 +92,16 @@ export default function TailorMadePage() {
         </div>
       </section>
 
-      <section className="py-24">
+      <section className="py-12">
         <div className="max-w-7xl mx-auto px-8">
           <Breadcrumbs 
             items={[
                 { label: 'Tailor-Made Travel', active: true }
             ]}
-            className="mb-16"
+            className="mb-8"
           />
 
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-24">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
             
             {/* Form Section */}
             <div className="lg:col-span-2">

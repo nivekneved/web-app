@@ -20,7 +20,7 @@ export default function PackageDetail({ title, subtitle, description, images, hi
     return (
         <div className="min-h-screen bg-slate-50 pb-20">
             {/* Hero Image */}
-            <div className="relative h-[50vh] min-h-[400px]">
+            <div className="relative h-[250px] md:h-[350px] overflow-hidden">
                 <Image
                     src={images[0]}
                     alt={title}
