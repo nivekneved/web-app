@@ -5,7 +5,7 @@ import { useSearchParams } from 'next/navigation'
 import Image from 'next/image'
 import ServiceCard from '@/components/ServiceCard'
 import { createClient } from '@/lib/supabase'
-import { Filter, Star, Check, Search } from 'lucide-react'
+import { Filter, Star, Check, Search, X } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
 
 const supabase = createClient()
@@ -407,6 +407,30 @@ function ServiceListingInner({
 
                     {/* Content */}
                     <main className="lg:w-3/4">
+                        {/* Prominent Search Bar */}
+                        <div className="mb-8">
+                            <div className="relative group">
+                                <div className="absolute inset-y-0 left-6 flex items-center pointer-events-none">
+                                    <Search className="h-6 w-6 text-slate-400 group-focus-within:text-red-600 transition-colors" />
+                                </div>
+                                <input
+                                    type="text"
+                                    placeholder={searchPlaceholder}
+                                    value={searchTerm}
+                                    onChange={(e) => setSearchTerm(e.target.value)}
+                                    className="w-full pl-16 pr-6 py-6 bg-white border-2 border-slate-100 rounded-[2rem] text-xl font-bold text-slate-900 placeholder:text-slate-400 shadow-sm transition-all focus:outline-none focus:border-red-600/50 focus:ring-4 focus:ring-red-600/10"
+                                />
+                                {searchTerm && (
+                                    <button 
+                                        onClick={() => setSearchTerm('')}
+                                        className="absolute inset-y-0 right-6 flex items-center text-slate-400 hover:text-slate-600 transition-colors"
+                                    >
+                                        <X className="h-5 w-5" />
+                                    </button>
+                                )}
+                            </div>
+                        </div>
+
                         {/* Sort Bar */}
                         <div className="bg-white rounded-[2rem] p-6 shadow-sm border border-slate-100 mb-8 flex flex-wrap items-center justify-between gap-6">
                             <div className="text-slate-500 font-bold">

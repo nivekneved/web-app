@@ -13,6 +13,7 @@ export default function MauritiusHotelsPage() {
             heroImage="/hero-hotel.png"
             serviceTypes={['hotel']}
             includeRegions={MAURITIUS_REGIONS}
+            excludeRegions={['Rodrigues']}
             tag="MAURITIUS"
             searchPlaceholder="Search hotels in Mauritius..."
         />

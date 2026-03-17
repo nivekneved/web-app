@@ -128,43 +128,52 @@ export default function Navbar() {
     return (
         <header className="w-full">
             {/* Topbar */}
-            <div className="bg-red-600 text-white py-1 hidden md:block border-b border-red-700">
-                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                    <div className="flex items-center justify-between text-sm">
-                        <div className="flex flex-wrap items-center gap-4 md:gap-6">
-                            <a href="tel:+2302124070" className="flex items-center gap-2 hover:bg-white/10 p-1 rounded transition-colors whitespace-nowrap">
-                                <Phone size={14} />
-                                <span>(+230) 212 4070</span>
-                            </a>
-                            <a href="https://wa.me/23059407701" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 hover:bg-white/10 p-1 rounded transition-colors whitespace-nowrap">
-                                <MessageCircle size={14} className="text-white" />
-                                <span>5940 7701</span>
-                            </a>
-                            <a href="https://wa.me/23059407711" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 hover:bg-white/10 p-1 rounded transition-colors whitespace-nowrap">
-                                <MessageCircle size={14} className="text-white" />
-                                <span>5940 7711</span>
-                            </a>
-                            <a href="mailto:reservation@travellounge.mu" className="flex items-center gap-2 hover:bg-white/10 p-1 rounded transition-colors whitespace-nowrap">
-                                <Mail size={14} />
-                                <span>reservation@travellounge.mu</span>
-                            </a>
-                        </div>
- 
-                        <div className="flex items-center gap-4">
-                            <div className="flex items-center gap-2">
-                                <a href={facebookUrl} target="_blank" rel="noopener noreferrer" className="hover:bg-white/10 p-1 rounded transition-colors">
-                                    <Facebook size={16} />
-                                </a>
-                                <a href={instagramUrl} target="_blank" rel="noopener noreferrer" className="hover:bg-white/10 p-1 rounded transition-colors">
-                                    <Instagram size={16} />
-                                </a>
+            <AnimatePresence>
+                {!isScrolled && (
+                    <motion.div 
+                        initial={{ height: 0, opacity: 0 }}
+                        animate={{ height: 'auto', opacity: 1 }}
+                        exit={{ height: 0, opacity: 0 }}
+                        transition={{ duration: 0.3, ease: 'easeInOut' }}
+                        className="bg-red-600 text-white py-1 hidden md:block border-b border-red-700 overflow-hidden"
+                    >
+                        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                            <div className="flex items-center justify-between text-sm">
+                                <div className="flex flex-wrap items-center gap-4 md:gap-6">
+                                    <a href="tel:+2302124070" className="flex items-center gap-2 hover:bg-white/10 p-1 rounded transition-colors whitespace-nowrap">
+                                        <Phone size={14} />
+                                        <span>(+230) 212 4070</span>
+                                    </a>
+                                    <a href="https://wa.me/23059407701" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 hover:bg-white/10 p-1 rounded transition-colors whitespace-nowrap">
+                                        <MessageCircle size={14} className="text-white" />
+                                        <span>5940 7701</span>
+                                    </a>
+                                    <a href="https://wa.me/23059407711" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 hover:bg-white/10 p-1 rounded transition-colors whitespace-nowrap">
+                                        <MessageCircle size={14} className="text-white" />
+                                        <span>5940 7711</span>
+                                    </a>
+                                    <a href="mailto:reservation@travellounge.mu" className="flex items-center gap-2 hover:bg-white/10 p-1 rounded transition-colors whitespace-nowrap">
+                                        <Mail size={14} />
+                                        <span>reservation@travellounge.mu</span>
+                                    </a>
+                                </div>
+
+                                <div className="flex items-center gap-4">
+                                    <div className="flex items-center gap-2">
+                                        <a href={facebookUrl} target="_blank" rel="noopener noreferrer" className="hover:bg-white/10 p-1 rounded transition-colors">
+                                            <Facebook size={16} />
+                                        </a>
+                                        <a href={instagramUrl} target="_blank" rel="noopener noreferrer" className="hover:bg-white/10 p-1 rounded transition-colors">
+                                            <Instagram size={16} />
+                                        </a>
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                </div>
-            </div>
+                    </motion.div>
+                )}
+            </AnimatePresence>
 
-            {/* Main Navigation */}
             <nav
                 className={cn(
                     "sticky top-0 z-50 transition-all duration-300",
