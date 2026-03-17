@@ -182,9 +182,9 @@ export default function Footer() {
                                 <li>
                                     <Link href="/packages" className="hover:text-red-600 transition-colors">Holiday Packages</Link>
                                 </li>
-                                <li>
+                                {/* <li>
                                     <Link href="/news" className="hover:text-red-600 transition-colors">Latest News</Link>
-                                </li>
+                                </li> */}
                                 <li>
                                     <Link href="/faq" className="hover:text-red-600 transition-colors">FAQ</Link>
                                 </li>

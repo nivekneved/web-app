@@ -105,8 +105,8 @@ export const navigationConfig: NavConfig = {
       href: "#",
       children: [
         { "label": "Our Story", "href": "/about" },
-        { "label": "Our Team", "href": "/about/team" },
-        { "label": "News & Updates", "href": "/news" }
+        { "label": "Our Team", "href": "/about/team" /* },
+        { "label": "News & Updates", "href": "/news" */ }
       ]
     },
     {
