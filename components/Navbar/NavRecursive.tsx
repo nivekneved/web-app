@@ -71,8 +71,8 @@ const NavItem: React.FC<{ item: NavMenuItem; level: number; onClose?: () => void
         className={cn(
           "flex items-center justify-between transition-all duration-300",
           level === 0 
-            ? "text-slate-900 dark:text-slate-100 hover:text-red-600 font-extrabold py-8 text-[11px] uppercase tracking-[0.2em]" 
-            : "px-4 py-2.5 text-sm text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 hover:text-red-600 rounded-lg font-semibold"
+            ? "text-black hover:text-red-600 font-extrabold py-8 text-[11px] uppercase tracking-[0.2em]" 
+            : "px-4 py-2.5 text-sm text-slate-800 dark:text-slate-100 hover:bg-slate-50 dark:hover:bg-slate-800 hover:text-red-600 rounded-lg font-semibold"
         )}
         onClick={(e) => {
           if (item.href === '#') {
