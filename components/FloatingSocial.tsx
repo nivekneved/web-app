@@ -50,13 +50,10 @@ export default function FloatingSocial() {
                 initial={{ opacity: 0, x: 20 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: index * 0.1 }}
-                className={`flex items-center gap-3 p-3 rounded-2xl shadow-lg backdrop-blur-md bg-white/90 dark:bg-slate-800/90 border border-slate-200 dark:border-slate-700 group transition-all hover:scale-105 active:scale-95`}
+                className={`flex items-center justify-center p-1.5 rounded-2xl shadow-lg backdrop-blur-md bg-white/90 dark:bg-slate-800/90 border border-slate-200 dark:border-slate-700 group transition-all hover:scale-110 active:scale-95`}
                 title={social.name}
               >
-                <span className="text-xs font-bold text-slate-600 dark:text-slate-300 opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap px-1">
-                  {social.name}
-                </span>
-                <div className={`${social.color} ${social.hoverColor} p-2.5 rounded-xl text-white shadow-sm transition-colors`}>
+                <div className={`${social.color} ${social.hoverColor} p-2.5 rounded-xl text-white shadow-md transition-colors`}>
                   <social.icon size={20} />
                 </div>
               </motion.a>
