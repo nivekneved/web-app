@@ -67,6 +67,13 @@ export default function HotelClientWrapper({ hotel }: { hotel: Hotel }) {
             toast.success('Added to wishlist')
         }
     }
+    
+    const getDayKey = (dateString: string) => {
+        if (!dateString) return new Date().toLocaleDateString('en-US', { weekday: 'short' }).toLowerCase();
+        return new Date(dateString).toLocaleDateString('en-US', { weekday: 'short' }).toLowerCase();
+    }
+
+    const currentDayKey = getDayKey(checkIn);
 
     function handleBookNow() {
         if (!checkIn || !checkOut) {
@@ -85,15 +92,21 @@ export default function HotelClientWrapper({ hotel }: { hotel: Hotel }) {
     const onBookingConfirm = async (formData: BookingWizardData) => {
         setBookingLoading(true)
         try {
+            // Find the room type selected in the wizard to get its correct price
+            const roomInWizard = hotel.room_types?.find(r => r.type === formData.roomPreference);
+            const calculatedAmount = roomInWizard 
+                ? (parseFloat(roomInWizard.prices?.[currentDayKey] || roomInWizard.prices?.mon || roomInWizard.price?.toString() || '0') || hotel.base_price)
+                : hotel.base_price;
+
             const { success, error } = await createBookingRequest({
                 serviceId: hotel.id,
                 serviceName: hotel.name,
                 serviceCategory: 'hotel',
-                amount: selectedRoom ? (parseFloat(selectedRoom.prices?.[new Date().toLocaleDateString('en-US', {weekday: 'short'}).toLowerCase()] || '0') || selectedRoom.price || hotel.base_price) : hotel.base_price,
+                amount: calculatedAmount,
                 startDate: formData.checkIn || checkIn,
                 endDate: formData.checkOut || checkOut,
                 paxAdults: formData.guests || guests,
-                roomPreference: selectedRoom?.type,
+                roomPreference: formData.roomPreference || selectedRoom?.type,
                 paxChildren: 0,
                 travelers: formData.travelers as Record<string, unknown>[],
                 specialRequests: formData.notes,
@@ -203,9 +216,8 @@ export default function HotelClientWrapper({ hotel }: { hotel: Hotel }) {
                                 {hotel.room_types && hotel.room_types.length > 0 ? (
                                     hotel.room_types.map((room, idx) => {
                                         const isSelected = selectedRoom?.type === room.type;
-                                        // Simple price logic for preview
-                                        const today = new Date().toLocaleDateString('en-US', { weekday: 'short' }).toLowerCase();
-                                        const roomPrice = parseFloat(room.prices?.[today] || room.price?.toString() || hotel.base_price.toString());
+                                        // Dynamic price logic based on check-in
+                                        const roomPrice = parseFloat(room.prices?.[currentDayKey] || room.prices?.mon || room.price?.toString() || hotel.base_price.toString());
                                         
                                         return (
                                             <div 
@@ -317,7 +329,7 @@ export default function HotelClientWrapper({ hotel }: { hotel: Hotel }) {
                                 <div className="flex items-end gap-2 mb-10">
                                     <span className="text-5xl font-black text-slate-900 tracking-tighter">
                                         MUR {selectedRoom 
-                                            ? parseFloat(selectedRoom.prices?.[new Date().toLocaleDateString('en-US', {weekday: 'short'}).toLowerCase()] || selectedRoom.price?.toString() || hotel.base_price.toString()).toLocaleString()
+                                            ? parseFloat(selectedRoom.prices?.[currentDayKey] || selectedRoom.prices?.mon || selectedRoom.price?.toString() || hotel.base_price.toString()).toLocaleString()
                                             : hotel.base_price.toLocaleString()}
                                     </span>
                                     <span className="text-slate-400 font-black text-[10px] uppercase tracking-widest mb-3">/ night</span>
@@ -401,7 +413,9 @@ export default function HotelClientWrapper({ hotel }: { hotel: Hotel }) {
                         <BookingWizard
                             serviceId={hotel.id}
                             serviceName={hotel.name}
-                            servicePrice={hotel.base_price}
+                            servicePrice={selectedRoom 
+                                ? (parseFloat(selectedRoom.prices?.[currentDayKey] || selectedRoom.prices?.mon || selectedRoom.price?.toString() || '0') || hotel.base_price)
+                                : hotel.base_price}
                             serviceCategory="hotel"
                             initialData={{
                                 checkIn,

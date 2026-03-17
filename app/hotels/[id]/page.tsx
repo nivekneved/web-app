@@ -10,38 +10,51 @@ interface Props {
 async function getHotel(id: string) {
     const supabase = await createClient()
     
-    // Fetch hotel details
+    // Fetch hotel details including JSON room_types
     const { data: hotel, error: hotelError } = await supabase
         .from('services')
-        .select('id, name, description, location, region, base_price, rating, image_url, amenities')
+        .select('id, name, description, location, region, base_price, rating, image_url, amenities, room_types')
         .eq('id', id)
         .eq('service_type', 'hotel')
         .single()
 
     if (hotelError || !hotel) return null
 
-    // Fetch room types from dedicated table
-    const { data: rooms } = await supabase
-        .from('room_types')
-        .select('*')
-        .eq('service_id', id)
+    let mappedRoomTypes = [];
 
-    // Map room_types table data to the structure expected by HotelClientWrapper
-    const mappedRoomTypes = (rooms || []).map(room => ({
-        type: room.name,
-        price: parseFloat(room.weekday_price || '0'),
-        prices: {
-            mon: room.weekday_price,
-            tue: room.weekday_price,
-            wed: room.weekday_price,
-            thu: room.weekday_price,
-            fri: room.weekday_price,
-            sat: room.weekend_price,
-            sun: room.weekend_price
-        },
-        image_url: room.image_url,
-        features: room.amenities || []
-    }))
+    // Prioritize JSON room types column if it exists and is not empty
+    if (hotel.room_types && Array.isArray(hotel.room_types) && hotel.room_types.length > 0) {
+        mappedRoomTypes = hotel.room_types.map((room: any) => ({
+            type: room.type,
+            price: parseFloat(room.prices?.mon || '0'),
+            prices: room.prices,
+            image_url: room.image_url,
+            features: Array.isArray(room.features) ? room.features : (typeof room.features === 'string' ? room.features.split(',').map((f: string) => f.trim()) : []),
+            available: room.available !== false
+        }));
+    } else {
+        // Fallback to room_types table for older data
+        const { data: rooms } = await supabase
+            .from('room_types')
+            .select('*')
+            .eq('service_id', id)
+
+        mappedRoomTypes = (rooms || []).map(room => ({
+            type: room.name,
+            price: parseFloat(room.weekday_price || '0'),
+            prices: {
+                mon: room.weekday_price,
+                tue: room.weekday_price,
+                wed: room.weekday_price,
+                thu: room.weekday_price,
+                fri: room.weekday_price,
+                sat: room.weekend_price,
+                sun: room.weekend_price
+            },
+            image_url: room.image_url,
+            features: room.amenities || []
+        }))
+    }
 
     return {
         ...hotel,
