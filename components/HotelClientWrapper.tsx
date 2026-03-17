@@ -426,6 +426,7 @@ export default function HotelClientWrapper({ hotel }: { hotel: Hotel }) {
                             onComplete={onBookingConfirm}
                             isLoading={bookingLoading}
                             roomOptions={hotel.room_types?.map(r => r.type)}
+                            showRoomSelection={true}
                         />
                     </div>
                 </div>

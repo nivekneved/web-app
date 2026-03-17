@@ -23,6 +23,7 @@ type BookingWizardProps = {
     isLoading?: boolean
     initialData?: Partial<BookingWizardData>
     roomOptions?: string[]
+    showRoomSelection?: boolean
 }
 
 export type BookingWizardData = {
@@ -40,7 +41,7 @@ export type BookingWizardData = {
     roomPreference?: string
 }
 
-export default function BookingWizard({ serviceName, servicePrice, onComplete, isLoading, initialData, roomOptions }: BookingWizardProps) {
+export default function BookingWizard({ serviceName, servicePrice, onComplete, isLoading, initialData, roomOptions, showRoomSelection = true }: BookingWizardProps) {
     const [currentStep, setCurrentStep] = React.useState<BookingWizardStep>(1)
     const [formData, setFormData] = React.useState<BookingWizardData>({
         checkIn: initialData?.checkIn || '',
@@ -54,7 +55,7 @@ export default function BookingWizard({ serviceName, servicePrice, onComplete, i
         notes: initialData?.notes || '',
         travelers: initialData?.travelers || [],
         mealPreference: initialData?.mealPreference || 'none',
-        roomPreference: initialData?.roomPreference || (roomOptions && roomOptions.length > 0 ? roomOptions[0] : 'standard')
+        roomPreference: initialData?.roomPreference || (roomOptions && roomOptions.length > 0 ? roomOptions[0] : (showRoomSelection ? 'standard' : undefined))
     })
 
     function updateFormData(updates: Partial<BookingWizardData>) {
@@ -305,27 +306,29 @@ export default function BookingWizard({ serviceName, servicePrice, onComplete, i
                                 <option value="kosher">Kosher</option>
                             </select>
                         </div>
-                        <div>
-                            <label className="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-2">Room Type</label>
-                            <select
-                                value={formData.roomPreference}
-                                onChange={(e) => updateFormData({ roomPreference: e.target.value })}
-                                className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-700 border border-slate-200 dark:border-slate-600 rounded-xl focus:outline-none focus:ring-4 focus:ring-red-600/20 dark:text-white font-bold"
-                            >
-                                {roomOptions && roomOptions.length > 0 ? (
-                                    roomOptions.map(opt => (
-                                        <option key={opt} value={opt}>{opt}</option>
-                                    ))
-                                ) : (
-                                    <>
-                                        <option value="standard">Standard Room</option>
-                                        <option value="deluxe">Deluxe Room</option>
-                                        <option value="suite">Suite</option>
-                                        <option value="connecting">Connecting Rooms</option>
-                                    </>
-                                )}
-                            </select>
-                        </div>
+                        {showRoomSelection && (
+                            <div>
+                                <label className="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-2">Room Type</label>
+                                <select
+                                    value={formData.roomPreference}
+                                    onChange={(e) => updateFormData({ roomPreference: e.target.value })}
+                                    className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-700 border border-slate-200 dark:border-slate-600 rounded-xl focus:outline-none focus:ring-4 focus:ring-red-600/20 dark:text-white font-bold"
+                                >
+                                    {roomOptions && roomOptions.length > 0 ? (
+                                        roomOptions.map(opt => (
+                                            <option key={opt} value={opt}>{opt}</option>
+                                        ))
+                                    ) : (
+                                        <>
+                                            <option value="standard">Standard Room</option>
+                                            <option value="deluxe">Deluxe Room</option>
+                                            <option value="suite">Suite</option>
+                                            <option value="connecting">Connecting Rooms</option>
+                                        </>
+                                    )}
+                                </select>
+                            </div>
+                        )}
                     </div>
                 )}
 
