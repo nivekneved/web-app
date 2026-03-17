@@ -170,7 +170,7 @@ export default function Navbar() {
                     "sticky top-0 z-50 transition-all duration-300",
                     isScrolled 
                         ? "bg-white/95 backdrop-blur-xl shadow-lg py-2" 
-                        : "bg-white border-b border-slate-100 py-4"
+                        : "bg-white border-b border-slate-100 py-2"
                 )}
                 role="navigation"
                 aria-label="Main Navigation"
