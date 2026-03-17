@@ -157,12 +157,14 @@ export default function HomePage() {
               </p>
 
               <div className="flex flex-wrap items-center justify-center gap-6">
+                {/* 
                 <Link
                   href={heroSlides[currentSlide]?.link || '#'}
                   className="px-10 py-4 bg-red-600 text-white rounded-full font-black text-xs tracking-[0.2em] hover:bg-white hover:text-slate-900 transition-all transform hover:scale-105 shadow-2xl shadow-red-600/20 uppercase"
                 >
                   {heroSlides[currentSlide]?.cta || 'Explore Now'}
                 </Link>
+                */}
                 <button className="px-10 py-4 bg-white/5 backdrop-blur-md border border-white/10 text-white rounded-full font-black text-xs tracking-[0.2em] hover:bg-white/10 transition-all uppercase">
                   Discover More
                 </button>
