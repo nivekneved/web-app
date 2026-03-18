@@ -23,6 +23,7 @@
 ## 2026-03-17 - Navigation & Search Refinements
 
 ### Changes Made
+
 - Implemented "hide on scroll" logic for the red top bar in `Navbar.tsx` using Framer Motion.
 - Added a prominent "Search as you type" input box above the service listings in `ServiceListing.tsx`.
 - Refined Mauritius Hotels filtering to explicitly include Mauritius regions and exclude Rodrigues in `app/hotels/mauritius/page.tsx`.
@@ -32,7 +33,8 @@
 - Added `showRoomSelection` prop to `BookingWizard.tsx` to conditionally hide room selection for Tours and Activities.
 - Fixed minor lint errors and unused variables in the FAQ page.
 
-### Verified:
+### Verified
+
 - Navbar red bar hides correctly on scroll and reappears at the top.
 - "Search as you type" is functional and highly visible on service pages.
 - Mauritius Hotels page accurately filters out Rodrigues hotels.
