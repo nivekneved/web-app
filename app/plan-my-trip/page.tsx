@@ -78,15 +78,15 @@ export default function PlanMyTrip() {
         />
         <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-transparent to-black/60" />
         
-        <div className="container mx-auto px-6 relative z-10 text-center">
-            <span className="inline-block py-2 px-6 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-white text-[10px] font-black uppercase tracking-[0.4em] mb-8">
+        <div className="container mx-auto px-6 relative z-10 text-center flex flex-col items-center justify-center">
+            <span className="inline-block py-2 px-6 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-white text-[10px] font-black uppercase tracking-[0.4em] mb-6">
                 Custom Journeys
             </span>
-            <h1 className="text-5xl md:text-8xl font-black text-white mb-6 tracking-tighter leading-[1.1]">
+            <h1 className="text-4xl md:text-6xl font-black text-white mb-6 tracking-tighter leading-[1.1]">
                 Design Your <br />
                 <span className="text-red-500 italic">Dream Escape.</span>
             </h1>
-            <p className="text-xl text-white/70 font-medium max-w-2xl mx-auto leading-relaxed">
+            <p className="text-lg text-white/70 font-medium max-w-2xl mx-auto leading-relaxed">
                 Tell us about your perfect journey, and we&apos;ll handle every detail to make it a reality.
             </p>
         </div>

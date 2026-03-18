@@ -78,15 +78,15 @@ export default function TailorMadePage() {
         />
         <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-transparent to-black/60" />
         
-        <div className="container mx-auto px-6 relative z-10 text-center">
-            <span className="inline-block py-2 px-6 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-white text-[10px] font-black uppercase tracking-[0.4em] mb-8">
+        <div className="container mx-auto px-6 relative z-10 text-center flex flex-col items-center justify-center">
+            <span className="inline-block py-2 px-6 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-white text-[10px] font-black uppercase tracking-[0.4em] mb-6">
                 Bespoke Journeys
             </span>
-            <h1 className="text-5xl md:text-8xl font-black text-white mb-6 tracking-tighter leading-[1.1]">
+            <h1 className="text-4xl md:text-6xl font-black text-white mb-6 tracking-tighter leading-[1.1]">
                 Your Journey, <br />
                 <span className="text-red-500 italic">Exactly as You Imagine.</span>
             </h1>
-            <p className="text-xl text-white/70 font-medium max-w-2xl mx-auto leading-relaxed">
+            <p className="text-lg text-white/70 font-medium max-w-2xl mx-auto leading-relaxed">
                 Customise your trips including accommodation, transport, activities, or places of interest with our travel specialists.
             </p>
         </div>
