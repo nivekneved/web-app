@@ -85,13 +85,13 @@ export default function Footer() {
                     {/* Company Info */}
                     <div className="md:col-span-2 lg:col-span-1">
                         <Link href="/" className="inline-block mb-6">
-                            <Image 
-                                src="/logo-white.png" 
-                                alt="Travel Lounge" 
-                                width={200} 
-                                height={60} 
-                                className="h-12 w-auto object-contain"
-                            />
+                                <Image 
+                                    src="/logo-white.png" 
+                                    alt="Travel Lounge" 
+                                    width={200} 
+                                    height={60} 
+                                    className="h-12 w-auto object-contain brightness-0 invert"
+                                />
                         </Link>
                         <p className="text-slate-400 mb-6 leading-relaxed text-sm font-medium">
                             Your local and international holiday provider. IATA accredited travel agents for safe and memorable holidays.

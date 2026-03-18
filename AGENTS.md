@@ -3,7 +3,9 @@
 ## 2026-03-18 - Seasonal Deals & Promotional System
 
 ### Changes Made
-
+- Applied `brightness-0 invert` filter to the footer logo in `Footer.tsx` to fix visibility on dark backgrounds.
+- Updated `README.md` with a comprehensive application services and logic report.
+- Standardized all "Reserve Now" labels to "Book Now" for consistency across web and mobile platforms.
 - Added `is_seasonal_deal` and `deal_note` fields to the `services` table in Supabase.
 - Updated Admin App `CreateService.jsx` with a new "Promotional Strategy" section for managing deal flags and badge notes.
 - Refactored Web App `DealsCarousel.tsx` to fetch products dynamically based on the `is_seasonal_deal` flag.
