@@ -134,7 +134,7 @@ export default function Footer() {
                                         className="text-xs font-black text-red-500 hover:text-red-400 flex items-center gap-1 uppercase"
                                     >
                                         <MapPin size={10} />
-                                        Get Directions
+                                        Directions
                                     </a>
                                 </div>
                             )}
@@ -154,7 +154,7 @@ export default function Footer() {
                                         className="text-xs font-black text-red-500 hover:text-red-400 flex items-center gap-1 uppercase"
                                     >
                                         <MapPin size={10} />
-                                        Get Directions
+                                        Directions
                                     </a>
                                 </div>
                             )}
