@@ -22,7 +22,7 @@ const socialLinks = [
   {
     name: 'Facebook',
     icon: Facebook,
-    href: 'https://www.facebook.com/cqf.xeh.mybluehost.me/website_6dd3f772/',
+    href: 'https://www.facebook.com/travellounge.mu/',
     color: 'bg-blue-600',
     hoverColor: 'hover:bg-blue-700'
   }

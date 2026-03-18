@@ -238,7 +238,7 @@ ON CONFLICT (id) DO NOTHING;
 
 -- 22. Site Settings
 INSERT INTO public.site_settings (key, value, category, description) VALUES
-('social_fb', '"https://facebook.com/tl"', 'social', 'Facebook URL'),
+('social_fb', '"https://www.facebook.com/travellounge.mu/"', 'social', 'Facebook URL'),
 ('social_ig', '"https://instagram.com/tl"', 'social', 'Instagram URL'),
 ('contact_email', '"info@tl.mu"', 'contact', 'Contact Email'),
 ('contact_phone', '"+230 123 4567"', 'contact', 'Contact Phone'),

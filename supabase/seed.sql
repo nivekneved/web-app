@@ -16,7 +16,7 @@ INSERT INTO public.categories (name, slug, icon, image_url, display_order, is_ac
 -- Site Settings (Example)
 INSERT INTO public.site_settings (key, value, category, description) VALUES
 ('contact_info', '{"email": "info@travellounge.mu", "phone": "+230 212 4070"}', 'contact', 'Global contact information'),
-('social_links', '{"facebook": "facebook.com/travellounge", "instagram": "instagram.com/travellounge"}', 'social', 'Social media integration links');
+('social_links', '{"facebook": "https://www.facebook.com/travellounge.mu/", "instagram": "instagram.com/travellounge"}', 'social', 'Social media integration links');
 
 -- FAQs
 INSERT INTO public.faqs (question, answer, category, order_index, is_published) VALUES

@@ -1,7 +1,18 @@
 'use client'
 
 import { useState } from 'react'
-import { MapPin, Check, ArrowLeft, Calendar, Users, Heart, X } from 'lucide-react'
+import {
+    Users,
+    Calendar,
+    Check,
+    ChevronLeft,
+    ChevronRight,
+    X,
+    Moon,
+    MapPin,
+    ArrowLeft,
+    Heart
+} from 'lucide-react';
 import Link from 'next/link'
 import Image from 'next/image'
 import { toast } from 'sonner'
@@ -301,6 +312,15 @@ export default function HotelClientWrapper({ hotel }: { hotel: Hotel }) {
                                                             Indulge in our refined {room.type.toLowerCase()} featuring premium amenities and world-class comfort.
                                                         </p>
                                                         <div className="flex flex-wrap gap-2">
+                                                            {room.min_stay && room.min_stay > 1 && (
+                                                                <span className={cn(
+                                                                    "px-3 py-1 rounded-lg text-[9px] font-black uppercase tracking-widest border border-red-200/50 bg-red-50 text-red-600 flex items-center gap-1.5",
+                                                                    isSelected && "bg-red-600/10 border-red-500/20 text-red-400"
+                                                                )}>
+                                                                    <Moon size={12} />
+                                                                    {room.min_stay} Nights Min
+                                                                </span>
+                                                            )}
                                                             {room.features?.map((f, i) => (
                                                                 <span key={i} className={cn(
                                                                     "px-3 py-1 rounded-lg text-[9px] font-black uppercase tracking-widest border transition-colors",
