@@ -88,9 +88,9 @@ export default function Footer() {
                                 <Image 
                                     src="/logo-white.png" 
                                     alt="Travel Lounge" 
-                                    width={200} 
-                                    height={60} 
-                                    className="h-12 w-auto object-contain"
+                                    width={300} 
+                                    height={100} 
+                                    className="h-24 w-auto object-contain brightness-0 invert"
                                 />
                         </Link>
                         <p className="text-slate-400 mb-6 leading-relaxed text-sm font-medium">
