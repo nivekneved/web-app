@@ -9,7 +9,7 @@ export default function ActivitiesPage() {
             title="Activities & Experiences"
             subtitle="Unique adventures and unforgettable moments across the most beautiful islands."
             heroImage="/assets/hero/rodrigues_hotels_hero_1773391499243.png" // Using a high-quality adventure image
-            serviceTypes={['activity']}
+            serviceTypes={['activity', 'sea_activity', 'land_activity']}
             tag="ACTIVITY"
             searchPlaceholder="Search for activities, locations..."
         />

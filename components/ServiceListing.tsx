@@ -214,7 +214,7 @@ function ServiceListingInner({
 
     const getServiceLink = (service: Service) => {
         const type = service.service_type.toLowerCase()
-        const base = type === 'activity' ? '/activities' : 
+        const base = (type === 'activity' || type === 'sea_activity' || type === 'land_activity') ? '/activities' : 
                      type === 'tour' ? '/tours' : 
                      type === 'cruise' ? '/cruises' : 
                      type === 'hotel' ? '/hotels' : 
