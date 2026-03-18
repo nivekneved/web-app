@@ -14,6 +14,7 @@ import { Badge } from './ui/Badge'
 import { Button } from './ui/Button'
 import { cn } from '@/lib/utils'
 import StarRating from './ui/StarRating'
+import SocialShare from '@/components/SocialShare'
 
 type RoomType = {
     type: string;
@@ -166,6 +167,12 @@ export default function HotelClientWrapper({ hotel }: { hotel: Hotel }) {
                     >
                         <Heart size={20} fill={isInWishlist(hotel.id) ? 'currentColor' : 'none'} />
                     </Button>
+                    <div className="backdrop-blur-md bg-white/10 p-1 rounded-full border border-white/20">
+                        <SocialShare 
+                            url={typeof window !== 'undefined' ? window.location.href : ''} 
+                            title={hotel.name} 
+                        />
+                    </div>
                 </div>
 
                 <div className="absolute bottom-16 left-8 right-8">

@@ -120,7 +120,7 @@ export default function Navbar() {
     }, [fetchSettings, fetchNavigations])
 
     const siteTitle = settings?.general_config?.siteTitle || 'Travel Lounge'
-    const facebookUrl = settings?.general_config?.facebookUrl || 'https://www.facebook.com/cqf.xeh.mybluehost.me/website_6dd3f772/'
+    const facebookUrl = settings?.general_config?.facebookUrl || 'https://www.facebook.com/travellounge.mu'
     const instagramUrl = settings?.general_config?.instagramUrl || 'https://www.instagram.com/travellounge_ltd?igsh=MWljeWRiNG43aDN0OQ=='
 
     const menuItems = items.length > 0 ? items : navigationConfig.menu
@@ -140,9 +140,9 @@ export default function Navbar() {
                         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                             <div className="flex items-center justify-between text-sm">
                                 <div className="flex flex-wrap items-center gap-4 md:gap-6">
-                                    <a href="tel:+2302124070" className="flex items-center gap-2 hover:bg-white/10 p-1 rounded transition-colors whitespace-nowrap">
+                                    <a href="tel:+23059407701" className="flex items-center gap-2 hover:bg-white/10 p-1 rounded transition-colors whitespace-nowrap">
                                         <Phone size={14} />
-                                        <span>(+230) 212 4070</span>
+                                        <span>+230 5940 7701</span>
                                     </a>
                                     <a href="https://wa.me/23059407701" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 hover:bg-white/10 p-1 rounded transition-colors whitespace-nowrap">
                                         <MessageCircle size={14} className="text-white" />
@@ -191,9 +191,9 @@ export default function Navbar() {
                             <Image
                                 src="/logo.png"
                                 alt={siteTitle}
-                                width={200}
-                                height={60}
-                                className="h-12 w-auto object-contain transition-transform duration-300 hover:scale-105"
+                                width={240}
+                                height={72}
+                                className="h-16 w-auto object-contain transition-transform duration-300 hover:scale-105"
                                 priority
                             />
                         </Link>

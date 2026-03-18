@@ -10,6 +10,9 @@ import BookingWizard, { BookingWizardData } from '@/components/BookingWizard'
 import { createBookingRequest } from '@/lib/bookingService'
 import StarRating from '@/components/ui/StarRating'
 import ReviewsSection from '@/components/ReviewsSection'
+import SocialShare from '@/components/SocialShare'
+import { Button } from './ui/Button'
+import { cn } from '@/lib/utils'
 
 type ActivityService = {
     id: string

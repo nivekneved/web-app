@@ -73,9 +73,9 @@ export default function Footer() {
     }
 
     const contactEmail = settings?.contactEmail || 'reservation@travellounge.mu'
-    const contactPhone = settings?.contactPhone || '(+230) 212 4070'
+    const contactPhone = settings?.contactPhone || '+230 5940 7701'
     const workingHours = settings?.workingHours || 'Mon - Fri: 08:30 - 17:00'
-    const facebookUrl = settings?.facebookUrl || 'https://www.facebook.com/cqf.xeh.mybluehost.me/website_6dd3f772/'
+    const facebookUrl = settings?.facebookUrl || 'https://www.facebook.com/travellounge.mu'
     const instagramUrl = settings?.instagramUrl || 'https://www.instagram.com/travellounge_ltd?igsh=MWljeWRiNG43aDN0OQ=='
 
     return (
@@ -90,7 +90,7 @@ export default function Footer() {
                                     alt="Travel Lounge" 
                                     width={200} 
                                     height={60} 
-                                    className="h-12 w-auto object-contain brightness-0 invert"
+                                    className="h-12 w-auto object-contain"
                                 />
                         </Link>
                         <p className="text-slate-400 mb-6 leading-relaxed text-sm font-medium">
@@ -125,7 +125,7 @@ export default function Footer() {
                                     href="https://www.google.com/maps/dir/?api=1&destination=Newton+Tower+Port+Louis" 
                                     target="_blank" 
                                     rel="noopener noreferrer"
-                                    className="text-xs font-black text-red-500 hover:text-red-400 flex items-center gap-1 uppercase tracking-tighter"
+                                    className="text-xs font-black text-red-500 hover:text-red-400 flex items-center gap-1 uppercase"
                                 >
                                     <MapPin size={10} />
                                     Get Directions
@@ -143,7 +143,7 @@ export default function Footer() {
                                     href="https://www.google.com/maps/dir/?api=1&destination=Ebene+Mews+57" 
                                     target="_blank" 
                                     rel="noopener noreferrer"
-                                    className="text-xs font-black text-red-500 hover:text-red-400 flex items-center gap-1 uppercase tracking-tighter"
+                                    className="text-xs font-black text-red-500 hover:text-red-400 flex items-center gap-1 uppercase"
                                 >
                                     <MapPin size={10} />
                                     Get Directions

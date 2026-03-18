@@ -83,7 +83,7 @@ export default function ContactPage() {
     }
 
     const contactEmail = settings?.contactEmail || 'reservation@travellounge.mu'
-    const contactPhone = settings?.contactPhone || '(+230) 212 4070'
+    const contactPhone = settings?.contactPhone || '+230 5940 7701'
     const whatsapp1 = settings?.whatsappNumber1 || '+230 5940 7711'
     const office1Title = settings?.office1Title || 'Port Louis Office'
     const office1Address = settings?.office1Address || 'Ground Floor Newton Tower, Corner Sir William Newton and Remy Ollier Street, Port Louis, Mauritius'
@@ -171,7 +171,7 @@ export default function ContactPage() {
                                     </div>
                                     <div>
                                         <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">Direct Line</p>
-                                        <p className="text-xl font-black text-slate-900">{contactPhone}</p>
+                                        <p className="text-xl font-black text-slate-900">+230 5940 7701</p>
                                     </div>
                                 </a>
                                 
@@ -181,7 +181,7 @@ export default function ContactPage() {
                                     </div>
                                     <div>
                                         <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">WhatsApp Concierge</p>
-                                        <p className="text-xl font-black text-slate-900">{whatsapp1}</p>
+                                        <p className="text-xl font-black text-slate-900">+230 5940 7701</p>
                                     </div>
                                 </a>
 

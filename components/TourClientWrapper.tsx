@@ -15,6 +15,7 @@ import StarRating from '@/components/ui/StarRating'
 import ReviewsSection from '@/components/ReviewsSection'
 import BookingWizard, { BookingWizardData } from '@/components/BookingWizard'
 import { createBookingRequest } from '@/lib/bookingService'
+import SocialShare from '@/components/SocialShare'
 
 type Tour = {
     id: string
@@ -163,6 +164,12 @@ export default function TourClientWrapper({ tour }: { tour: Tour }) {
                     >
                         <Heart size={20} fill={isInWishlist(tour.id) ? 'currentColor' : 'none'} />
                     </Button>
+                    <div className="backdrop-blur-md bg-white/10 p-1 rounded-full border border-white/20">
+                        <SocialShare 
+                            url={typeof window !== 'undefined' ? window.location.href : ''} 
+                            title={tour.name} 
+                        />
+                    </div>
                 </div>
 
                 <div className="absolute bottom-16 left-8 right-8">
