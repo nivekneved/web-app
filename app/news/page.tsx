@@ -46,18 +46,18 @@ export default function NewsPage() {
     return (
         <div className="min-h-screen bg-slate-50 pb-20">
             {/* Hero */}
-            <div className="relative h-[250px] md:h-[350px] flex items-center justify-center overflow-hidden">
+            <div className="relative h-[250px] md:h-[350px] flex items-center justify-center overflow-hidden bg-slate-950">
                 <Image
                     src="/assets/hero/tailormade_travel_hero_1773391405705.png"
                     alt="Travel News"
                     fill
-                    className="object-cover"
+                    className="object-cover opacity-60"
                     priority
                 />
-                <div className="absolute inset-0 bg-black/40" />
-                <div className="relative z-10 text-center text-white px-4">
-                    <h1 className="text-5xl md:text-6xl font-black mb-4 uppercase tracking-tight">Travel Insights</h1>
-                    <p className="text-xl md:text-2xl text-slate-200 max-w-2xl mx-auto font-light">
+                <div className="absolute inset-0 bg-gradient-to-b from-black/20 via-transparent to-black/60" />
+                <div className="relative z-10 text-center text-white px-6">
+                    <h1 className="text-4xl md:text-6xl font-black mb-6 uppercase tracking-tight leading-none">Travel Insights</h1>
+                    <p className="text-lg text-white/80 font-medium max-w-2xl mx-auto leading-relaxed">
                         Discover the latest trends, guides, and stories from our local experts.
                     </p>
                 </div>

@@ -130,30 +130,30 @@ export default function DestinationListing({
 
     return (
         <div className="min-h-screen bg-[#F2F5F7]">
-            {/* MMT Style Hero - more focused */}
-            <div className="relative h-[250px] md:h-[350px] flex items-center overflow-hidden">
+            {/* Hero Section */}
+            <div className="relative h-[250px] md:h-[350px] flex items-center overflow-hidden bg-slate-950">
                 <Image
                     src={heroImage}
                     alt={title}
                     fill
-                    className="object-cover"
+                    className="object-cover opacity-60"
                     priority
                 />
-                <div className="absolute inset-0 bg-gradient-to-r from-black/80 to-transparent" />
-                <div className="container mx-auto px-4 relative z-10">
-                    <div className="max-w-2xl">
+                <div className="absolute inset-0 bg-gradient-to-b from-black/20 via-transparent to-black/60" />
+                <div className="container mx-auto px-6 relative z-10 flex flex-col items-center justify-center text-center">
+                    <div className="max-w-3xl">
                         <motion.h1 
-                            initial={{ opacity: 0, x: -20 }}
-                            animate={{ opacity: 1, x: 0 }}
-                            className="text-4xl md:text-6xl font-black text-white mb-2 uppercase tracking-tight"
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            className="text-4xl md:text-6xl font-black text-white mb-4 uppercase tracking-tight leading-none"
                         >
                             {title}
                         </motion.h1>
                         <motion.p 
-                            initial={{ opacity: 0, x: -20 }}
-                            animate={{ opacity: 1, x: 0 }}
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
                             transition={{ delay: 0.1 }}
-                            className="text-lg md:text-xl text-white/80 font-medium"
+                            className="text-lg text-white/80 font-medium max-w-2xl mx-auto leading-relaxed"
                         >
                             {subtitle}
                         </motion.p>

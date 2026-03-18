@@ -111,12 +111,12 @@ export default function ContactPage() {
                 />
                 <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-transparent to-black/60" />
                 
-                <div className="absolute inset-0 flex items-center justify-center text-center">
-                    <div className="max-w-4xl mx-auto px-6">
+                <div className="container mx-auto px-6 relative z-10 flex flex-col items-center justify-center text-center">
+                    <div className="max-w-4xl">
                         <span className="inline-block py-2 px-6 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-white text-[10px] font-black uppercase tracking-[0.4em] mb-8">
                             Get In Touch
                         </span>
-                        <h1 className="text-5xl md:text-7xl font-black text-white mb-6 tracking-tighter leading-tight">
+                        <h1 className="text-4xl md:text-6xl font-black text-white mb-6 uppercase tracking-tight leading-tight">
                             We&apos;re Here To <br />
                             <span className="text-red-500 italic">Help You.</span>
                         </h1>

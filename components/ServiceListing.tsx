@@ -251,21 +251,21 @@ function ServiceListingInner({
     return (
         <div className="min-h-screen bg-[#F2F5F7]">
             {/* Hero Section */}
-            <div className="relative h-[250px] md:h-[350px] flex items-center overflow-hidden">
+            <div className="relative h-[250px] md:h-[350px] flex items-center overflow-hidden bg-slate-900">
                 <Image
                     src={heroImage}
                     alt={title}
                     fill
-                    className="object-cover"
+                    className="object-cover opacity-60"
                     priority
                 />
-                <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/40 to-transparent" />
-                <div className="container mx-auto px-4 relative z-10 pt-16 md:pt-20">
+                <div className="absolute inset-0 bg-gradient-to-b from-black/20 via-transparent to-black/60" />
+                <div className="container mx-auto px-6 relative z-10 flex flex-col items-center justify-center text-center">
                     <div className="max-w-3xl">
                         <motion.h1 
                             initial={{ opacity: 0, y: 20 }}
                             animate={{ opacity: 1, y: 0 }}
-                            className="text-4xl md:text-7xl font-black text-white mb-4 uppercase tracking-tight leading-[0.9]"
+                            className="text-4xl md:text-6xl font-black text-white mb-6 uppercase tracking-tight leading-none"
                         >
                             {title}
                         </motion.h1>
@@ -273,7 +273,7 @@ function ServiceListingInner({
                             initial={{ opacity: 0, y: 20 }}
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ delay: 0.1 }}
-                            className="text-lg md:text-2xl text-white/80 font-medium"
+                            className="text-lg text-white/80 font-medium max-w-2xl mx-auto leading-relaxed"
                         >
                             {subtitle}
                         </motion.p>
