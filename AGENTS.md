@@ -20,6 +20,20 @@
 - "Reserve Now" in `HotelClientWrapper.tsx` updated to "Book Now".
 - Linting clean for both projects.
 
+## 2026-03-18 - Homepage Category Image Fixes
+
+### Changes Made
+
+- Fixed missing "Activities" and "Rodrigues" category card images on the homepage.
+- Generated new high-quality replacement assets.
+- Moved assets to the local `public/categories/` directory for better reliability.
+- Updated Supabase `categories` table to point to local `/categories/` paths (using `/categories/rodrigues_final.png` for the Rodrigues card).
+
+### Verified
+
+- Homepage correctly displays both "Activities" and "Rodrigues" cards with high-quality images.
+- Filename-based caching bypassed with unique naming.
+
 ## 2026-03-17 - Navigation & Search Refinements
 
 ### Changes Made
