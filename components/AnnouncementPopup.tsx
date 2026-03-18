@@ -65,7 +65,9 @@ export default function AnnouncementPopup() {
 
   const handleClose = () => {
     setIsVisible(false)
-    if (ad) {
+    // Only persist "seen" status if not set to "always"
+    // If it's "always", we want it to reset on every visit/reload
+    if (ad && ad.display_frequency !== 'always') {
       localStorage.setItem(`popup_ad_seen_${ad.id}`, new Date().toISOString())
       sessionStorage.setItem(`popup_ad_seen_${ad.id}`, 'true')
     }
@@ -140,14 +142,22 @@ export default function AnnouncementPopup() {
 
               {/* Action Button */}
               {ad.cta_text && ad.cta_link && (
-                <a
-                  href={ad.cta_link}
-                  onClick={handleClose}
-                  className="inline-flex items-center justify-center gap-2 w-full py-5 bg-red-600 text-white rounded-2xl text-[11px] font-black uppercase tracking-[0.2em] hover:bg-slate-900 transition-all transform hover:scale-[1.02] shadow-xl shadow-red-600/20 group"
-                >
-                  {ad.cta_text}
-                  <ExternalLink size={16} className="group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
-                </a>
+                <div className="flex flex-col gap-3 w-full">
+                  <a
+                    href={ad.cta_link}
+                    onClick={handleClose}
+                    className="inline-flex items-center justify-center gap-2 w-full py-5 bg-red-600 text-white rounded-2xl text-[11px] font-black uppercase tracking-[0.2em] hover:bg-slate-900 transition-all transform hover:scale-[1.02] shadow-xl shadow-red-600/20 group"
+                  >
+                    {ad.cta_text}
+                    <ExternalLink size={16} className="group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
+                  </a>
+                  <button
+                    onClick={handleClose}
+                    className="text-[10px] font-black uppercase tracking-widest text-slate-400 hover:text-red-600 transition-colors py-2"
+                  >
+                    Maybe Later
+                  </button>
+                </div>
               )}
               
               {!ad.cta_link && (
