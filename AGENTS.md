@@ -1,113 +1,148 @@
-## 2026-03-18 - SQL Consolidation & Room Stay Logic
+# Agent Activity Log
 
-### Database Changes Made
-- Consolidation of all separate SQL scripts into three definitive files in `web-app/supabase/`:
-  - `structure.sql`: Full schema including extensions, tables, functions, and triggers.
-  - `seed.sql`: Comprehensive seed data for all key application tables.
-  - `policy.sql`: Centralized Row Level Security (RLS) policies for all public tables.
-- Added `min_stay_days` column to `room_types` and `hotel_rooms` tables with a default value of 1.
-- Updated existing `services.room_types` JSONB data to include `min_stay: 1` as a default.
+## [2026-03-11 23:55] Antigravity
 
-### Admin App Changes Made
-- Modified `CreateService.jsx` to include a "Minimum Stay (Days)" input field for each room type.
-- Updated state management to support and persist the `min_stay` value.
+- Updated `.gitignore` to exclude `dist/` and `build_output.txt` (though `dist/` remains tracked as it was previously).
+- Pushed changes to Git for `admin-app`.
+- Verified `web-app` is clean.
 
-### Verification
-- SQL files verified for syntax and coverage.
-- Admin App UI correctly saves and loads minimum stay requirements for hotel services.
+## [2026-03-12 00:05] Antigravity
 
-## 2026-03-18 - Footer Brand Refinement
+- Generated and applied seed data (7+ entries each) for `public.inquiries`, `public.subscribers`, `public.reviews`, and `public.profiles` in Supabase.
+- Seed data stored in `supabase/seed_moderation.sql`.
 
-### Footer Changes Made
+## [2026-03-12 00:10] Antigravity
 
-- Increased footer logo size to `h-24` and fixed visibility with `brightness-0 invert` filter.
-- Ensured logo is prominently displayed on the dark theme.
+- Created the `public.popup_ads` table in Supabase to manage promotional popups.
+- Seeded the table with 8 diverse promotional entries (images, videos, and text).
+- SQL script saved to `supabase/popup_ads.sql`.
 
-### Footer Verification
+## [2026-03-12 00:25] Antigravity
 
-- Verified logo is pure white and appropriately scaled in the footer area.
-- Pushed changes to GitHub.
+- Implemented the `PopupAds.jsx` management dashboard in the `admin-app`.
+- Added "Popup Ads" menu link to the `Sidebar.jsx` under Content & CMS.
+- Registered the `/popup-ads` route in `App.jsx`.
+- Verified build and cross-page navigation.
 
-## 2026-03-18 - Service Listing Promotional Badges
+## [2026-03-12 00:35] Antigravity
 
-### Promotional Changes Made
+- Fixed empty page issue by applying Row Level Security (RLS) policies to `popup_ads`.
+- Updated `supabase/popup_ads.sql` and `supabase/rlspolicies.sql` with the latest policies and 10 diverse seed entries.
+- Synchronized all changes across `admin-app` and `web-app` with a final Git push.
 
-- Added `is_seasonal_deal` and `deal_note` visual indicators to the Admin App `Services.jsx` list and grid views.
-- Updated Web App `ServiceListing.tsx` to include promotional fields in the data fetch.
-- Modified Web App `ServiceCard.tsx` to display a branded promotional badge for seasonal deals.
+## [2026-03-13 00:22] Antigravity
 
-### Promotional Verification
+- Implemented Recursive Navigation component in `web-app` (Desktop Hover, Mobile Accordion).
+- Synchronized `navigations` table in Supabase with structural 3-level depth for Destinations, Hotels, and Travel Guides.
+- Enhanced `NavigationManager.jsx` in `admin-app` to support unlimited nesting and visual tree selection.
+- Refactored `Navbar.tsx` in `web-app` to fetch navigation dynamically from Supabase.
+- Verified builds and accessibility for both applications.
+- Pushed final synchronized changes to both `web-app` and `admin-app`.
 
-- Admin App table reflects correct badges for seasonal services.
-- Web App service cards show "Limited Time" or custom notes on the category list page.
-- Git repository updated with all promotional UI refinements.
+## [2026-03-13 12:08] Antigravity
 
-## 2026-03-18 - Seasonal Deals & Promotional System
+- Polished `web-app` Navbar: Changed background to solid white and increased logo width to 200px for better visibility.
+- Fixed navigation text visibility issues by updating `tailwind.config.ts` and increasing contrast on level 0 menu items (`text-slate-800`).
+- Corrected CTA button and icon colors to ensure visibility on white background.
+- Finalized all navigation and design tasks across both apps and verified production build.
 
-### Seasonal System Changes Made
+## [2026-03-14 00:55] Antigravity
 
-- Applied `brightness-0 invert` filter to the footer logo in `Footer.tsx` to fix visibility on dark backgrounds.
-- Updated `README.md` with a comprehensive application services and logic report.
-- Standardized all "Reserve Now" labels to "Book Now" for consistency across web and mobile platforms.
-- Added `is_seasonal_deal` and `deal_note` fields to the `services` table in Supabase.
-- Updated Admin App `CreateService.jsx` with a new "Promotional Strategy" section for managing deal flags and badge notes.
-- Refactored Web App `DealsCarousel.tsx` to fetch products dynamically based on the `is_seasonal_deal` flag.
-- Standardized promotional badge styling across the homepage deals list.
-- Updated all "Reserve Now" labels to "Book Now" for consistency across web and mobile platforms.
+- Performed Level 4 Forensic Audit on `admin-app` and `web-app`.
+- Remediated security vulnerabilities: Commented out hardcoded `JWT_SECRET` and `SUPABASE_SERVICE_ROLE_KEY`.
+- Implemented production resilience:
+  - Added Next.js Edge Middleware for route protection in `web-app`.
+  - Integrated global `ErrorBoundary` in `admin-app` and `error.tsx/loading.tsx` in `web-app`.
+- Fixed data integrity: Refactored booking update logic to sync `total_amount` and resolved revenue leakage in the reporting engine.
+- Verified production readiness: SUCCESS on `npm run build` for both platforms.
+- Pushed all audit remediation changes to Git.
 
-### Seasonal System Verified
+## [2026-03-14 01:00] Antigravity
 
-- Admin UI correctly toggles and saves promotional states.
-- Web UI dynamically reflects database changes in the "Seasonal Deals" carousel.
-- "Reserve Now" in `HotelClientWrapper.tsx` updated to "Book Now".
-- Linting clean for both projects.
+- Hardened `.gitignore` in `admin-app` and `web-app` to strictly ignore all `.env*` files.
+- Verified ignore rules across both ecosystems using `git check-ignore`.
+- **Travel Abroad Alignment**: Redesigned Mauritius, Rodrigues, and International pages to a premium "MakeMyTrip" style.
+  - Implemented reusable `DestinationListing` component with sidebar filters.
+  - Standardized routing under `/destinations/...`.
+  - Verified build stability and resolved Next.js route caching issues.
+- **Production Readiness**: Completed final production builds and security audit for both apps.
+  - Verified `next build` and `vite build` success with zero errors.
+  - Confirmed no sensitive key leakage and removed all debug logs.
+  - Optimized SEO meta tags across all destination pages.
 
-## 2026-03-18 - Homepage Category Image Fixes
+## [2026-03-14 01:05] Antigravity
 
-### Category Image Changes Made
+- Generated and applied comprehensive itinerary seed data for 5 major categories:
+  - **Activities**: Wild South Adventure (8h).
+  - **Group Tours**: Cultural Heritage Journey (1d).
+  - **Day Packages**: Island Bliss Escape (7h).
+  - **Cruises**: Three Islands Catamaran Cruise (8h).
+  - **Rodrigues**: Rodrigues Authentic Discovery (3d).
+- Implemented idempotent SQL seeding logic to handle schema constraints.
+- Bridged new services to appropriate categories for correct frontend filtering.
 
-- Fixed missing "Activities" and "Rodrigues" category card images on the homepage.
-- Generated new high-quality replacement assets.
-- Moved assets to the local `public/categories/` directory for better reliability.
-- Updated Supabase `categories` table to point to local `/categories/` paths (using `/categories/rodrigues_final.png` for the Rodrigues card).
+## [2026-03-14 15:25] Antigravity
 
-### Category Image Verified
+- **UI/UX Elevation**: Transformed web-app into a premium 10/10 OTA experience.
+  - Implemented **Minimalist MegaMenu** with grid categories and promotional featured blocks.
+  - Integrated **Parallax Hero** on the Homepage using Framer Motion for dynamic depth effects.
+  - Refined typography (Black weight focus) and whitespace across the entire platform.
+- Verified production build stability for `web-app` (`next build` SUCCESS).
+- Synchronized development state with GitHub across both repositories.
 
-- Homepage correctly displays both "Activities" and "Rodrigues" cards with high-quality images.
-- Filename-based caching bypassed with unique naming.
+## [2026-03-14 18:15] Antigravity
 
-## 2026-03-17 - Navigation & Search Refinements
+- **UI/UX Performance & Standardization**:
+  - Implemented universal `GridSkeleton` loaders for `Tours`, `Packages`, `Hotels`, and `Deals` to eliminate layout shift.
+  - Standardized UI components: `Button`, `Input`, `Badge`, and `Breadcrumbs` across all flows.
+  - Optimized image loading by removing `unoptimized` flags and tuning LCP priority for above-the-fold assets.
+  - Refined `About/Team` page with modern skeleton states and Next.js asset optimization.
+  - Finalized design consistency for `AnnouncementPopup` and `Footer`.
+- Verified production readiness with zero errors in both `web-app` and `admin-app`.
+- Synchronized all codebases with a final Git push.
 
-### Nav Changes Made
+## [2026-03-14 18:35] Antigravity
 
-- Implemented "hide on scroll" logic for the red top bar in `Navbar.tsx` using Framer Motion.
-- Added a prominent "Search as you type" input box above the service listings in `ServiceListing.tsx`.
-- Refined Mauritius Hotels filtering to explicitly include Mauritius regions and exclude Rodrigues in `app/hotels/mauritius/page.tsx`.
-- Standardized hero banner heights to `h-[250px] md:h-[350px]` across the entire application.
-- Compacted the Tailormade page by reducing hero height, section padding, and grid gaps.
-- Converted Hotel, Activity, and Tour detail pages to Server Components with `force-dynamic` to ensure real-time pricing.
-- Added `showRoomSelection` prop to `BookingWizard.tsx` to conditionally hide room selection for Tours and Activities.
-- Fixed minor lint errors and unused variables in the FAQ page.
+- **Design Refinement**:
+  - Reduced homepage Hero slider height to `70vh` for better layout focus.
+  - Removed `MegaMenu` from desktop navigation as requested, reverting to standard top-level navigation.
+  - Preserved `MegaMenu.tsx` logic via commenting for potential future restoration.
+- Pushed all design refinements to GitHub.
 
-### Nav Verified
+## [2026-03-14 18:55] Antigravity
 
-- Navbar red bar hides correctly on scroll and reappears at the top.
-- "Search as you type" is functional and highly visible on service pages.
-- Mauritius Hotels page accurately filters out Rodrigues hotels.
-- All banners are now consistent.
-- Tailormade page is more professional and compact.
-- Data fetching is now dynamic and not from cache.
-- Booking form logic correctly handles room selection visibility.
+- **Build Systems & Bug Fixes**:
+  - Resolved Tailwind v4 compatibility error (`border-border`) by implementing proper theme mapping in `globals.css`.
+  - Fixed client component error in `contact/page.tsx` by adding missing `'use client'` directive.
+  - Resolved `React.Children.only` error in production build by refactoring `Button.tsx` to correctly handle `asChild` prop and `Slot` children.
 
-## 2026-03-18 - Booking Validation & Min Stay Enforcement
+## [2026-03-15 13:20] Antigravity
 
-### Booking Changes Made
-- Updated `app/hotels/[id]/page.tsx` to include `min_stay` in room type data fetching.
-- Added validation in `HotelClientWrapper.tsx` to check minimum stay requirement before opening the Booking Wizard.
-- Implemented robust duration validation in `BookingWizard.tsx` to prevent invalid date ranges and enforce room-specific minimum stays.
-- Enhanced `BookingWizard` UI to show `(X nights min)` in the room selection dropdown for transparency.
+- **Detail Page Polish**: Enhanced Activities, Tours, Cruises, and Packages detail pages with premium layouts and standardized elements.
+- **Itinerary Timelines**: Implemented vertical timeline rendering for all service types using structured JSON data from Supabase.
+- **Star Rating Standardization**: Integrated the centralized `StarRating` component across all detail views and listing cards.
+- **Reviews Integration**: Added `ReviewsSection` to Activities, Tours, Cruises, and Packages for improved social proof.
+- **UI Optimization**: Reduced vertical spacing and optimized layout density across major sections to improve content visibility.
+- **Production Readiness**: Verified local builds and synchronized all changes to GitHub across both `web-app` and `admin-app`.
 
-### Booking Verification
-- Web App correctly blocks sub-minimum stay requests with descriptive alerts.
-- Room selection accurately reflects dynamic minimum stay requirements from the database.
-- TypeScript linting resolved for structured room data.
+## [2026-03-15 13:28] Antigravity
+
+- **Build Error Remediation**: Fixed mission-critical TypeScript and build errors discovered during deployment.
+- **Type Safety**: Corrected `price` prop type mismatch (string vs number) in `ServiceCard` usage across `Cruises`, `Tours`, `Packages`, `Day Packages`, `Hotels`, and `Hotel Day Packages` (8+ files).
+- **Prop Completeness**: Added missing required `id` prop to all `ServiceCard` component instances globally.
+- **Final Verification**: Confirmed success with `npx tsc --noEmit` and local `npm run build` (Exit Code 0).
+- **Git Synchronization**: Pushed all build remediation changes to GitHub.
+- [2026-03-16 06:55] **Room Type Selection & Preview**:
+  - Enhanced Admin App with `image_url` field for room types in `CreateService.jsx`.
+  - Seeded high-quality room data for *The Oberoi Beach Resort* via Supabase.
+  - Implemented a premium "Choose Your Room" interactive UI in `HotelClientWrapper.tsx`.
+  - Integrated selection logic with `BookingWizard.tsx` and updated dynamic pricing.
+- [2026-03-16 08:15] **Build Error Fix**: Resolved TypeScript error in `lib/bookingService.ts` by adding `roomPreference` to the `BookingRequestData` interface. Updated booking description to include selected room details.
+- [2026-03-16 17:15] **UI Refinement & Data Fixes**:
+  - Implemented a premium horizontal navigation menu for desktop users in `web-app`.
+  - Refined `NavRecursive.tsx` with high-end typography and animations.
+  - Fixed broken image paths for "Catamaran Sunset" and updated cruise placeholders globally in the database.
+  - Synchronized `web-app` repository state with a final Git push.
+- [2026-03-16 17:35] **Build Error Remediation**: Fixed Vercel build failure by adding the missing `'use client'` directive to `app/transfers/page.tsx`. Pushed the fix to the `main` branch.
+- [2026-03-16 17:40] **UI Visibility Fix**: Resolved "white text on white background" issue in horizontal menu. Restored premium transparent-to-white navbar transition and implemented scroll-aware dynamic text colors in `NavRecursive.tsx`.
+- [2026-03-16 17:42] **Color Standardization**: Standardized Navbar to always use a solid white background with black text for maximum legibility, replacing the transparent transition per user request.
