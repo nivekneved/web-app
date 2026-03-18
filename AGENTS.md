@@ -1,4 +1,32 @@
-# AGENTS.md
+## 2026-03-18 - SQL Consolidation & Room Stay Logic
+
+### Database Changes Made
+- Consolidation of all separate SQL scripts into three definitive files in `web-app/supabase/`:
+  - `structure.sql`: Full schema including extensions, tables, functions, and triggers.
+  - `seed.sql`: Comprehensive seed data for all key application tables.
+  - `policy.sql`: Centralized Row Level Security (RLS) policies for all public tables.
+- Added `min_stay_days` column to `room_types` and `hotel_rooms` tables with a default value of 1.
+- Updated existing `services.room_types` JSONB data to include `min_stay: 1` as a default.
+
+### Admin App Changes Made
+- Modified `CreateService.jsx` to include a "Minimum Stay (Days)" input field for each room type.
+- Updated state management to support and persist the `min_stay` value.
+
+### Verification
+- SQL files verified for syntax and coverage.
+- Admin App UI correctly saves and loads minimum stay requirements for hotel services.
+
+## 2026-03-18 - Footer Brand Refinement
+
+### Footer Changes Made
+
+- Increased footer logo size to `h-24` and fixed visibility with `brightness-0 invert` filter.
+- Ensured logo is prominently displayed on the dark theme.
+
+### Footer Verification
+
+- Verified logo is pure white and appropriately scaled in the footer area.
+- Pushed changes to GitHub.
 
 ## 2026-03-18 - Service Listing Promotional Badges
 
