@@ -3,6 +3,7 @@
 ## 2026-03-18 - Seasonal Deals & Promotional System
 
 ### Changes Made
+
 - Applied `brightness-0 invert` filter to the footer logo in `Footer.tsx` to fix visibility on dark backgrounds.
 - Updated `README.md` with a comprehensive application services and logic report.
 - Standardized all "Reserve Now" labels to "Book Now" for consistency across web and mobile platforms.
@@ -20,7 +21,8 @@
 - Linting clean for both projects.
 
 ## 2026-03-17 - Navigation & Search Refinements
-### Changes Made:
+
+### Changes Made
 - Implemented "hide on scroll" logic for the red top bar in `Navbar.tsx` using Framer Motion.
 - Added a prominent "Search as you type" input box above the service listings in `ServiceListing.tsx`.
 - Refined Mauritius Hotels filtering to explicitly include Mauritius regions and exclude Rodrigues in `app/hotels/mauritius/page.tsx`.
