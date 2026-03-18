@@ -384,7 +384,7 @@ export default function HotelClientWrapper({ hotel }: { hotel: Hotel }) {
                                         onClick={handleBookNow}
                                         className="w-full"
                                     >
-                                        Reserve Now
+                                        Book Now
                                     </Button>
 
                                     <p className="text-center text-slate-400 text-[10px] font-black uppercase tracking-[0.2em]">

@@ -1,15 +1,20 @@
 # AGENTS.md
 
 ## 2026-03-18 - Seasonal Deals & Promotional System
-### Changes Made:
+
+### Changes Made
+
 - Added `is_seasonal_deal` and `deal_note` fields to the `services` table in Supabase.
 - Updated Admin App `CreateService.jsx` with a new "Promotional Strategy" section for managing deal flags and badge notes.
 - Refactored Web App `DealsCarousel.tsx` to fetch products dynamically based on the `is_seasonal_deal` flag.
 - Standardized promotional badge styling across the homepage deals list.
+- Updated all "Reserve Now" labels to "Book Now" for consistency across web and mobile platforms.
 
-### Verified:
+### Verified
+
 - Admin UI correctly toggles and saves promotional states.
 - Web UI dynamically reflects database changes in the "Seasonal Deals" carousel.
+- "Reserve Now" in `HotelClientWrapper.tsx` updated to "Book Now".
 - Linting clean for both projects.
 
 ## 2026-03-17 - Navigation & Search Refinements
