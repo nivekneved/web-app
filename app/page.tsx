@@ -50,7 +50,7 @@ export default function HomePage() {
 
   const y = useTransform(scrollYProgress, [0, 1], ["0%", "50%"])
   const opacity = useTransform(scrollYProgress, [0, 0.5], [1, 0])
-  const scale = useTransform(scrollYProgress, [0, 1], [1.05, 1.2])
+
 
   useEffect(() => {
     async function loadHeroSlides() {
@@ -112,7 +112,7 @@ export default function HomePage() {
       setCurrentSlide((prev) => (prev + 1) % heroSlides.length)
     }, autoPlayDuration)
     return () => clearInterval(timer)
-  }, [heroSlides.length, currentSlide])
+  }, [heroSlides, currentSlide])
 
   return (
     <div className="min-h-screen bg-white selection:bg-red-100 selection:text-red-900 overflow-x-hidden">
@@ -194,7 +194,7 @@ export default function HomePage() {
                 </span>
               )}
               
-              <h1 className="text-4xl md:text-6xl lg:text-7xl font-black text-white mb-6 leading-[1.05] tracking-tight">
+              <h1 className="text-4xl md:text-6xl font-black text-white mb-6 uppercase tracking-tight leading-[1.05]">
                 {heroSlides[currentSlide]?.title}
               </h1>
 <p className="text-lg md:text-xl text-white/70 font-medium mb-8 max-w-2xl mx-auto leading-relaxed">

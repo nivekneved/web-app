@@ -55,15 +55,23 @@ export default function TeamPage() {
     return (
         <div className="min-h-screen bg-white">
             {/* Header */}
-            <section className="relative h-[250px] md:h-[350px] flex items-center justify-center bg-slate-50 border-b border-slate-100">
-                <div className="container mx-auto px-6 text-center">
+            <section className="relative h-[250px] md:h-[350px] flex items-center justify-center bg-slate-950 overflow-hidden">
+                <Image
+                    src="/hero-about.png"
+                    alt="Our Team"
+                    fill
+                    className="object-cover opacity-60"
+                    priority
+                />
+                <div className="absolute inset-0 bg-gradient-to-b from-black/20 via-transparent to-black/60" />
+                <div className="container mx-auto px-6 relative z-10 text-center">
                     <motion.div
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
                     >
-                        <h1 className="text-sm font-bold text-red-600 uppercase tracking-[0.4em] mb-4">Our People</h1>
-                        <p className="text-5xl md:text-6xl font-black text-slate-900 mb-8">Meet the <span className="text-red-600">Experts</span></p>
-                        <p className="text-xl text-slate-500 max-w-2xl mx-auto leading-relaxed">
+                        <span className="inline-block py-2 px-6 rounded-full bg-red-600 text-white text-[10px] font-black uppercase tracking-[0.4em] mb-6">Our People</span>
+                        <h1 className="text-4xl md:text-6xl font-black text-white mb-6 uppercase tracking-tight leading-none">Meet the <span className="text-red-500 italic">Experts</span></h1>
+                        <p className="text-lg text-white/80 font-medium max-w-2xl mx-auto leading-relaxed">
                             A dedicated team of IATA-certified professionals committed to making your world-wide travel dreams a reality.
                         </p>
                     </motion.div>
