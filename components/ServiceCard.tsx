@@ -18,9 +18,11 @@ interface ServiceCardProps {
     tag?: string
     rating?: number
     service_type?: string
+    isSeasonal?: boolean
+    dealNote?: string
 }
 
-export default function ServiceCard({ title, location, price, image, duration, link, tag, rating }: ServiceCardProps) {
+export default function ServiceCard({ title, location, price, image, duration, link, tag, rating, isSeasonal, dealNote }: ServiceCardProps) {
     return (
         <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -35,9 +37,9 @@ export default function ServiceCard({ title, location, price, image, duration, l
                     fill
                     className="object-cover group-hover:scale-110 transition-transform duration-700"
                 />
-                {tag && (
-                    <div className="absolute top-4 left-4 bg-white/90 backdrop-blur-md text-slate-900 text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider shadow-sm">
-                        {tag}
+                {isSeasonal && (
+                    <div className="absolute top-4 right-4 bg-red-600 text-white text-[10px] font-black px-4 py-1.5 rounded-full uppercase tracking-[0.2em] shadow-lg shadow-red-900/20 z-10">
+                        {dealNote || 'Limited Time'}
                     </div>
                 )}
             </div>

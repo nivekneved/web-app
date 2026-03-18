@@ -24,6 +24,8 @@ type Service = {
     rating?: number
     region?: string
     amenities?: string[] | string
+    is_seasonal_deal?: boolean
+    deal_note?: string
 }
 
 type ServiceListingProps = {
@@ -95,7 +97,7 @@ function ServiceListingInner({
             const selectFields = [
                 'id', 'name', 'location', 'base_price', 'image_url', 
                 'duration_days', 'duration_hours', 'service_type', 
-                'rating', 'region', 'amenities'
+                'rating', 'region', 'amenities', 'is_seasonal_deal', 'deal_note'
             ].join(', ')
             
             const categorySelect = categorySlug ? ', service_categories!inner(category_id, categories!inner(slug))' : ''
@@ -512,6 +514,8 @@ function ServiceListingInner({
                                                 link={getServiceLink(service)}
                                                 tag={tag || service.service_type.toUpperCase()}
                                                 rating={service.rating}
+                                                isSeasonal={service.is_seasonal_deal}
+                                                dealNote={service.deal_note}
                                             />
                                         </motion.div>
                                     ))
