@@ -11,7 +11,7 @@ export default function VisaServicesPage() {
         {
             title: "Expert Consultation",
             description: "Detailed analysis of your travel plans and visa requirements based on your nationality and destination.",
-            icon: <Globe className="text-blue-600" size={24} />
+            icon: <Globe className="text-red-600" size={24} />
         },
         {
             title: "Document Preparation",
@@ -29,7 +29,7 @@ export default function VisaServicesPage() {
         {
             title: "Accredited Agency",
             desc: "IATA accredited travel agent with years of experience in global visa procedures.",
-            icon: <ShieldCheck className="text-blue-500" />
+            icon: <ShieldCheck className="text-red-500" />
         },
         {
             title: "Time Saving",
@@ -141,11 +141,11 @@ export default function VisaServicesPage() {
                         </div>
 
                         {/* Information Alert */}
-                        <div className="bg-blue-600 rounded-[2.5rem] p-10 text-white">
+                        <div className="bg-red-600 rounded-[2.5rem] p-10 text-white">
                             <h3 className="text-xl font-black mb-6 flex items-center gap-3 uppercase tracking-widest">
                                 Important Notice
                             </h3>
-                            <p className="text-sm font-medium text-blue-100 leading-relaxed mb-6">
+                            <p className="text-sm font-medium text-red-100 leading-relaxed mb-6">
                                 Visa requirements can change without notice. Always verify with official embassy channels or consult our team for the most up-to-date information.
                             </p>
                             <Link href="/about" className="flex items-center gap-2 font-black text-[10px] uppercase tracking-widest hover:translate-x-2 transition-transform">

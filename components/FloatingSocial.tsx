@@ -23,8 +23,8 @@ const socialLinks = [
     name: 'Facebook',
     icon: Facebook,
     href: 'https://www.facebook.com/travellounge.mu/',
-    color: 'bg-blue-600',
-    hoverColor: 'hover:bg-blue-700'
+    color: 'bg-red-600',
+    hoverColor: 'hover:bg-red-700'
   }
 ];
 

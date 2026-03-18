@@ -121,10 +121,10 @@ function PaymentContent() {
                                     />
                                 </div>
 
-                                <div className="bg-blue-50 border border-blue-100 rounded-2xl p-4">
+                                <div className="bg-red-50 border border-red-100 rounded-2xl p-4">
                                     <div className="flex items-start gap-3">
-                                        <CheckCircle size={20} className="text-blue-600 mt-0.5" />
-                                        <div className="text-sm text-blue-900">
+                                        <CheckCircle size={20} className="text-red-600 mt-0.5" />
+                                        <div className="text-sm text-red-900">
                                             <strong>Demo Payment Mode</strong><br />
                                             This is a demonstration. No actual payment will be processed. Use any card details to proceed.
                                         </div>

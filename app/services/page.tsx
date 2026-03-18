@@ -17,7 +17,7 @@ export default function ServicesPage() {
             desc: "Set sail on an amazing voyage with our selected cruise options.",
             features: ["Comfortable Cabins", "Global Itineraries", "All-Inclusive Options"],
             path: "/cruises",
-            color: "bg-blue-600",
+            color: "bg-red-600",
             image: "/categories/cruises.png"
         },
         {

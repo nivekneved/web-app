@@ -14,4 +14,4 @@ export default function PackagesPage() {
             searchPlaceholder="Search activities, adventures..."
         />
     )
-}
+}

@@ -150,7 +150,7 @@ export default function FlightDetailPage() {
                 <div className="absolute bottom-12 left-8 right-8">
                     <div className="max-w-7xl mx-auto">
                         <div className="flex flex-wrap items-center gap-4 mb-4">
-                            <Badge className="bg-blue-600 text-white border-none py-1.5 px-4 shadow-lg">
+                            <Badge className="bg-red-600 text-white border-none py-1.5 px-4 shadow-lg">
                                 Best Value Connection
                             </Badge>
                         </div>
@@ -163,7 +163,7 @@ export default function FlightDetailPage() {
                                 {flight.location}
                             </div>
                             <div className="flex items-center gap-2 font-bold uppercase tracking-wider text-xs">
-                                <Plane size={18} className="text-blue-400" />
+                                <Plane size={18} className="text-red-400" />
                                 Domestic & International
                             </div>
                         </div>
@@ -184,7 +184,7 @@ export default function FlightDetailPage() {
                     <div className="lg:col-span-2 space-y-16">
                         {/* Description */}
                         <section>
-                            <h2 className="text-[10px] font-black text-blue-600 uppercase tracking-[0.4em] mb-4 text-center sm:text-left">Journey Details</h2>
+                            <h2 className="text-[10px] font-black text-red-600 uppercase tracking-[0.4em] mb-4 text-center sm:text-left">Journey Details</h2>
                             <h3 className="text-3xl font-black text-slate-900 mb-6 leading-tight text-center sm:text-left">Fly to {flight.location}</h3>
                             <p className="text-lg text-slate-500 leading-relaxed font-medium">
                                 {flight.description}
@@ -200,7 +200,7 @@ export default function FlightDetailPage() {
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                     {flight.amenities.map((item, idx) => (
                                         <div key={idx} className="flex items-center gap-3 p-5 bg-slate-50 rounded-2xl border border-slate-100">
-                                            <div className="w-10 h-10 bg-white rounded-xl flex items-center justify-center text-blue-600 shadow-sm border border-slate-200/50">
+                                            <div className="w-10 h-10 bg-white rounded-xl flex items-center justify-center text-red-600 shadow-sm border border-slate-200/50">
                                                 <Shield size={18} />
                                             </div>
                                             <span className="font-bold text-xs uppercase tracking-widest text-slate-600">{item}</span>
@@ -251,7 +251,7 @@ export default function FlightDetailPage() {
                                                 type="date"
                                                 value={travelDate}
                                                 onChange={(e) => setTravelDate(e.target.value)}
-                                                className="w-full pl-12 pr-4 py-4 bg-slate-50 border border-slate-100 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-600/50 focus:bg-white font-bold text-sm transition-all"
+                                                className="w-full pl-12 pr-4 py-4 bg-slate-50 border border-slate-100 rounded-xl focus:outline-none focus:ring-2 focus:ring-red-600/50 focus:bg-white font-bold text-sm transition-all"
                                             />
                                         </div>
                                     </div>
@@ -265,7 +265,7 @@ export default function FlightDetailPage() {
                                                 min="1"
                                                 value={travelers}
                                                 onChange={(e) => setTravelers(parseInt(e.target.value))}
-                                                className="w-full pl-12 pr-4 py-4 bg-slate-50 border border-slate-100 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-600/50 focus:bg-white font-bold text-sm transition-all"
+                                                className="w-full pl-12 pr-4 py-4 bg-slate-50 border border-slate-100 rounded-xl focus:outline-none focus:ring-2 focus:ring-red-600/50 focus:bg-white font-bold text-sm transition-all"
                                             />
                                         </div>
                                     </div>
@@ -273,14 +273,14 @@ export default function FlightDetailPage() {
                                     <Button
                                         size="xl"
                                         onClick={handleBookNow}
-                                        className="w-full bg-blue-600 hover:bg-slate-900 shadow-xl shadow-blue-600/20 mt-4"
+                                        className="w-full bg-red-600 hover:bg-slate-900 shadow-xl shadow-red-600/20 mt-4"
                                     >
                                         Inquire Availability
                                     </Button>
 
-                                    <div className="flex items-center gap-3 p-4 bg-blue-50 rounded-2xl">
-                                        <Clock className="text-blue-600 shrink-0" size={18} />
-                                        <p className="text-[10px] text-blue-700 font-bold leading-tight">Prices are subject to airline availability at the time of booking.</p>
+                                    <div className="flex items-center gap-3 p-4 bg-red-50 rounded-2xl">
+                                        <Clock className="text-red-600 shrink-0" size={18} />
+                                        <p className="text-[10px] text-red-700 font-bold leading-tight">Prices are subject to airline availability at the time of booking.</p>
                                     </div>
                                 </div>
                             </div>

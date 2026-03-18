@@ -47,8 +47,8 @@ function BookingConfirmationContent() {
                     </div>
 
                     {/* Info Box */}
-                    <div className="bg-blue-50 border border-blue-100 rounded-2xl p-6 mb-8 text-left">
-                        <p className="text-sm text-blue-900">
+                    <div className="bg-red-50 border border-red-100 rounded-2xl p-6 mb-8 text-left">
+                        <p className="text-sm text-red-900">
                             <strong>What&apos;s Next?</strong><br />
                             Our team has received your request and will review the details. You will receive a notification once the booking is processed. For any offline payment arrangements, our concierge team will contact you directly within the next 24 hours.
                         </p>

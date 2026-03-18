@@ -160,8 +160,8 @@ export default function DashboardPage() {
                     <div className="lg:col-span-2">
                         <div className="bg-white rounded-[2rem] p-8 border border-slate-100 shadow-sm">
                             <div className="flex items-center gap-3 mb-6">
-                                <div className="p-3 bg-blue-50 rounded-xl">
-                                    <BookOpen size={24} className="text-blue-600" />
+                                <div className="p-3 bg-red-50 rounded-xl">
+                                    <BookOpen size={24} className="text-red-600" />
                                 </div>
                                 <h2 className="text-2xl font-black text-slate-900">My Bookings</h2>
                             </div>

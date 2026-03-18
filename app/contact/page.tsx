@@ -186,7 +186,7 @@ export default function ContactPage() {
                                 </a>
 
                                 <a href={`mailto:${contactEmail}`} className="group flex items-center gap-6 p-6 hover:bg-slate-50 rounded-3xl transition-all duration-300">
-                                    <div className="w-14 h-14 bg-blue-600 text-white rounded-2xl flex items-center justify-center group-hover:scale-110 transition-transform">
+                                    <div className="w-14 h-14 bg-red-600 text-white rounded-2xl flex items-center justify-center group-hover:scale-110 transition-transform">
                                         <Mail size={24} />
                                     </div>
                                     <div>

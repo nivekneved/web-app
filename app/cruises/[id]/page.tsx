@@ -174,7 +174,7 @@ export default function CruiseDetailPage() {
                 {cruise.image_url ? (
                     <div className="absolute inset-0 bg-cover bg-center" style={{ backgroundImage: `url(${cruise.image_url})` }} />
                 ) : (
-                    <div className="absolute inset-0 bg-gradient-to-br from-blue-600 to-slate-900 flex items-center justify-center">
+                    <div className="absolute inset-0 bg-gradient-to-br from-red-600 to-slate-900 flex items-center justify-center">
                         <Ship size={120} className="text-white/30" />
                     </div>
                 )}
@@ -249,7 +249,7 @@ export default function CruiseDetailPage() {
 
                                         <button
                                             onClick={handleBookNow}
-                                            className="w-full px-6 py-4 bg-blue-600 text-white rounded-xl font-black uppercase tracking-wider hover:bg-slate-900 transition-all shadow-lg shadow-blue-600/20"
+                                            className="w-full px-6 py-4 bg-red-600 text-white rounded-xl font-black uppercase tracking-wider hover:bg-slate-900 transition-all shadow-lg shadow-red-600/20"
                                         >
                                             Book Now
                                         </button>
@@ -262,7 +262,7 @@ export default function CruiseDetailPage() {
                 {cruise.itinerary && cruise.itinerary.length > 0 && (
                     <div className="bg-white rounded-[2rem] p-10 border border-slate-100 shadow-sm mb-12">
                         <section>
-                            <h2 className="text-xs font-black text-blue-600 uppercase tracking-[0.4em] mb-6">Voyage</h2>
+                            <h2 className="text-xs font-black text-red-600 uppercase tracking-[0.4em] mb-6">Voyage</h2>
                             <h3 className="text-4xl font-black text-slate-900 mb-10 leading-tight">Detailed Itinerary</h3>
                             <div className="space-y-0">
                                 {cruise.itinerary.map((item, idx) => (
@@ -272,8 +272,8 @@ export default function CruiseDetailPage() {
                                             <div className="absolute left-[15px] top-[30px] bottom-0 w-0.5 bg-slate-100" />
                                         )}
                                         {/* Timeline Dot */}
-                                        <div className="absolute left-0 top-1.5 w-8 h-8 bg-white border-2 border-blue-600 rounded-full flex items-center justify-center z-10">
-                                            <div className="w-2 h-2 bg-blue-600 rounded-full" />
+                                        <div className="absolute left-0 top-1.5 w-8 h-8 bg-white border-2 border-red-600 rounded-full flex items-center justify-center z-10">
+                                            <div className="w-2 h-2 bg-red-600 rounded-full" />
                                         </div>
                                         <div className="space-y-3">
                                             <div className="flex items-center gap-3">
@@ -296,12 +296,12 @@ export default function CruiseDetailPage() {
                 {/* Amenities */}
                 {cruise.amenities && cruise.amenities.length > 0 && (
                     <div className="bg-white rounded-[2rem] p-10 border border-slate-100 shadow-sm mb-12">
-                        <h2 className="text-xs font-black text-blue-600 uppercase tracking-[0.4em] mb-6">Experience</h2>
+                        <h2 className="text-xs font-black text-red-600 uppercase tracking-[0.4em] mb-6">Experience</h2>
                         <h3 className="text-4xl font-black text-slate-900 mb-10 leading-tight">Onboard Amenities</h3>
                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                             {cruise.amenities.map((amenity, idx) => (
                                 <div key={idx} className="flex items-center gap-4 p-6 bg-slate-50 rounded-[2rem] border border-slate-100 hover:bg-white hover:shadow-xl hover:shadow-slate-200/50 transition-all duration-300">
-                                    <div className="w-10 h-10 bg-white rounded-xl flex items-center justify-center text-blue-600 shadow-sm">
+                                    <div className="w-10 h-10 bg-white rounded-xl flex items-center justify-center text-red-600 shadow-sm">
                                         <Check size={18} />
                                     </div>
                                     <span className="font-black text-xs uppercase tracking-widest text-slate-600">{amenity}</span>

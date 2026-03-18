@@ -11,10 +11,14 @@ interface GeneralConfig {
     siteTitle?: string;
     contactEmail?: string;
     contactPhone?: string;
-    officeAddress?: string;
+    office1Title?: string;
+    office1Address?: string;
+    office2Title?: string;
+    office2Address?: string;
     workingHours?: string;
     facebookUrl?: string;
     instagramUrl?: string;
+    whatsappNumber1?: string;
 }
 
 export default function Footer() {
@@ -74,6 +78,7 @@ export default function Footer() {
 
     const contactEmail = settings?.contactEmail || 'reservation@travellounge.mu'
     const contactPhone = settings?.contactPhone || '+230 5940 7701'
+    const whatsappNumber1 = settings?.whatsappNumber1 || '23059407701'
     const workingHours = settings?.workingHours || 'Mon - Fri: 08:30 - 17:00'
     const facebookUrl = settings?.facebookUrl || 'https://www.facebook.com/travellounge.mu'
     const instagramUrl = settings?.instagramUrl || 'https://www.instagram.com/travellounge_ltd?igsh=MWljeWRiNG43aDN0OQ=='
@@ -103,7 +108,7 @@ export default function Footer() {
                             <a href={instagramUrl} target="_blank" rel="noopener noreferrer" className="w-9 h-9 bg-slate-800 rounded-lg flex items-center justify-center hover:bg-red-600 transition-colors">
                                 <Instagram size={18} />
                             </a>
-                            <a href="https://wa.me/23059407701" target="_blank" rel="noopener noreferrer" className="w-9 h-9 bg-slate-800 rounded-lg flex items-center justify-center hover:bg-green-600 transition-colors">
+                            <a href={`https://wa.me/${whatsappNumber1.replace(/\s+/g, '').replace('+', '')}`} target="_blank" rel="noopener noreferrer" className="w-9 h-9 bg-slate-800 rounded-lg flex items-center justify-center hover:bg-green-600 transition-colors">
                                 <MessageCircle size={18} />
                             </a>
                         </div>
@@ -113,42 +118,46 @@ export default function Footer() {
                     <div>
                         <h4 className="text-[11px] font-black mb-6 uppercase tracking-[0.3em] text-white">Visit Us</h4>
                         <div className="space-y-6 text-slate-400">
-                            <div>
-                                <p className="font-bold text-white mb-1 uppercase text-[10px] tracking-widest flex items-center gap-2">
-                                    <span className="w-1.5 h-1.5 bg-red-600 rounded-full"></span>
-                                    Port Louis
-                                </p>
-                                <p className="text-sm leading-relaxed mb-2">
-                                    Ground Floor Newton Tower, Corner Sir William Newton and Remy Ollier Street, Port Louis
-                                </p>
-                                <a 
-                                    href="https://www.google.com/maps/dir/?api=1&destination=Newton+Tower+Port+Louis" 
-                                    target="_blank" 
-                                    rel="noopener noreferrer"
-                                    className="text-xs font-black text-red-500 hover:text-red-400 flex items-center gap-1 uppercase"
-                                >
-                                    <MapPin size={10} />
-                                    Get Directions
-                                </a>
-                            </div>
-                            <div>
-                                <p className="font-bold text-white mb-1 uppercase text-[10px] tracking-widest flex items-center gap-2">
-                                    <span className="w-1.5 h-1.5 bg-red-600 rounded-full"></span>
-                                    Ebene
-                                </p>
-                                <p className="text-sm leading-relaxed mb-2">
-                                    Ground Floor, 57 Ebene Mews, Rue Du Savoir, Ebene Cybercity
-                                </p>
-                                <a 
-                                    href="https://www.google.com/maps/dir/?api=1&destination=Ebene+Mews+57" 
-                                    target="_blank" 
-                                    rel="noopener noreferrer"
-                                    className="text-xs font-black text-red-500 hover:text-red-400 flex items-center gap-1 uppercase"
-                                >
-                                    <MapPin size={10} />
-                                    Get Directions
-                                </a>
-                            </div>
+                            {settings?.office1Address && (
+                                <div>
+                                    <p className="font-bold text-white mb-1 uppercase text-[10px] tracking-widest flex items-center gap-2">
+                                        <span className="w-1.5 h-1.5 bg-red-600 rounded-full"></span>
+                                        {settings.office1Title || 'Port Louis'}
+                                    </p>
+                                    <p className="text-sm leading-relaxed mb-2">
+                                        {settings.office1Address}
+                                    </p>
+                                    <a 
+                                        href={`https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(settings.office1Address)}`} 
+                                        target="_blank" 
+                                        rel="noopener noreferrer"
+                                        className="text-xs font-black text-red-500 hover:text-red-400 flex items-center gap-1 uppercase"
+                                    >
+                                        <MapPin size={10} />
+                                        Get Directions
+                                    </a>
+                                </div>
+                            )}
+                            {settings?.office2Address && (
+                                <div>
+                                    <p className="font-bold text-white mb-1 uppercase text-[10px] tracking-widest flex items-center gap-2">
+                                        <span className="w-1.5 h-1.5 bg-red-600 rounded-full"></span>
+                                        {settings.office2Title || 'Ebene'}
+                                    </p>
+                                    <p className="text-sm leading-relaxed mb-2">
+                                        {settings.office2Address}
+                                    </p>
+                                    <a 
+                                        href={`https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(settings.office2Address)}`} 
+                                        target="_blank" 
+                                        rel="noopener noreferrer"
+                                        className="text-xs font-black text-red-500 hover:text-red-400 flex items-center gap-1 uppercase"
+                                    >
+                                        <MapPin size={10} />
+                                        Get Directions
+                                    </a>
+                                </div>
+                            )}
                         </div>
                     </div>
 
@@ -156,7 +165,7 @@ export default function Footer() {
                     <div>
                         <h4 className="text-[11px] font-black mb-6 uppercase tracking-[0.3em] text-white">Contact Us</h4>
                         <div className="space-y-4 text-slate-400 font-medium text-sm">
-                            <a href={`tel:${contactPhone.replace(/\s/g, '')}`} className="flex items-center gap-2 hover:text-red-600 transition-colors">
+                            <a href={`tel:${contactPhone.replace(/\s+/g, '')}`} className="flex items-center gap-2 hover:text-red-600 transition-colors">
                                 <Phone size={16} className="text-red-600" />
                                 <span>{contactPhone}</span>
                             </a>
@@ -182,9 +191,6 @@ export default function Footer() {
                                 <li>
                                     <Link href="/packages" className="hover:text-red-600 transition-colors">Holiday Packages</Link>
                                 </li>
-                                {/* <li>
-                                    <Link href="/news" className="hover:text-red-600 transition-colors">Latest News</Link>
-                                </li> */}
                                 <li>
                                     <Link href="/faq" className="hover:text-red-600 transition-colors">FAQ</Link>
                                 </li>
@@ -229,11 +235,11 @@ export default function Footer() {
                 {/* Copyright */}
                 <div className="mt-8 pt-6 border-t border-slate-800 text-center text-slate-400 text-sm">
                     <p>
-                        © {new Date().getFullYear()} Travel Lounge and Leisure. All rights reserved.
-                        {' '}- Developed by <span className="text-red-600 font-bold">Deven</span>
+                        © {new Date().getFullYear()} {settings?.siteTitle || 'Travel Lounge'}. All rights reserved.
                     </p>
                 </div>
             </div>
         </footer>
+
     )
 }

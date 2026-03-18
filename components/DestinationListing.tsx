@@ -168,7 +168,7 @@ export default function DestinationListing({
                         <div className="bg-white rounded-2xl p-6 shadow-sm border border-slate-200">
                             <div className="flex items-center justify-between mb-6 pb-4 border-b border-slate-100">
                                 <h3 className="text-xl font-bold text-slate-900 flex items-center gap-2">
-                                    <Filter size={20} className="text-blue-500" />
+                                    <Filter size={20} className="text-red-500" />
                                     Filters
                                 </h3>
                                 <button 
@@ -177,7 +177,7 @@ export default function DestinationListing({
                                         setSelectedTypes([]);
                                         setSelectedRatings([]);
                                     }}
-                                    className="text-sm font-bold text-blue-600 hover:text-blue-700"
+                                    className="text-sm font-bold text-red-600 hover:text-red-700"
                                 >
                                     Reset All
                                 </button>
@@ -195,7 +195,7 @@ export default function DestinationListing({
                                     step="5000"
                                     value={filterPrice}
                                     onChange={(e) => setFilterPrice(Number(e.target.value))}
-                                    className="w-full h-2 bg-slate-100 rounded-lg appearance-none cursor-pointer accent-blue-600"
+                                    className="w-full h-2 bg-slate-100 rounded-lg appearance-none cursor-pointer accent-red-600"
                                 />
                                 <div className="flex justify-between mt-2 text-xs font-bold text-slate-400">
                                     <span>Rs 1,000</span>
@@ -216,7 +216,7 @@ export default function DestinationListing({
                                                     type="checkbox"
                                                     checked={selectedTypes.includes(type)}
                                                     onChange={() => toggleType(type)}
-                                                    className="peer h-5 w-5 appearance-none rounded border-2 border-slate-200 checked:bg-blue-600 checked:border-blue-600 transition-all"
+                                                    className="peer h-5 w-5 appearance-none rounded border-2 border-slate-200 checked:bg-red-600 checked:border-red-600 transition-all"
                                                 />
                                                 <Check className="absolute h-3 w-3 text-white left-1 opacity-0 peer-checked:opacity-100 transition-opacity" />
                                             </div>
@@ -241,7 +241,7 @@ export default function DestinationListing({
                                                     type="checkbox"
                                                     checked={selectedRatings.includes(rating)}
                                                     onChange={() => toggleRating(rating)}
-                                                    className="peer h-5 w-5 appearance-none rounded border-2 border-slate-200 checked:bg-blue-600 checked:border-blue-600 transition-all"
+                                                    className="peer h-5 w-5 appearance-none rounded border-2 border-slate-200 checked:bg-red-600 checked:border-red-600 transition-all"
                                                 />
                                                 <Check className="absolute h-3 w-3 text-white left-1 opacity-0 peer-checked:opacity-100 transition-opacity" />
                                             </div>
@@ -258,11 +258,11 @@ export default function DestinationListing({
                         </div>
 
                         {/* Promo Card */}
-                        <div className="bg-gradient-to-br from-blue-600 to-indigo-700 rounded-2xl p-6 text-white overflow-hidden relative">
+                        <div className="bg-gradient-to-br from-red-600 to-indigo-700 rounded-2xl p-6 text-white overflow-hidden relative">
                             <div className="relative z-10">
                                 <h4 className="text-xl font-black mb-2 uppercase">Need Help?</h4>
                                 <p className="text-sm text-white/80 mb-4 font-medium">Get personalized travel advice from our experts.</p>
-                                <button className="bg-white text-blue-600 px-6 py-2 rounded-xl font-bold text-sm hover:scale-105 transition-transform">
+                                <button className="bg-white text-red-600 px-6 py-2 rounded-xl font-bold text-sm hover:scale-105 transition-transform">
                                     Contact Us
                                 </button>
                             </div>
@@ -292,7 +292,7 @@ export default function DestinationListing({
                                             onClick={() => setSortBy(opt.id)}
                                             className={`px-4 py-2 rounded-xl text-xs font-bold transition-all ${
                                                 sortBy === opt.id 
-                                                ? 'bg-blue-600 text-white' 
+                                                ? 'bg-red-600 text-white' 
                                                 : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
                                             }`}
                                         >
@@ -336,7 +336,7 @@ export default function DestinationListing({
                                                     setSelectedTypes([]);
                                                     setSelectedRatings([]);
                                                 }}
-                                                className="mt-6 px-8 py-3 bg-blue-600 text-white rounded-xl font-bold hover:bg-blue-700 transition-all"
+                                                className="mt-6 px-8 py-3 bg-red-600 text-white rounded-xl font-bold hover:bg-red-700 transition-all"
                                             >
                                                 Clear All Filters
                                             </button>
