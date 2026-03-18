@@ -1,8 +1,22 @@
 # AGENTS.md
 
+## 2026-03-18 - Service Listing Promotional Badges
+
+### Promotional Changes Made
+
+- Added `is_seasonal_deal` and `deal_note` visual indicators to the Admin App `Services.jsx` list and grid views.
+- Updated Web App `ServiceListing.tsx` to include promotional fields in the data fetch.
+- Modified Web App `ServiceCard.tsx` to display a branded promotional badge for seasonal deals.
+
+### Promotional Verification
+
+- Admin App table reflects correct badges for seasonal services.
+- Web App service cards show "Limited Time" or custom notes on the category list page.
+- Git repository updated with all promotional UI refinements.
+
 ## 2026-03-18 - Seasonal Deals & Promotional System
 
-### Changes Made
+### Seasonal System Changes Made
 
 - Applied `brightness-0 invert` filter to the footer logo in `Footer.tsx` to fix visibility on dark backgrounds.
 - Updated `README.md` with a comprehensive application services and logic report.
@@ -13,7 +27,7 @@
 - Standardized promotional badge styling across the homepage deals list.
 - Updated all "Reserve Now" labels to "Book Now" for consistency across web and mobile platforms.
 
-### Verified
+### Seasonal System Verified
 
 - Admin UI correctly toggles and saves promotional states.
 - Web UI dynamically reflects database changes in the "Seasonal Deals" carousel.
@@ -22,21 +36,21 @@
 
 ## 2026-03-18 - Homepage Category Image Fixes
 
-### Changes Made
+### Category Image Changes Made
 
 - Fixed missing "Activities" and "Rodrigues" category card images on the homepage.
 - Generated new high-quality replacement assets.
 - Moved assets to the local `public/categories/` directory for better reliability.
 - Updated Supabase `categories` table to point to local `/categories/` paths (using `/categories/rodrigues_final.png` for the Rodrigues card).
 
-### Verified
+### Category Image Verified
 
 - Homepage correctly displays both "Activities" and "Rodrigues" cards with high-quality images.
 - Filename-based caching bypassed with unique naming.
 
 ## 2026-03-17 - Navigation & Search Refinements
 
-### Changes Made
+### Nav Changes Made
 
 - Implemented "hide on scroll" logic for the red top bar in `Navbar.tsx` using Framer Motion.
 - Added a prominent "Search as you type" input box above the service listings in `ServiceListing.tsx`.
@@ -47,7 +61,7 @@
 - Added `showRoomSelection` prop to `BookingWizard.tsx` to conditionally hide room selection for Tours and Activities.
 - Fixed minor lint errors and unused variables in the FAQ page.
 
-### Verified
+### Nav Verified
 
 - Navbar red bar hides correctly on scroll and reappears at the top.
 - "Search as you type" is functional and highly visible on service pages.
