@@ -50,14 +50,14 @@ This document provides a consolidated overview of the business logic, technical 
 
 ## 3. Platform Feature Map
 
-| Feature | Web App | Mobile App | Admin App |
-| :--- | :---: | :---: | :---: |
-| **Search & Discovery** | ✅ | ✅ | ❌ |
-| **Booking Wizard** | ✅ | ✅ | ❌ |
-| **Reviews Moderation** | ❌ | ❌ | ✅ |
-| **Customer Insights** | ❌ | ❌ | ✅ |
-| **Push/Meta Mgmt** | ❌ | ✅ | ✅ |
-| **Dynamic Branding** | ✅ | ✅ | ✅ |
+| Feature                  | Web App | Mobile App | Admin App |
+| :---                     | :---:   | :---:      | :---:     |
+| **Search & Discovery**   | ✅       | ✅          | ❌         |
+| **Booking Wizard**       | ✅       | ✅          | ❌         |
+| **Reviews Moderation**   | ❌       | ❌          | ✅         |
+| **Customer Insights**    | ❌       | ❌          | ✅         |
+| **Push/Meta Mgmt**       | ❌       | ✅          | ✅         |
+| **Dynamic Branding**     | ✅       | ✅          | ✅         |
 
 ---
 
