@@ -98,3 +98,16 @@
 - Tailormade page is more professional and compact.
 - Data fetching is now dynamic and not from cache.
 - Booking form logic correctly handles room selection visibility.
+
+## 2026-03-18 - Booking Validation & Min Stay Enforcement
+
+### Booking Changes Made
+- Updated `app/hotels/[id]/page.tsx` to include `min_stay` in room type data fetching.
+- Added validation in `HotelClientWrapper.tsx` to check minimum stay requirement before opening the Booking Wizard.
+- Implemented robust duration validation in `BookingWizard.tsx` to prevent invalid date ranges and enforce room-specific minimum stays.
+- Enhanced `BookingWizard` UI to show `(X nights min)` in the room selection dropdown for transparency.
+
+### Booking Verification
+- Web App correctly blocks sub-minimum stay requests with descriptive alerts.
+- Room selection accurately reflects dynamic minimum stay requirements from the database.
+- TypeScript linting resolved for structured room data.
