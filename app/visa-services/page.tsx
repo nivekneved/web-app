@@ -5,6 +5,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { FileText, CheckCircle, Clock, ShieldCheck, Globe, ArrowRight, HelpCircle } from 'lucide-react'
 import { motion } from 'framer-motion'
+import { Breadcrumbs } from '@/components/ui/Breadcrumbs'
 
 export default function VisaServicesPage() {
     const steps = [
@@ -50,7 +51,7 @@ export default function VisaServicesPage() {
                     priority
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-slate-900 via-slate-900/40 to-transparent" />
-                <div className="container mx-auto px-6 relative z-10 text-center md:text-left">
+                <div className="container mx-auto px-6 relative z-10 flex flex-col items-center justify-center text-center">
                     <motion.div
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
@@ -59,11 +60,11 @@ export default function VisaServicesPage() {
                         <span className="inline-block py-2 px-6 rounded-full bg-red-600 text-white text-[10px] font-black uppercase tracking-[0.4em] mb-6">
                             Concierge Services
                         </span>
-                        <h1 className="text-5xl md:text-7xl font-black text-white mb-6 leading-tight tracking-tight">
+                        <h1 className="text-4xl md:text-6xl font-black text-white mb-6 leading-tight tracking-tight uppercase">
                             Travel Visa <br />
                             <span className="text-red-600">Assistance.</span>
                         </h1>
-                        <p className="text-lg md:text-xl text-white/80 font-medium mb-10 max-w-2xl leading-relaxed">
+                        <p className="text-lg text-white/80 font-medium mb-10 max-w-2xl mx-auto leading-relaxed">
                             Simplifying the complex world of travel documentation. Our experts ensure your visa application 
                             is handled with precision and care for a stress-free journey.
                         </p>
@@ -73,6 +74,10 @@ export default function VisaServicesPage() {
 
             {/* Main Content */}
             <div className="container mx-auto px-6 -mt-16 relative z-20">
+                <Breadcrumbs 
+                    items={[{ label: 'Visa Services', active: true }]} 
+                    className="mb-8"
+                />
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
                     {/* Process Steps */}
                     <div className="lg:col-span-2 space-y-8">
@@ -116,7 +121,6 @@ export default function VisaServicesPage() {
                                     </Link>
                                 </div>
                             </div>
-                            {/* Decorative background logo */}
                             <div className="absolute -bottom-20 -right-20 opacity-10">
                                 <Globe size={300} />
                             </div>
@@ -140,7 +144,6 @@ export default function VisaServicesPage() {
                             </div>
                         </div>
 
-                        {/* Information Alert */}
                         <div className="bg-red-600 rounded-[2.5rem] p-10 text-white">
                             <h3 className="text-xl font-black mb-6 flex items-center gap-3 uppercase tracking-widest">
                                 Important Notice

@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { MessageCircle, Instagram, Facebook, Share2, X } from 'lucide-react';
+import { MessageCircle, Instagram, Facebook, Share2, X, Mail } from 'lucide-react';
 
 const socialLinks = [
   {
@@ -25,6 +25,13 @@ const socialLinks = [
     href: 'https://www.facebook.com/travellounge.mu/',
     color: 'bg-red-600',
     hoverColor: 'hover:bg-red-700'
+  },
+  {
+    name: 'Email',
+    icon: Mail,
+    href: 'mailto:reservation@travellounge.mu',
+    color: 'bg-indigo-600',
+    hoverColor: 'hover:bg-indigo-700'
   }
 ];
 

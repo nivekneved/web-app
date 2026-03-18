@@ -82,7 +82,7 @@ export default function TailorMadePage() {
             <span className="inline-block py-2 px-6 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-white text-[10px] font-black uppercase tracking-[0.4em] mb-6">
                 Bespoke Journeys
             </span>
-            <h1 className="text-4xl md:text-6xl font-black text-white mb-6 tracking-tighter leading-[1.1]">
+            <h1 className="text-4xl md:text-6xl font-black text-white mb-6 uppercase tracking-tight leading-[1.1]">
                 Your Journey, <br />
                 <span className="text-red-500 italic">Exactly as You Imagine.</span>
             </h1>
