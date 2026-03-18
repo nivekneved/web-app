@@ -24,6 +24,7 @@ type RoomType = {
     features?: string[];
     available?: boolean;
     prices?: Record<string, string>;
+    min_stay?: number;
 }
 
 type Hotel = {
@@ -86,6 +87,18 @@ export default function HotelClientWrapper({ hotel }: { hotel: Hotel }) {
             const element = document.getElementById('rooms-selection');
             element?.scrollIntoView({ behavior: 'smooth' });
             return
+        }
+
+        if (selectedRoom && selectedRoom.min_stay && selectedRoom.min_stay > 1) {
+            const start = new Date(checkIn);
+            const end = new Date(checkOut);
+            const diffTime = Math.abs(end.getTime() - start.getTime());
+            const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+            
+            if (diffDays < selectedRoom.min_stay) {
+                toast.error(`This room requires a minimum stay of ${selectedRoom.min_stay} nights. Your selection is ${diffDays} ${diffDays === 1 ? 'night' : 'nights'}.`);
+                return;
+            }
         }
         setShowWizard(true)
     }
@@ -432,7 +445,7 @@ export default function HotelClientWrapper({ hotel }: { hotel: Hotel }) {
                             }}
                             onComplete={onBookingConfirm}
                             isLoading={bookingLoading}
-                            roomOptions={hotel.room_types?.map(r => r.type)}
+                            roomOptions={hotel.room_types?.map(r => ({ type: r.type, min_stay: r.min_stay }))}
                             showRoomSelection={true}
                         />
                     </div>

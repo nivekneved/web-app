@@ -33,7 +33,8 @@ async function getHotel(id: string) {
             prices: room.prices,
             image_url: room.image_url,
             features: Array.isArray(room.features) ? room.features : (typeof room.features === 'string' ? room.features.split(',').map((f: string) => f.trim()) : []),
-            available: room.available !== false
+            available: room.available !== false,
+            min_stay: parseInt(room.min_stay) || 1
         }));
     } else {
         // Fallback to room_types table for older data
@@ -55,7 +56,8 @@ async function getHotel(id: string) {
                 sun: room.weekend_price
             },
             image_url: room.image_url,
-            features: room.amenities || []
+            features: room.amenities || [],
+            min_stay: room.min_stay_days || 1
         }))
     }
 

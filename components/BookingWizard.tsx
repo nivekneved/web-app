@@ -22,7 +22,7 @@ type BookingWizardProps = {
     onComplete: (data: BookingWizardData) => void
     isLoading?: boolean
     initialData?: Partial<BookingWizardData>
-    roomOptions?: string[]
+    roomOptions?: (string | { type: string, min_stay?: number })[]
     showRoomSelection?: boolean
 }
 
@@ -55,7 +55,9 @@ export default function BookingWizard({ serviceName, servicePrice, onComplete, i
         notes: initialData?.notes || '',
         travelers: initialData?.travelers || [],
         mealPreference: initialData?.mealPreference || 'none',
-        roomPreference: initialData?.roomPreference || (roomOptions && roomOptions.length > 0 ? roomOptions[0] : (showRoomSelection ? 'standard' : undefined))
+        roomPreference: initialData?.roomPreference || (roomOptions && roomOptions.length > 0
+            ? (typeof roomOptions[0] === 'string' ? roomOptions[0] : roomOptions[0].type)
+            : (showRoomSelection ? 'standard' : undefined))
     })
 
     function updateFormData(updates: Partial<BookingWizardData>) {
@@ -83,6 +85,37 @@ export default function BookingWizard({ serviceName, servicePrice, onComplete, i
     }
 
     function nextStep() {
+        if (currentStep === 1) {
+            // Validation for Step 1
+            if (!formData.checkIn || !formData.checkOut) {
+                alert('Please select both check-in and check-out dates')
+                return
+            }
+
+            // Min stay check
+            const start = new Date(formData.checkIn)
+            const end = new Date(formData.checkOut)
+            const diffTime = Math.abs(end.getTime() - start.getTime())
+            const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24))
+
+            if (diffDays < 1 && formData.checkIn && formData.checkOut) {
+                alert('Checkout date must be after check-in date')
+                return
+            }
+
+            // Find selected room's min stay
+            const selectedRoomName = formData.roomPreference
+            const roomConfig = roomOptions?.find(opt => 
+                typeof opt === 'string' ? opt === selectedRoomName : opt.type === selectedRoomName
+            )
+
+            if (roomConfig && typeof roomConfig !== 'string' && roomConfig.min_stay && roomConfig.min_stay > 1) {
+                if (diffDays < roomConfig.min_stay) {
+                    alert(`This room requires a minimum stay of ${roomConfig.min_stay} nights. Your selection is ${diffDays} nights.`)
+                    return
+                }
+            }
+        }
         if (currentStep < 4) setCurrentStep((currentStep + 1) as BookingWizardStep)
     }
 
@@ -314,18 +347,20 @@ export default function BookingWizard({ serviceName, servicePrice, onComplete, i
                                     onChange={(e) => updateFormData({ roomPreference: e.target.value })}
                                     className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-700 border border-slate-200 dark:border-slate-600 rounded-xl focus:outline-none focus:ring-4 focus:ring-red-600/20 dark:text-white font-bold"
                                 >
-                                    {roomOptions && roomOptions.length > 0 ? (
-                                        roomOptions.map(opt => (
-                                            <option key={opt} value={opt}>{opt}</option>
-                                        ))
-                                    ) : (
-                                        <>
-                                            <option value="standard">Standard Room</option>
-                                            <option value="deluxe">Deluxe Room</option>
-                                            <option value="suite">Suite</option>
-                                            <option value="connecting">Connecting Rooms</option>
-                                        </>
-                                    )}
+                                {roomOptions && roomOptions.length > 0 ? (
+                                    roomOptions.map(opt => {
+                                        const value = typeof opt === 'string' ? opt : opt.type
+                                        const label = typeof opt === 'string' ? opt : `${opt.type} ${opt.min_stay && opt.min_stay > 1 ? `(${opt.min_stay} nights min)` : ''}`
+                                        return <option key={value} value={value}>{label}</option>
+                                    })
+                                ) : (
+                                    <>
+                                        <option value="standard">Standard Room</option>
+                                        <option value="deluxe">Deluxe Room</option>
+                                        <option value="suite">Suite</option>
+                                        <option value="connecting">Connecting Rooms</option>
+                                    </>
+                                )}
                                 </select>
                             </div>
                         )}
