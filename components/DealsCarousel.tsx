@@ -20,6 +20,8 @@ type Deal = {
     duration_hours?: number
     service_type: string
     rating?: number
+    is_seasonal_deal?: boolean
+    deal_note?: string
 }
 
 export default function DealsCarousel() {
@@ -34,8 +36,9 @@ export default function DealsCarousel() {
         try {
             const { data, error } = await supabase
                 .from('services')
-                .select('id, name, base_price, image_url, duration_days, duration_hours, service_type, rating')
-                .limit(4)
+                .select('id, name, base_price, image_url, duration_days, duration_hours, service_type, rating, deal_note')
+                .eq('is_seasonal_deal', true)
+                .limit(8)
                 .order('rating', { ascending: false })
 
             if (error) throw error
@@ -79,8 +82,8 @@ export default function DealsCarousel() {
                                         fill
                                         className="object-cover group-hover:scale-110 transition-transform duration-700"
                                     />
-                                    <div className="absolute top-4 right-4 bg-red-600 text-white text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider">
-                                        Limited Time
+                                    <div className="absolute top-4 right-4 bg-red-600 text-white text-[10px] font-black px-4 py-1.5 rounded-full uppercase tracking-[0.2em] shadow-lg shadow-red-900/20">
+                                        {deal.deal_note || 'Limited Time'}
                                     </div>
                                 </div>
                                 <div className="p-6 flex flex-col flex-1">

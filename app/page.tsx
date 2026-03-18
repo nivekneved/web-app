@@ -24,6 +24,13 @@ type HeroSlide = {
   image_url: string
   media_type: string
   video_url: string | null
+  animation_type?: string
+  duration?: number
+  start_date?: string
+  end_date?: string
+  mobile_image_url?: string
+  badge_text?: string
+  badge_color?: string
   tag?: string
   cta?: string
   link?: string
@@ -50,19 +57,28 @@ export default function HomePage() {
       try {
         const { data, error } = await supabase
           .from('hero_slides')
-          .select('id, title, subtitle, description, cta_text, cta_link, image_url, media_type, video_url, order_index')
+          .select('id, title, subtitle, description, cta_text, cta_link, image_url, media_type, video_url, order_index, animation_type, duration, start_date, end_date, mobile_image_url, badge_text, badge_color')
           .eq('is_active', true)
           .order('order_index', { ascending: true })
 
         if (error) throw error
         if (data && data.length > 0) {
-          setHeroSlides(data.map(slide => ({
+          const now = new Date();
+          const filteredData = data.filter(slide => {
+            const start = slide.start_date ? new Date(slide.start_date) : null;
+            const end = slide.end_date ? new Date(slide.end_date) : null;
+            if (start && start > now) return false;
+            if (end && end < now) return false;
+            return true;
+          });
+
+          setHeroSlides(filteredData.map(slide => ({
             ...slide,
             subtitle: slide.subtitle || slide.description || '',
             cta: slide.cta_text || 'Explore',
             link: slide.cta_link || '/search',
             image: slide.image_url,
-            tag: 'TRAVEL DEALS',
+            tag: slide.badge_text || 'TRAVEL DEALS',
           })))
         } else {
           setHeroSlides([
@@ -91,11 +107,12 @@ export default function HomePage() {
 
   useEffect(() => {
     if (heroSlides.length === 0) return
+    const autoPlayDuration = heroSlides[currentSlide]?.duration || 6000;
     const timer = setInterval(() => {
       setCurrentSlide((prev) => (prev + 1) % heroSlides.length)
-    }, 6000)
+    }, autoPlayDuration)
     return () => clearInterval(timer)
-  }, [heroSlides.length])
+  }, [heroSlides.length, currentSlide])
 
   return (
     <div className="min-h-screen bg-white selection:bg-red-100 selection:text-red-900 overflow-x-hidden">
@@ -105,11 +122,25 @@ export default function HomePage() {
           {!loading && heroSlides.length > 0 && (
             <motion.div
               key={currentSlide}
-              style={{ y, opacity, scale }}
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
+              style={{ y, opacity }}
+              initial={{ 
+                opacity: 0,
+                scale: heroSlides[currentSlide].animation_type === 'ken-burns' ? 1.2 : 1.05,
+                x: heroSlides[currentSlide].animation_type === 'parallax-shift' ? 20 : 0,
+                y: heroSlides[currentSlide].animation_type === 'slide-up' ? 50 : 0
+              }}
+              animate={{ 
+                opacity: 1,
+                scale: heroSlides[currentSlide].animation_type === 'ken-burns' ? 1.05 : 1,
+                x: 0,
+                y: 0
+              }}
               exit={{ opacity: 0 }}
-              transition={{ duration: 1.5, ease: "easeOut" }}
+              transition={{ 
+                duration: 1.5, 
+                ease: "easeOut",
+                scale: { duration: heroSlides[currentSlide].duration ? heroSlides[currentSlide].duration / 1000 : 6 }
+              }}
               className="absolute inset-0"
             >
               {heroSlides[currentSlide].media_type === 'video' && heroSlides[currentSlide].video_url ? (
@@ -122,13 +153,21 @@ export default function HomePage() {
                   className="absolute inset-0 w-full h-full object-cover"
                 />
               ) : (
-                <Image
-                  src={heroSlides[currentSlide]?.image_url || heroSlides[currentSlide]?.image || '/hero-placeholder.png'}
-                  alt={heroSlides[currentSlide]?.title || 'Hero Slide'}
-                  fill
-                  className="object-cover"
-                  priority
-                />
+                <picture className="absolute inset-0">
+                  {heroSlides[currentSlide]?.mobile_image_url && (
+                    <source
+                      media="(max-width: 640px)"
+                      srcSet={heroSlides[currentSlide].mobile_image_url}
+                    />
+                  )}
+                  <Image
+                    src={heroSlides[currentSlide]?.image_url || heroSlides[currentSlide]?.image || '/hero-placeholder.png'}
+                    alt={heroSlides[currentSlide]?.title || 'Hero Slide'}
+                    fill
+                    className="object-cover"
+                    priority
+                  />
+                </picture>
               )}
               <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/20 to-transparent" />
             </motion.div>
@@ -143,9 +182,15 @@ export default function HomePage() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.1 }}
             >
-              {!loading && heroSlides[currentSlide]?.tag && (
-                <span className="inline-block py-2 px-6 rounded-full bg-white/5 backdrop-blur-sm border border-white/10 text-white text-[10px] font-black uppercase tracking-[0.4em] mb-4">
-                  {heroSlides[currentSlide].tag}
+              {!loading && (heroSlides[currentSlide]?.tag || heroSlides[currentSlide]?.badge_text) && (
+                <span 
+                    style={{ 
+                        backgroundColor: heroSlides[currentSlide]?.badge_color || 'rgba(255,255,255,0.05)',
+                        borderColor: heroSlides[currentSlide]?.badge_color ? 'transparent' : 'rgba(255,255,255,0.1)'
+                    }}
+                    className="inline-block py-2 px-6 rounded-full backdrop-blur-sm border text-white text-[10px] font-black uppercase tracking-[0.4em] mb-4"
+                >
+                  {heroSlides[currentSlide].badge_text || heroSlides[currentSlide].tag}
                 </span>
               )}
               
