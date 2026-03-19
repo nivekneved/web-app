@@ -116,20 +116,32 @@ export default function TeamPage() {
                                                     fill
                                                     className="object-cover transition-transform duration-700 group-hover:scale-105"
                                                 />
-                                                <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/10 to-transparent" />
-                                                
-                                                <div className="absolute bottom-10 left-10 right-10">
-                                                    <span className="text-[10px] font-black text-red-500 uppercase tracking-[0.3em] mb-2 block">Managing Director</span>
+                                                <div className="absolute inset-0 bg-red-600/90 opacity-0 group-hover:opacity-100 transition-opacity duration-300 p-10 flex flex-col justify-center text-center text-white">
+                                                    <h3 className="text-3xl font-black mb-4">
+                                                        {boss.name}
+                                                    </h3>
+                                                    <p className="text-sm font-bold leading-relaxed mb-8">
+                                                        {boss.bio || "Leading our agency with vision and excellence."}
+                                                    </p>
+                                                    <div className="flex justify-center gap-4">
+                                                        <a href={`mailto:${boss.email}`} className="bg-white text-red-600 px-8 py-3 rounded-xl font-black text-xs uppercase tracking-widest hover:bg-slate-950 hover:text-white transition-all">
+                                                            Contact Leena
+                                                        </a>
+                                                    </div>
+                                                </div>
+
+                                                <div className="absolute bottom-10 left-10 right-10 group-hover:opacity-0 transition-opacity duration-300">
+                                                    <span className="text-[10px] font-black text-red-500 uppercase tracking-[0.3em] mb-2 block group-hover:text-white">Managing Director</span>
                                                     <h3 className="text-3xl font-black text-white leading-tight tracking-tighter">
-                                                        {boss.name.split(' ')[0]} <span className="text-red-500">{boss.name.split(' ').slice(1).join(' ')}</span>
+                                                        {boss.name.split(' ')[0]} <span className="text-red-500 group-hover:text-white transition-colors">{boss.name.split(' ').slice(1).join(' ')}</span>
                                                     </h3>
                                                     <p className="text-white text-[10px] mt-4 leading-relaxed font-medium line-clamp-3">
                                                         {boss.bio || "Leading the agency with vision and excellence."}
                                                     </p>
                                                     <div className="flex gap-4 mt-8">
-                                                        <a href={`mailto:${boss.email}`} className="p-3 bg-white/10 hover:bg-white/20 text-white rounded-xl backdrop-blur-sm border border-white/10 transition-all">
+                                                        <div className="p-3 bg-white/10 text-white rounded-xl backdrop-blur-sm border border-white/10">
                                                             <Mail size={16} />
-                                                        </a>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
@@ -166,11 +178,11 @@ export default function TeamPage() {
                                                 
                                                 {/* Smaller Text Overlay for Staff */}
                                                 <div className="absolute bottom-6 left-6 right-6 group-hover:opacity-0 transition-opacity duration-300">
-                                                    <span className="text-[8px] font-black text-red-500 uppercase tracking-widest mb-1 block">
+                                                    <span className="text-[8px] font-black text-red-500 group-hover:text-white transition-colors uppercase tracking-widest mb-1 block">
                                                         {roleLabels[member.role] || member.role}
                                                     </span>
                                                     <h3 className="text-xl font-black text-white leading-tight">
-                                                        {member.name.split(' ')[0]} <span className="text-red-500">{member.name.split(' ').slice(1).join(' ')}</span>
+                                                        {member.name.split(' ')[0]} <span className="text-red-500 group-hover:text-white transition-colors">{member.name.split(' ').slice(1).join(' ')}</span>
                                                     </h3>
                                                 </div>
 

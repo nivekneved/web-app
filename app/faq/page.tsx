@@ -103,7 +103,7 @@ export default function FAQPage() {
                         <input
                             type="text"
                             placeholder="Search for answers..."
-                            className="w-full px-8 py-5 bg-slate-50 border border-slate-200 rounded-2xl focus:outline-none focus:ring-4 focus:ring-red-600/10 focus:border-red-600 text-lg font-medium transition-all"
+                            className="w-full px-8 py-5 bg-slate-50 border border-slate-300 rounded-2xl focus:outline-none focus:ring-4 focus:ring-red-600/10 focus:border-red-600 text-lg font-medium transition-all"
                             value={searchTerm}
                             onChange={(e) => setSearchTerm(e.target.value)}
                         />

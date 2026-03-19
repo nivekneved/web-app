@@ -77,7 +77,7 @@ function PaymentContent() {
                                         placeholder="1234 5678 9012 3456"
                                         required
                                         maxLength={19}
-                                        className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-4 focus:ring-red-600/20 focus:border-red-600 transition-all text-lg tracking-wider"
+                                        className="w-full px-4 py-3 bg-slate-50 border border-slate-300 rounded-xl focus:outline-none focus:ring-4 focus:ring-red-600/20 focus:border-red-600 transition-all text-lg tracking-wider"
                                     />
                                 </div>
 
@@ -91,7 +91,7 @@ function PaymentContent() {
                                             placeholder="MM/YY"
                                             required
                                             maxLength={5}
-                                            className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-4 focus:ring-red-600/20 focus:border-red-600 transition-all"
+                                            className="w-full px-4 py-3 bg-slate-50 border border-slate-300 rounded-xl focus:outline-none focus:ring-4 focus:ring-red-600/20 focus:border-red-600 transition-all"
                                         />
                                     </div>
 
@@ -104,7 +104,7 @@ function PaymentContent() {
                                             placeholder="123"
                                             required
                                             maxLength={3}
-                                            className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-4 focus:ring-red-600/20 focus:border-red-600 transition-all"
+                                            className="w-full px-4 py-3 bg-slate-50 border border-slate-300 rounded-xl focus:outline-none focus:ring-4 focus:ring-red-600/20 focus:border-red-600 transition-all"
                                         />
                                     </div>
                                 </div>
@@ -117,7 +117,7 @@ function PaymentContent() {
                                         onChange={(e) => setCardName(e.target.value.toUpperCase())}
                                         placeholder="JOHN DOE"
                                         required
-                                        className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-4 focus:ring-red-600/20 focus:border-red-600 transition-all uppercase"
+                                        className="w-full px-4 py-3 bg-slate-50 border border-slate-300 rounded-xl focus:outline-none focus:ring-4 focus:ring-red-600/20 focus:border-red-600 transition-all uppercase"
                                     />
                                 </div>
 

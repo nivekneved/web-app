@@ -318,7 +318,7 @@ function ServiceListingInner({
                                         placeholder={searchPlaceholder}
                                         value={searchTerm}
                                         onChange={(e) => setSearchTerm(e.target.value)}
-                                        className="w-full pl-11 pr-4 py-3 bg-slate-50 border border-slate-100 rounded-2xl focus:outline-none focus:ring-2 focus:ring-red-600/20 focus:bg-white font-bold text-sm transition-all"
+                                        className="w-full pl-11 pr-4 py-3 bg-slate-50 border border-slate-300 rounded-2xl focus:outline-none focus:ring-2 focus:ring-red-600/20 focus:bg-white font-bold text-sm transition-all"
                                     />
                                 </div>
                             </div>
@@ -429,7 +429,7 @@ function ServiceListingInner({
                                     placeholder={searchPlaceholder}
                                     value={searchTerm}
                                     onChange={(e) => setSearchTerm(e.target.value)}
-                                    className="w-full pl-16 pr-6 py-6 bg-white border-2 border-slate-100 rounded-[2rem] text-xl font-bold text-slate-900 placeholder:text-slate-400 shadow-sm transition-all focus:outline-none focus:border-red-600/50 focus:ring-4 focus:ring-red-600/10"
+                                    className="w-full pl-16 pr-6 py-6 bg-white border-2 border-slate-300 rounded-[2rem] text-xl font-bold text-slate-900 placeholder:text-slate-400 shadow-sm transition-all focus:outline-none focus:border-red-600/50 focus:ring-4 focus:ring-red-600/10"
                                 />
                                 {searchTerm && (
                                     <button 
@@ -523,6 +523,7 @@ function ServiceListingInner({
                                                 link={getServiceLink(service)}
                                                 tag={tag || service.service_type.toUpperCase()}
                                                 rating={service.rating}
+                                                service_type={service.service_type}
                                                 isSeasonal={service.is_seasonal_deal}
                                                 dealNote={service.deal_note}
                                             />

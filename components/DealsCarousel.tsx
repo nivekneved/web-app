@@ -1,13 +1,12 @@
 'use client'
 
 import React, { useState, useEffect } from 'react'
-import Image from 'next/image'
 import Link from 'next/link'
 import { motion } from 'framer-motion'
-import { ArrowRight, Clock, Share2 } from 'lucide-react'
+import { ArrowRight } from 'lucide-react'
 import { createClient } from '@/lib/supabase'
 import { GridSkeleton } from '@/components/LoadingSkeleton'
-import StarRating from '@/components/ui/StarRating'
+import ServiceCard from './ServiceCard'
 
 const supabase = createClient()
 
@@ -73,66 +72,20 @@ export default function DealsCarousel() {
                                 whileInView={{ opacity: 1, y: 0 }}
                                 viewport={{ once: true }}
                                 transition={{ delay: index * 0.1 }}
-                                className="bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 group flex flex-col h-full"
                             >
-                                <div className="relative h-64 overflow-hidden">
-                                    <Image
-                                        src={deal.image_url || "/hero-hotel.png"}
-                                        alt={deal.name}
-                                        fill
-                                        className="object-cover group-hover:scale-110 transition-transform duration-700"
-                                    />
-                                    <div className="absolute top-4 right-4 bg-red-600 text-white text-[10px] font-black px-4 py-1.5 rounded-full uppercase tracking-[0.2em] shadow-lg shadow-red-900/20">
-                                        {deal.deal_note || 'Limited Time'}
-                                    </div>
-                                </div>
-                                <div className="p-6 flex flex-col flex-1">
-                                    <div className="flex items-center gap-2 text-slate-400 text-xs font-bold uppercase mb-3">
-                                        <Clock size={14} />
-                                        {deal.duration_days ? `${deal.duration_days} Days` : deal.duration_hours ? `${deal.duration_hours} Hours` : 'Special'}
-                                    </div>
-                                    <h4 className="text-xl font-bold text-slate-900 mb-2 leading-tight group-hover:text-red-600 transition-colors line-clamp-1">
-                                        {deal.name}
-                                    </h4>
-                                    <div className="mb-4">
-                                        <StarRating rating={deal.rating || 0} size={14} showNumber={true} />
-                                    </div>
-                                    <div className="mt-auto flex items-end justify-between border-t border-slate-50 pt-4">
-                                        <div>
-                                            <span className="text-xs text-slate-400 font-bold block">From</span>
-                                            <span className="text-xl font-black text-slate-900">Rs {deal.base_price.toLocaleString()}</span>
-                                        </div>
-                                        <div className="flex gap-3">
-                                            <button
-                                                onClick={(e) => {
-                                                    e.preventDefault();
-                                                    e.stopPropagation();
-                                                    const link = `/${deal.service_type === 'hotel' ? 'hotels' : 'search/details'}/${deal.id}`;
-                                                    const shareUrl = window.location.origin + link;
-                                                    if (navigator.share) {
-                                                        navigator.share({
-                                                            title: deal.name,
-                                                            url: shareUrl
-                                                        }).catch(console.error);
-                                                    } else {
-                                                        navigator.clipboard.writeText(shareUrl);
-                                                        import('sonner').then(({ toast }) => toast.success('Link copied to clipboard!'));
-                                                    }
-                                                }}
-                                                className="w-10 h-10 rounded-full bg-slate-50 flex items-center justify-center text-slate-400 hover:bg-slate-950 hover:text-white transition-all shadow-sm"
-                                                title="Share this deal"
-                                            >
-                                                <Share2 size={18} />
-                                            </button>
-                                            <Link 
-                                                href={`/${deal.service_type === 'hotel' ? 'hotels' : 'search/details'}/${deal.id}`} 
-                                                className="w-10 h-10 rounded-full bg-slate-100 flex items-center justify-center text-slate-900 group-hover:bg-red-600 group-hover:text-white transition-all"
-                                            >
-                                                <ArrowRight size={18} />
-                                            </Link>
-                                        </div>
-                                    </div>
-                                </div>
+                                <ServiceCard
+                                    id={deal.id}
+                                    title={deal.name}
+                                    price={deal.base_price}
+                                    image={deal.image_url || "/hero-hotel.png"}
+                                    duration={deal.duration_days ? `${deal.duration_days} Days` : deal.duration_hours ? `${deal.duration_hours} Hours` : 'Special'}
+                                    link={`/${deal.service_type === 'hotel' ? 'hotels' : 'search/details'}/${deal.id}`}
+                                    tag={deal.service_type.toUpperCase()}
+                                    rating={deal.rating}
+                                    service_type={deal.service_type}
+                                    isSeasonal={true}
+                                    dealNote={deal.deal_note}
+                                />
                             </motion.div>
                         ))
                     )}

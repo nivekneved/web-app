@@ -225,7 +225,7 @@ export default function DestinationListing({
                                                     type="checkbox"
                                                     checked={selectedTypes.includes(type)}
                                                     onChange={() => toggleType(type)}
-                                                    className="peer h-5 w-5 appearance-none rounded border-2 border-slate-200 checked:bg-red-600 checked:border-red-600 transition-all"
+                                                    className="peer h-5 w-5 appearance-none rounded border-2 border-slate-300 checked:bg-red-600 checked:border-red-600 transition-all"
                                                 />
                                                 <Check className="absolute h-3 w-3 text-white left-1 opacity-0 peer-checked:opacity-100 transition-opacity" />
                                             </div>
@@ -250,7 +250,7 @@ export default function DestinationListing({
                                                     type="checkbox"
                                                     checked={selectedRatings.includes(rating)}
                                                     onChange={() => toggleRating(rating)}
-                                                    className="peer h-5 w-5 appearance-none rounded border-2 border-slate-200 checked:bg-red-600 checked:border-red-600 transition-all"
+                                                    className="peer h-5 w-5 appearance-none rounded border-2 border-slate-300 checked:bg-red-600 checked:border-red-600 transition-all"
                                                 />
                                                 <Check className="absolute h-3 w-3 text-white left-1 opacity-0 peer-checked:opacity-100 transition-opacity" />
                                             </div>
@@ -364,6 +364,7 @@ export default function DestinationListing({
                                             link={getServiceLink(service)}
                                             tag={tag || service.service_type.toUpperCase()}
                                             rating={service.rating}
+                                            service_type={service.service_type}
                                         />
                                     ))
                                 )}

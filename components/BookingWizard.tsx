@@ -171,7 +171,7 @@ export default function BookingWizard({ serviceName, servicePrice, onComplete, i
                                     type="date"
                                     value={formData.checkIn}
                                     onChange={(e) => updateFormData({ checkIn: e.target.value })}
-                                    className="w-full px-4 py-3 bg-white dark:bg-slate-700 border border-slate-200 dark:border-slate-600 rounded-xl focus:outline-none focus:ring-4 focus:ring-red-600/20 dark:text-white"
+                                    className="w-full px-4 py-3 bg-white dark:bg-slate-700 border border-slate-300 dark:border-slate-600 rounded-xl focus:outline-none focus:ring-4 focus:ring-red-600/20 dark:text-white"
                                 />
                             </div>
                             <div>
@@ -180,7 +180,7 @@ export default function BookingWizard({ serviceName, servicePrice, onComplete, i
                                     type="date"
                                     value={formData.checkOut}
                                     onChange={(e) => updateFormData({ checkOut: e.target.value })}
-                                    className="w-full px-4 py-3 bg-white dark:bg-slate-700 border border-slate-200 dark:border-slate-600 rounded-xl focus:outline-none focus:ring-4 focus:ring-red-600/20 dark:text-white"
+                                    className="w-full px-4 py-3 bg-white dark:bg-slate-700 border border-slate-300 dark:border-slate-600 rounded-xl focus:outline-none focus:ring-4 focus:ring-red-600/20 dark:text-white"
                                 />
                             </div>
                             <div className="col-span-2">
@@ -191,7 +191,7 @@ export default function BookingWizard({ serviceName, servicePrice, onComplete, i
                                     max="10"
                                     value={formData.guests}
                                     onChange={(e) => updateFormData({ guests: parseInt(e.target.value) })}
-                                    className="w-full px-4 py-3 bg-white dark:bg-slate-700 border border-slate-200 dark:border-slate-600 rounded-xl focus:outline-none focus:ring-4 focus:ring-red-600/20 dark:text-white"
+                                    className="w-full px-4 py-3 bg-white dark:bg-slate-700 border border-slate-300 dark:border-slate-600 rounded-xl focus:outline-none focus:ring-4 focus:ring-red-600/20 dark:text-white"
                                 />
                             </div>
                         </div>
@@ -204,7 +204,7 @@ export default function BookingWizard({ serviceName, servicePrice, onComplete, i
                                     placeholder="First Name"
                                     value={formData.firstName}
                                     onChange={(e) => updateFormData({ firstName: e.target.value })}
-                                    className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-700 border border-slate-200 dark:border-slate-600 rounded-xl focus:outline-none focus:ring-4 focus:ring-red-600/20 dark:text-white"
+                                    className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-700 border border-slate-300 dark:border-slate-600 rounded-xl focus:outline-none focus:ring-4 focus:ring-red-600/20 dark:text-white"
                                 />
                             </div>
                             <div>
@@ -214,7 +214,7 @@ export default function BookingWizard({ serviceName, servicePrice, onComplete, i
                                     placeholder="Last Name"
                                     value={formData.lastName}
                                     onChange={(e) => updateFormData({ lastName: e.target.value })}
-                                    className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-700 border border-slate-200 dark:border-slate-600 rounded-xl focus:outline-none focus:ring-4 focus:ring-red-600/20 dark:text-white"
+                                    className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-700 border border-slate-300 dark:border-slate-600 rounded-xl focus:outline-none focus:ring-4 focus:ring-red-600/20 dark:text-white"
                                 />
                             </div>
                             <div className="col-span-2">
@@ -224,7 +224,7 @@ export default function BookingWizard({ serviceName, servicePrice, onComplete, i
                                     placeholder="Email"
                                     value={formData.email}
                                     onChange={(e) => updateFormData({ email: e.target.value })}
-                                    className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-700 border border-slate-200 dark:border-slate-600 rounded-xl focus:outline-none focus:ring-4 focus:ring-red-600/20 dark:text-white"
+                                    className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-700 border border-slate-300 dark:border-slate-600 rounded-xl focus:outline-none focus:ring-4 focus:ring-red-600/20 dark:text-white"
                                 />
                             </div>
                             <div>
@@ -234,7 +234,7 @@ export default function BookingWizard({ serviceName, servicePrice, onComplete, i
                                     placeholder="Phone"
                                     value={formData.phone}
                                     onChange={(e) => updateFormData({ phone: e.target.value })}
-                                    className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-700 border border-slate-200 dark:border-slate-600 rounded-xl focus:outline-none focus:ring-4 focus:ring-red-600/20 dark:text-white"
+                                    className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-700 border border-slate-300 dark:border-slate-600 rounded-xl focus:outline-none focus:ring-4 focus:ring-red-600/20 dark:text-white"
                                 />
                             </div>
                             <div>
@@ -244,7 +244,7 @@ export default function BookingWizard({ serviceName, servicePrice, onComplete, i
                                     placeholder="Mobile"
                                     value={formData.mobile}
                                     onChange={(e) => updateFormData({ mobile: e.target.value })}
-                                    className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-700 border border-slate-200 dark:border-slate-600 rounded-xl focus:outline-none focus:ring-4 focus:ring-red-600/20 dark:text-white"
+                                    className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-700 border border-slate-300 dark:border-slate-600 rounded-xl focus:outline-none focus:ring-4 focus:ring-red-600/20 dark:text-white"
                                 />
                             </div>
                             <div className="col-span-2">
@@ -254,7 +254,7 @@ export default function BookingWizard({ serviceName, servicePrice, onComplete, i
                                     onChange={(e) => updateFormData({ notes: e.target.value })}
                                     rows={3}
                                     placeholder="Any special requirements or messages for the host..."
-                                    className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-700 border border-slate-200 dark:border-slate-600 rounded-xl focus:outline-none focus:ring-4 focus:ring-red-600/20 dark:text-white"
+                                    className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-700 border border-slate-300 dark:border-slate-600 rounded-xl focus:outline-none focus:ring-4 focus:ring-red-600/20 dark:text-white"
                                 />
                             </div>
                         </div>
@@ -292,28 +292,28 @@ export default function BookingWizard({ serviceName, servicePrice, onComplete, i
                                         placeholder="First Name"
                                         value={traveler.firstName}
                                         onChange={(e) => updateTraveler(idx, { firstName: e.target.value })}
-                                        className="px-4 py-3 bg-white dark:bg-slate-600 border border-slate-200 dark:border-slate-500 rounded-xl focus:outline-none focus:ring-4 focus:ring-red-600/20 dark:text-white"
+                                        className="px-4 py-3 bg-white dark:bg-slate-600 border border-slate-300 dark:border-slate-500 rounded-xl focus:outline-none focus:ring-4 focus:ring-red-600/20 dark:text-white"
                                     />
                                     <input
                                         type="text"
                                         placeholder="Last Name"
                                         value={traveler.lastName}
                                         onChange={(e) => updateTraveler(idx, { lastName: e.target.value })}
-                                        className="px-4 py-3 bg-white dark:bg-slate-600 border border-slate-200 dark:border-slate-500 rounded-xl focus:outline-none focus:ring-4 focus:ring-red-600/20 dark:text-white"
+                                        className="px-4 py-3 bg-white dark:bg-slate-600 border border-slate-300 dark:border-slate-500 rounded-xl focus:outline-none focus:ring-4 focus:ring-red-600/20 dark:text-white"
                                     />
                                     <input
                                         type="email"
                                         placeholder="Email"
                                         value={traveler.email}
                                         onChange={(e) => updateTraveler(idx, { email: e.target.value })}
-                                        className="px-4 py-3 bg-white dark:bg-slate-600 border border-slate-200 dark:border-slate-500 rounded-xl focus:outline-none focus:ring-4 focus:ring-red-600/20 dark:text-white"
+                                        className="px-4 py-3 bg-white dark:bg-slate-600 border border-slate-300 dark:border-slate-500 rounded-xl focus:outline-none focus:ring-4 focus:ring-red-600/20 dark:text-white"
                                     />
                                     <input
                                         type="tel"
                                         placeholder="Phone"
                                         value={traveler.phone}
                                         onChange={(e) => updateTraveler(idx, { phone: e.target.value })}
-                                        className="px-4 py-3 bg-white dark:bg-slate-600 border border-slate-200 dark:border-slate-500 rounded-xl focus:outline-none focus:ring-4 focus:ring-red-600/20 dark:text-white"
+                                        className="px-4 py-3 bg-white dark:bg-slate-600 border border-slate-300 dark:border-slate-500 rounded-xl focus:outline-none focus:ring-4 focus:ring-red-600/20 dark:text-white"
                                     />
                                 </div>
                             </div>
@@ -330,7 +330,7 @@ export default function BookingWizard({ serviceName, servicePrice, onComplete, i
                             <select
                                 value={formData.mealPreference}
                                 onChange={(e) => updateFormData({ mealPreference: e.target.value })}
-                                className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-700 border border-slate-200 dark:border-slate-600 rounded-xl focus:outline-none focus:ring-4 focus:ring-red-600/20 dark:text-white"
+                                className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-700 border border-slate-300 dark:border-slate-600 rounded-xl focus:outline-none focus:ring-4 focus:ring-red-600/20 dark:text-white"
                             >
                                 <option value="none">No Preference</option>
                                 <option value="vegetarian">Vegetarian</option>
