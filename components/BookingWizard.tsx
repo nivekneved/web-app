@@ -142,14 +142,14 @@ export default function BookingWizard({ serviceName, servicePrice, onComplete, i
                             <div className="flex flex-col items-center">
                                 <div className={`w-10 h-10 rounded-full flex items-center justify-center font-bold transition-all ${currentStep >= step.num
                                         ? 'bg-red-600 text-white'
-                                        : 'bg-slate-200 dark:bg-slate-700 text-slate-400'
+                                        : 'bg-slate-300 dark:bg-slate-700 text-slate-400'
                                     }`}>
                                     {step.num}
                                 </div>
                                 <span className="text-xs mt-2 font-medium text-slate-600 dark:text-slate-400">{step.label}</span>
                             </div>
                             {idx < 3 && (
-                                <div className={`flex-1 h-1 mx-2 rounded transition-all ${currentStep > step.num ? 'bg-red-600' : 'bg-slate-200 dark:bg-slate-700'
+                                <div className={`flex-1 h-1 mx-2 rounded transition-all ${currentStep > step.num ? 'bg-red-600' : 'bg-slate-300 dark:bg-slate-700'
                                     }`} />
                             )}
                         </React.Fragment>
@@ -158,7 +158,7 @@ export default function BookingWizard({ serviceName, servicePrice, onComplete, i
             </div>
 
             {/* Step Content */}
-            <div className="bg-white dark:bg-slate-800 rounded-[3rem] p-8 md:p-12 border border-slate-200 dark:border-slate-700 shadow-sm">
+            <div className="bg-white dark:bg-slate-800 rounded-[3rem] p-8 md:p-12 border border-slate-300 dark:border-slate-700 shadow-sm">
                 {/* Step 1: Booking Details */}
                 {currentStep === 1 && (
                     <div className="space-y-6">
@@ -345,7 +345,7 @@ export default function BookingWizard({ serviceName, servicePrice, onComplete, i
                                 <select
                                     value={formData.roomPreference}
                                     onChange={(e) => updateFormData({ roomPreference: e.target.value })}
-                                    className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-700 border border-slate-200 dark:border-slate-600 rounded-xl focus:outline-none focus:ring-4 focus:ring-red-600/20 dark:text-white font-bold"
+                                    className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-700 border border-slate-300 dark:border-slate-600 rounded-xl focus:outline-none focus:ring-4 focus:ring-red-600/20 dark:text-white font-bold"
                                 >
                                 {roomOptions && roomOptions.length > 0 ? (
                                     roomOptions.map(opt => {
@@ -379,7 +379,7 @@ export default function BookingWizard({ serviceName, servicePrice, onComplete, i
                                     <div><strong>Check-out:</strong> {formData.checkOut}</div>
                                     <div><strong>Guests:</strong> {formData.guests}</div>
                                     <div><strong>Travelers:</strong> {formData.travelers.length + 1}</div>
-                                    <div className="col-span-2 border-t border-slate-200 dark:border-slate-600 pt-2 mt-2">
+                                    <div className="col-span-2 border-t border-slate-300 dark:border-slate-600 pt-2 mt-2">
                                         <strong>Primary Contact:</strong> {formData.firstName} {formData.lastName} ({formData.email})
                                     </div>
                                     {formData.notes && (
@@ -404,7 +404,7 @@ export default function BookingWizard({ serviceName, servicePrice, onComplete, i
                     {currentStep > 1 && (
                         <button
                             onClick={prevStep}
-                            className="flex-1 px-6 py-4 border-2 border-slate-200 dark:border-slate-600 text-slate-700 dark:text-slate-300 rounded-xl font-bold hover:bg-slate-50 dark:hover:bg-slate-700 transition-all"
+                            className="flex-1 px-6 py-4 border-2 border-slate-300 dark:border-slate-600 text-slate-700 dark:text-slate-300 rounded-xl font-bold hover:bg-slate-50 dark:hover:bg-slate-700 transition-all"
                         >
                             Previous
                         </button>

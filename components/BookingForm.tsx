@@ -33,7 +33,7 @@ export default function BookingForm({ packageTitle }: { packageTitle: string }) 
                             type="text"
                             required
                             placeholder="John Doe"
-                            className="w-full pl-12 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:outline-hidden focus:ring-2 focus:ring-red-600 transition-all font-medium"
+                            className="w-full pl-12 pr-4 py-3 bg-slate-50 border border-slate-300 rounded-xl focus:outline-hidden focus:ring-2 focus:ring-red-600 transition-all font-medium"
                         />
                     </div>
                 </div>
@@ -46,7 +46,7 @@ export default function BookingForm({ packageTitle }: { packageTitle: string }) 
                             type="email"
                             required
                             placeholder="john@example.com"
-                            className="w-full pl-12 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:outline-hidden focus:ring-2 focus:ring-red-600 transition-all font-medium"
+                            className="w-full pl-12 pr-4 py-3 bg-slate-50 border border-slate-300 rounded-xl focus:outline-hidden focus:ring-2 focus:ring-red-600 transition-all font-medium"
                         />
                     </div>
                 </div>
@@ -59,7 +59,7 @@ export default function BookingForm({ packageTitle }: { packageTitle: string }) 
                             type="tel"
                             required
                             placeholder="+230 5000 0000"
-                            className="w-full pl-12 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:outline-hidden focus:ring-2 focus:ring-red-600 transition-all font-medium"
+                            className="w-full pl-12 pr-4 py-3 bg-slate-50 border border-slate-300 rounded-xl focus:outline-hidden focus:ring-2 focus:ring-red-600 transition-all font-medium"
                         />
                     </div>
                 </div>
@@ -68,7 +68,7 @@ export default function BookingForm({ packageTitle }: { packageTitle: string }) 
                     <label className="block text-xs font-bold text-slate-500 uppercase mb-1">Travelers</label>
                     <div className="relative">
                         <Users className="absolute left-4 top-3.5 text-slate-400" size={18} />
-                        <select className="w-full pl-12 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:outline-hidden focus:ring-2 focus:ring-red-600 transition-all font-medium appearance-none">
+                        <select className="w-full pl-12 pr-4 py-3 bg-slate-50 border border-slate-300 rounded-xl focus:outline-hidden focus:ring-2 focus:ring-red-600 transition-all font-medium appearance-none">
                             <option>1 Traveler</option>
                             <option>2 Travelers</option>
                             <option>3 Travelers</option>
@@ -84,7 +84,7 @@ export default function BookingForm({ packageTitle }: { packageTitle: string }) 
                         <textarea
                             rows={3}
                             placeholder="Any dietary requirements or preferences?"
-                            className="w-full pl-12 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:outline-hidden focus:ring-2 focus:ring-red-600 transition-all font-medium resize-none"
+                            className="w-full pl-12 pr-4 py-3 bg-slate-50 border border-slate-300 rounded-xl focus:outline-hidden focus:ring-2 focus:ring-red-600 transition-all font-medium resize-none"
                         />
                     </div>
                 </div>

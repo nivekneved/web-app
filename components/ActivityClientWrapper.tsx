@@ -10,9 +10,6 @@ import BookingWizard, { BookingWizardData } from '@/components/BookingWizard'
 import { createBookingRequest } from '@/lib/bookingService'
 import StarRating from '@/components/ui/StarRating'
 import ReviewsSection from '@/components/ReviewsSection'
-import SocialShare from '@/components/SocialShare'
-import { Button } from './ui/Button'
-import { cn } from '@/lib/utils'
 
 type ActivityService = {
     id: string
@@ -182,7 +179,7 @@ export default function ActivityClientWrapper({ activity }: { activity: Activity
                                     )}
                                 </div>
 
-                                <div className="lg:w-96 bg-slate-50 rounded-2xl p-6 border border-slate-200">
+                                <div className="lg:w-96 bg-slate-50 rounded-2xl p-6 border border-slate-300">
                                     <div className="text-center mb-6">
                                         <div className="text-sm text-slate-500 mb-1">Starting from</div>
                                         <div className="text-4xl font-black text-slate-900">Rs {activity.base_price?.toLocaleString()}</div>
@@ -198,7 +195,7 @@ export default function ActivityClientWrapper({ activity }: { activity: Activity
                                                 type="date"
                                                 value={date}
                                                 onChange={(e) => setDate(e.target.value)}
-                                                className="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl focus:outline-none focus:ring-4 focus:ring-red-600/20 focus:border-red-600 transition-all"
+                                                className="w-full px-4 py-3 bg-white border border-slate-300 rounded-xl focus:outline-none focus:ring-4 focus:ring-red-600/20 focus:border-red-600 transition-all"
                                             />
                                         </div>
 
@@ -211,7 +208,7 @@ export default function ActivityClientWrapper({ activity }: { activity: Activity
                                                 min="1"
                                                 value={participants}
                                                 onChange={(e) => setParticipants(parseInt(e.target.value))}
-                                                className="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl focus:outline-none focus:ring-4 focus:ring-red-600/20 focus:border-red-600 transition-all"
+                                                className="w-full px-4 py-3 bg-white border border-slate-300 rounded-xl focus:outline-none focus:ring-4 focus:ring-red-600/20 focus:border-red-600 transition-all"
                                             />
                                         </div>
 

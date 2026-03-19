@@ -174,7 +174,7 @@ export default function DestinationListing({
                 <div className="flex flex-col lg:flex-row gap-8">
                     {/* Sidebar Filters - MMT Style */}
                     <aside className="lg:w-1/4 space-y-6">
-                        <div className="bg-white rounded-2xl p-6 shadow-sm border border-slate-200">
+                        <div className="bg-white rounded-2xl p-6 shadow-sm border border-slate-300">
                             <div className="flex items-center justify-between mb-6 pb-4 border-b border-slate-100">
                                 <h3 className="text-xl font-bold text-slate-900 flex items-center gap-2">
                                     <Filter size={20} className="text-red-500" />
@@ -284,7 +284,7 @@ export default function DestinationListing({
                     {/* Main Content Area */}
                     <main className="lg:w-3/4">
                         {/* Top Bar Sort */}
-                        <div className="bg-white rounded-2xl p-4 shadow-sm border border-slate-200 mb-6 flex flex-wrap items-center justify-between gap-4">
+                        <div className="bg-white rounded-2xl p-4 shadow-sm border border-slate-300 mb-6 flex flex-wrap items-center justify-between gap-4">
                             <div className="text-slate-600 font-bold">
                                 Showing <span className="text-slate-900">{processedServices.length}</span> results for your search
                             </div>
@@ -321,7 +321,7 @@ export default function DestinationListing({
                                             key={`skeleton-${i}`}
                                             initial={{ opacity: 0 }}
                                             animate={{ opacity: 1 }}
-                                            className="animate-pulse bg-white rounded-2xl h-[400px] border border-slate-200" 
+                                            className="animate-pulse bg-white rounded-2xl h-[400px] border border-slate-300" 
                                         />
                                     ))
                                 ) : processedServices.length === 0 ? (
@@ -331,7 +331,7 @@ export default function DestinationListing({
                                         animate={{ opacity: 1, y: 0 }}
                                         className="col-span-full py-20 text-center"
                                     >
-                                        <div className="bg-white rounded-3xl p-12 inline-block border border-slate-200 shadow-sm">
+                                        <div className="bg-white rounded-3xl p-12 inline-block border border-slate-300 shadow-sm">
                                             <div className="w-20 h-20 bg-slate-50 rounded-full flex items-center justify-center mx-auto mb-6 text-slate-300">
                                                 <Filter size={40} />
                                             </div>

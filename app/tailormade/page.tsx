@@ -105,7 +105,7 @@ export default function TailorMadePage() {
             
             {/* Form Section */}
             <div className="lg:col-span-2">
-              <div className="bg-white rounded-[3rem] border border-slate-100 p-12 shadow-[0_50px_100px_-20px_rgba(0,0,0,0.08)]">
+              <div className="bg-white rounded-[3rem] border border-slate-300 p-12 shadow-[0_50px_100px_-20px_rgba(0,0,0,0.08)]">
                 <div className="mb-12">
                   <h2 className="text-xs font-black text-red-600 uppercase tracking-[0.4em] mb-4">Inquiry</h2>
                   <h3 className="text-4xl font-black text-slate-900 tracking-tight">Design Your Trip</h3>
@@ -284,7 +284,7 @@ export default function TailorMadePage() {
                     { step: '02', title: 'Curated Design', desc: 'Our experts draft a unique itinerary for your review.' },
                     { step: '03', title: 'Perfected Details', desc: 'We refine everything until it is absolutely perfect.' },
                   ].map((item, i) => (
-                    <div key={i} className="p-6 bg-slate-50 rounded-2xl border border-slate-100">
+                    <div key={i} className="p-6 bg-slate-50 rounded-2xl border border-slate-300">
                       <span className="text-xs font-black text-red-500 mb-2 block">{item.step}</span>
                       <h4 className="font-black text-slate-900 mb-2">{item.title}</h4>
                       <p className="text-sm text-slate-500 font-medium leading-relaxed">{item.desc}</p>

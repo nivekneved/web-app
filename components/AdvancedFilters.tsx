@@ -45,7 +45,7 @@ export default function AdvancedFilters({ filters, onFilterChange, availableAmen
             {/* Filter Toggle Button */}
             <button
                 onClick={() => setIsOpen(!isOpen)}
-                className="px-6 py-3 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl font-bold hover:border-red-600 transition-all flex items-center gap-2"
+                className="px-6 py-3 bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-xl font-bold hover:border-red-600 transition-all flex items-center gap-2"
             >
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" />
@@ -55,7 +55,7 @@ export default function AdvancedFilters({ filters, onFilterChange, availableAmen
 
             {/* Filter Panel */}
             {isOpen && (
-                <div className="absolute top-full right-0 mt-2 w-80 bg-white dark:bg-slate-800 rounded-2xl shadow-xl border border-slate-200 dark:border-slate-700 p-6 z-50">
+                <div className="absolute top-full right-0 mt-2 w-80 bg-white dark:bg-slate-800 rounded-2xl shadow-xl border border-slate-300 dark:border-slate-700 p-6 z-50">
                     <div className="space-y-6">
                         {/* Price Range */}
                         <div>
@@ -108,7 +108,7 @@ export default function AdvancedFilters({ filters, onFilterChange, availableAmen
                             <select
                                 value={localFilters.sortBy}
                                 onChange={(e) => updateFilter('sortBy', e.target.value as 'price' | 'rating' | 'popularity')}
-                                className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-700 border border-slate-200 dark:border-slate-600 rounded-xl focus:outline-none focus:ring-4 focus:ring-red-600/20 dark:text-white"
+                                className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-700 border border-slate-300 dark:border-slate-600 rounded-xl focus:outline-none focus:ring-4 focus:ring-red-600/20 dark:text-white"
                             >
                                 <option value="popularity">Popularity</option>
                                 <option value="price">Price (Low to High)</option>
@@ -144,10 +144,10 @@ export default function AdvancedFilters({ filters, onFilterChange, availableAmen
                         )}
 
                         {/* Actions */}
-                        <div className="flex gap-3 pt-4 border-t border-slate-200 dark:border-slate-700">
+                        <div className="flex gap-3 pt-4 border-t border-slate-300 dark:border-slate-700">
                             <button
                                 onClick={resetFilters}
-                                className="flex-1 px-4 py-2 border-2 border-slate-200 dark:border-slate-600 text-slate-700 dark:text-slate-300 rounded-xl font-bold hover:bg-slate-50 dark:hover:bg-slate-700 transition-all"
+                                className="flex-1 px-4 py-2 border-2 border-slate-300 dark:border-slate-600 text-slate-700 dark:text-slate-300 rounded-xl font-bold hover:bg-slate-50 dark:hover:bg-slate-700 transition-all"
                             >
                                 Reset
                             </button>

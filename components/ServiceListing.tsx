@@ -294,7 +294,7 @@ function ServiceListingInner({
                 <div className="flex flex-col lg:flex-row gap-8">
                     {/* Sidebar Filters */}
                     <aside className="lg:w-1/4 space-y-6">
-                        <div className="bg-white rounded-3xl p-8 shadow-sm border border-slate-200 sticky top-24">
+                        <div className="bg-white rounded-3xl p-8 shadow-sm border border-slate-300 sticky top-24">
                             <div className="flex items-center justify-between mb-8 pb-4 border-b border-slate-100">
                                 <h3 className="text-xl font-bold text-slate-900 flex items-center gap-2">
                                     <Filter size={20} className="text-red-600" />

@@ -140,7 +140,7 @@ export default function ContactPage() {
                             <h3 className="text-4xl font-black text-slate-900 mb-8 leading-tight">Our Global Headquarters</h3>
                             
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                                <div className="space-y-4 p-8 bg-slate-50 rounded-[2.5rem] border border-slate-100">
+                                <div className="space-y-4 p-8 bg-slate-50 rounded-[2.5rem] border border-slate-300">
                                     <div className="w-12 h-12 bg-white rounded-2xl flex items-center justify-center text-red-600 shadow-sm mb-4">
                                         <MapPin size={24} />
                                     </div>
@@ -150,7 +150,7 @@ export default function ContactPage() {
                                     </p>
                                 </div>
                                 
-                                <div className="space-y-4 p-8 bg-slate-50 rounded-[2.5rem] border border-slate-100">
+                                <div className="space-y-4 p-8 bg-slate-50 rounded-[2.5rem] border border-slate-300">
                                     <div className="w-12 h-12 bg-white rounded-2xl flex items-center justify-center text-red-600 shadow-sm mb-4">
                                         <MapPin size={24} />
                                     </div>
@@ -201,7 +201,7 @@ export default function ContactPage() {
                     {/* Contact Form */}
                     <div>
                         <div className="sticky top-24">
-                            <div className="bg-white rounded-[3rem] border border-slate-100 p-12 shadow-[0_50px_100px_-20px_rgba(0,0,0,0.08)]">
+                            <div className="bg-white rounded-[3rem] border border-slate-300 p-12 shadow-[0_50px_100px_-20px_rgba(0,0,0,0.08)]">
                                 <h3 className="text-3xl font-black text-slate-900 mb-10 tracking-tight">Direct Inquiry</h3>
                                 
                                 <form onSubmit={handleSubmit} className="space-y-8">
@@ -280,7 +280,7 @@ export default function ContactPage() {
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
                         {/* Port Louis Map */}
                         <div className="space-y-6">
-                            <div className="bg-slate-50 rounded-[3rem] overflow-hidden border border-slate-100 h-[450px] relative group shadow-2xl shadow-slate-200/50">
+                            <div className="bg-slate-50 rounded-[3rem] overflow-hidden border border-slate-300 h-[450px] relative group shadow-2xl shadow-slate-200/50">
                                 <iframe 
                                     src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3744.912389104051!2d57.50091321744385!3d-20.162747100000003!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x217c504dafffffff%3A0x6b801a6b0c0c0c0c!2sNewton%20Tower!5e0!3m2!1sen!2smu!4v1710590000000!5m2!1sen!2smu"
                                     width="100%" 
@@ -303,7 +303,7 @@ export default function ContactPage() {
 
                         {/* Ebene Map */}
                         <div className="space-y-6">
-                            <div className="bg-slate-50 rounded-[3rem] overflow-hidden border border-slate-100 h-[450px] relative group shadow-2xl shadow-slate-200/50">
+                            <div className="bg-slate-50 rounded-[3rem] overflow-hidden border border-slate-300 h-[450px] relative group shadow-2xl shadow-slate-200/50">
                                 <iframe 
                                     src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3743.90561570172!2d57.485121!3d-20.244347!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x217c5adaaaaaaa!2sEbene%20Mews!5e0!3m2!1sen!2smu!4v1710590000000!5m2!1sen!2smu"
                                     width="100%" 
