@@ -40,17 +40,6 @@ export default function AnnouncementPopup() {
         if (data && data.length > 0) {
           const selectedAd = data[0] as PopupAd
           
-          // Check display frequency
-          const lastSeen = localStorage.getItem(`popup_ad_seen_${selectedAd.id}`)
-          const sessionSeen = sessionStorage.getItem(`popup_ad_seen_${selectedAd.id}`)
-
-          if (selectedAd.display_frequency === 'once_per_session' && sessionSeen) return
-          if (selectedAd.display_frequency === 'once_per_day' && lastSeen) {
-            const lastDate = new Date(lastSeen)
-            const today = new Date()
-            if (lastDate.toDateString() === today.toDateString()) return
-          }
-
           setAd(selectedAd)
           // Delay popup for better UX
           setTimeout(() => setIsVisible(true), 1500)
@@ -65,12 +54,6 @@ export default function AnnouncementPopup() {
 
   const handleClose = () => {
     setIsVisible(false)
-    // Only persist "seen" status if not set to "always"
-    // If it's "always", we want it to reset on every visit/reload
-    if (ad && ad.display_frequency !== 'always') {
-      localStorage.setItem(`popup_ad_seen_${ad.id}`, new Date().toISOString())
-      sessionStorage.setItem(`popup_ad_seen_${ad.id}`, 'true')
-    }
   }
 
   if (!ad) return null

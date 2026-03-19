@@ -52,6 +52,7 @@ export async function createBookingRequest(data: BookingRequestData) {
                         .from('customers')
                         .insert([{
                             id: user.id,
+                            user_id: user.id,
                             first_name: firstName,
                             last_name: lastName,
                             email: profile.email,
