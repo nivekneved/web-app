@@ -4,7 +4,7 @@ import React, { useState, useEffect } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { motion } from 'framer-motion'
-import { ArrowRight, Clock } from 'lucide-react'
+import { ArrowRight, Clock, Share2 } from 'lucide-react'
 import { createClient } from '@/lib/supabase'
 import { GridSkeleton } from '@/components/LoadingSkeleton'
 import StarRating from '@/components/ui/StarRating'
@@ -102,9 +102,35 @@ export default function DealsCarousel() {
                                             <span className="text-xs text-slate-400 font-bold block">From</span>
                                             <span className="text-xl font-black text-slate-900">Rs {deal.base_price.toLocaleString()}</span>
                                         </div>
-                                        <Link href={`/${deal.service_type === 'hotel' ? 'hotels' : 'search/details'}/${deal.id}`} className="w-10 h-10 rounded-full bg-slate-100 flex items-center justify-center text-slate-900 group-hover:bg-red-600 group-hover:text-white transition-all">
-                                            <ArrowRight size={18} />
-                                        </Link>
+                                        <div className="flex gap-3">
+                                            <button
+                                                onClick={(e) => {
+                                                    e.preventDefault();
+                                                    e.stopPropagation();
+                                                    const link = `/${deal.service_type === 'hotel' ? 'hotels' : 'search/details'}/${deal.id}`;
+                                                    const shareUrl = window.location.origin + link;
+                                                    if (navigator.share) {
+                                                        navigator.share({
+                                                            title: deal.name,
+                                                            url: shareUrl
+                                                        }).catch(console.error);
+                                                    } else {
+                                                        navigator.clipboard.writeText(shareUrl);
+                                                        import('sonner').then(({ toast }) => toast.success('Link copied to clipboard!'));
+                                                    }
+                                                }}
+                                                className="w-10 h-10 rounded-full bg-slate-50 flex items-center justify-center text-slate-400 hover:bg-slate-950 hover:text-white transition-all shadow-sm"
+                                                title="Share this deal"
+                                            >
+                                                <Share2 size={18} />
+                                            </button>
+                                            <Link 
+                                                href={`/${deal.service_type === 'hotel' ? 'hotels' : 'search/details'}/${deal.id}`} 
+                                                className="w-10 h-10 rounded-full bg-slate-100 flex items-center justify-center text-slate-900 group-hover:bg-red-600 group-hover:text-white transition-all"
+                                            >
+                                                <ArrowRight size={18} />
+                                            </Link>
+                                        </div>
                                     </div>
                                 </div>
                             </motion.div>
