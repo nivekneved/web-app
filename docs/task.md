@@ -1,6 +1,6 @@
 # Task List - Dynamic Content Migration
 
-- [ ] Audit & Planning
+- [x] Audit & Planning
   - [x] Audit hardcoded elements in Web App
   - [x] Audit hardcoded elements in Mobile App
   - [x] Create Audit Report artifact
@@ -14,8 +14,8 @@
   - [x] Update `Navbar.tsx` for dynamic topbar
   - [x] Update `Footer.tsx` for dynamic office info
   - [x] Update `layout.tsx` for dynamic SEO
-- [ ] Mobile App Refactoring
-  - [ ] Implement global config fetching
-  - [ ] Link theme/colors to config
-- [ ] Final Verification
-  - [ ] Verify persistence and propagation of all settings
+- [x] Mobile App Refactoring
+  - [x] Implement global config fetching
+  - [x] Link theme/colors to config
+- [x] Final Verification
+  - [x] Verify persistence and propagation of all settings
