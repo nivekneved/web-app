@@ -171,6 +171,7 @@ export default function ServiceCard({ id, title, location, price, image, duratio
                         </div>
                     </div>
 
+{/* 
                     <button 
                         onClick={(e) => {
                             e.preventDefault();
@@ -181,6 +182,7 @@ export default function ServiceCard({ id, title, location, price, image, duratio
                     >
                         Book This Now
                     </button>
+                    */}
                 </div>
             </div>
         </motion.div>
