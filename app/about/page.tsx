@@ -87,7 +87,7 @@ export default function AboutPage() {
 
     return (
         <div className="min-h-screen bg-white">
-            <section className="relative h-[300px] md:h-[400px] flex items-center overflow-hidden bg-slate-950">
+            <section className="relative h-[250px] md:h-[350px] flex items-center overflow-hidden bg-slate-950 border-b border-white/10">
                 <Image
                     src={hero.image}
                     alt="Travel Lounge Mauritius"
@@ -95,7 +95,7 @@ export default function AboutPage() {
                     className="object-cover opacity-60"
                     priority
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-slate-950/20" />
+                <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-transparent to-black/60" />
 
                 <div className="container mx-auto px-6 relative z-10 flex flex-col items-center justify-center text-center">
                     <motion.div
@@ -104,10 +104,10 @@ export default function AboutPage() {
                         transition={{ duration: 0.8 }}
                         className="max-w-3xl"
                     >
-                        <span className="inline-block py-2 px-6 rounded-full bg-red-600 text-white text-[10px] font-black uppercase tracking-[0.4em] mb-6">
+                        <span className="inline-block py-2 px-6 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-white text-[10px] font-black uppercase tracking-[0.4em] mb-6">
                             {hero.badge}
                         </span>
-                        <h1 className="text-4xl md:text-6xl font-black text-white mb-6 uppercase tracking-tight leading-none">
+                        <h1 className="text-4xl md:text-6xl font-black text-white mb-6 uppercase tracking-tight leading-[1.1]">
                             {hero.title.split('<br />').map((line: string, idx: number) => (
                                 <React.Fragment key={idx}>
                                     <span dangerouslySetInnerHTML={{ __html: line }} />
@@ -115,7 +115,7 @@ export default function AboutPage() {
                                 </React.Fragment>
                             ))}
                         </h1>
-                        <p className="text-lg text-white/80 font-medium max-w-2xl mx-auto leading-relaxed">
+                        <p className="text-lg text-white/70 font-medium max-w-2xl mx-auto leading-relaxed">
                             {hero.description}
                         </p>
                     </motion.div>

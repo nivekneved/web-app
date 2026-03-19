@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react'
 import Image from 'next/image'
-import { Mail, ArrowRight } from 'lucide-react'
+import { Mail } from 'lucide-react'
 import { motion } from 'framer-motion'
 import Link from 'next/link'
 import { createClient } from '@/lib/supabase'
@@ -54,8 +54,8 @@ export default function TeamPage() {
 
     return (
         <div className="min-h-screen bg-white">
-            {/* Header */}
-            <section className="relative h-[250px] md:h-[350px] flex items-center justify-center bg-slate-950 overflow-hidden">
+            {/* Hero Section */}
+            <div className="relative h-[250px] md:h-[350px] flex items-center overflow-hidden bg-slate-900 border-b border-white/10">
                 <Image
                     src="/hero-about.png"
                     alt="Our Team"
@@ -63,84 +63,131 @@ export default function TeamPage() {
                     className="object-cover opacity-60"
                     priority
                 />
-                <div className="absolute inset-0 bg-gradient-to-b from-black/20 via-transparent to-black/60" />
-                <div className="container mx-auto px-6 relative z-10 text-center">
+                <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-transparent to-black/60" />
+                <div className="container mx-auto px-6 relative z-10 flex flex-col items-center justify-center text-center">
                     <motion.div
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
+                        className="max-w-3xl"
                     >
-                        <span className="inline-block py-2 px-6 rounded-full bg-red-600 text-white text-[10px] font-black uppercase tracking-[0.4em] mb-6">Our People</span>
-                        <h1 className="text-4xl md:text-6xl font-black text-white mb-6 uppercase tracking-tight leading-none">Meet the <span className="text-red-500 italic">Experts</span></h1>
-                        <p className="text-lg text-white/80 font-medium max-w-2xl mx-auto leading-relaxed">
+                        <span className="inline-block py-2 px-6 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-white text-[10px] font-black uppercase tracking-[0.4em] mb-6">
+                            Our People
+                        </span>
+                        <h1 className="text-4xl md:text-6xl font-black text-white mb-6 leading-[1.1] tracking-tight uppercase">
+                            Meet the <br />
+                            <span className="text-red-500 italic">Experts.</span>
+                        </h1>
+                        <p className="text-lg text-white/70 font-medium mb-10 max-w-2xl mx-auto leading-relaxed">
                             A dedicated team of IATA-certified professionals committed to making your world-wide travel dreams a reality.
                         </p>
                     </motion.div>
                 </div>
-            </section>
+            </div>
 
             {/* Team Grid */}
-            <section className="py-32">
+            <section className="py-24 bg-slate-50/50">
                 <div className="container mx-auto px-6">
                     {loading ? (
                         <GridSkeleton count={3} />
                     ) : (
-                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12">
-                            {team.map((member, i) => (
-                                <motion.div
-                                    key={member.id}
-                                    initial={{ opacity: 0, y: 30 }}
-                                    whileInView={{ opacity: 1, y: 0 }}
-                                    viewport={{ once: true }}
-                                    transition={{ delay: i * 0.1 }}
-                                    className="group"
-                                >
-                                    <div className="relative aspect-[4/5] rounded-[3rem] overflow-hidden shadow-2xl shadow-slate-200">
-                                        <Image
-                                            src={member.photo_url || `https://ui-avatars.com/api/?name=${encodeURIComponent(member.name)}&size=800&background=F3F4F6&color=9CA3AF`}
-                                            alt={member.name}
-                                            fill
-                                            className="object-cover transition-transform duration-700 group-hover:scale-110"
-                                        />
-                                        
-                                        {/* Persistent Gradient for legibility */}
-                                        <div className="absolute inset-0 bg-gradient-to-t from-slate-950/90 via-slate-950/20 to-transparent" />
-
-                                        {/* Hover Overlay for Bio */}
-                                        <div className="absolute inset-0 bg-red-600/90 backdrop-blur-sm opacity-0 group-hover:opacity-100 transition-opacity duration-500 p-10 flex flex-col justify-center text-white">
-                                            <p className="text-lg font-medium leading-relaxed mb-8">
-                                                {member.bio || "Dedicated travel professional at Travel Lounge."}
-                                            </p>
-                                            <div className="flex flex-col gap-4">
-                                                <a href={`mailto:${member.email}`} className="flex items-center gap-3 bg-white/20 hover:bg-white/30 transition-all p-4 rounded-2xl border border-white/20">
-                                                    <Mail size={20} />
-                                                    <span className="font-bold text-sm">Send Email</span>
-                                                </a>
-                                                <Link
-                                                    href={`/contact?subject=Meeting with ${member.name}`}
-                                                    className="flex items-center gap-3 bg-white text-red-600 font-bold p-4 rounded-2xl hover:bg-slate-900 hover:text-white transition-all"
-                                                >
-                                                    <ArrowRight size={20} />
-                                                    <span className="text-sm">Book Consultation</span>
-                                                </Link>
-                                            </div>
+                        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
+                            {/* Left Column: The Boss */}
+                            <div className="lg:col-span-4 space-y-8">
+                                <div className="sticky top-32">
+                                    <div className="mb-8 pl-4">
+                                        <div className="flex items-center gap-3 mb-4">
+                                            <span className="w-12 h-1 bg-red-600 rounded-full" />
+                                            <span className="text-xs font-black text-red-600 uppercase tracking-[0.4em]">Leadership</span>
                                         </div>
-
-                                        {/* Persistent Text Overlay (Name/Role) */}
-                                        <div className="absolute bottom-10 left-10 right-10 group-hover:opacity-0 transition-opacity duration-300">
-                                            <div className="flex items-center gap-3 mb-4">
-                                                <span className="w-8 h-1 bg-red-600 rounded-full" />
-                                                <span className="text-[10px] font-black text-white uppercase tracking-[0.3em]">
-                                                    {roleLabels[member.role] || member.role}
-                                                </span>
-                                            </div>
-                                            <h3 className="text-4xl font-black text-white leading-tight tracking-tighter">
-                                                {member.name.split(' ')[0]} <br />
-                                                <span className="text-red-500">{member.name.split(' ').slice(1).join(' ')}</span>
-                                            </h3>
-                                        </div>
+                                        <h2 className="text-3xl font-black text-gray-900 uppercase tracking-tight">Our <span className="text-red-600 italic">Visionary</span></h2>
                                     </div>
-                                </motion.div>
-                            ))}
+                                    
+                                    {team.filter(m => m.role === 'director').map((boss) => (
+                                        <motion.div
+                                            key={boss.id}
+                                            initial={{ opacity: 0, x: -30 }}
+                                            animate={{ opacity: 1, x: 0 }}
+                                            className="group px-4"
+                                        >
+                                            <div className="relative aspect-[4/5] rounded-[2.5rem] overflow-hidden shadow-2xl shadow-red-100 ring-1 ring-gray-100">
+                                                <Image
+                                                    src={boss.photo_url || `https://ui-avatars.com/api/?name=${encodeURIComponent(boss.name)}&size=800&background=F3F4F6&color=9CA3AF`}
+                                                    alt={boss.name}
+                                                    fill
+                                                    className="object-cover transition-transform duration-700 group-hover:scale-105"
+                                                />
+                                                <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/10 to-transparent" />
+                                                
+                                                <div className="absolute bottom-10 left-10 right-10">
+                                                    <span className="text-[10px] font-black text-red-500 uppercase tracking-[0.3em] mb-2 block">Managing Director</span>
+                                                    <h3 className="text-3xl font-black text-white leading-tight tracking-tighter">
+                                                        {boss.name.split(' ')[0]} <span className="text-red-500">{boss.name.split(' ').slice(1).join(' ')}</span>
+                                                    </h3>
+                                                    <p className="text-white/60 text-[10px] mt-4 leading-relaxed font-medium line-clamp-3">
+                                                        {boss.bio || "Leading the agency with vision and excellence."}
+                                                    </p>
+                                                    <div className="flex gap-4 mt-8">
+                                                        <a href={`mailto:${boss.email}`} className="p-3 bg-white/10 hover:bg-white/20 text-white rounded-xl backdrop-blur-sm border border-white/10 transition-all">
+                                                            <Mail size={16} />
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </motion.div>
+                                    ))}
+                                </div>
+                            </div>
+
+                            {/* Right Column: The Team Experts */}
+                            <div className="lg:col-span-8">
+                                <div className="mb-12">
+                                    <h3 className="text-xs font-black text-gray-400 uppercase tracking-widest mb-2">Operational Excellence</h3>
+                                    <h2 className="text-3xl font-black text-gray-900 uppercase tracking-tight italic text-red-600">The Travel Specialists</h2>
+                                </div>
+
+                                <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6">
+                                    {team.filter(m => m.role !== 'director').map((member, i) => (
+                                        <motion.div
+                                            key={member.id}
+                                            initial={{ opacity: 0, y: 20 }}
+                                            whileInView={{ opacity: 1, y: 0 }}
+                                            viewport={{ once: true }}
+                                            transition={{ delay: i * 0.1 }}
+                                            className="group"
+                                        >
+                                            <div className="relative aspect-[3/4] rounded-[2rem] overflow-hidden shadow-xl shadow-slate-200 border border-gray-100">
+                                                <Image
+                                                    src={member.photo_url || `https://ui-avatars.com/api/?name=${encodeURIComponent(member.name)}&size=800&background=F3F4F6&color=9CA3AF`}
+                                                    alt={member.name}
+                                                    fill
+                                                    className="object-cover transition-transform duration-500 group-hover:scale-110"
+                                                />
+                                                <div className="absolute inset-0 bg-gradient-to-t from-slate-900/90 via-slate-900/20 to-transparent" />
+                                                
+                                                {/* Smaller Text Overlay for Staff */}
+                                                <div className="absolute bottom-6 left-6 right-6 group-hover:opacity-0 transition-opacity duration-300">
+                                                    <span className="text-[8px] font-black text-red-500 uppercase tracking-widest mb-1 block">
+                                                        {roleLabels[member.role] || member.role}
+                                                    </span>
+                                                    <h3 className="text-xl font-black text-white leading-tight">
+                                                        {member.name.split(' ')[0]} <span className="text-red-500">{member.name.split(' ').slice(1).join(' ')}</span>
+                                                    </h3>
+                                                </div>
+
+                                                {/* Compact Hover State */}
+                                                <div className="absolute inset-0 bg-red-600/95 opacity-0 group-hover:opacity-100 transition-opacity duration-300 p-6 flex flex-col justify-center text-center text-white">
+                                                    <p className="text-xs font-bold leading-relaxed mb-6 opacity-90 line-clamp-4">
+                                                        {member.bio || "Dedicated travel professional at Travel Lounge."}
+                                                    </p>
+                                                    <a href={`mailto:${member.email}`} className="flex items-center justify-center gap-2 bg-white text-red-600 py-3 rounded-xl font-black text-[10px] uppercase tracking-widest hover:bg-slate-950 hover:text-white transition-all">
+                                                        <Mail size={14} /> Contact
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        </motion.div>
+                                    ))}
+                                </div>
+                            </div>
                         </div>
                     )}
                 </div>

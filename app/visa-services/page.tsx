@@ -42,7 +42,7 @@ export default function VisaServicesPage() {
     return (
         <div className="min-h-screen bg-slate-50 pb-20">
             {/* Hero Section */}
-            <div className="relative h-[250px] md:h-[350px] flex items-center overflow-hidden bg-slate-900 rounded-b-[3rem] md:rounded-b-[5rem]">
+            <div className="relative h-[250px] md:h-[350px] flex items-center overflow-hidden bg-slate-900 border-b border-white/10">
                 <Image
                     src="/hero-flight.png"
                     alt="Travel Visa Services"
@@ -50,21 +50,21 @@ export default function VisaServicesPage() {
                     className="object-cover opacity-60"
                     priority
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-slate-900 via-slate-900/40 to-transparent" />
+                <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-transparent to-black/60" />
                 <div className="container mx-auto px-6 relative z-10 flex flex-col items-center justify-center text-center">
                     <motion.div
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
                         className="max-w-3xl"
                     >
-                        <span className="inline-block py-2 px-6 rounded-full bg-red-600 text-white text-[10px] font-black uppercase tracking-[0.4em] mb-6">
+                        <span className="inline-block py-2 px-6 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-white text-[10px] font-black uppercase tracking-[0.4em] mb-6">
                             Concierge Services
                         </span>
-                        <h1 className="text-4xl md:text-6xl font-black text-white mb-6 leading-tight tracking-tight uppercase">
+                        <h1 className="text-4xl md:text-6xl font-black text-white mb-6 leading-[1.1] tracking-tight uppercase">
                             Travel Visa <br />
-                            <span className="text-red-600">Assistance.</span>
+                            <span className="text-red-500 italic">Assistance.</span>
                         </h1>
-                        <p className="text-lg text-white/80 font-medium mb-10 max-w-2xl mx-auto leading-relaxed">
+                        <p className="text-lg text-white/70 font-medium mb-10 max-w-2xl mx-auto leading-relaxed">
                             Simplifying the complex world of travel documentation. Our experts ensure your visa application 
                             is handled with precision and care for a stress-free journey.
                         </p>

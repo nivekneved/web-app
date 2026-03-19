@@ -13,21 +13,18 @@ export default function DestinationsPage() {
   return (
     <div className="bg-white">
       {/* Hero Section */}
-      <section className="relative h-[65vh] flex items-center min-h-[500px]">
-        <div className="absolute inset-0 z-0">
-          <Image
-            src="/assets/hero/destinations_hero.png"
-            alt="Global Destinations"
-            fill
-            className="object-cover"
-            priority
-          />
-          <div className="absolute inset-0 bg-black/50" />
-        </div>
-        
-        <div className="container mx-auto px-4 relative z-10 text-white text-center">
-          <h1 className="text-5xl md:text-8xl font-bold mb-6 font-serif">Explore the World</h1>
-          <p className="text-xl md:text-2xl mb-10 text-white/90 font-light max-w-2xl mx-auto">Wherever you want to go, we have the expertise to get you there in style and comfort.</p>
+      <section className="relative h-[250px] md:h-[350px] flex items-center justify-center bg-slate-950 overflow-hidden">
+        <Image
+          src="/assets/hero/destinations_hero.png"
+          alt="Global Destinations"
+          fill
+          className="object-cover opacity-60"
+          priority
+        />
+        <div className="absolute inset-0 bg-gradient-to-b from-black/20 via-transparent to-black/60" />
+        <div className="container mx-auto px-6 relative z-10 text-center">
+            <h1 className="text-4xl md:text-6xl font-black text-white mb-6 uppercase tracking-tight leading-none">Explore the World</h1>
+            <p className="text-lg text-white/80 font-medium max-w-2xl mx-auto leading-relaxed">Wherever you want to go, we have the expertise to get you there in style and comfort.</p>
         </div>
       </section>
 
