@@ -123,7 +123,7 @@ export default function TeamPage() {
                                                     <h3 className="text-3xl font-black text-white leading-tight tracking-tighter">
                                                         {boss.name.split(' ')[0]} <span className="text-red-500">{boss.name.split(' ').slice(1).join(' ')}</span>
                                                     </h3>
-                                                    <p className="text-white/60 text-[10px] mt-4 leading-relaxed font-medium line-clamp-3">
+                                                    <p className="text-white text-[10px] mt-4 leading-relaxed font-medium line-clamp-3">
                                                         {boss.bio || "Leading the agency with vision and excellence."}
                                                     </p>
                                                     <div className="flex gap-4 mt-8">
@@ -176,7 +176,7 @@ export default function TeamPage() {
 
                                                 {/* Compact Hover State */}
                                                 <div className="absolute inset-0 bg-red-600/95 opacity-0 group-hover:opacity-100 transition-opacity duration-300 p-6 flex flex-col justify-center text-center text-white">
-                                                    <p className="text-xs font-bold leading-relaxed mb-6 opacity-90 line-clamp-4">
+                                                    <p className="text-xs font-bold leading-relaxed mb-6 text-white line-clamp-4">
                                                         {member.bio || "Dedicated travel professional at Travel Lounge."}
                                                     </p>
                                                     <a href={`mailto:${member.email}`} className="flex items-center justify-center gap-2 bg-white text-red-600 py-3 rounded-xl font-black text-[10px] uppercase tracking-widest hover:bg-slate-950 hover:text-white transition-all">
