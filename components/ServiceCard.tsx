@@ -4,7 +4,7 @@ import React from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { motion } from 'framer-motion'
-import { MapPin, Clock, ArrowRight } from 'lucide-react'
+import { MapPin, Clock, ArrowRight, Share2 } from 'lucide-react'
 import StarRating from './ui/StarRating'
 
 interface ServiceCardProps {
@@ -77,12 +77,34 @@ export default function ServiceCard({ title, location, price, image, duration, l
                         <span className="text-xs text-slate-400 font-bold block">Starting from</span>
                         <span className="text-xl font-black text-slate-900">Rs {price.toLocaleString()}</span>
                     </div>
-                    <Link 
-                        href={link} 
-                        className="w-10 h-10 rounded-full bg-slate-100 flex items-center justify-center text-slate-900 group-hover:bg-red-600 group-hover:text-white transition-all"
-                    >
-                        <ArrowRight size={18} />
-                    </Link>
+                    <div className="flex gap-3">
+                        <button
+                            onClick={(e) => {
+                                e.preventDefault();
+                                e.stopPropagation();
+                                const shareUrl = window.location.origin + link;
+                                if (navigator.share) {
+                                    navigator.share({
+                                        title: title,
+                                        url: shareUrl
+                                    }).catch(console.error);
+                                } else {
+                                    navigator.clipboard.writeText(shareUrl);
+                                    import('sonner').then(({ toast }) => toast.success('Link copied to clipboard!'));
+                                }
+                            }}
+                            className="w-10 h-10 rounded-full bg-slate-50 flex items-center justify-center text-slate-400 hover:bg-slate-950 hover:text-white transition-all shadow-sm"
+                            title="Share this service"
+                        >
+                            <Share2 size={18} />
+                        </button>
+                        <Link 
+                            href={link} 
+                            className="w-10 h-10 rounded-full bg-slate-100 flex items-center justify-center text-slate-900 group-hover:bg-red-600 group-hover:text-white transition-all shadow-sm"
+                        >
+                            <ArrowRight size={18} />
+                        </Link>
+                    </div>
                 </div>
             </div>
         </motion.div>
