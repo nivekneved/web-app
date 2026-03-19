@@ -1,0 +1,14 @@
+
+C:\Users\deven\Desktop\web-app\app\hotels\[id]\page.tsx
+  30:55  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+C:\Users\deven\Desktop\web-app\app\layout.tsx
+  32:32  error    Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  44:12  warning  'error' is defined but never used         @typescript-eslint/no-unused-vars
+
+C:\Users\deven\Desktop\web-app\components\HotelClientWrapper.tsx
+  8:5  warning  'ChevronLeft' is defined but never used   @typescript-eslint/no-unused-vars
+  9:5  warning  'ChevronRight' is defined but never used  @typescript-eslint/no-unused-vars
+
+Γ£û 5 problems (2 errors, 3 warnings)
+
