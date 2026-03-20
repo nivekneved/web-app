@@ -1,9 +1,11 @@
 import { createClient } from '@supabase/supabase-js';
-require('dotenv').config();
+import dotenv from 'dotenv';
 
-// Initialize Supabase client using environment variables
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || '';
-const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || '';
+// Load environment variables
+dotenv.config();
+
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 
 if (!supabaseUrl || !supabaseKey) {
   console.error('Missing Supabase configuration. Please check your .env.local file.');
@@ -178,7 +180,7 @@ async function main() {
 }
 
 // Run the script
-if (require.main === module) {
+if (import.meta.url.endsWith(process.argv[1])) {
   main();
 }
 

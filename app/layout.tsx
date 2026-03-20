@@ -1,20 +1,21 @@
 import type { Metadata } from 'next'
 import { Outfit } from 'next/font/google'
 import './globals.css'
-import { Toaster } from 'sonner'
 import Navbar from '@/components/Navbar'
 import Footer from '@/components/Footer'
 import FloatingSocial from '@/components/FloatingSocial'
 import { AuthProvider } from '@/contexts/AuthContext'
 import { WishlistProvider } from '@/contexts/WishlistContext'
-import { ThemeProvider } from '@/contexts/ThemeContext'
+import { ThemeProvider } from 'next-themes'
 import { CurrencyProvider } from '@/contexts/CurrencyContext'
 import BackToTop from '@/components/BackToTop'
+import { NextIntlClientProvider } from 'next-intl'
+import { getMessages } from 'next-intl/server'
 
 
 import { createClient } from '@/lib/supabaseServer'
 
-const outfit = Outfit({ 
+const font = Outfit({ 
   subsets: ['latin'],
   display: 'swap',
   weight: ['300', '400', '500', '600', '700', '800', '900'],
@@ -29,7 +30,7 @@ export async function generateMetadata(): Promise<Metadata> {
       .eq('key', 'seo_config')
       .single()
 
-    const seo = data?.value as any || {}
+    const seo = data?.value as {metaTitle?: string, metaDescription?: string, metaKeywords?: string, ogImage?: string} || {}
 
     return {
       title: seo.metaTitle || 'Travel Lounge | Your Gateway to Extraordinary Journeys',
@@ -49,32 +50,41 @@ export async function generateMetadata(): Promise<Metadata> {
   }
 }
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
+  params
 }: {
   children: React.ReactNode
+  params: Promise<{ locale: string }>
 }) {
+  const { locale: currentLocale } = await params
+  
+  // Providing all locales for static generation
+  const messages = (await getMessages({locale: currentLocale})) as {[key: string]: string}
+
   return (
-    <html lang="en">
-      <body className={`${outfit.className} antialiased`}>
-        <ThemeProvider>
-          <CurrencyProvider>
-            <AuthProvider>
-              <WishlistProvider>
-                <Navbar />
-                <main className="min-h-screen bg-slate-50 dark:bg-slate-900">
-                  {children}
-                </main>
-                <Footer />
-                <BackToTop />
-                <FloatingSocial />
-                <Toaster position="top-right" richColors />
-              </WishlistProvider>
-            </AuthProvider>
-          </CurrencyProvider>
-        </ThemeProvider>
+    <html lang={currentLocale}>
+      <body className={font.className}>
+        <NextIntlClientProvider locale={currentLocale} messages={messages}>
+          <ThemeProvider attribute="class" defaultTheme="light">
+            <CurrencyProvider>
+              <AuthProvider>
+                <WishlistProvider>
+                  <div className="flex flex-col min-h-screen">
+                    <Navbar />
+                    <main className="flex-grow">
+                      {children}
+                    </main>
+                    <FloatingSocial />
+                    <Footer />
+                    <BackToTop />
+                  </div>
+                </WishlistProvider>
+              </AuthProvider>
+            </CurrencyProvider>
+          </ThemeProvider>
+        </NextIntlClientProvider>
       </body>
     </html>
-
   )
 }

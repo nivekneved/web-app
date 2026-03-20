@@ -1,108 +1,162 @@
-import { createClient } from '@/lib/supabaseServer'
 import { Metadata } from 'next'
-import { notFound } from 'next/navigation'
+import { createClient } from '@/lib/supabase'
 import HotelClientWrapper from '@/components/HotelClientWrapper'
+import { notFound } from 'next/navigation'
 
-export const dynamic = 'force-dynamic'
-export const revalidate = 0
-
-interface Props {
-    params: Promise<{ id: string }>
+type RoomType = {
+  id: string;
+  name: string;
+  type: string;
+  price_per_night: number;
+  total_units: number;
+  size?: string;
+  bed?: string;
+  view?: string;
+  features?: string[];
+  image_url?: string;
+  max_occupancy?: number;
+  meal_plan?: string;
+  cancellation_policy?: string;
+  deposit_policy?: string;
+  is_active?: boolean;
+  min_stay_days?: number;
+  prices?: {
+    [key: string]: string;
+  };
+  // Properties required by HotelClientWrapper
+  price: number;  // Required in HotelClientWrapper
 }
 
-async function getHotel(id: string) {
-    const supabase = await createClient()
-    
-    // Fetch hotel details including JSON room_types
-    const { data: hotel, error: hotelError } = await supabase
-        .from('services')
-        .select('id, name, description, location, region, base_price, rating, image_url, amenities, room_types')
-        .eq('id', id)
-        .eq('service_type', 'hotel')
-        .single()
-
-    if (hotelError || !hotel) return null
-
-    let mappedRoomTypes = [];
-
-    // Prioritize JSON room types column if it exists and is not empty
-    if (hotel.room_types && Array.isArray(hotel.room_types) && hotel.room_types.length > 0) {
-        mappedRoomTypes = hotel.room_types.map((room: any) => ({
-            type: room.type,
-            price: parseFloat(room.prices?.mon || '0'),
-            prices: room.prices,
-            image_url: room.image_url,
-            features: Array.isArray(room.features) ? room.features : (typeof room.features === 'string' ? room.features.split(',').map((f: string) => f.trim()) : []),
-            available: room.available !== false,
-            min_stay: parseInt(room.min_stay) || 1
-        }));
-    } else {
-        // Fallback to room_types table for older data
-        const { data: rooms } = await supabase
-            .from('room_types')
-            .select('*')
-            .eq('service_id', id)
-
-        mappedRoomTypes = (rooms || []).map(room => ({
-            type: room.name,
-            price: parseFloat(room.weekday_price || '0'),
-            prices: {
-                mon: room.weekday_price,
-                tue: room.weekday_price,
-                wed: room.weekday_price,
-                thu: room.weekday_price,
-                fri: room.weekday_price,
-                sat: room.weekend_price,
-                sun: room.weekend_price
-            },
-            image_url: room.image_url,
-            features: room.amenities || [],
-            min_stay: room.min_stay_days || 1
-        }))
-    }
-
-    return {
-        ...hotel,
-        room_types: mappedRoomTypes
-    }
+type HotelDetails = {
+  id: string;
+  name: string;
+  description: string;
+  location: string;
+  region: string;
+  base_price: number;
+  rating: number;
+  image_url?: string;
+  secondary_image_url?: string;
+  amenities?: string[];
+  service_type: string;
+  duration_days?: number;
+  duration_hours?: number;
+  max_group_size?: number;
+  room_types?: RoomType[];
+  gallery_images?: string[];
+  meta_title?: string;
+  meta_description?: string;
+  special_features?: string[];
+  highlights?: string[];
+  included?: string[];
+  not_included?: string[];
+  cancellation_policy?: string;
+  terms_and_conditions?: string;
+  thumbnail_url?: string;
+  banner_url?: string;
+  featured?: boolean;
+  priority?: number;
 }
 
+export async function generateMetadata({ params }: { params: Promise<{ id: string }> }): Promise<Metadata> {
+  const { id } = await params
+  const supabase = createClient()
+  const { data: hotel } = await supabase
+    .from('services')
+    .select('*')
+    .eq('id', id)
+    .single()
 
-export async function generateMetadata({ params }: Props): Promise<Metadata> {
-    const { id } = await params
-    const hotel = await getHotel(id)
+  if (!hotel) {
+    return {}
+  }
 
-    if (!hotel) {
-        return {
-            title: 'Hotel Not Found | Travel Lounge',
-        }
+  return {
+    title: hotel.meta_title || hotel.name,
+    description: hotel.meta_description || hotel.description,
+    openGraph: {
+      title: hotel.meta_title || hotel.name,
+      description: hotel.meta_description || hotel.description,
+      images: hotel.image_url ? [hotel.image_url!] : [], // Assert as non-null since we checked
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: hotel.meta_title || hotel.name,
+      description: hotel.meta_description || hotel.description,
+      images: hotel.image_url ? [hotel.image_url!] : [], // Assert as non-null since we checked
     }
-
-    return {
-        title: `${hotel.name} | Travel Lounge Mauritius`,
-        description: hotel.description?.substring(0, 160) || `Book your stay at ${hotel.name} in ${hotel.location}, Mauritius.`,
-        openGraph: {
-            title: hotel.name,
-            description: hotel.description,
-            images: [hotel.image_url],
-            type: 'website',
-        },
-        twitter: {
-            card: 'summary_large_image',
-            title: hotel.name,
-            description: hotel.description,
-            images: [hotel.image_url],
-        }
-    }
+  }
 }
 
-export default async function HotelDetailPage({ params }: Props) {
-    const { id } = await params
-    const hotel = await getHotel(id)
+export default async function HotelPage({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params
+  const supabase = createClient()
 
-    if (!hotel) {
-        notFound()
-    }
+  const { data: hotelData, error } = await supabase
+    .from('services')
+    .select('*')
+    .eq('id', id)
+    .single()
 
-    return <HotelClientWrapper hotel={hotel} />
+  if (error || !hotelData) {
+    notFound()
+  }
+
+  // Process room types for the client component
+  let mappedRoomTypes: RoomType[] = []
+  if (hotelData.room_types && Array.isArray(hotelData.room_types) && hotelData.room_types.length > 0) {
+    mappedRoomTypes = hotelData.room_types.map((room: any) => ({
+      id: room.id || '',
+      name: room.name || room.type || 'Standard Room',
+      type: room.type || 'standard',
+      price_per_night: parseFloat(room.prices?.mon || room.price_per_night || '0'),
+      total_units: room.total_units || 1,
+      size: room.size,
+      bed: room.bed,
+      view: room.view,
+      features: room.features,
+      image_url: room.image_url,
+      max_occupancy: room.max_occupancy || 2,
+      meal_plan: room.meal_plan || 'Room Only',
+      cancellation_policy: room.cancellation_policy,
+      deposit_policy: room.deposit_policy,
+      is_active: room.is_active !== undefined ? room.is_active : true,
+      min_stay_days: room.min_stay_days || 1,
+      prices: room.prices,
+      price: parseFloat(room.prices?.mon || room.price_per_night || '0') // Add the required price property
+    }))
+  } else {
+    // Fallback to default room type if needed
+    const rooms: any[] = hotelData.room_types || []
+    mappedRoomTypes = rooms.map((room, index) => ({
+      id: `default-${index}`,
+      name: room.name || 'Standard Room',
+      type: room.type || 'standard',
+      price_per_night: parseFloat(room.price || room.price_per_night || hotelData.base_price || '0'),
+      total_units: room.total_units || 1,
+      size: room.size,
+      bed: room.bed,
+      view: room.view,
+      features: room.features || [],
+      image_url: room.image_url || hotelData.image_url,
+      max_occupancy: room.max_occupancy || 2,
+      meal_plan: room.meal_plan || 'Room Only',
+      cancellation_policy: room.cancellation_policy,
+      deposit_policy: room.deposit_policy,
+      is_active: room.is_active !== undefined ? room.is_active : true,
+      min_stay_days: room.min_stay_days || 1,
+      prices: room.prices,
+      price: parseFloat(room.price || room.price_per_night || hotelData.base_price || '0') // Add the required price property
+    }))
+  }
+
+  // Update the hotel data with processed room types, ensuring image_url is defined
+  const hotel: HotelDetails = {
+    ...hotelData,
+    image_url: hotelData.image_url || '/placeholder-hotel.jpg', // Provide a default image
+    amenities: hotelData.amenities || [], // Ensure amenities is not undefined
+    room_types: mappedRoomTypes
+  }
+
+  return <HotelClientWrapper hotel={hotel} />
 }

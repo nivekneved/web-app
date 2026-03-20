@@ -1,5 +1,19 @@
 import { createClient } from '@supabase/supabase-js';
-require('dotenv').config();
+import 'dotenv/config';
+import { fileURLToPath } from 'url';
+import { dirname } from 'path';
+
+// For ESM, check if the script is run directly using import.meta
+if (import.meta.url.startsWith('file:')) {
+  const currentFilePath = fileURLToPath(import.meta.url);
+  const currentDir = dirname(currentFilePath);
+  
+  // Ensure we're running the script directly
+  const isMain = currentFilePath === fileURLToPath(new URL('.', import.meta.url));
+  if (isMain) {
+    main();
+  }
+}
 
 // Initialize Supabase client using environment variables
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || '';
@@ -95,9 +109,7 @@ async function main() {
 }
 
 // Run the script
-if (require.main === module) {
-  main();
-}
+// ESM equivalent of `require.main === module` handled above
 
 export { fetchAllServices };
 export type { Service };

@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import {
     Users,
     Calendar,
@@ -36,6 +36,16 @@ type RoomType = {
     available?: boolean;
     prices?: Record<string, string>;
     min_stay?: number;
+    name?: string;
+    total_units?: number;
+    size?: string;
+    bed?: string;
+    view?: string;
+    max_occupancy?: number;
+    meal_plan?: string;
+    cancellation_policy?: string;
+    deposit_policy?: string;
+    is_active?: boolean;
 }
 
 type Hotel = {
@@ -46,8 +56,26 @@ type Hotel = {
     region: string
     base_price: number
     rating: number
-    image_url: string
-    amenities: string[]
+    image_url?: string
+    amenities?: string[]
+    service_type?: string
+    duration_days?: number
+    duration_hours?: number
+    max_group_size?: number
+    secondary_image_url?: string
+    gallery_images?: string[]
+    meta_title?: string
+    meta_description?: string
+    special_features?: string[]
+    highlights?: string[]
+    included?: string[]
+    not_included?: string[]
+    cancellation_policy?: string
+    terms_and_conditions?: string
+    thumbnail_url?: string
+    banner_url?: string
+    featured?: boolean
+    priority?: number
     room_types?: RoomType[]
 }
 
@@ -81,12 +109,19 @@ export default function HotelClientWrapper({ hotel }: { hotel: Hotel }) {
         }
     }
     
+    const [isMounted, setIsMounted] = useState(false)
+    
+    useEffect(() => {
+        setIsMounted(true)
+    }, [])
+
     const getDayKey = (dateString: string) => {
         if (!dateString) return new Date().toLocaleDateString('en-US', { weekday: 'short' }).toLowerCase();
         return new Date(dateString).toLocaleDateString('en-US', { weekday: 'short' }).toLowerCase();
     }
 
-    const currentDayKey = getDayKey(checkIn);
+    // Use a stable key for SSR, or only calculate if checkIn is present
+    const currentDayKey = isMounted ? getDayKey(checkIn) : 'mon';
 
     function handleBookNow() {
         if (!checkIn || !checkOut) {
@@ -263,7 +298,7 @@ export default function HotelClientWrapper({ hotel }: { hotel: Hotel }) {
                                             >
                                                 <div className="relative w-full md:w-64 h-48 rounded-[2rem] overflow-hidden shrink-0">
                                                     <Image
-                                                        src={room.image_url || hotel.image_url}
+                                                        src={room.image_url || hotel.image_url || '/placeholder-hotel.jpg'}
                                                         alt={room.type}
                                                         fill
                                                         className="object-cover group-hover:scale-110 transition-transform duration-700"
@@ -273,7 +308,10 @@ export default function HotelClientWrapper({ hotel }: { hotel: Hotel }) {
                                                         <button
                                                             onClick={(e) => {
                                                                 e.stopPropagation();
-                                                                setActiveGallery({ images: [room.image_url || hotel.image_url, ...(room.images || [])], title: room.type });
+                                                                setActiveGallery({ 
+                                                                    images: [(room.image_url || hotel.image_url || '/placeholder-hotel.jpg'), ...(room.images || [])], 
+                                                                    title: room.type || 'Room' 
+                                                                });
                                                                 setCurrentGalleryIdx(0);
                                                             }}
                                                             className="absolute top-4 left-4 p-2.5 bg-white/90 backdrop-blur-md text-red-600 rounded-2xl opacity-0 group-hover:opacity-100 transition-all hover:scale-110 active:scale-95 shadow-lg border border-red-50"

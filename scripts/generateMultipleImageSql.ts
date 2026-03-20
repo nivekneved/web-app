@@ -1,5 +1,6 @@
 import { createClient } from '@supabase/supabase-js';
-require('dotenv').config();
+import dotenv from 'dotenv';
+dotenv.config();
 
 // Initialize Supabase client using environment variables
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || '';
@@ -140,8 +141,16 @@ async function main() {
 }
 
 // Run the script
-if (require.main === module) {
-  main();
+import { fileURLToPath } from 'url';
+import { dirname } from 'path';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+
+if (import.meta.url) {
+  if (process.argv[1] === __filename) {
+    main();
+  }
 }
 
 export { fetchServicesNeedingPhotos };

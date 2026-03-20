@@ -25,81 +25,16 @@ export async function createBookingRequest(data: BookingRequestData) {
     try {
         const { data: { user } } = await supabase.auth.getUser()
         
-        let customerId: string | undefined
+        // 1. Identify or create customer via secure RPC
+        const { data: customerId, error: customerError } = await supabase.rpc('get_or_create_customer_v1', {
+            p_email: user?.email || data.email,
+            p_first_name: data.firstName,
+            p_last_name: data.lastName,
+            p_phone: data.phone,
+            p_user_id: user?.id
+        })
 
-        if (user) {
-            // 1a. Logged in user - Ensure customer record exists
-            const { data: customer } = await supabase
-                .from('customers')
-                .select('id')
-                .eq('id', user.id)
-                .single()
-
-            if (!customer) {
-                // Fetch profile to sync
-                const { data: profile } = await supabase
-                    .from('profiles')
-                    .select('id, name, email, phone')
-                    .eq('id', user.id)
-                    .single()
-
-                if (profile) {
-                    const names = profile.name.split(' ')
-                    const firstName = names[0]
-                    const lastName = names.slice(1).join(' ') || 'User'
-
-                    const { data: newCustomer, error: insertError } = await supabase
-                        .from('customers')
-                        .insert([{
-                            id: user.id,
-                            user_id: user.id,
-                            first_name: firstName,
-                            last_name: lastName,
-                            email: profile.email,
-                            phone: profile.phone,
-                            status: 'Active'
-                        }])
-                        .select()
-                        .single()
-
-                    if (insertError) throw insertError
-                    customerId = newCustomer?.id
-                } else {
-                    customerId = user.id
-                }
-            } else {
-                customerId = customer.id
-            }
-        } else {
-            // 1b. Guest user - Use provided contact details
-            if (!data.email) throw new Error('Email is required for guest booking')
-
-            const { data: existingCustomer } = await supabase
-                .from('customers')
-                .select('id')
-                .eq('email', data.email)
-                .maybeSingle()
-
-            if (existingCustomer) {
-                customerId = existingCustomer.id
-            } else {
-                // Create new guest customer
-                const { data: newGuest, error: guestError } = await supabase
-                    .from('customers')
-                    .insert([{
-                        first_name: data.firstName || 'Guest',
-                        last_name: data.lastName || 'User',
-                        email: data.email,
-                        phone: data.phone,
-                        status: 'Lead'
-                    }])
-                    .select()
-                    .single()
-
-                if (guestError) throw guestError
-                customerId = newGuest?.id
-            }
-        }
+        if (customerError) throw customerError
 
         if (!customerId) throw new Error('Could not identify or create customer')
 
@@ -112,6 +47,7 @@ export async function createBookingRequest(data: BookingRequestData) {
             pax_adults: data.paxAdults,
             pax_children: data.paxChildren,
             amount: data.amount,
+            tax_amount: 0, // Need to calculate tax if applicable
             activity_type: data.serviceCategory,
             activity_name: data.serviceName,
             description: data.roomPreference 
@@ -134,12 +70,6 @@ export async function createBookingRequest(data: BookingRequestData) {
         })
 
         if (rpcError) throw rpcError
-
-        // The RPC returns { id: ... } or similar if successful, depending on its definition
-        // Let's assume it returns the created booking ID or use the data if returned.
-        // Based on Admin-app usage, it doesn't seem to capture the return value but we want the ID if possible.
-        // If the RPC doesn't return the ID, we might need to fetch it or modify the RPC later.
-        // For now, we follow the pattern of the RPC usage.
 
         return { success: true, bookingId: bookingResponse?.id }
     } catch (error) {
