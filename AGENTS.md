@@ -1,5 +1,13 @@
 # AGENTS.md
 
+## 2026-03-21 - Web App Build Restoration & Vercel Deployment
+
+### Changes Made
+- **Build Restoration**: Resolved a critical build failure caused by an incomplete and broken `next-intl` setup in `app/layout.tsx`.
+- **Next.js 15/16 Compatibility**: Fixed a TypeScript mismatch in `RootLayout` where `params` was incorrectly typed for the root segment in the latest Next.js versions.
+- **Vercel Certification**: Successfully verified a local production build and initiated a production deployment to Vercel.
+- **Code Hygiene**: Removed unused i18n imports and providers to stabilize the production pipeline.
+
 ## 2026-03-19 - Elite Mobile Transformation (10/10 Score)
 
 ### Changes Made

@@ -9,8 +9,8 @@ import { WishlistProvider } from '@/contexts/WishlistContext'
 import { ThemeProvider } from 'next-themes'
 import { CurrencyProvider } from '@/contexts/CurrencyContext'
 import BackToTop from '@/components/BackToTop'
-import { NextIntlClientProvider } from 'next-intl'
-import { getMessages } from 'next-intl/server'
+// import { NextIntlClientProvider } from 'next-intl'
+// import { getMessages } from 'next-intl/server'
 
 
 import { createClient } from '@/lib/supabaseServer'
@@ -42,7 +42,7 @@ export async function generateMetadata(): Promise<Metadata> {
         images: seo.ogImage ? [{ url: seo.ogImage }] : [],
       }
     }
-  } catch (error) {
+  } catch {
     return {
       title: 'Travel Lounge | Your Gateway to Extraordinary Journeys',
       description: 'Discover amazing hotels, cruises, tours, and travel experiences worldwide',
@@ -55,17 +55,18 @@ export default async function RootLayout({
   params
 }: {
   children: React.ReactNode
-  params: Promise<{ locale: string }>
+  params: Promise<{ locale?: string }>
 }) {
-  const { locale: currentLocale } = await params
+  const resolvedParams = await params
+  const currentLocale = resolvedParams.locale || 'en'
   
   // Providing all locales for static generation
-  const messages = (await getMessages({locale: currentLocale})) as {[key: string]: string}
+  // const messages = (await getMessages({locale: currentLocale})) as {[key: string]: string}
 
   return (
     <html lang={currentLocale}>
       <body className={font.className}>
-        <NextIntlClientProvider locale={currentLocale} messages={messages}>
+        {/* <NextIntlClientProvider locale={currentLocale} messages={messages}> */}
           <ThemeProvider attribute="class" defaultTheme="light">
             <CurrencyProvider>
               <AuthProvider>
@@ -83,7 +84,7 @@ export default async function RootLayout({
               </AuthProvider>
             </CurrencyProvider>
           </ThemeProvider>
-        </NextIntlClientProvider>
+        {/* </NextIntlClientProvider> */}
       </body>
     </html>
   )
