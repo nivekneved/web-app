@@ -4,6 +4,26 @@ import React from 'react'
 import ServiceListing from '@/components/ServiceListing'
 
 export default function FlightsPage() {
+    const [iframeHeight, setIframeHeight] = React.useState('800px');
+
+    React.useEffect(() => {
+        const handleMessage = (event: MessageEvent) => {
+            // Support for iFrame Resizer (commonly used by GOL IBE)
+            if (typeof event.data === 'string' && event.data.startsWith('[iFrameSizer]')) {
+                const parts = event.data.split(':');
+                if (parts.length > 4) {
+                    const newHeight = parseInt(parts[3], 10);
+                    if (!isNaN(newHeight) && newHeight > 100) {
+                        setIframeHeight(`${newHeight}px`);
+                    }
+                }
+            }
+        };
+
+        window.addEventListener('message', handleMessage);
+        return () => window.removeEventListener('message', handleMessage);
+    }, []);
+
     return (
         <div className="flex flex-col min-h-screen bg-white">
             {/* GOL IBE Search Form Integration */}
@@ -18,15 +38,19 @@ export default function FlightsPage() {
                         
                         {/* 
                           * GOL IBE search form implementation_D4 version
-                          * Note: Replace 'xxx' with your actual golibe subdomain.
+                          * Sandbox: No allow-top-navigation to keep results in iframe
                           */}
                         <iframe 
+                            id="gol_ibe_iframe"
+                            name="gol_ibe_iframe"
                             src="https://travellounge.golibe.com/iframe" 
                             width="100%" 
-                            height="600px" 
+                            height={iframeHeight}
                             frameBorder="0" 
                             allowTransparency={true}
-                            className="w-full"
+                            sandbox="allow-forms allow-scripts allow-same-origin allow-popups allow-modals"
+                            className="w-full transition-all duration-500 ease-in-out"
+                            style={{ height: iframeHeight }}
                         ></iframe>
                     </div>
                     
