@@ -55,17 +55,16 @@ export default function FlightsPage() {
                         
                         {/* 
                           * GOL IBE search form implementation_D4 version
-                          * Force target to 'golIbeIframe' and add iframe mode
+                          * Opening results in a new tab as per latest user request
                           */}
                         <iframe 
                             id="golIbeIframe"
                             name="golIbeIframe"
-                            src="https://travellounge.golibe.com/iframe?iframe=1&target=golIbeIframe&embedded=true" 
+                            src="https://travellounge.golibe.com/iframe?iframe=1&target=_blank&embedded=true" 
                             width="100%" 
                             height={iframeHeight}
                             frameBorder="0" 
                             allowTransparency={true}
-                            sandbox="allow-forms allow-scripts allow-same-origin allow-popups allow-modals allow-top-navigation-by-user-activation"
                             className="w-full transition-all duration-500 ease-in-out"
                             style={{ height: iframeHeight }}
                         ></iframe>
