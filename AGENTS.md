@@ -3,6 +3,7 @@
 ## 2026-03-24 - Dynamic Footer Visibility & GOL IBE Finalization
 
 ### Web App Changes
+
 - **Flight IBE Integration**: Successfully integrated GOL IBE D4 on the `/flights` page.
 - **New Tab Results**: Configured search results to open in a new tab via `target=_blank` to bypass restrictive top-level navigation blocks (Hardened Iframe).
 - **Dynamic Height**: Implemented a `postMessage` listener for automatic iframe stretching to fit the form content.
@@ -18,7 +19,8 @@
 - `/flights` page search results open correctly in a new window/tab.
 - Service card images on mobile homepage load without 404 errors.
 - EAS Build v1.0.1 dashboard shows a successful or running build status.
-- **Footer Visibility**: Toggling "Global Footer Visibility" in Admin Settings hides/shows the footer in both Web and Mobile apps.
+
+- **Footer Visibility**: Toggling "Web Footer Visibility" and "Mobile Footer Visibility" independently in Admin Settings hides/shows the footer on the respective platform.
 
 ## 2026-03-23 - Elite Mobile Parity Restoration (10/10 Score)
 
