@@ -19,6 +19,7 @@ interface GeneralConfig {
     facebookUrl?: string;
     instagramUrl?: string;
     whatsappNumber1?: string;
+    showFooter?: boolean;
 }
 
 export default function Footer() {
@@ -83,6 +84,8 @@ export default function Footer() {
     const facebookUrl = settings?.facebookUrl || 'https://www.facebook.com/travellounge.mu'
     const instagramUrl = settings?.instagramUrl || 'https://www.instagram.com/travellounge_ltd?igsh=MWljeWRiNG43aDN0OQ=='
 
+    if (settings?.showFooter === false) return null;
+
     return (
         <footer className="bg-slate-900 text-white">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
@@ -122,7 +125,7 @@ export default function Footer() {
                                 <div>
                                     <p className="font-bold text-white mb-1 uppercase text-[10px] tracking-widest flex items-center gap-2">
                                         <span className="w-1.5 h-1.5 bg-red-600 rounded-full"></span>
-                                        {settings.office1Title || 'Port Louis'}
+                                        {settings.office1Title || ''}
                                     </p>
                                     <p className="text-sm leading-relaxed mb-2">
                                         {settings.office1Address}
@@ -142,7 +145,7 @@ export default function Footer() {
                                 <div>
                                     <p className="font-bold text-white mb-1 uppercase text-[10px] tracking-widest flex items-center gap-2">
                                         <span className="w-1.5 h-1.5 bg-red-600 rounded-full"></span>
-                                        {settings.office2Title || 'Ebene'}
+                                        {settings.office2Title || ''}
                                     </p>
                                     <p className="text-sm leading-relaxed mb-2">
                                         {settings.office2Address}

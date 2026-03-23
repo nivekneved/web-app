@@ -122,9 +122,9 @@ export default function Navbar() {
         return () => window.removeEventListener('scroll', handleScroll)
     }, [fetchSettings, fetchNavigations])
 
-    const siteTitle = settings?.general_config?.siteTitle || 'Travel Lounge'
-    const facebookUrl = settings?.general_config?.facebookUrl || 'https://www.facebook.com/travellounge.mu'
-    const instagramUrl = settings?.general_config?.instagramUrl || 'https://www.instagram.com/travellounge_ltd?igsh=MWljeWRiNG43aDN0OQ=='
+    const siteTitle = settings?.general_config?.siteTitle || ''
+    const facebookUrl = settings?.general_config?.facebookUrl || ''
+    const instagramUrl = settings?.general_config?.instagramUrl || ''
 
     const menuItems = items.length > 0 ? items : navigationConfig.menu
 

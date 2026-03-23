@@ -82,13 +82,13 @@ export default function ContactPage() {
         }
     }
 
-    const contactEmail = settings?.contactEmail || 'reservation@travellounge.mu'
-    const contactPhone = settings?.contactPhone || '+230 5940 7701'
-    const whatsapp1 = settings?.whatsappNumber1 || '+230 5940 7711'
-    const office1Title = settings?.office1Title || 'Port Louis Office'
-    const office1Address = settings?.office1Address || 'Ground Floor Newton Tower, Corner Sir William Newton and Remy Ollier Street, Port Louis, Mauritius'
-    const office2Title = settings?.office2Title || 'Ebene Office'
-    const office2Address = settings?.office2Address || 'Ground Floor, 57 Ebene Mews, Rue Du Savoir, Ebene Cybercity, Mauritius'
+    const contactEmail = settings?.contactEmail || ''
+    const contactPhone = settings?.contactPhone || ''
+    const whatsapp1 = settings?.whatsappNumber1 || ''
+    const office1Title = settings?.office1Title || ''
+    const office1Address = settings?.office1Address || ''
+    const office2Title = settings?.office2Title || ''
+    const office2Address = settings?.office2Address || ''
 
     if (loading) {
         return (

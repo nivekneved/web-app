@@ -58,7 +58,7 @@ export default function BookingForm({ packageTitle }: { packageTitle: string }) 
                         <input
                             type="tel"
                             required
-                            placeholder="+230 5000 0000"
+                            placeholder="+230 XXXX XXXX"
                             className="w-full pl-12 pr-4 py-3 bg-slate-50 border border-slate-300 rounded-xl focus:outline-hidden focus:ring-2 focus:ring-red-600 transition-all font-medium"
                         />
                     </div>
