@@ -19,7 +19,7 @@ interface GeneralConfig {
     facebookUrl?: string;
     instagramUrl?: string;
     whatsappNumber1?: string;
-    showFooter?: boolean;
+    showFooterWeb?: boolean;
 }
 
 export default function Footer() {
@@ -84,7 +84,7 @@ export default function Footer() {
     const facebookUrl = settings?.facebookUrl || 'https://www.facebook.com/travellounge.mu'
     const instagramUrl = settings?.instagramUrl || 'https://www.instagram.com/travellounge_ltd?igsh=MWljeWRiNG43aDN0OQ=='
 
-    if (settings?.showFooter === false) return null;
+    if (settings?.showFooterWeb === false) return null;
 
     return (
         <footer className="bg-slate-900 text-white">
