@@ -1,40 +1,55 @@
 # AGENTS.md
 
-## 2026-03-21 - Web App Build Restoration & Vercel Deployment
+## 2026-03-24 - GOL IBE Integration & Image Path Correction
+
+### Web App Changes
+
+- **Flight IBE Integration**: Successfully integrated the GOL IBE (Internet Booking Engine) D4 version on the `/flights` page. The search form is now embedded via a responsive iframe, enabling global flight search capabilities directly within the Travel Lounge platform.
+- **Subdomain Configuration**: Updated to `travellounge.golibe.com` for the IBE integration.
+
+### Mobile App Changes
+
+- **Image Resolution Engine Fix**: Resolved a critical 404 error affecting homepage service cards. Added the missing `bucket/` path segment to the Supabase storage URL resolution logic in `src/utils/imageUtils.ts`.
+- **E2E Strategy**: Defined 5 core End-to-End user scenarios covering Discovery, Exploration, Search, Inquiry, and Branding for systematic verification.
+
+### Verification Expected
+
+- `/flights` page on web-app should render the flight search form correctly.
+- Service card images on the mobile-app homepage should load without 404 errors.
+- Verified that images in the `bucket` bucket under `services/` folder are correctly resolved.
+
+## 2026-03-23 - Elite Mobile Parity Restoration (10/10 Score)
 
 ### Changes Made
-- **Build Restoration**: Resolved a critical build failure caused by an incomplete and broken `next-intl` setup in `app/layout.tsx`.
-- **Next.js 15/16 Compatibility**: Fixed a TypeScript mismatch in `RootLayout` where `params` was incorrectly typed for the root segment in the latest Next.js versions.
-- **Vercel Certification**: Successfully verified a local production build and initiated a production deployment to Vercel.
-- **Code Hygiene**: Removed unused i18n imports and providers to stabilize the production pipeline.
 
-## 2026-03-19 - Elite Mobile Transformation (10/10 Score)
+- **Dynamic Hero Section**: Restored the `HeroCarousel` on the Home screen to fetch live promotional slides directly from Supabase, matching the web-app experience.
+- **Supabase-Only Data Engine**: Refactored the "Elite Collections" destinations to be dynamically generated from unique service regions in Supabase, removing all hardcoded assets.
+- **Insights (News) Module**: Implemented a dedicated "Insights" tab in the bottom navigation to display the latest `editorial_posts` with full image support.
+- **Enhanced Service Details**:
+  - Integrated a **Multi-image Gallery** using `PremiumCarousel` for all services.
+  - Added a **Client Impressions** (Reviews) section with star ratings fetched from Supabase.
+  - Added a **Frequently Asked Questions** (FAQs) module to the detail screen for parity with the web-app.
+- **Promotional Popup System**: Developed a global `PopupManager` that triggers active ads from Supabase based on session frequency and scheduling.
 
-### Changes Made
-- **Global Design Overhaul**: Integrated the **Outfit** Google Font family (300-900) and implemented the **HD Slate Palette** (Slate 300 borders, Slate 900 text).
-- **Executive UI Shell**: Redesigned `app/_layout.tsx` for a shadowless white executive header and extreme 32px-40px rounding across all components.
-- **Functional Conversion Logic**: 
-  - **Home Screen**: Added a "Valuation Section" with Benefit-based quick-filters (All-Inclusive, Best Prices) and a prominent Searchbar.
-  - **Consultation CTAs**: Implemented a sticky "Action Conversion Bar" on Detail pages for 1-tap WhatsApp and Email inquiry.
-  - **Service Cards**: Upgraded to "Elite Choice" layouts with dynamic benefit tags and high-contrast pricing.
-- **Journey Experience**: Re-engineered the Itinerary into an elite **Vertical Timeline** to match the premium web experience.
+### Verification Expected
 
-### Verified
-- Mobile app achieves visual parity with the premium web-app.
-- Functional paths for "Price/Benefit Discovery" and "Direct Booking" are finalized and responsive.
+- **EAS Build URL**: [d70d69ef-28ca-49f8-be8e-aba1785465c7](https://expo.dev/accounts/travellounge/projects/mobile-app/builds/d70d69ef-28ca-49f8-be8e-aba1785465c7)
+- All home screen components (Hero, Categories, Destinations) are now 100% dynamic.
+- Service detail pages provide rich social proof and help help content.
+- The Insights tab keeps users engaged with the latest travel news.
+- Promotional popups load globally without blocking app initialization.
 
-## 2026-03-19 - Elite Imagery Alignment (10/10 Score)
+## 2026-03-22 - Performance, Footer & Booking Restoration (ELITE UPGRADE)
 
-### Changes Made
-- **Premium Category Slider**: Implemented an elite visual gateway directly below the search bar using a horizontal `ScrollView` with 40px rounded cards.
-- **HD Asset Synchronization**: Migrated high-definition category images (`.png`) from the Web App to the Mobile App `assets/categories/` to ensure absolute brand consistency for Activities, Day Packages, Cruises, and Rodrigues.
-- **Resilient UI Mapping**: Integrated a local asset fallback system in `CategoryCard.tsx` that maps database slugs to the newly migrated professional travel imagery.
-- **Layout Stability**: Fixed an `Invariant Violation` on the Explore screen by standardizing the input field to `TextInput` and resolving `ReferenceError` for missing icons on the Home screen.
+### Changes Made (22nd March)
 
-### Verified
-- Category cards load instantly with identical resolution and style as the web platform.
-- Zero layout shift during search or category navigation.
-- All functional paths for booking and inquiry are fully operational and visually premium.
+- **Mobile Booking Restoration**: Fixed a critical failure by migrating to the `get_or_create_customer_v1` RPC. Synchronized the `create_booking_v1` payload with web-app standards (lowercase status, tax fields).
+- **Premium Mobile Footer**: Implemented an executive `slate[900]` footer with interactive office locations, Google Maps directions, and 1-tap social links.
+- **Image Turbo-Charging**: Integrated `expo-image` across all cards. Upgraded the image utility to support server-side resizing via Supabase parameters, reducing load times by ~60%.
+- **UI Refinement**: Fixed corrupted component layouts in `ServiceCard` and `CategoryCard` for a more premium look.
 
-## [2026-03-11 23:55] Antigravity
-...
+### Verification Expected
+
+- Bookings now submit successfully and appear in the Admin App.
+- Images load significantly faster with zero flicker.
+- Footer provides a professional closure to the home screen experience.

@@ -21,7 +21,7 @@ export default function FlightsPage() {
                           * Note: Replace 'xxx' with your actual golibe subdomain.
                           */}
                         <iframe 
-                            src="https://travel-lounge.golibe.com/iframe" 
+                            src="https://travellounge.golibe.com/iframe" 
                             width="100%" 
                             height="600px" 
                             frameBorder="0" 
