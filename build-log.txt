@@ -1,0 +1,31 @@
+
+> web@0.1.1 build
+> next build
+
+ΓÜá Warning: Next.js inferred your workspace root, but it may not be correct.
+ We detected multiple lockfiles and selected the directory of C:\Users\deven\yarn.lock as the root directory.
+ To silence this warning, set `turbopack.root` in your Next.js config, or consider removing one of the lockfiles if it's not needed.
+   See https://nextjs.org/docs/app/api-reference/config/next-config-js/turbopack#root-directory for more information.
+ Detected additional lockfiles: 
+   * C:\Users\deven\Desktop\web-app\package-lock.json
+
+Γû▓ Next.js 16.1.2 (Turbopack)
+- Environments: .env.local, .env
+
+ΓÜá The "middleware" file convention is deprecated. Please use "proxy" instead. Learn more: https://nextjs.org/docs/messages/middleware-to-proxy
+  Creating an optimized production build ...
+Γ£ô Compiled successfully in 3.5s
+  Running TypeScript ...
+Failed to compile.
+
+./app/page.tsx:227:18
+Type error: Cannot find name 'Link'.
+
+  225 |
+  226 |               <div className="flex flex-wrap items-center justify-center gap-6">
+> 227 |                 <Link
+      |                  ^
+  228 |                   href={heroSlides[currentSlide]?.link || '#'}
+  229 |                   className="px-10 py-5 bg-red-600 text-white rounded-full font-black text-xs tracking-[0.2em] hover:bg-white hover:text-slate-900 transition-all transform hover:scale-105 shadow-2xl shadow-red-600/40 uppercase outline-none focus:ring-4 focus:ring-red-600/50"
+  230 |                   aria-label={`Explore ${heroSlides[currentSlide]?.title}`}
+Next.js build worker exited with code: 1 and signal: null
