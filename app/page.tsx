@@ -37,10 +37,16 @@ type HeroSlide = {
   image?: string
 }
 
+type SiteSettings = {
+  experienceSectionImage?: string
+  [key: string]: unknown
+}
+
 export default function HomePage() {
   const [currentSlide, setCurrentSlide] = useState(0)
   const [heroSlides, setHeroSlides] = useState<HeroSlide[]>([])
   const [loading, setLoading] = useState(true)
+  const [settings, setSettings] = useState<SiteSettings | null>(null)
   
   const targetRef = useRef(null)
   const { scrollYProgress } = useScroll({
@@ -87,11 +93,11 @@ export default function HomePage() {
               subtitle: "Travel with ease and comfort with our best flight deals.",
               cta: "Book Your Flight",
               link: "/flights",
-              image: "/hero-flight.png",
+              image: "/assets/placeholders/hero-flight.png",
               tag: "TRAVEL DEALS",
               media_type: 'image',
               video_url: null,
-              image_url: "/hero-flight.png"
+              image_url: "/assets/placeholders/hero-flight.png"
             }
           ])
         }
@@ -102,7 +108,23 @@ export default function HomePage() {
       }
     }
 
+    async function loadSettings() {
+      try {
+        const { data, error } = await supabase
+          .from('site_settings')
+          .select('value')
+          .eq('key', 'general_config')
+          .single()
+        if (!error && data) {
+          setSettings(data.value)
+        }
+      } catch (err) {
+        console.error('Error loading settings:', err)
+      }
+    }
+
     loadHeroSlides()
+    loadSettings()
   }, [])
 
   useEffect(() => {
@@ -161,7 +183,7 @@ export default function HomePage() {
                     />
                   )}
                   <Image
-                    src={heroSlides[currentSlide]?.image_url || heroSlides[currentSlide]?.image || '/hero-placeholder.png'}
+                    src={heroSlides[currentSlide]?.image_url || heroSlides[currentSlide]?.image || '/assets/placeholders/hero-placeholder.png'}
                     alt={heroSlides[currentSlide]?.title || 'Hero Slide'}
                     fill
                     className="object-cover"
@@ -288,7 +310,7 @@ export default function HomePage() {
             >
               <div className="aspect-[4/3] relative rounded-[2rem] overflow-hidden shadow-[0_50px_100px_-20px_rgba(0,0,0,0.15)]">
                 <Image
-                  src="/hero-hotel.png"
+                  src={settings?.experienceSectionImage || "/assets/placeholders/hero-hotel.png"}
                   alt="Modern Experience"
                   fill
                   className="object-cover"

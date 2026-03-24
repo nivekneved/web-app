@@ -1,12 +1,11 @@
 import { createClient } from '@supabase/supabase-js';
 import 'dotenv/config';
 import { fileURLToPath } from 'url';
-import { dirname } from 'path';
 
 // For ESM, check if the script is run directly using import.meta
 if (import.meta.url.startsWith('file:')) {
   const currentFilePath = fileURLToPath(import.meta.url);
-  const currentDir = dirname(currentFilePath);
+  // const currentDir = dirname(currentFilePath); // Unused
   
   // Ensure we're running the script directly
   const isMain = currentFilePath === fileURLToPath(new URL('.', import.meta.url));

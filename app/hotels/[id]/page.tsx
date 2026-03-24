@@ -105,11 +105,11 @@ export default async function HotelPage({ params }: { params: Promise<{ id: stri
   // Process room types for the client component
   let mappedRoomTypes: RoomType[] = []
   if (hotelData.room_types && Array.isArray(hotelData.room_types) && hotelData.room_types.length > 0) {
-    mappedRoomTypes = hotelData.room_types.map((room: any) => ({
+    mappedRoomTypes = hotelData.room_types.map((room: RoomType) => ({
       id: room.id || '',
       name: room.name || room.type || 'Standard Room',
       type: room.type || 'standard',
-      price_per_night: parseFloat(room.prices?.mon || room.price_per_night || '0'),
+      price_per_night: typeof room.price_per_night === 'number' ? room.price_per_night : parseFloat(String(room.prices?.mon || room.price_per_night || '0')),
       total_units: room.total_units || 1,
       size: room.size,
       bed: room.bed,
@@ -123,16 +123,16 @@ export default async function HotelPage({ params }: { params: Promise<{ id: stri
       is_active: room.is_active !== undefined ? room.is_active : true,
       min_stay_days: room.min_stay_days || 1,
       prices: room.prices,
-      price: parseFloat(room.prices?.mon || room.price_per_night || '0') // Add the required price property
+      price: typeof room.price_per_night === 'number' ? room.price_per_night : parseFloat(String(room.prices?.mon || room.price_per_night || '0')) // Add the required price property
     }))
   } else {
     // Fallback to default room type if needed
-    const rooms: any[] = hotelData.room_types || []
+    const rooms: RoomType[] = hotelData.room_types || []
     mappedRoomTypes = rooms.map((room, index) => ({
       id: `default-${index}`,
       name: room.name || 'Standard Room',
       type: room.type || 'standard',
-      price_per_night: parseFloat(room.price || room.price_per_night || hotelData.base_price || '0'),
+      price_per_night: typeof room.price_per_night === 'number' ? room.price_per_night : parseFloat(String(room.price || room.price_per_night || hotelData.base_price || '0')),
       total_units: room.total_units || 1,
       size: room.size,
       bed: room.bed,
@@ -146,7 +146,7 @@ export default async function HotelPage({ params }: { params: Promise<{ id: stri
       is_active: room.is_active !== undefined ? room.is_active : true,
       min_stay_days: room.min_stay_days || 1,
       prices: room.prices,
-      price: parseFloat(room.price || room.price_per_night || hotelData.base_price || '0') // Add the required price property
+      price: typeof room.price_per_night === 'number' ? room.price_per_night : parseFloat(String(room.price || room.price_per_night || hotelData.base_price || '0')) // Add the required price property
     }))
   }
 

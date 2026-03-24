@@ -171,7 +171,7 @@ export default function ContactPage() {
                                     </div>
                                     <div>
                                         <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">Direct Line</p>
-                                        <p className="text-xl font-black text-slate-900">+230 5940 7701</p>
+                                        <p className="text-xl font-black text-slate-900">{contactPhone || '+230 5940 7701'}</p>
                                     </div>
                                 </a>
                                 
@@ -181,7 +181,7 @@ export default function ContactPage() {
                                     </div>
                                     <div>
                                         <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">WhatsApp Concierge</p>
-                                        <p className="text-xl font-black text-slate-900">+230 5940 7701</p>
+                                        <p className="text-xl font-black text-slate-900">{contactPhone || '+230 5940 7701'}</p>
                                     </div>
                                 </a>
 

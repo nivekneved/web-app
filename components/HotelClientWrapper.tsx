@@ -5,8 +5,6 @@ import {
     Users,
     Calendar,
     Check,
-    ChevronLeft,
-    ChevronRight,
     X,
     Moon,
     MapPin,

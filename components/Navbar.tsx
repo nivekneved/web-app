@@ -204,7 +204,7 @@ export default function Navbar() {
                         {/* Logo */}
                         <Link href="/" className="flex items-center gap-3 z-50 shrink-0">
                             <Image
-                                src="/logo.png"
+                                src="/assets/logo.png"
                                 alt={siteTitle}
                                 width={240}
                                 height={72}
@@ -303,7 +303,7 @@ export default function Navbar() {
                                 <div className="p-8 flex items-center justify-between border-b border-slate-100 dark:border-slate-200">
                                     <Link href="/" onClick={() => setIsOpen(false)}>
                                         <Image
-                                            src="/logo.png"
+                                            src="/assets/logo.png"
                                             alt={siteTitle}
                                             width={140}
                                             height={40}

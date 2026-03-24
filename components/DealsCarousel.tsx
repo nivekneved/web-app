@@ -77,7 +77,7 @@ export default function DealsCarousel() {
                                     id={deal.id}
                                     title={deal.name}
                                     price={deal.base_price}
-                                    image={deal.image_url || "/hero-hotel.png"}
+                                    image={deal.image_url || "/assets/placeholders/hero-hotel.png"}
                                     duration={deal.duration_days ? `${deal.duration_days} Days` : deal.duration_hours ? `${deal.duration_hours} Hours` : 'Special'}
                                     link={`/${deal.service_type === 'hotel' ? 'hotels' : 'search/details'}/${deal.id}`}
                                     tag={deal.service_type.toUpperCase()}

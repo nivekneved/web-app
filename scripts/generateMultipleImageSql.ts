@@ -72,7 +72,7 @@ function generateUpdateStatementWithMultipleImages(
   serviceName: string
 ): string {
   // Create a JSON array of image URLs
-  const allImages = [primaryImage, ...additionalImages];
+  // const allImages = [primaryImage, ...additionalImages]; // Unused
   
   // If your services table doesn't have a separate gallery column,
   // we'll update the main image_url to the primary image
@@ -141,12 +141,6 @@ async function main() {
 }
 
 // Run the script
-import { fileURLToPath } from 'url';
-import { dirname } from 'path';
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
-
 if (import.meta.url) {
   if (process.argv[1] === __filename) {
     main();

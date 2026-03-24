@@ -1,0 +1,22 @@
+
+> web@0.1.1 lint
+> eslint
+
+
+C:\Users\deven\Desktop\web-app\app\hotels\[id]\page.tsx
+  108:55  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  130:18  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+C:\Users\deven\Desktop\web-app\components\HotelClientWrapper.tsx
+  8:5  warning  'ChevronLeft' is defined but never used   @typescript-eslint/no-unused-vars
+  9:5  warning  'ChevronRight' is defined but never used  @typescript-eslint/no-unused-vars
+
+C:\Users\deven\Desktop\web-app\scripts\fetchServicesAndPhotos.ts
+  9:9  warning  'currentDir' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+C:\Users\deven\Desktop\web-app\scripts\generateMultipleImageSql.ts
+   75:9  warning  'allImages' is assigned a value but never used  @typescript-eslint/no-unused-vars
+  148:7  warning  '__dirname' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+Γ£û 7 problems (2 errors, 5 warnings)
+
