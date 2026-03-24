@@ -94,7 +94,7 @@ export default function Footer() {
                     <div className="md:col-span-2 lg:col-span-1">
                         <Link href="/" className="inline-block mb-6">
                                 <Image 
-                                    src="/logo-white.png" 
+                                    src="/assets/logo-white.png" 
                                     alt="Travel Lounge" 
                                     width={300} 
                                     height={100} 
