@@ -26,6 +26,30 @@ type Service = {
     amenities?: string[] | string
     is_seasonal_deal?: boolean
     deal_note?: string
+    description?: string
+    max_group_size?: number
+    room_types?: any[]
+    itinerary?: any[]
+    stock?: number
+    status?: string
+    cta_text?: string
+    cta_link?: string
+    gallery_images?: string[]
+    meta_title?: string
+    meta_description?: string
+    seo_keywords?: string
+    special_features?: any
+    seasonality?: string
+    highlights?: any
+    included?: any
+    not_included?: any
+    cancellation_policy?: string
+    terms_and_conditions?: string
+    thumbnail_url?: string
+    banner_url?: string
+    featured?: boolean
+    priority?: number
+    secondary_image_url?: string
 }
 
 type ServiceListingProps = {
@@ -97,7 +121,13 @@ function ServiceListingInner({
             const selectFields = [
                 'id', 'name', 'location', 'base_price', 'image_url', 
                 'duration_days', 'duration_hours', 'service_type', 
-                'rating', 'region', 'amenities', 'is_seasonal_deal', 'deal_note'
+                'rating', 'region', 'amenities', 'is_seasonal_deal', 'deal_note',
+                'description', 'max_group_size', 'room_types', 'itinerary', 'stock',
+                'status', 'cta_text', 'cta_link', 'gallery_images', 'meta_title',
+                'meta_description', 'seo_keywords', 'special_features', 'seasonality',
+                'highlights', 'included', 'not_included', 'cancellation_policy',
+                'terms_and_conditions', 'thumbnail_url', 'banner_url', 'featured',
+                'priority', 'secondary_image_url'
             ].join(', ')
             
             const categorySelect = categorySlug ? ', service_categories!inner(category_id, categories!inner(slug))' : ''

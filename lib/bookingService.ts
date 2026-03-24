@@ -41,15 +41,15 @@ export async function createBookingRequest(data: BookingRequestData) {
         // 2. Prepare data for the transactional RPC
         const bookingData = {
             customer_id: customerId,
-            start_date: data.startDate,
-            end_date: data.endDate,
+            check_in_date: data.startDate,
+            check_out_date: data.endDate,
             status: 'pending',
             pax_adults: data.paxAdults,
             pax_children: data.paxChildren,
             amount: data.amount,
             tax_amount: 0, // Need to calculate tax if applicable
-            activity_type: data.serviceCategory,
-            activity_name: data.serviceName,
+            service_type: data.serviceCategory,
+            service_name: data.serviceName,
             description: data.roomPreference 
                 ? `Room: ${data.roomPreference}. ${data.specialRequests || ''} Travelers: ${JSON.stringify(data.travelers)}`
                 : data.specialRequests || `Travelers: ${JSON.stringify(data.travelers)}`,
