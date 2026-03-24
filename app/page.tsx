@@ -219,20 +219,22 @@ export default function HomePage() {
               <h1 className="text-4xl md:text-6xl font-black text-white mb-6 uppercase tracking-tight leading-[1.05]">
                 {heroSlides[currentSlide]?.title}
               </h1>
-<p className="text-lg md:text-xl text-white/70 font-medium mb-8 max-w-2xl mx-auto leading-relaxed">
+<p className="text-lg md:text-2xl text-white font-bold mb-8 max-w-2xl mx-auto leading-relaxed drop-shadow-lg">
                 {heroSlides[currentSlide]?.subtitle ? heroSlides[currentSlide].subtitle.replace('<br />', ' ') : ''}
               </p>
 
               <div className="flex flex-wrap items-center justify-center gap-6">
-                {/* 
                 <Link
                   href={heroSlides[currentSlide]?.link || '#'}
-                  className="px-10 py-4 bg-red-600 text-white rounded-full font-black text-xs tracking-[0.2em] hover:bg-white hover:text-slate-900 transition-all transform hover:scale-105 shadow-2xl shadow-red-600/20 uppercase"
+                  className="px-10 py-5 bg-red-600 text-white rounded-full font-black text-xs tracking-[0.2em] hover:bg-white hover:text-slate-900 transition-all transform hover:scale-105 shadow-2xl shadow-red-600/40 uppercase outline-none focus:ring-4 focus:ring-red-600/50"
+                  aria-label={`Explore ${heroSlides[currentSlide]?.title}`}
                 >
                   {heroSlides[currentSlide]?.cta || 'Explore Now'}
                 </Link>
-                */}
-                <button className="px-10 py-4 bg-white/5 backdrop-blur-md border border-white/10 text-white rounded-full font-black text-xs tracking-[0.2em] hover:bg-white/10 transition-all uppercase">
+                <button 
+                  className="px-10 py-5 bg-white/10 backdrop-blur-md border border-white/20 text-white rounded-full font-black text-xs tracking-[0.2em] hover:bg-white/20 transition-all uppercase outline-none focus:ring-4 focus:ring-white/50"
+                  aria-label="Discover more about our travel services"
+                >
                   Discover More
                 </button>
               </div>

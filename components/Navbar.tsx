@@ -312,7 +312,8 @@ export default function Navbar() {
                                     </Link>
                                     <button
                                         onClick={() => setIsOpen(false)}
-                                        className="w-10 h-10 flex items-center justify-center bg-slate-50 dark:bg-white rounded-full text-slate-500 hover:text-red-600 border border-slate-100 transition-all font-black text-xs"
+                                        className="w-10 h-10 flex items-center justify-center bg-slate-50 dark:bg-white rounded-full text-slate-900 border border-slate-200 transition-all font-black text-xs hover:bg-slate-100"
+                                        aria-label="Close menu"
                                     >
                                         <X size={20} />
                                     </button>
@@ -324,12 +325,12 @@ export default function Navbar() {
                                 </div>
 
                                 {/* Drawer Footer */}
-                                <div className="p-10 border-t border-slate-100 dark:border-slate-200 bg-slate-50/50">
+                                <div className="p-10 border-t border-slate-200 bg-slate-100/50">
                                     <Button
                                         asChild
                                         variant="primary"
                                         size="lg"
-                                        className="w-full shadow-2xl shadow-red-600/20 py-8 text-sm tracking-[0.2em] font-black"
+                                        className="w-full shadow-2xl shadow-red-600/20 py-8 text-sm tracking-[0.2em] font-black focus:ring-4 focus:ring-red-600/50"
                                         onClick={() => setIsOpen(false)}
                                     >
                                         <Link href={navigationConfig.cta.href}>
@@ -337,12 +338,12 @@ export default function Navbar() {
                                         </Link>
                                     </Button>
 
-                                    <div className="mt-8 flex items-center justify-center gap-6 grayscale opacity-50">
-                                        <a href={facebookUrl} target="_blank" rel="noopener noreferrer" className="hover:opacity-100 hover:grayscale-0 transition-all">
-                                            <Facebook size={20} />
+                                    <div className="mt-8 flex items-center justify-center gap-10">
+                                        <a href={facebookUrl} target="_blank" rel="noopener noreferrer" className="text-slate-900 hover:text-red-600 transition-all p-2" aria-label="Facebook">
+                                            <Facebook size={24} />
                                         </a>
-                                        <a href={instagramUrl} target="_blank" rel="noopener noreferrer" className="hover:opacity-100 hover:grayscale-0 transition-all">
-                                            <Instagram size={20} />
+                                        <a href={instagramUrl} target="_blank" rel="noopener noreferrer" className="text-slate-900 hover:text-red-600 transition-all p-2" aria-label="Instagram">
+                                            <Instagram size={24} />
                                         </a>
                                     </div>
                                 </div>

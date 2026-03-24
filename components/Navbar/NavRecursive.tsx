@@ -1,11 +1,10 @@
-'use client';
-
-import React, { useState, useRef, useEffect } from 'react';
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
+import { useState, useRef, useEffect } from 'react';
 import { ChevronRight, ChevronDown } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { NavMenuItem } from '@/lib/navigation';
-import { cn } from '@/lib/utils'; // Assuming cn utility exists, will create if not
+import { cn } from '@/lib/utils';
 
 interface NavRecursiveProps {
   items: NavMenuItem[];
@@ -27,9 +26,11 @@ export const NavRecursive: React.FC<NavRecursiveProps> = ({ items, level = 0, on
 };
 
 const NavItem: React.FC<{ item: NavMenuItem; level: number; onClose?: () => void }> = ({ item, level, onClose }) => {
+  const pathname = usePathname();
   const [isOpen, setIsOpen] = useState(false);
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
 
+  const isActive = pathname === item.href;
   const hasChildren = item.children && item.children.length > 0;
 
   const handleMouseEnter = () => {
@@ -68,11 +69,13 @@ const NavItem: React.FC<{ item: NavMenuItem; level: number; onClose?: () => void
     >
       <Link
         href={item.href}
+        aria-current={isActive ? "page" : undefined}
         className={cn(
-          "flex items-center justify-between transition-all duration-300",
+          "flex items-center justify-between transition-all duration-300 outline-none focus-visible:ring-2 focus-visible:ring-red-600 focus-visible:ring-offset-2 rounded-md",
           level === 0 
-            ? "text-black hover:text-red-600 font-extrabold py-4 text-[11px] uppercase tracking-[0.2em]" 
-            : "px-4 py-2.5 text-sm text-slate-800 dark:text-slate-100 hover:bg-slate-50 dark:hover:bg-slate-800 hover:text-red-600 rounded-lg font-semibold"
+            ? "text-slate-900 hover:text-red-600 font-extrabold py-4 text-[11px] uppercase tracking-[0.2em]" 
+            : "px-4 py-2.5 text-sm text-slate-950 dark:text-slate-100 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-red-600 rounded-lg font-bold",
+          isActive && "text-red-600"
         )}
         onClick={(e) => {
           if (item.href === '#') {
