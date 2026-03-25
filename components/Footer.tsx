@@ -21,6 +21,7 @@ interface GeneralConfig {
     instagramUrl?: string;
     whatsappNumber1?: string;
     showFooterWeb?: boolean;
+    logoUrl?: string;
 }
 
 export default function Footer() {
@@ -95,7 +96,7 @@ export default function Footer() {
                     <div className="md:col-span-2 lg:col-span-1">
                         <Link href="/" className="inline-block mb-6">
                                 <Image 
-                                    src={resolveImageUrl("/assets/logo-white.png")} 
+                                    src={resolveImageUrl(settings?.logoUrl || "/assets/logo-white.png")} 
                                     alt="Travel Lounge" 
                                     width={300} 
                                     height={100} 

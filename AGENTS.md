@@ -1,5 +1,20 @@
 # AGENTS.md
 
+## 2026-03-25 - Branding Integration & Asset Resolution
+
+### Admin App Changes
+- **Local Asset Integration**: Synchronized `src/assets` folder with standard icons and placeholders from the Web App.
+- **Dynamic Asset Resolver**: Implemented a centralized `resolveImageUrl` in `src/utils/image.js` using `import.meta.glob` to support bundled local assets via `/assets/` prefix.
+- **Enhanced Branding**: Expanded `Settings.jsx` and `site_settings` schema to include site logo, dimensions, favicons, and social sharing metadata.
+
+### Web App Changes
+- **Asset Standardization**: Synchronized `public/assets` with the Admin App to ensure icon parity.
+- **Branding Logic**: Verified that dynamic branding from `site_settings` (logo, dimensions) is correctly reflected in the frontend.
+
+### Verification Expected
+- All local icons render correctly in both Web and Admin interfaces.
+- Site branding updates in Admin are reflected instantly on the website.
+
 ## 2026-03-24 - Zero-Regression Database Schema Parity
 
 ### Admin App Changes

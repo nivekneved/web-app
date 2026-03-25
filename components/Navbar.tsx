@@ -34,9 +34,10 @@ interface SiteSettings {
         contactPhone?: string;
         whatsappNumber1?: string;
         whatsappNumber2?: string;
-        facebookUrl?: string;
-        instagramUrl?: string;
         linkedinUrl?: string;
+        logoUrl?: string;
+        logoHeight?: string;
+        logoWidth?: string;
     };
     [key: string]: unknown;
 }
@@ -205,11 +206,15 @@ export default function Navbar() {
                         {/* Logo */}
                         <Link href="/" className="flex items-center gap-3 z-50 shrink-0">
                             <Image
-                                src={resolveImageUrl("/assets/logo.png")}
+                                src={resolveImageUrl(settings?.general_config?.logoUrl || "/assets/logo.png")}
                                 alt={siteTitle}
-                                width={240}
-                                height={72}
-                                className="h-16 w-auto object-contain transition-transform duration-300 hover:scale-105"
+                                width={parseInt(settings?.general_config?.logoWidth || "240") || 240}
+                                height={parseInt(settings?.general_config?.logoHeight || "72") || 72}
+                                style={{
+                                    height: settings?.general_config?.logoHeight ? `${settings.general_config.logoHeight}px` : 'auto',
+                                    width: settings?.general_config?.logoWidth && settings.general_config.logoWidth !== 'auto' ? `${settings.general_config.logoWidth}px` : 'auto'
+                                }}
+                                className="w-auto object-contain transition-transform duration-300 hover:scale-105"
                                 priority
                             />
                         </Link>
@@ -304,11 +309,15 @@ export default function Navbar() {
                                 <div className="p-8 flex items-center justify-between border-b border-slate-100 dark:border-slate-200">
                                     <Link href="/" onClick={() => setIsOpen(false)}>
                                         <Image
-                                            src={resolveImageUrl("/assets/logo.png")}
+                                            src={resolveImageUrl(settings?.general_config?.logoUrl || "/assets/logo.png")}
                                             alt={siteTitle}
                                             width={140}
                                             height={40}
-                                            className="h-10 w-auto object-contain"
+                                            style={{
+                                                height: settings?.general_config?.logoHeight ? `${Math.min(parseInt(settings.general_config.logoHeight), 40)}px` : '40px',
+                                                width: 'auto'
+                                            }}
+                                            className="w-auto object-contain"
                                         />
                                     </Link>
                                     <button
