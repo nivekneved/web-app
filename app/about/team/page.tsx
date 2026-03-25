@@ -6,6 +6,7 @@ import { Mail } from 'lucide-react'
 import { motion } from 'framer-motion'
 import Link from 'next/link'
 import { createClient } from '@/lib/supabase'
+import { resolveImageUrl } from '@/lib/image'
 import { GridSkeleton } from '@/components/LoadingSkeleton'
 
 interface TeamMember {
@@ -111,7 +112,7 @@ export default function TeamPage() {
                                         >
                                             <div className="relative aspect-[4/5] rounded-[2.5rem] overflow-hidden shadow-2xl shadow-red-100 ring-1 ring-gray-100">
                                                 <Image
-                                                    src={boss.photo_url || `https://ui-avatars.com/api/?name=${encodeURIComponent(boss.name)}&size=800&background=F3F4F6&color=9CA3AF`}
+                                                    src={resolveImageUrl(boss.photo_url || `https://ui-avatars.com/api/?name=${encodeURIComponent(boss.name)}&size=800&background=F3F4F6&color=9CA3AF`)}
                                                     alt={boss.name}
                                                     fill
                                                     className="object-cover transition-transform duration-700 group-hover:scale-105"
@@ -169,7 +170,7 @@ export default function TeamPage() {
                                         >
                                             <div className="relative aspect-[3/4] rounded-[2rem] overflow-hidden shadow-xl shadow-slate-200 border border-gray-100">
                                                 <Image
-                                                    src={member.photo_url || `https://ui-avatars.com/api/?name=${encodeURIComponent(member.name)}&size=800&background=F3F4F6&color=9CA3AF`}
+                                                    src={resolveImageUrl(member.photo_url || `https://ui-avatars.com/api/?name=${encodeURIComponent(member.name)}&size=800&background=F3F4F6&color=9CA3AF`)}
                                                     alt={member.name}
                                                     fill
                                                     className="object-cover transition-transform duration-500 group-hover:scale-110"

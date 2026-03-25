@@ -4,7 +4,9 @@ import React, { useState, useEffect } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 import { createClient } from '@/lib/supabase'
+import { resolveImageUrl } from '@/lib/image'
 import { Calendar, ArrowRight, Tag } from 'lucide-react'
+import { usePageContent } from '@/hooks/usePageContent'
 
 const supabase = createClient()
 
@@ -20,7 +22,10 @@ type Post = {
 
 export default function NewsPage() {
     const [posts, setPosts] = useState<Post[]>([])
+    const { content } = usePageContent('news')
     const [loading, setLoading] = useState(true)
+    
+    const hero = content.hero || {}
 
     useEffect(() => {
         loadPosts()
@@ -48,17 +53,19 @@ export default function NewsPage() {
             {/* Hero */}
             <div className="relative h-[250px] md:h-[350px] flex items-center justify-center overflow-hidden bg-slate-950">
                 <Image
-                    src="/assets/hero/tailormade_travel_hero_1773391405705.png"
-                    alt="Travel News"
+                    src={resolveImageUrl(hero.image_url)}
+                    alt={hero.title || "Travel News"}
                     fill
                     className="object-cover opacity-60"
                     priority
                 />
                 <div className="absolute inset-0 bg-gradient-to-b from-black/20 via-transparent to-black/60" />
                 <div className="relative z-10 text-center text-white px-6">
-                    <h1 className="text-4xl md:text-6xl font-black mb-6 uppercase tracking-tight leading-none">Travel Insights</h1>
+                    <h1 className="text-4xl md:text-6xl font-black mb-6 uppercase tracking-tight leading-none">
+                        {hero.title || "Travel Insights"}
+                    </h1>
                     <p className="text-lg text-white/80 font-medium max-w-2xl mx-auto leading-relaxed">
-                        Discover the latest trends, guides, and stories from our local experts.
+                        {hero.description || "Discover the latest trends, guides, and stories from our local experts."}
                     </p>
                 </div>
             </div>
@@ -91,7 +98,7 @@ export default function NewsPage() {
                             >
                                 <div className="aspect-[16/10] bg-slate-200 overflow-hidden relative">
                                     <Image
-                                        src={post.featured_image || "/assets/hero/tailormade_travel_hero_1773391405705.png"}
+                                        src={resolveImageUrl(post.featured_image)}
                                         alt={post.title}
                                         fill
                                         className="object-cover transition-transform duration-700 group-hover:scale-110"

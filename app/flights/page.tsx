@@ -1,11 +1,17 @@
 'use client'
 
 import React from 'react'
+import Image from 'next/image'
 import ServiceListing from '@/components/ServiceListing'
+import { usePageContent } from '@/hooks/usePageContent'
+import { resolveImageUrl } from '@/lib/image'
 
 export default function FlightsPage() {
+    const { content } = usePageContent('flights')
     const [iframeHeight, setIframeHeight] = React.useState('800px');
     const [isMounted, setIsMounted] = React.useState(false);
+
+    const hero = content.hero || {};
 
     React.useEffect(() => {
         setIsMounted(true);
@@ -43,6 +49,30 @@ export default function FlightsPage() {
 
     return (
         <div className="flex flex-col min-h-screen bg-white">
+            {/* Hero Section */}
+            <section className="relative h-[250px] md:h-[350px] flex items-center overflow-hidden bg-slate-900">
+                <Image
+                    src={resolveImageUrl(hero.image_url, "/assets/hero/tailormade_travel_hero_1773391405705.png")}
+                    alt={hero.title || "Book Your Flight"}
+                    fill
+                    className="object-cover opacity-60"
+                    priority
+                />
+                <div className="absolute inset-0 bg-gradient-to-b from-black/20 via-transparent to-black/60" />
+                
+                <div className="container mx-auto px-6 relative z-10 text-center flex flex-col items-center justify-center">
+                    <span className="inline-block py-2 px-6 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-white text-[10px] font-black uppercase tracking-[0.4em] mb-6">
+                        {hero.subtitle || "Global Connections"}
+                    </span>
+                    <h1 className="text-4xl md:text-6xl font-black text-white mb-6 uppercase tracking-tight leading-none">
+                        {hero.title || "Book Your Flight"}
+                    </h1>
+                    <p className="text-lg text-white/80 font-medium max-w-2xl mx-auto leading-relaxed">
+                        {hero.description || "Search hundreds of airlines and find the perfect connection to your dream destination."}
+                    </p>
+                </div>
+            </section>
+
             {/* GOL IBE Search Form Integration */}
             <div className="w-full bg-slate-50 py-12 md:py-20">
                 <div className="container mx-auto px-4">

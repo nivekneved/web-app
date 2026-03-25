@@ -14,6 +14,7 @@ import {
   Mail
 } from 'lucide-react';
 import { createClient } from '@/lib/supabase';
+import { resolveImageUrl } from '@/lib/image';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Breadcrumbs } from '@/components/ui/Breadcrumbs';
 import { Button } from '@/components/ui/Button';
@@ -70,7 +71,7 @@ export default function PlanMyTrip() {
       {/* Hero Section */}
       <section className="relative h-[50vh] min-h-[500px] flex items-center overflow-hidden bg-slate-900">
         <Image
-          src="https://images.unsplash.com/photo-1506929197321-4674476aa6e2"
+          src={resolveImageUrl(null, "/assets/placeholders/hero-placeholder.png")}
           alt="Plan My Trip"
           fill
           className="object-cover opacity-60"

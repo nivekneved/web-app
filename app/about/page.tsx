@@ -5,6 +5,7 @@ import Image from 'next/image'
 import { Loader2 } from 'lucide-react'
 import { motion } from 'framer-motion'
 import { createClient } from '@/lib/supabase'
+import { resolveImageUrl } from '@/lib/image'
 
 type ContentBlock = {
     section_key: string
@@ -89,7 +90,7 @@ export default function AboutPage() {
         <div className="min-h-screen bg-white">
             <section className="relative h-[250px] md:h-[350px] flex items-center overflow-hidden bg-slate-950 border-b border-white/10">
                 <Image
-                    src={hero.image}
+                    src={resolveImageUrl(hero.image)}
                     alt="Travel Lounge Mauritius"
                     fill
                     className="object-cover opacity-60"
@@ -150,12 +151,12 @@ export default function AboutPage() {
                                     <div className="text-xs font-black text-slate-400 uppercase tracking-widest">{identity.stats_label}</div>
                                 </div>
                                 <div className="aspect-[4/5] relative rounded-[2.5rem] overflow-hidden shadow-2xl">
-                                    <Image src="/hero-adventure.png" alt="Identity" fill className="object-cover" />
+                                    <Image src={resolveImageUrl("/hero-adventure.png")} alt="Identity" fill className="object-cover" />
                                 </div>
                            </div>
                            <div className="space-y-6">
                                 <div className="aspect-[4/5] relative rounded-[2.5rem] overflow-hidden shadow-2xl">
-                                    <Image src="/hero-hotel.png" alt="Identity" fill className="object-cover" />
+                                    <Image src={resolveImageUrl("/hero-hotel.png")} alt="Identity" fill className="object-cover" />
                                 </div>
                                 <div className="bg-red-600 p-8 rounded-[2.5rem] text-white shadow-2xl">
                                     <div className="text-4xl font-black mb-2">IATA</div>

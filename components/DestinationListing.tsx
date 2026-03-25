@@ -6,6 +6,7 @@ import ServiceCard from '@/components/ServiceCard'
 import { createClient } from '@/lib/supabase'
 import { Filter, Star, Check } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
+import { resolveImageUrl } from '@/lib/image'
 
 const supabase = createClient()
 
@@ -133,7 +134,7 @@ export default function DestinationListing({
             {/* Hero Section */}
             <div className="relative h-[250px] md:h-[350px] flex items-center overflow-hidden bg-slate-950 border-b border-white/10">
                 <Image
-                    src={heroImage}
+                    src={resolveImageUrl(heroImage, "/assets/hero/destinations_hero.png")}
                     alt={title}
                     fill
                     className="object-cover opacity-60"

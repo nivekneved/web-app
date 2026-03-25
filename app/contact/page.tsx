@@ -8,6 +8,7 @@ import { Breadcrumbs } from '@/components/ui/Breadcrumbs'
 import { Button } from '@/components/ui/Button'
 import { Input } from '@/components/ui/Input'
 import Image from 'next/image'
+import { resolveImageUrl } from '@/lib/image'
 
 interface GeneralConfig {
     siteTitle?: string;
@@ -103,7 +104,7 @@ export default function ContactPage() {
             {/* Hero Section */}
             <div className="relative h-[40vh] w-full overflow-hidden bg-slate-900">
                 <Image
-                    src="https://images.unsplash.com/photo-1423666639041-f56000c27a9a"
+                    src={resolveImageUrl("https://images.unsplash.com/photo-1423666639041-f56000c27a9a")}
                     alt="Contact Us"
                     fill
                     className="object-cover opacity-60"

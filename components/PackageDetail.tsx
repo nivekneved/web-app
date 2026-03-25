@@ -1,9 +1,10 @@
-'use client'
+'use client';
 
 import React from 'react'
 import Image from 'next/image'
 import { MapPin, Clock, Calendar, CheckCircle } from 'lucide-react'
 import BookingForm from '@/components/BookingForm'
+import { resolveImageUrl } from '@/lib/image'
 
 interface PackageDetailProps {
     title: string
@@ -22,7 +23,7 @@ export default function PackageDetail({ title, subtitle, description, images, hi
             {/* Hero Image */}
             <div className="relative h-[250px] md:h-[350px] overflow-hidden">
                 <Image
-                    src={images[0]}
+                    src={resolveImageUrl(images[0])}
                     alt={title}
                     fill
                     className="object-cover"
@@ -95,7 +96,7 @@ export default function PackageDetail({ title, subtitle, description, images, hi
                             <div className="grid grid-cols-2 gap-4">
                                 {images.slice(1).map((img, i) => (
                                     <div key={i} className="relative h-48 md:h-64 rounded-xl overflow-hidden">
-                                        <Image src={img} alt={`Gallery ${i}`} fill className="object-cover hover:scale-105 transition-transform duration-500" />
+                                        <Image src={resolveImageUrl(img)} alt={`Gallery ${i}`} fill className="object-cover hover:scale-105 transition-transform duration-500" />
                                     </div>
                                 ))}
                             </div>

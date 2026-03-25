@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { createClient } from '@/lib/supabase'
+import { resolveImageUrl } from '@/lib/image'
 import Link from 'next/link'
 import Image from 'next/image'
 import { X, Plus } from 'lucide-react'
@@ -105,7 +106,7 @@ export default function ComparePage() {
                                                 {item.image_url ? (
                                                     <div className="relative w-full h-32 mb-4 rounded-xl overflow-hidden">
                                                         <Image
-                                                            src={item.image_url}
+                                                            src={resolveImageUrl(item.image_url)}
                                                             alt={item.name}
                                                             fill
                                                             className="object-cover"

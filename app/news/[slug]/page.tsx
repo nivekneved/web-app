@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { createClient } from '@/lib/supabase'
+import { resolveImageUrl } from '@/lib/image'
 import { useParams } from 'next/navigation'
 import Link from 'next/link'
 import Image from 'next/image'
@@ -87,7 +88,7 @@ export default function NewsArticlePage() {
                 <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
                     <div className="aspect-video rounded-[3rem] overflow-hidden relative">
                         <Image
-                            src={post.featured_image}
+                            src={resolveImageUrl(post.featured_image)}
                             alt={post.title}
                             fill
                             className="object-cover"

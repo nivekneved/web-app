@@ -8,6 +8,7 @@ import {
     Zap, Heart, Sparkles
 } from 'lucide-react'
 import { motion } from 'framer-motion'
+import { resolveImageUrl } from '@/lib/image'
 
 export default function ServicesPage() {
     const allServices = [
@@ -106,7 +107,12 @@ export default function ServicesPage() {
                             >
                                 <div className="flex-1 w-full relative">
                                     <div className="aspect-video relative rounded-3xl overflow-hidden shadow-2xl">
-                                        <Image src={s.image} alt={s.title} fill className="object-cover" />
+                                        <Image 
+                                            src={resolveImageUrl(s.image, '/assets/placeholders/category-placeholder.png')} 
+                                            alt={s.title} 
+                                            fill 
+                                            className="object-cover" 
+                                        />
                                         <div className="absolute inset-0 bg-black/20" />
                                     </div>
                                 </div>

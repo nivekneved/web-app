@@ -13,6 +13,7 @@ import AnnouncementPopup from '@/components/AnnouncementPopup'
 import PartnerSlider from '@/components/PartnerSlider'
 
 import { createClient } from '@/lib/supabase'
+import { resolveImageUrl } from '@/lib/image'
 
 const supabase = createClient()
 
@@ -183,7 +184,7 @@ export default function HomePage() {
                     />
                   )}
                   <Image
-                    src={heroSlides[currentSlide]?.image_url || heroSlides[currentSlide]?.image || '/assets/placeholders/hero-placeholder.png'}
+                    src={resolveImageUrl(heroSlides[currentSlide]?.image_url || heroSlides[currentSlide]?.image, '/assets/placeholders/hero-placeholder.png')}
                     alt={heroSlides[currentSlide]?.title || 'Hero Slide'}
                     fill
                     className="object-cover"
@@ -311,8 +312,8 @@ export default function HomePage() {
                 className="relative"
             >
               <div className="aspect-[4/3] relative rounded-[2rem] overflow-hidden shadow-[0_50px_100px_-20px_rgba(0,0,0,0.15)]">
-                <Image
-                  src={settings?.experienceSectionImage || "/assets/placeholders/hero-hotel.png"}
+                 <Image
+                  src={resolveImageUrl(settings?.experienceSectionImage, "/assets/placeholders/hero-hotel.png")}
                   alt="Modern Experience"
                   fill
                   className="object-cover"

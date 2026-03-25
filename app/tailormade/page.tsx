@@ -14,12 +14,14 @@ import {
   Mail
 } from 'lucide-react';
 import { createClient } from '@/lib/supabase';
+import { resolveImageUrl } from '@/lib/image';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Breadcrumbs } from '@/components/ui/Breadcrumbs';
 import { Button } from '@/components/ui/Button';
 import { Input } from '@/components/ui/Input';
 import { toast } from 'sonner';
 import { cn } from '@/lib/utils';
+import { usePageContent } from '@/hooks/usePageContent';
 
 export default function TailorMadePage() {
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -65,13 +67,16 @@ export default function TailorMadePage() {
     }
   };
 
+  const { content } = usePageContent('tailormade');
+  const hero = content.hero || {};
+
   return (
     <div className="bg-white min-h-screen">
       {/* Hero Section */}
       <section className="relative h-[250px] md:h-[350px] flex items-center overflow-hidden bg-slate-900">
         <Image
-          src="/assets/hero/tailormade_travel_hero_1773391405705.png"
-          alt="Tailor-Made Travel"
+          src={resolveImageUrl(hero.image_url, "/assets/placeholders/hero-placeholder.png")}
+          alt={hero.title || "Tailor-Made Travel"}
           fill
           className="object-cover opacity-60"
           priority
@@ -80,14 +85,13 @@ export default function TailorMadePage() {
         
         <div className="container mx-auto px-6 relative z-10 text-center flex flex-col items-center justify-center">
             <span className="inline-block py-2 px-6 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-white text-[10px] font-black uppercase tracking-[0.4em] mb-6">
-                Bespoke Journeys
+                {hero.subtitle || "Bespoke Journeys"}
             </span>
             <h1 className="text-4xl md:text-6xl font-black text-white mb-6 uppercase tracking-tight leading-[1.1]">
-                Your Journey, <br />
-                <span className="text-red-500 italic">Exactly as You Imagine.</span>
+                {hero.title || "Your Journey,"} {!hero.title && <><br /> <span className="text-red-500 italic">Exactly as You Imagine.</span></>}
             </h1>
             <p className="text-lg text-white/70 font-medium max-w-2xl mx-auto leading-relaxed">
-                Customise your trips including accommodation, transport, activities, or places of interest with our travel specialists.
+                {hero.description || "Customise your trips including accommodation, transport, activities, or places of interest with our travel specialists."}
             </p>
         </div>
       </section>

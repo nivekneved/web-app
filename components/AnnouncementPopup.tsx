@@ -5,6 +5,7 @@ import Image from 'next/image'
 import { X, ExternalLink } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { createClient } from '@/lib/supabase'
+import { resolveImageUrl } from '@/lib/image'
 
 const supabase = createClient()
 
@@ -101,7 +102,7 @@ export default function AnnouncementPopup() {
                   />
                 ) : (
                   <Image
-                    src={ad.media_url}
+                    src={resolveImageUrl(ad.media_url)}
                     alt={ad.title}
                     fill
                     className="object-cover"

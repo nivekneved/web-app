@@ -2,6 +2,7 @@
 import React from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
+import { resolveImageUrl } from '@/lib/image';
 import { Plane, Globe, Shield, CreditCard, Clock, MapPin } from 'lucide-react';
 
 export const metadata = {
@@ -16,7 +17,7 @@ export default function FlightPage() {
       <section className="relative h-[60vh] flex items-center min-h-[400px]">
         <div className="absolute inset-0 z-0">
           <Image
-            src="/assets/hero/flight_booking_hero_1773391370829.png"
+            src={resolveImageUrl("/assets/hero/flight_booking_hero_1773391370829.png")}
             alt="Flight Booking"
             fill
             className="object-cover"

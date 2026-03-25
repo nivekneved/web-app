@@ -1,30 +1,35 @@
+'use client';
 
 import React from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { ArrowRight, Plane } from 'lucide-react';
-
-export const metadata = {
-  title: 'Global Destinations | Travel Lounge',
-  description: 'Explore our curated list of international and local destinations. From the beaches of Mauritius to the cities of Europe, your next adventure starts here.',
-};
+import { usePageContent } from '@/hooks/usePageContent';
+import { resolveImageUrl } from '@/lib/image';
 
 export default function DestinationsPage() {
+  const { content } = usePageContent('destinations');
+  const hero = content.hero || {};
+
   return (
     <div className="bg-white">
       {/* Hero Section */}
       <section className="relative h-[250px] md:h-[350px] flex items-center justify-center bg-slate-950 overflow-hidden">
         <Image
-          src="/assets/hero/destinations_hero.png"
-          alt="Global Destinations"
+          src={resolveImageUrl(hero.image_url, "/assets/hero/destinations_hero.png")}
+          alt={hero.title || "Global Destinations"}
           fill
           className="object-cover opacity-60"
           priority
         />
         <div className="absolute inset-0 bg-gradient-to-b from-black/20 via-transparent to-black/60" />
         <div className="container mx-auto px-6 relative z-10 text-center">
-            <h1 className="text-4xl md:text-6xl font-black text-white mb-6 uppercase tracking-tight leading-none">Explore the World</h1>
-            <p className="text-lg text-white/80 font-medium max-w-2xl mx-auto leading-relaxed">Wherever you want to go, we have the expertise to get you there in style and comfort.</p>
+            <h1 className="text-4xl md:text-6xl font-black text-white mb-6 uppercase tracking-tight leading-none">
+                {hero.title || "Explore the World"}
+            </h1>
+            <p className="text-lg text-white/80 font-medium max-w-2xl mx-auto leading-relaxed">
+                {hero.description || "Wherever you want to go, we have the expertise to get you there in style and comfort."}
+            </p>
         </div>
       </section>
 
@@ -42,7 +47,7 @@ export default function DestinationsPage() {
                 ].map((dest, i) => (
                     <Link key={i} href={dest.link} className="group block overflow-hidden rounded-[2.5rem] bg-slate-50 border border-slate-100 shadow-sm hover:shadow-2xl transition-all h-full">
                         <div className="relative h-72">
-                            <Image src={dest.img} alt={dest.name} fill className="object-cover group-hover:scale-110 transition-transform duration-700" />
+                            <Image src={resolveImageUrl(dest.img)} alt={dest.name} fill className="object-cover group-hover:scale-110 transition-transform duration-700" />
                         </div>
                         <div className="p-10">
                             <h3 className="text-2xl font-bold text-slate-900 mb-3">{dest.name}</h3>

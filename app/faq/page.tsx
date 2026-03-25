@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from 'react'
 import Image from 'next/image'
 import { createClient } from '@/lib/supabase'
+import { resolveImageUrl } from '@/lib/image'
 import { ChevronDown, HelpCircle, Loader2, Mail, MessageCircle } from 'lucide-react'
 import Link from 'next/link'
 
@@ -81,7 +82,7 @@ export default function FAQPage() {
             {/* Hero */}
             <div className="relative h-[250px] md:h-[350px] flex items-center justify-center overflow-hidden bg-slate-950">
                 <Image
-                    src="/assets/hero/local_deals_hero_1773391387665.png"
+                    src={resolveImageUrl("/assets/hero/local_deals_hero_1773391387665.png")}
                     alt="FAQ"
                     fill
                     className="object-cover opacity-60"

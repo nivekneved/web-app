@@ -12,6 +12,7 @@ import { useWishlist } from '@/contexts/WishlistContext'
 import { Breadcrumbs } from '@/components/ui/Breadcrumbs'
 import { Badge } from '@/components/ui/Badge'
 import { Button } from '@/components/ui/Button'
+import { resolveImageUrl } from '@/lib/image'
 import { cn } from '@/lib/utils'
 import ReviewsSection from '@/components/ReviewsSection'
 import BookingWizard, { BookingWizardData } from '@/components/BookingWizard'
@@ -184,7 +185,7 @@ export default function TransferDetailPage() {
 
             <div className="relative h-[55vh] w-full overflow-hidden">
                 <Image
-                    src={transfer.image_url || '/placeholders/transfer_main.png'}
+                    src={resolveImageUrl(transfer.image_url, '/assets/placeholders/service-placeholder.png')}
                     alt={transfer.name}
                     fill
                     className="object-cover"

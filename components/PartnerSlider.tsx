@@ -3,28 +3,29 @@
 import React from 'react';
 import Image from 'next/image';
 import { motion } from 'framer-motion';
+import { createClient } from '@/lib/supabase';
+import { resolveImageUrl } from '@/lib/image';
 
-const partners = [
-  { name: 'Air Austral', logo: '/assets/partners/Air-austral.png' },
-  { name: 'Air France', logo: '/assets/partners/airfrance.png' },
-  { name: 'Air Mauritius', logo: '/assets/partners/airmauritius.png' },
-  { name: 'Expat', logo: '/assets/partners/Expat-logo-e1717409708420.jpg' },
-  { name: 'Holy', logo: '/assets/partners/HOLY-NEW.png' },
-  { name: 'Kenya Airways', logo: '/assets/partners/KenyaAirways.png' },
-  { name: 'SA Airways', logo: '/assets/partners/SAairways.png' },
-  { name: 'Swan', logo: '/assets/partners/SWAN-NEW.png' },
-  { name: 'Turkish Airlines', logo: '/assets/partners/Turkishairline.png' },
-  { name: 'Hotelbeds', logo: '/assets/partners/hotelbeds.png' },
-  { name: 'TBO Holidays', logo: '/assets/partners/tboholidays.png' },
-  { name: 'Emirates', logo: '/assets/partners/prt-5-300x225-1.webp' }, 
-  { name: 'Cim Finance', logo: '/assets/partners/prt-7-300x225-1.webp' },
-  { name: 'Partner 3', logo: '/assets/partners/prt3.webp' },
-];
-
-// Double the partners for a seamless infinite loop
-const sliderPartners = [...partners, ...partners];
+const supabase = createClient();
 
 export default function PartnerSlider() {
+  const [partners, setPartners] = React.useState<{ name: string; logo_url: string }[]>([]);
+
+  React.useEffect(() => {
+    async function loadPartners() {
+      const { data } = await supabase
+        .from('partners')
+        .select('name, logo_url')
+        .eq('is_active', true)
+        .order('display_order', { ascending: true });
+        
+      if (data) setPartners(data);
+    }
+    loadPartners();
+  }, []);
+
+  // Double the partners for a seamless infinite loop
+  const sliderPartners = [...partners, ...partners];
   return (
     <div className="pb-10 pt-4 overflow-hidden [mask-image:linear-gradient(to_right,transparent,black_15%,black_85%,transparent)]">
       <motion.div
@@ -49,7 +50,7 @@ export default function PartnerSlider() {
             className="relative h-24 w-60 shrink-0 flex items-center justify-center grayscale opacity-60 hover:grayscale-0 hover:opacity-100 transition-all duration-500"
           >
             <Image
-              src={partner.logo}
+              src={resolveImageUrl(partner.logo_url)}
               alt={partner.name}
               fill
               className="object-contain"

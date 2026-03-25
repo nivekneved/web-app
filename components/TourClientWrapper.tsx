@@ -11,6 +11,7 @@ import { Breadcrumbs } from '@/components/ui/Breadcrumbs'
 import { Badge } from '@/components/ui/Badge'
 import { Button } from '@/components/ui/Button'
 import { cn } from '@/lib/utils'
+import { resolveImageUrl } from '@/lib/image'
 import StarRating from '@/components/ui/StarRating'
 import ReviewsSection from '@/components/ReviewsSection'
 import BookingWizard, { BookingWizardData } from '@/components/BookingWizard'
@@ -133,7 +134,7 @@ export default function TourClientWrapper({ tour }: { tour: Tour }) {
 
             <div className="relative h-[65vh] w-full overflow-hidden">
                 <Image
-                    src={tour.image_url || 'https://images.unsplash.com/photo-1544551763-46a013bb70d5'}
+                    src={resolveImageUrl(tour.image_url)}
                     alt={tour.name}
                     fill
                     className="object-cover"

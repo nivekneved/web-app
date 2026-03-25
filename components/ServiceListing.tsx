@@ -7,6 +7,7 @@ import ServiceCard from '@/components/ServiceCard'
 import { createClient } from '@/lib/supabase'
 import { Filter, Star, Check, Search, X } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
+import { resolveImageUrl } from '@/lib/image'
 
 const supabase = createClient()
 
@@ -28,8 +29,8 @@ type Service = {
     deal_note?: string
     description?: string
     max_group_size?: number
-    room_types?: any[]
-    itinerary?: any[]
+    room_types?: unknown[]
+    itinerary?: unknown[]
     stock?: number
     status?: string
     cta_text?: string
@@ -38,11 +39,11 @@ type Service = {
     meta_title?: string
     meta_description?: string
     seo_keywords?: string
-    special_features?: any
+    special_features?: unknown
     seasonality?: string
-    highlights?: any
-    included?: any
-    not_included?: any
+    highlights?: unknown
+    included?: unknown
+    not_included?: unknown
     cancellation_policy?: string
     terms_and_conditions?: string
     thumbnail_url?: string
@@ -283,7 +284,7 @@ function ServiceListingInner({
             {/* Hero Section */}
             <div className="relative h-[250px] md:h-[350px] flex items-center overflow-hidden bg-slate-900 border-b border-white/10">
                 <Image
-                    src={heroImage}
+                    src={resolveImageUrl(heroImage)}
                     alt={title}
                     fill
                     className="object-cover opacity-60"

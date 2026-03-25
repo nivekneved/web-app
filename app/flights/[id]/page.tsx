@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { createClient } from '@/lib/supabase'
+import { resolveImageUrl } from '@/lib/image'
 import { useParams } from 'next/navigation'
 import { Plane, ArrowLeft, Calendar, Users, MapPin, Heart, Shield, Clock } from 'lucide-react'
 import Link from 'next/link'
@@ -115,7 +116,7 @@ export default function FlightDetailPage() {
             {/* Hero Section */}
             <div className="relative h-[55vh] w-full overflow-hidden">
                 <Image
-                    src={flight.image_url || '/placeholders/flight_main.png'}
+                    src={resolveImageUrl(flight.image_url || '/placeholders/flight_main.png')}
                     alt={flight.name}
                     fill
                     className="object-cover"

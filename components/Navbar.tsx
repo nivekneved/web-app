@@ -9,6 +9,7 @@ import { useWishlist } from '@/contexts/WishlistContext'
 // import { useTheme } from '@/contexts/ThemeContext'
 import { createClient } from '@/lib/supabase'
 import { navigationConfig, type NavMenuItem } from '@/lib/navigation'
+import { resolveImageUrl } from '@/lib/image'
 import { MobileAccordion } from './Navbar/MobileAccordion'
 import { NavRecursive } from './Navbar/NavRecursive'
 // import { MegaMenu } from './MegaMenu'
@@ -204,7 +205,7 @@ export default function Navbar() {
                         {/* Logo */}
                         <Link href="/" className="flex items-center gap-3 z-50 shrink-0">
                             <Image
-                                src="/assets/logo.png"
+                                src={resolveImageUrl("/assets/logo.png")}
                                 alt={siteTitle}
                                 width={240}
                                 height={72}
@@ -303,7 +304,7 @@ export default function Navbar() {
                                 <div className="p-8 flex items-center justify-between border-b border-slate-100 dark:border-slate-200">
                                     <Link href="/" onClick={() => setIsOpen(false)}>
                                         <Image
-                                            src="/assets/logo.png"
+                                            src={resolveImageUrl("/assets/logo.png")}
                                             alt={siteTitle}
                                             width={140}
                                             height={40}

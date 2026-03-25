@@ -6,6 +6,7 @@ import Link from 'next/link'
 import { FileText, CheckCircle, Clock, ShieldCheck, Globe, ArrowRight, HelpCircle } from 'lucide-react'
 import { motion } from 'framer-motion'
 import { Breadcrumbs } from '@/components/ui/Breadcrumbs'
+import { resolveImageUrl } from '@/lib/image'
 
 export default function VisaServicesPage() {
     const steps = [
@@ -44,7 +45,7 @@ export default function VisaServicesPage() {
             {/* Hero Section */}
             <div className="relative h-[250px] md:h-[350px] flex items-center overflow-hidden bg-slate-900 border-b border-white/10">
                 <Image
-                    src="/hero-flight.png"
+                    src={resolveImageUrl('/hero-flight.png', '/assets/placeholders/hero-placeholder.png')}
                     alt="Travel Visa Services"
                     fill
                     className="object-cover opacity-60"

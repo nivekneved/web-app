@@ -5,6 +5,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { motion } from 'framer-motion'
 import { createClient } from '@/lib/supabase'
+import { resolveImageUrl } from '@/lib/image'
 
 type Category = {
     id: string
@@ -69,7 +70,7 @@ export default function CategoryGrid() {
                         >
                             <Link href={cat.link || '#'} className="group block relative h-64 lg:h-80 rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300">
                                 <Image
-                                    src={cat.image_url || '/assets/placeholders/hero-placeholder.png'}
+                                    src={resolveImageUrl(cat.image_url, '/assets/placeholders/hero-placeholder.png')}
                                     alt={cat.name}
                                     fill
                                     className="object-cover group-hover:scale-110 transition-transform duration-700"

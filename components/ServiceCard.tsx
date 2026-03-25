@@ -8,6 +8,7 @@ import { MapPin, Clock, ArrowRight, Share2, X } from 'lucide-react'
 import StarRating from './ui/StarRating'
 import BookingWizard, { BookingWizardData } from './BookingWizard'
 import { createBookingRequest } from '@/lib/bookingService'
+import { resolveImageUrl } from '@/lib/image'
 import { toast } from 'sonner'
 import { useRouter } from 'next/navigation'
 
@@ -95,7 +96,7 @@ export default function ServiceCard({ id, title, location, price, image, duratio
         >
             <div className="relative h-64 overflow-hidden">
                 <Image
-                    src={image || "/hero-hotel.png"}
+                    src={resolveImageUrl(image, "/hero-hotel.png")}
                     alt={title}
                     fill
                     className="object-cover group-hover:scale-110 transition-transform duration-700"

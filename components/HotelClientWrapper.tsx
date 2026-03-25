@@ -22,6 +22,7 @@ import { Breadcrumbs } from './ui/Breadcrumbs'
 import { Badge } from './ui/Badge'
 import { Button } from './ui/Button'
 import { cn } from '@/lib/utils'
+import { resolveImageUrl } from '@/lib/image'
 import StarRating from './ui/StarRating'
 import SocialShare from '@/components/SocialShare'
 
@@ -193,7 +194,7 @@ export default function HotelClientWrapper({ hotel }: { hotel: Hotel }) {
         <div className="min-h-screen bg-white">
             <div className="relative h-[65vh] w-full overflow-hidden">
                 <Image
-                    src={hotel.image_url || 'https://images.unsplash.com/photo-1566073771259-6a8506099945'}
+                    src={resolveImageUrl(hotel.image_url)}
                     alt={hotel.name}
                     fill
                     className="object-cover"
@@ -566,7 +567,7 @@ export default function HotelClientWrapper({ hotel }: { hotel: Hotel }) {
                                         currentGalleryIdx === i ? "border-red-500 scale-110 shadow-lg" : "border-transparent opacity-50 hover:opacity-100"
                                     )}
                                 >
-                                    <Image src={img} alt={`Thumb ${i}`} fill className="object-cover" />
+                                    <Image src={resolveImageUrl(img)} alt={`Thumb ${i}`} fill className="object-cover" />
                                 </button>
                             ))}
                         </div>
