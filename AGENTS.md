@@ -1,5 +1,15 @@
 # AGENTS.md
 
+## 2026-03-25 - Thematic Category Image Integration
+
+### Web App Changes
+- **Visual Restoration**: Replaced generic and mismatched category images with 8k custom-generated thematic visuals for all 6 core categories.
+- **Path Standardization**: Moved all category assets to `/assets/categories/` and updated the `categories` table to reflect these paths.
+- **Logic Correction**: Replaced the incorrect flight icon for "Day Packages" with an appropriate nautical adventure theme.
+
+### Mobile App Changes
+- **Platform Parity**: Synchronized the new thematic category assets to the mobile bundle, ensuring a consistent premium look.
+
 ## 2026-03-25 - Thematic Hero Banner Integration
 
 ### Web App Changes
