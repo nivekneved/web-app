@@ -26,21 +26,7 @@ interface NavRow {
     created_at: string;
     updated_at: string;
 }
-
-interface SiteSettings {
-    general_config?: {
-        siteTitle?: string;
-        contactEmail?: string;
-        contactPhone?: string;
-        whatsappNumber1?: string;
-        whatsappNumber2?: string;
-        linkedinUrl?: string;
-        logoUrl?: string;
-        logoHeight?: string;
-        logoWidth?: string;
-    };
-    [key: string]: unknown;
-}
+import { type SiteSettings } from '@/types/settings'
 
 export default function Navbar() {
     const [isOpen, setIsOpen] = useState(false)

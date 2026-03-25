@@ -8,21 +8,7 @@ import { createClient } from '@/lib/supabase'
 import { toast } from 'sonner'
 import { resolveImageUrl } from '@/lib/image'
 
-interface GeneralConfig {
-    siteTitle?: string;
-    contactEmail?: string;
-    contactPhone?: string;
-    office1Title?: string;
-    office1Address?: string;
-    office2Title?: string;
-    office2Address?: string;
-    workingHours?: string;
-    facebookUrl?: string;
-    instagramUrl?: string;
-    whatsappNumber1?: string;
-    showFooterWeb?: boolean;
-    logoUrl?: string;
-}
+import { type GeneralConfig } from '@/types/settings'
 
 export default function Footer() {
     const [email, setEmail] = useState('')

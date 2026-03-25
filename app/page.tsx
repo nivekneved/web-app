@@ -38,16 +38,13 @@ type HeroSlide = {
   image?: string
 }
 
-type SiteSettings = {
-  experienceSectionImage?: string
-  [key: string]: unknown
-}
+import { type GeneralConfig } from '@/types/settings'
 
 export default function HomePage() {
   const [currentSlide, setCurrentSlide] = useState(0)
   const [heroSlides, setHeroSlides] = useState<HeroSlide[]>([])
   const [loading, setLoading] = useState(true)
-  const [settings, setSettings] = useState<SiteSettings | null>(null)
+  const [settings, setSettings] = useState<GeneralConfig | null>(null)
   
   const targetRef = useRef(null)
   const { scrollYProgress } = useScroll({
