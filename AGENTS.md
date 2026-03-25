@@ -1,5 +1,17 @@
 # AGENTS.md
 
+## 2026-03-25 - Image 404 Resolution (Hero Slider & Logo)
+
+### Web App Changes
+
+- **Image Resolution Fix**: Fixed `resolveImageUrl` in `lib/image.ts` to correctly handle local `/assets/` paths and prepend the `bucket/` prefix for Supabase storage objects (Logo).
+- **Maintenance**: Resolved ESLint warning for unused `SUPABASE_URL` constant.
+
+### Mobile App Changes
+
+- **Asset Synchronization**: Synced photographic hero slider placeholders from the Web App to the Mobile App bundle.
+- **Dynamic Mapping**: Updated `resolveImageUrl` in `src/utils/imageUtils.ts` to map hero slider database paths to the new local photographic assets.
+
 ## 2026-03-25 - Build Fix & Type Unification
 
 ### Web App Changes
