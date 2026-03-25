@@ -1,5 +1,17 @@
 # AGENTS.md
 
+## 2026-03-25 - Thematic Hero Banner Integration
+
+### Web App Changes
+- **Thematic Generation**: Generated 8k professional thematic banners for Home (Flights, Cruises, Hotels), About, Flights, Hotels, and Cruises.
+- **Asset Storage**: Stored images in `public/assets/heroes/`.
+- **Database Logic**: Updated `hero_slides` table to point to new thematic local assets.
+- **Component Sync**: Updated hardcoded fallbacks in `AboutPage`, `FlightsPage`, `HotelsPage`, and `CruisesPage` to ensure conceptual alignment.
+
+### Mobile App Changes
+- **Visual Parity**: Synchronized new thematic banners to `assets/placeholders/` to ensure consistent premium experience.
+- **Mapping Sync**: Leveraging existing `resolveImageUrl` logic to map database-driven homepage banners to new high-definition thematic assets.
+
 ## 2026-03-25 - Image 404 Resolution (Hero Slider & Logo)
 
 ### Web App Changes
