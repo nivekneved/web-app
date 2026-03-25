@@ -52,7 +52,7 @@ export default function FlightsPage() {
             {/* Hero Section */}
             <section className="relative h-[250px] md:h-[350px] flex items-center overflow-hidden bg-slate-900">
                 <Image
-                    src={resolveImageUrl(hero.image_url, "/assets/hero/tailormade_travel_hero_1773391405705.png")}
+                    src={resolveImageUrl(hero.image_url, "/assets/heroes/hero-flights.png")}
                     alt={hero.title || "Book Your Flight"}
                     fill
                     className="object-cover opacity-60"

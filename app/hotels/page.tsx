@@ -8,7 +8,7 @@ export default function HotelsPage() {
         <ServiceListing
             title="Exquisite Stays"
             subtitle="Discover excellent hospitality in the most stunning locations across Mauritius and beyond."
-            heroImage="/hero-hotel.png"
+            heroImage="/assets/heroes/hero-hotels.png"
             serviceTypes={['hotel']}
             excludeRegions={['Rodrigues']}
             tag="HOTEL"

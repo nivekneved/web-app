@@ -8,7 +8,7 @@ export default function CruisesPage() {
         <ServiceListing
             title="Cruise Holidays"
             subtitle="Set sail for amazing destinations with our trusted cruise partners. Luxury, adventure, and serenity."
-            heroImage="/hero-cruise.png"
+            heroImage="/assets/heroes/hero-cruises.png"
             serviceTypes={['cruise']}
             tag="CRUISE"
             searchPlaceholder="Search cruise packages, ships, destinations..."

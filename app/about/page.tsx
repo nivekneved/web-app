@@ -66,7 +66,7 @@ export default function AboutPage() {
         badge: "IATA Accredited Agency",
         title: "Your World, <br />Our <span class=\"text-red-600\">Expertise</span>",
         description: "Since 2014, Travel Lounge has been the premier destination for discerning travelers in Mauritius. We specialize in corporate travel and tailor-made leisure experiences worldwide.",
-        image: "/hero-flight.png"
+        image: "/assets/heroes/hero-about.png"
     }
 
     const identity = content?.identity || {
