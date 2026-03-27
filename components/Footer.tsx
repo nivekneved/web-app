@@ -122,7 +122,7 @@ export default function Footer() {
                                         href={`https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(settings.office1Address)}`} 
                                         target="_blank" 
                                         rel="noopener noreferrer"
-                                        className="text-xs font-black text-red-500 hover:text-red-400 flex items-center gap-1 uppercase"
+                                        className="text-xs font-black text-red-500 hover:text-red-400 flex items-center gap-1 uppercase tracking-[0.3em]"
                                     >
                                         <MapPin size={10} />
                                         Directions
@@ -142,7 +142,7 @@ export default function Footer() {
                                         href={`https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(settings.office2Address)}`} 
                                         target="_blank" 
                                         rel="noopener noreferrer"
-                                        className="text-xs font-black text-red-500 hover:text-red-400 flex items-center gap-1 uppercase"
+                                        className="text-xs font-black text-red-500 hover:text-red-400 flex items-center gap-1 uppercase tracking-[0.3em]"
                                     >
                                         <MapPin size={10} />
                                         Directions

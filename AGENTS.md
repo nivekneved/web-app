@@ -2,7 +2,8 @@
 
 ## 2026-03-27 - Form Refactoring & Layout Compaction
 
-### Web App Changes
+### Web App Changes (2026-03-27)
+
 - **UI Simplification**: Removed unnecessary fields ("Return Date", "Preferred Budget", "Preferred Accommodation") from the "Plan My Trip" form to streamline user submissions.
 - **Hero Image Resolution**: Updated the hero banner image source from a missing placeholder to a high-quality thematic asset (`/assets/placeholders/hero-adventure.png`) for visual parity.
 - **Layout Compaction**: Reduced excessive top/bottom padding, margins, and gaps across the "Plan My Trip" page to create a more compact and elegant user interface.
@@ -13,50 +14,68 @@
 - **Footer UI**: Integrated the newly generated red bird logo into the `Footer` component, removing the `brightness-0 invert` filter to preserve the colored bird while displaying the white text properly against the dark theme.
 - **Routing & Navigation**: Fixed a routing bug where the `Hotels -> Mauritius` menu item incorrectly linked to the generic destination page (`/destinations/mauritius`). Updated the Supabase `navigations` table to route traffic specifically to `/hotels/mauritius`.
 - **UI Asset Fix**: Updated the broken hero image path in `/hotels/mauritius/page.tsx` to standard `/assets/heroes/hero-hotels.png` to guarantee visual parity.
+- **Footer Typography**: Increased letter spacing (`tracking-[0.3em]`) for "DIRECTIONS" links in the footer to create a more premium, airy feel.
+- **Floating Social UI**: Changed the main toggle button's icon color from black to white for better visibility and consistency on the red brand background.
+
+### Database Changes (2026-03-27)
+
+- **Hotel Seeding**: Generated and applied realistic `room_types` (JSONB) and `amenities` (TEXT Array) for 11 existing luxury hotels (LUX*, Constance, Oberoi, etc.) to enhance the reservation experience.
+- **Relational Parity**: Synchronized the `public.room_types` table with the `services` table to ensure data integrity across all system layers.
+
+### Mobile App Changes (2026-03-27)
+
+- **Footer Typography**: Increased letter-spacing for "DIRECTIONS" text in mobile footer to match the web app's premium aesthetic.
+
 ## 2026-03-25 - Thematic Category Image Integration
 
-### Web App Changes
+### Web App Changes (2026-03-25 - Categories)
+
 - **Visual Restoration**: Replaced generic and mismatched category images with 8k custom-generated thematic visuals for all 6 core categories.
 - **Path Standardization**: Moved all category assets to `/assets/categories/` and updated the `categories` table to reflect these paths.
 - **Logic Correction**: Replaced the incorrect flight icon for "Day Packages" with an appropriate nautical adventure theme.
 
-### Mobile App Changes
+### Mobile App Changes (2026-03-25 - Categories)
+
 - **Platform Parity**: Synchronized the new thematic category assets to the mobile bundle, ensuring a consistent premium look.
 
 ## 2026-03-25 - Thematic Hero Banner Integration
 
-### Web App Changes
+### Web App Changes (2026-03-25 - Heroes)
+
 - **Thematic Generation**: Generated 8k professional thematic banners for Home (Flights, Cruises, Hotels), About, Flights, Hotels, and Cruises.
 - **Asset Storage**: Stored images in `public/assets/heroes/`.
 - **Database Logic**: Updated `hero_slides` table to point to new thematic local assets.
 - **Component Sync**: Updated hardcoded fallbacks in `AboutPage`, `FlightsPage`, `HotelsPage`, and `CruisesPage` to ensure conceptual alignment.
 
-### Mobile App Changes
+### Mobile App Changes (2026-03-25 - Heroes)
+
 - **Visual Parity**: Synchronized new thematic banners to `assets/placeholders/` to ensure consistent premium experience.
 - **Mapping Sync**: Leveraging existing `resolveImageUrl` logic to map database-driven homepage banners to new high-definition thematic assets.
 
 ## 2026-03-25 - Image 404 Resolution (Hero Slider & Logo)
 
-### Web App Changes
+### Web App Changes (2026-03-25 - Images)
 
 - **Image Resolution Fix**: Fixed `resolveImageUrl` in `lib/image.ts` to correctly handle local `/assets/` paths and prepend the `bucket/` prefix for Supabase storage objects (Logo).
 - **Maintenance**: Resolved ESLint warning for unused `SUPABASE_URL` constant.
 
-### Mobile App Changes
+### Mobile App Changes (2026-03-25 - Images)
 
 - **Asset Synchronization**: Synced photographic hero slider placeholders from the Web App to the Mobile App bundle.
 - **Dynamic Mapping**: Updated `resolveImageUrl` in `src/utils/imageUtils.ts` to map hero slider database paths to the new local photographic assets.
 
 ## 2026-03-25 - Build Fix & Type Unification
 
-### Web App Changes
+### Web App Changes (2026-03-25 - Build)
+
 - **Type Unification**: Created `types/settings.ts` to centralize `SiteSettings` and `GeneralConfig` definitions across all components (`Navbar`, `Footer`, `HomePage`).
 - **Build Fix**: Resolved a critical Vercel build error caused by missing `facebookUrl` and `instagramUrl` properties in the `Navbar`'s local settings interface.
 - **Maintenance**: Verified 100% build success locally using `npm run build`.
 
 ## 2026-03-25 - Branding Integration & Asset Resolution
 
-### Admin App Changes
+### Admin App Changes (2026-03-25 - Branding)
+
 - **Local Asset Integration**: Synchronized `src/assets` folder with standard icons and placeholders from the Web App.
 - **Dynamic Asset Resolver**: Implemented a centralized `resolveImageUrl` in `src/utils/image.js` using `import.meta.glob` to support bundled local assets via `/assets/` prefix.
 - **Enhanced Branding**: Expanded `Settings.jsx` and `site_settings` schema to include site logo, dimensions, favicons, and social sharing metadata.
@@ -64,58 +83,69 @@
 - **Service Catalog**: Integrated multi-image gallery support and narrative metadata (highlights, includes, policies) in `CreateService.jsx`.
 - **UI Maintenance**: Verified 100% asset resolution across `Categories.jsx`, `Services.jsx`, `HeroSlider.jsx`, and `PopupAds.jsx` to eliminate 404 errors.
 
-### Web App Changes
+### Web App Changes (2026-03-25 - Branding)
+
 - **Asset Standardization**: Synchronized `public/assets` with the Admin App to ensure icon parity.
 - **Branding Logic**: Verified that dynamic branding from `site_settings` (logo, dimensions) is correctly reflected in the frontend.
 
-### Verification Expected
+### Verification Expected (2026-03-25 - Branding)
+
 - All local icons (e.g., categories, team, partners) render correctly in both Web and Admin interfaces.
 - Site branding updates in Admin are reflected instantly on the website.
 - No 404 errors in the browser console for bundled assets.
 
 ## 2026-03-24 - Zero-Regression Database Schema Parity
 
-### Admin App Changes
+### Admin App Changes (2026-03-24 - Schema)
+
 - **Database Refactor Integration**: Replaced legacy `bookings` table queries (`activity_name`, `activity_type`, `total_amount`) with their new UI-driven counterparts (`service_name`, `service_type`, `total_price`) across all files (`Bookings.jsx`, `CreateBooking.jsx`, `Dashboard.jsx`, `ViewCustomer.jsx`, `Reports.jsx`).
 - **Migration Execution**: Executed Supabase SQL migration (e.g. `start_date` -> `check_in_date`) to force the backend database perfectly into alignment with the frontend naming structures.
 
-### Web App Changes
+### Web App Changes (2026-03-24 - Schema)
+
 - **Booking Checkout Sync**: Overhauled the structural payload in `lib/bookingService.ts` to transmit the new database keys, and seamlessly recreated the `create_booking_v1` secure RPC without regression.
 
-### Mobile App Changes
+### Mobile App Changes (2026-03-24 - Schema)
+
 - **Bookings Hook Fix**: Finalized flattening of the nested `booking_items` interface in `useCustomerBookings.ts` to surface `service_name`, `service_type`, and `total_price` independently of `uid` crashes.
 - **UI Restoration**: Safe refactor of `bookings.tsx` to present user history pulling directly from the newly updated bookings view.
 
 ## 2026-03-24 - Dynamic Footer Visibility & Asset Standardization
 
-### Web App Changes
+### Web App Changes (2026-03-24 - Assets)
+
 - **Asset Migration**: Moved all images to unified `public/assets/` structure (activities, categories, partners, team, placeholders).
 - **Dynamic Experience**: Refactored homepage "Experience" section to use dynamic image from Supabase `site_settings`.
 - **Flight IBE Integration**: Successfully integrated GOL IBE D4 on the `/flights` page.
 - **New Tab Results**: Configured search results to open in a new tab via `target=_blank`.
 
-### Mobile App Changes
+### Mobile App Changes (2026-03-24 - Assets)
+
 - **Image Resolution Engine**: Centralized image handling in `src/utils/imageUtils.ts` with robust fallback logic. Now correctly resolves `bucket/` paths and local assets.
 - **Hero Dynamic Fix**: Updated `Hero.tsx` to use the new resolution engine for promotional slides.
 
-### Admin App Changes
+### Admin App Changes (2026-03-24 - Assets)
+
 - **Independent Toggles**: Separated "Web Footer Visibility" and "Mobile Footer Visibility" in Global Settings.
 - **Asset Management**: Added dynamic configuration field for "Experience Section Image".
 
 ## 2026-03-24 - GOL IBE Finalization, Image Fixes & Mobile Build
 
-### Web App Changes
+### Web App Changes (2026-03-24 - GOL)
+
 - **Flight IBE Integration**: Successfully integrated GOL IBE D4 on the `/flights` page.
 - **New Tab Results**: Configured search results to open in a new tab via `target=_blank` to bypass restrictive top-level navigation blocks (Hardened Iframe).
 - **Dynamic Height**: Implemented a `postMessage` listener for automatic iframe stretching to fit the form content.
 - **Environment Parity**: Updated to `travellounge.golibe.com` subdomain for production-ready integration.
 
-### Mobile App Changes
+### Mobile App Changes (2026-03-24 - GOL)
+
 - **Image Resolution Engine Fix**: Resolved critical 404 errors on homepage service cards by correcting the Supabase storage path resolution in `src/utils/imageUtils.ts` (added `bucket/` segment).
 - **Version 1.0.1 (APK Build)**: Incremented to `versionCode: 3` and version `1.0.1`. Successfully authenticated as `travellounge` and triggered the queued cloud build for the Android APK.
 - **E2E Strategy**: Defined 5 core End-to-End user scenarios for systematic UI verification.
 
-### Verification Expected (2026-03-24)
+### Verification Expected (2026-03-24 - GOL)
+
 - `/flights` page on web-app should render the flight search form correctly.
 - Service card images on mobile homepage load without 404 errors.
 - EAS Build v1.0.1 dashboard shows a successful or running build status.

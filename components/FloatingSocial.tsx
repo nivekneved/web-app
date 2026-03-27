@@ -76,7 +76,7 @@ export default function FloatingSocial() {
         className={`p-4 rounded-full shadow-2xl transition-all flex items-center justify-center ${
           isOpen 
             ? 'bg-slate-900 text-white rotate-90' 
-            : 'bg-primary text-black shadow-primary/30'
+            : 'bg-primary text-white shadow-primary/30'
         }`}
         aria-label="Social media menu"
       >
