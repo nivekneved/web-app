@@ -58,7 +58,7 @@ export default function TeamPage() {
             {/* Hero Section */}
             <div className="relative h-[250px] md:h-[350px] flex items-center overflow-hidden bg-slate-900 border-b border-white/10">
                 <Image
-                    src="/hero-about.png"
+                    src={resolveImageUrl("/assets/heroes/hero-about.png")}
                     alt="Our Team"
                     fill
                     className="object-cover opacity-60"
