@@ -64,7 +64,7 @@ export default function PlanMyTrip() {
   return (
     <div className="bg-white min-h-screen">
       {/* Hero Section */}
-      <section className="relative h-[50vh] min-h-[500px] flex items-center overflow-hidden bg-slate-900">
+      <section className="relative h-[40vh] min-h-[400px] flex items-center overflow-hidden bg-slate-900">
         <Image
           src={resolveImageUrl(null, "/assets/placeholders/hero-adventure.png")}
           alt="Plan My Trip"
@@ -75,10 +75,10 @@ export default function PlanMyTrip() {
         <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-transparent to-black/60" />
         
         <div className="container mx-auto px-6 relative z-10 text-center flex flex-col items-center justify-center">
-            <span className="inline-block py-2 px-6 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-white text-[10px] font-black uppercase tracking-[0.4em] mb-6">
+            <span className="inline-block py-2 px-6 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-white text-[10px] font-black uppercase tracking-[0.4em] mb-4">
                 Custom Journeys
             </span>
-            <h1 className="text-4xl md:text-6xl font-black text-white mb-6 uppercase tracking-tight leading-[1.1]">
+            <h1 className="text-4xl md:text-6xl font-black text-white mb-4 uppercase tracking-tight leading-[1.1]">
                 Design Your <br />
                 <span className="text-red-500 italic">Dream Escape.</span>
             </h1>
@@ -88,27 +88,27 @@ export default function PlanMyTrip() {
         </div>
       </section>
 
-      <section className="py-24">
+      <section className="py-12">
         <div className="max-w-7xl mx-auto px-8">
           <Breadcrumbs 
             items={[
                 { label: 'Plan My Trip', active: true }
             ]}
-            className="mb-16"
+            className="mb-8"
           />
 
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-24">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
             
             {/* Form Section */}
             <div className="lg:col-span-2">
-              <div className="bg-white rounded-[3rem] border border-slate-100 p-12 shadow-[0_50px_100px_-20px_rgba(0,0,0,0.08)]">
-                <div className="mb-12">
+              <div className="bg-white rounded-[2rem] border border-slate-100 p-8 shadow-[0_50px_100px_-20px_rgba(0,0,0,0.08)]">
+                <div className="mb-8">
                   <h2 className="text-xs font-black text-red-600 uppercase tracking-[0.4em] mb-4">Inquiry</h2>
                   <h3 className="text-4xl font-black text-slate-900 tracking-tight">Trip Questionnaire</h3>
                 </div>
 
-                <form onSubmit={handleSubmit} className="space-y-12">
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
+                <form onSubmit={handleSubmit} className="space-y-8">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     {/* Destination */}
                     <div className="space-y-3">
                         <label className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] ml-2">Where would you like to go? *</label>
@@ -167,10 +167,10 @@ export default function PlanMyTrip() {
 
                   </div>
 
-                  <hr className="border-slate-50 my-12" />
+                  <hr className="border-slate-50 my-8" />
 
                   {/* Contact Info */}
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                     <Input 
                         label="Your Name *"
                         name="name"
@@ -203,7 +203,7 @@ export default function PlanMyTrip() {
                     ></textarea>
                   </div>
 
-                  <div className="flex flex-col items-center gap-6 pt-6">
+                  <div className="flex flex-col items-center gap-6 pt-2">
                     <Button 
                       type="submit"
                       size="xl"
@@ -232,11 +232,11 @@ export default function PlanMyTrip() {
             </div>
 
             {/* Sidebar / Contact Info */}
-            <div className="space-y-12">
+            <div className="space-y-8">
               {/* Office Locations */}
               <section>
-                <h3 className="text-xs font-black text-red-600 uppercase tracking-[0.4em] mb-8">Visit Us</h3>
-                <div className="space-y-10">
+                <h3 className="text-xs font-black text-red-600 uppercase tracking-[0.4em] mb-6">Visit Us</h3>
+                <div className="space-y-6">
                   <div className="space-y-4">
                     <h4 className="font-black text-slate-900 text-lg">Port Louis</h4>
                     <p className="text-slate-500 font-medium leading-relaxed">
@@ -258,8 +258,8 @@ export default function PlanMyTrip() {
               </section>
 
               {/* Working Hours */}
-              <div className="bg-slate-900 text-white rounded-[3rem] p-10 shadow-2xl shadow-slate-900/20">
-                <h3 className="text-xl font-black mb-8 flex items-center gap-4 text-red-500">
+              <div className="bg-slate-900 text-white rounded-[2rem] p-8 shadow-2xl shadow-slate-900/20">
+                <h3 className="text-xl font-black mb-6 flex items-center gap-4 text-red-500">
                   <Clock size={28} />
                   Hours
                 </h3>
@@ -281,8 +281,8 @@ export default function PlanMyTrip() {
 
               {/* Contact Numbers */}
               <section>
-                  <h3 className="text-xs font-black text-red-600 uppercase tracking-[0.4em] mb-8">Concierge</h3>
-                  <div className="space-y-6">
+                  <h3 className="text-xs font-black text-red-600 uppercase tracking-[0.4em] mb-6">Concierge</h3>
+                  <div className="space-y-4">
                     {[
                         { label: 'General', number: '(+230) 212 4070', icon: PhoneCall },
                         { label: 'WhatsApp', number: '(+230) 5940 7711', icon: MessageCircle, isWhatsApp: true },
