@@ -9,8 +9,6 @@ import {
   PhoneCall,
   MessageCircle,
   Users,
-  Wallet,
-  Home,
   Mail
 } from 'lucide-react';
 import { createClient } from '@/lib/supabase';
@@ -42,11 +40,8 @@ export default function TailorMadePage() {
       message: `
         Destination: ${formData.get('destination')}
         Departure Date: ${formData.get('departure_date')}
-        Return Date: ${formData.get('return_date')}
         Adults: ${formData.get('adults')}
         Children: ${formData.get('children')}
-        Budget: ${formData.get('budget')}
-        Accommodation: ${formData.get('accommodation')}
         Special Requests: ${formData.get('message')}
       `.trim(),
       status: 'unread'
@@ -109,14 +104,14 @@ export default function TailorMadePage() {
             
             {/* Form Section */}
             <div className="lg:col-span-2">
-              <div className="bg-white rounded-[3rem] border border-slate-300 p-12 shadow-[0_50px_100px_-20px_rgba(0,0,0,0.08)]">
-                <div className="mb-12">
+              <div className="bg-white rounded-[2rem] border border-slate-300 p-8 shadow-[0_50px_100px_-20px_rgba(0,0,0,0.08)]">
+                <div className="mb-8">
                   <h2 className="text-xs font-black text-red-600 uppercase tracking-[0.4em] mb-4">Inquiry</h2>
                   <h3 className="text-4xl font-black text-slate-900 tracking-tight">Design Your Trip</h3>
                 </div>
 
-                <form onSubmit={handleSubmit} className="space-y-12">
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
+                <form onSubmit={handleSubmit} className="space-y-8">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     {/* Destination */}
                     <div className="space-y-3">
                         <label className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] ml-2">Where would you like to go? *</label>
@@ -133,25 +128,14 @@ export default function TailorMadePage() {
                     </div>
 
                     {/* Dates */}
-                    <div className="grid grid-cols-2 gap-4">
-                        <div className="space-y-3">
-                            <label className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] ml-2">Departure *</label>
-                            <input 
-                                type="date" 
-                                name="departure_date"
-                                required
-                                className="w-full px-5 py-5 bg-slate-50 border border-slate-300 rounded-2xl focus:outline-none focus:ring-2 focus:ring-red-600/50 focus:bg-white font-bold text-sm text-slate-900 transition-all" 
-                            />
-                        </div>
-                        <div className="space-y-3">
-                            <label className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] ml-2">Return *</label>
-                            <input 
-                                type="date" 
-                                name="return_date"
-                                required
-                                className="w-full px-5 py-5 bg-slate-50 border border-slate-300 rounded-2xl focus:outline-none focus:ring-2 focus:ring-red-600/50 focus:bg-white font-bold text-sm text-slate-900 transition-all" 
-                            />
-                        </div>
+                    <div className="space-y-3">
+                        <label className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] ml-2">Departure *</label>
+                        <input 
+                            type="date" 
+                            name="departure_date"
+                            required
+                            className="w-full px-5 py-5 bg-slate-50 border border-slate-300 rounded-2xl focus:outline-none focus:ring-2 focus:ring-red-600/50 focus:bg-white font-bold text-sm text-slate-900 transition-all" 
+                        />
                     </div>
 
                     {/* Travelers */}
@@ -183,40 +167,13 @@ export default function TailorMadePage() {
                         </div>
                     </div>
 
-                    {/* Budget */}
-                    <div className="space-y-3">
-                      <label className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] ml-2">Preferred Budget (Rs) *</label>
-                      <div className="relative">
-                        <Wallet className="absolute left-5 top-1/2 -translate-y-1/2 text-slate-300" size={18} />
-                        <input 
-                            type="text" 
-                            name="budget"
-                            required 
-                            placeholder="e.g. 50,000 - 100,000"
-                            className="w-full pl-14 pr-6 py-5 bg-slate-50 border border-slate-300 rounded-2xl focus:outline-none focus:ring-2 focus:ring-red-600/50 focus:bg-white font-bold text-sm text-slate-900 placeholder:text-slate-400 transition-all" 
-                        />
-                      </div>
-                    </div>
 
-                    {/* Accommodation */}
-                    <div className="space-y-4 md:col-span-2">
-                      <label className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] ml-2">Preferred Accommodation</label>
-                      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                        {['Standard', 'Boutique', 'Quality', 'All-Inclusive'].map((type) => (
-                           <label key={type} className="group relative flex items-center justify-center p-5 bg-slate-50 border border-slate-300 rounded-2xl cursor-pointer hover:bg-white hover:border-red-600/50 transition-all font-bold text-xs uppercase tracking-widest text-slate-600 has-[:checked]:bg-red-600 has-[:checked]:text-white has-[:checked]:border-red-600 has-[:checked]:shadow-xl has-[:checked]:shadow-red-600/20">
-                             <input type="radio" name="accommodation" value={type} className="hidden" />
-                             <Home size={16} className="mr-2" />
-                             {type}
-                           </label>
-                        ))}
-                      </div>
-                    </div>
                   </div>
 
-                  <hr className="border-slate-50 my-12" />
+                  <hr className="border-slate-50 my-8" />
 
                   {/* Contact Info */}
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                     <Input 
                         label="Your Name *"
                         name="name"
@@ -249,7 +206,7 @@ export default function TailorMadePage() {
                     ></textarea>
                   </div>
 
-                  <div className="flex flex-col items-center gap-6 pt-6">
+                  <div className="flex flex-col items-center gap-6 pt-2">
                     <Button 
                       type="submit"
                       size="xl"
@@ -278,10 +235,10 @@ export default function TailorMadePage() {
             </div>
 
             {/* Sidebar / Contact Info */}
-            <div className="space-y-12">
+            <div className="space-y-8">
               {/* Process Section */}
               <section>
-                <h3 className="text-xs font-black text-red-600 uppercase tracking-[0.4em] mb-8">The Process</h3>
+                <h3 className="text-xs font-black text-red-600 uppercase tracking-[0.4em] mb-6">The Process</h3>
                 <div className="space-y-6">
                   {[
                     { step: '01', title: 'Consultation', desc: 'We chat about your dreams, interests, and must-sees.' },
@@ -298,8 +255,8 @@ export default function TailorMadePage() {
               </section>
 
               {/* Working Hours */}
-              <div className="bg-slate-900 text-white rounded-[3rem] p-10 shadow-2xl shadow-slate-900/20">
-                <h3 className="text-xl font-black mb-8 flex items-center gap-4 text-red-500">
+              <div className="bg-slate-900 text-white rounded-[2rem] p-8 shadow-2xl shadow-slate-900/20">
+                <h3 className="text-xl font-black mb-6 flex items-center gap-4 text-red-500">
                   <Clock size={28} />
                   Hours
                 </h3>
@@ -321,8 +278,8 @@ export default function TailorMadePage() {
 
               {/* Contact Numbers */}
               <section>
-                  <h3 className="text-xs font-black text-red-600 uppercase tracking-[0.4em] mb-8">Concierge</h3>
-                  <div className="space-y-6">
+                  <h3 className="text-xs font-black text-red-600 uppercase tracking-[0.4em] mb-6">Concierge</h3>
+                  <div className="space-y-4">
                     {[
                         { label: 'General', number: '(+230) 212 4070', icon: PhoneCall },
                         { label: 'WhatsApp', number: '(+230) 5940 7711', icon: MessageCircle, isWhatsApp: true },

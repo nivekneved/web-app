@@ -1,11 +1,12 @@
 # AGENTS.md
 
-## 2026-03-27 - Plan My Trip Form Refactoring & Image Fix
+## 2026-03-27 - Form Refactoring & Layout Compaction
 
 ### Web App Changes
 - **UI Simplification**: Removed unnecessary fields ("Return Date", "Preferred Budget", "Preferred Accommodation") from the "Plan My Trip" form to streamline user submissions.
 - **Hero Image Resolution**: Updated the hero banner image source from a missing placeholder to a high-quality thematic asset (`/assets/placeholders/hero-adventure.png`) for visual parity.
 - **Layout Compaction**: Reduced excessive top/bottom padding, margins, and gaps across the "Plan My Trip" page to create a more compact and elegant user interface.
+- **Tailormade Parity**: Applied identical UI simplification (field removal) and layout compaction to the "Tailormade" page to ensure consistent booking experiences.
 ## 2026-03-25 - Thematic Category Image Integration
 
 ### Web App Changes
