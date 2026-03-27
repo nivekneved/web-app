@@ -1,5 +1,10 @@
 # AGENTS.md
 
+## 2026-03-27 - Plan My Trip Form Refactoring & Image Fix
+
+### Web App Changes
+- **UI Simplification**: Removed unnecessary fields ("Return Date", "Preferred Budget", "Preferred Accommodation") from the "Plan My Trip" form to streamline user submissions.
+- **Hero Image Resolution**: Updated the hero banner image source from a missing placeholder to a high-quality thematic asset (`/assets/placeholders/hero-adventure.png`) for visual parity.
 ## 2026-03-25 - Thematic Category Image Integration
 
 ### Web App Changes
