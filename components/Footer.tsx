@@ -82,7 +82,7 @@ export default function Footer() {
                     <div className="md:col-span-2 lg:col-span-1">
                         <Link href="/" className="inline-block mb-6">
                                 <Image 
-                                    src={resolveImageUrl(settings?.logoUrl || "/assets/logo-red-bird.png")} 
+                                    src={resolveImageUrl("/assets/logo-red-bird.png")} 
                                     alt="Travel Lounge" 
                                     width={300} 
                                     height={100} 
