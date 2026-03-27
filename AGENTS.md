@@ -11,6 +11,8 @@
 - **Team Page Banner**: Restored the missing hero image on the 'Meet the Team' page by pointing the source to the standardized `/assets/heroes/hero-about.png` using the dynamic image resolver.
 - **Branding Update**: Programmatically generated and uploaded a flawless transparent background variant of the logo (`public/assets/logo-red-bird.png`) featuring a `text-red-600` colored bird above the text.
 - **Footer UI**: Integrated the newly generated red bird logo into the `Footer` component, removing the `brightness-0 invert` filter to preserve the colored bird while displaying the white text properly against the dark theme.
+- **Routing & Navigation**: Fixed a routing bug where the `Hotels -> Mauritius` menu item incorrectly linked to the generic destination page (`/destinations/mauritius`). Updated the Supabase `navigations` table to route traffic specifically to `/hotels/mauritius`.
+- **UI Asset Fix**: Updated the broken hero image path in `/hotels/mauritius/page.tsx` to standard `/assets/heroes/hero-hotels.png` to guarantee visual parity.
 ## 2026-03-25 - Thematic Category Image Integration
 
 ### Web App Changes

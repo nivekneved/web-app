@@ -10,7 +10,7 @@ export default function MauritiusHotelsPage() {
         <ServiceListing
             title="Mauritius Hotels"
             subtitle="Explore our curated selection of luxury resorts and boutique hotels across Mauritius."
-            heroImage="/hero-hotel.png"
+            heroImage="/assets/heroes/hero-hotels.png"
             serviceTypes={['hotel']}
             includeRegions={MAURITIUS_REGIONS}
             excludeRegions={['Rodrigues']}
