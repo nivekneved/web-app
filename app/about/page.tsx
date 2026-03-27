@@ -129,9 +129,10 @@ export default function AboutPage() {
                         <div className="space-y-8">
                             <div className="space-y-4">
                                 <span className="text-xs font-black text-red-600 uppercase tracking-[0.4em]">Who we are</span>
-                                <h2 className="text-4xl font-black text-slate-900 leading-tight uppercase tracking-tight">
-                                    {identity.title.replace('<br />', ' ')}
-                                </h2>
+                                <h2 
+                                    className="text-4xl font-black text-slate-900 leading-tight uppercase tracking-tight"
+                                    dangerouslySetInnerHTML={{ __html: identity.title.replace(/<br\s*\/?>/g, ' ') }}
+                                />
                             </div>
                             <p className="text-lg text-slate-600 leading-relaxed">
                                 {identity.description}

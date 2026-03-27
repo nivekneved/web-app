@@ -7,6 +7,7 @@
 - **Hero Image Resolution**: Updated the hero banner image source from a missing placeholder to a high-quality thematic asset (`/assets/placeholders/hero-adventure.png`) for visual parity.
 - **Layout Compaction**: Reduced excessive top/bottom padding, margins, and gaps across the "Plan My Trip" page to create a more compact and elegant user interface.
 - **Tailormade Parity**: Applied identical UI simplification (field removal) and layout compaction to the "Tailormade" page to ensure consistent booking experiences.
+- **About Page Fix**: Implemented `dangerouslySetInnerHTML` in the "Who We Are" section title to properly render inline HTML span styles (e.g., `<span class="text-red-600">`) instead of escaping them as text.
 ## 2026-03-25 - Thematic Category Image Integration
 
 ### Web App Changes
