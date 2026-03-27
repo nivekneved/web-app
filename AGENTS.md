@@ -16,7 +16,7 @@
 - **UI Asset Fix**: Updated the broken hero image path in `/hotels/mauritius/page.tsx` to standard `/assets/heroes/hero-hotels.png` to guarantee visual parity.
 - **Footer Typography**: Increased letter spacing (`tracking-[0.3em]`) for "DIRECTIONS" links in the footer to create a more premium, airy feel.
 - **Floating Social UI**: Changed the main toggle button's icon color from black to white for better visibility and consistency on the red brand background.
-- **Contact Page**: Renamed "Our Global Headquarters" to "Our adresse" to better reflect the service's accessibility.
+- **Contact Page**: Renamed "Our Global Headquarters" to "Our Address" to better reflect the service's accessibility.
 
 ### Database Changes (2026-03-27)
 

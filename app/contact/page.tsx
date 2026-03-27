@@ -138,7 +138,7 @@ export default function ContactPage() {
                     <div className="space-y-20">
                         <section>
                             <h2 className="text-xs font-black text-red-600 uppercase tracking-[0.4em] mb-6">Concierge</h2>
-                            <h3 className="text-4xl font-black text-slate-900 mb-8 leading-tight">Our adresse</h3>
+                            <h3 className="text-4xl font-black text-slate-900 mb-8 leading-tight">Our Address</h3>
                             
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                                 <div className="space-y-4 p-8 bg-slate-50 rounded-[2.5rem] border border-slate-300">
