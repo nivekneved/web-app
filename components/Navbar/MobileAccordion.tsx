@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import Link from 'next/link';
 import { ChevronDown } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { NavMenuItem } from '@/lib/navigation';
+import { NavMenuItem } from '@/lib/types';
 import { cn } from '@/lib/utils';
 
 interface MobileAccordionProps {

@@ -8,7 +8,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { useWishlist } from '@/contexts/WishlistContext'
 // import { useTheme } from '@/contexts/ThemeContext'
 import { createClient } from '@/lib/supabase'
-import { navigationConfig, type NavMenuItem } from '@/lib/navigation'
+import { type NavMenuItem } from '@/lib/types'
 import { resolveImageUrl } from '@/lib/image'
 import { MobileAccordion } from './Navbar/MobileAccordion'
 import { NavRecursive } from './Navbar/NavRecursive'
@@ -94,7 +94,7 @@ export default function Navbar() {
     const facebookUrl = config?.facebookUrl || ''
     const instagramUrl = config?.instagramUrl || ''
 
-    const menuItems = items.length > 0 ? items : navigationConfig.menu
+    const menuItems = items;
 
     return (
         <header className="w-full">
@@ -309,8 +309,8 @@ export default function Navbar() {
                                         className="w-full shadow-2xl shadow-red-600/20 py-8 text-sm tracking-[0.2em] font-black focus:ring-4 focus:ring-red-600/50"
                                         onClick={() => setIsOpen(false)}
                                     >
-                                        <Link href={config?.navbarCtaHref || navigationConfig.cta.href}>
-                                            {config?.navbarCtaLabel || navigationConfig.cta.label}
+                                        <Link href={config?.navbarCtaHref || '#'}>
+                                            {config?.navbarCtaLabel || 'Plan My Trip'}
                                         </Link>
                                     </Button>
 

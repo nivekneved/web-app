@@ -3,7 +3,7 @@ import { usePathname } from 'next/navigation';
 import { useState, useRef, useEffect } from 'react';
 import { ChevronRight, ChevronDown } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { NavMenuItem } from '@/lib/navigation';
+import { NavMenuItem } from '@/lib/types';
 import { cn } from '@/lib/utils';
 
 interface NavRecursiveProps {
