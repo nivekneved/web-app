@@ -1,6 +1,7 @@
 'use client'
 
 import React from 'react'
+import { useSettings } from '@/contexts/SettingsContext'
 
 type TravelerDetails = {
     firstName: string
@@ -42,6 +43,9 @@ export type BookingWizardData = {
 }
 
 export default function BookingWizard({ serviceName, servicePrice, onComplete, isLoading, initialData, roomOptions, showRoomSelection = true }: BookingWizardProps) {
+    const { generalConfig } = useSettings()
+    const labels = generalConfig?.ui_labels || {}
+    const placeholders = generalConfig?.form_placeholders || {}
     const [currentStep, setCurrentStep] = React.useState<BookingWizardStep>(1)
     const [formData, setFormData] = React.useState<BookingWizardData>({
         checkIn: initialData?.checkIn || '',
@@ -133,10 +137,10 @@ export default function BookingWizard({ serviceName, servicePrice, onComplete, i
             <div className="mb-8">
                 <div className="flex items-center justify-between">
                     {[
-                        { num: 1, label: 'Dates & Guests' },
-                        { num: 2, label: 'Traveler Details' },
-                        { num: 3, label: 'Preferences' },
-                        { num: 4, label: 'Review' }
+                        { num: 1, label: labels.dates_guests || 'Dates & Guests' },
+                        { num: 2, label: labels.traveler_details_label || 'Traveler Details' },
+                        { num: 3, label: labels.preferences || 'Preferences' },
+                        { num: 4, label: labels.review || 'Review' }
                     ].map((step, idx) => (
                         <React.Fragment key={step.num}>
                             <div className="flex flex-col items-center">
@@ -162,11 +166,11 @@ export default function BookingWizard({ serviceName, servicePrice, onComplete, i
                 {/* Step 1: Booking Details */}
                 {currentStep === 1 && (
                     <div className="space-y-6">
-                        <h2 className="text-2xl font-black text-slate-900 dark:text-white mb-4">Complete Your Reservation</h2>
+                        <h2 className="text-2xl font-black text-slate-900 dark:text-white mb-4">{labels.complete_reservation || 'Complete Your Reservation'}</h2>
                         
                         <div className="grid grid-cols-2 gap-4 p-6 bg-slate-50 dark:bg-slate-700/50 rounded-2xl border border-slate-100 dark:border-slate-700">
                             <div>
-                                <label className="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-2">Check-in</label>
+                                <label className="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-2">{labels.check_in || 'Check-in'}</label>
                                 <input
                                     type="date"
                                     value={formData.checkIn}
@@ -175,7 +179,7 @@ export default function BookingWizard({ serviceName, servicePrice, onComplete, i
                                 />
                             </div>
                             <div>
-                                <label className="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-2">Check-out</label>
+                                <label className="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-2">{labels.check_out || 'Check-out'}</label>
                                 <input
                                     type="date"
                                     value={formData.checkOut}
@@ -184,7 +188,7 @@ export default function BookingWizard({ serviceName, servicePrice, onComplete, i
                                 />
                             </div>
                             <div className="col-span-2">
-                                <label className="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-2">Number of Guests</label>
+                                <label className="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-2">{labels.number_of_guests || 'Number of Guests'}</label>
                                 <input
                                     type="number"
                                     min="1"
@@ -198,62 +202,62 @@ export default function BookingWizard({ serviceName, servicePrice, onComplete, i
 
                         <div className="grid grid-cols-2 gap-4">
                             <div>
-                                <label className="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-2">First Name</label>
+                                <label className="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-2">{labels.first_name || 'First Name'}</label>
                                 <input
                                     type="text"
-                                    placeholder="First Name"
+                                    placeholder={placeholders.first_name || 'First Name'}
                                     value={formData.firstName}
                                     onChange={(e) => updateFormData({ firstName: e.target.value })}
                                     className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-700 border border-slate-300 dark:border-slate-600 rounded-xl focus:outline-none focus:ring-4 focus:ring-red-600/20 dark:text-white"
                                 />
                             </div>
                             <div>
-                                <label className="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-2">Last Name</label>
+                                <label className="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-2">{labels.last_name || 'Last Name'}</label>
                                 <input
                                     type="text"
-                                    placeholder="Last Name"
+                                    placeholder={placeholders.last_name || 'Last Name'}
                                     value={formData.lastName}
                                     onChange={(e) => updateFormData({ lastName: e.target.value })}
                                     className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-700 border border-slate-300 dark:border-slate-600 rounded-xl focus:outline-none focus:ring-4 focus:ring-red-600/20 dark:text-white"
                                 />
                             </div>
                             <div className="col-span-2">
-                                <label className="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-2">Email Address</label>
+                                <label className="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-2">{labels.email_address || 'Email Address'}</label>
                                 <input
                                     type="email"
-                                    placeholder="Email"
+                                    placeholder={placeholders.email_address || 'Email'}
                                     value={formData.email}
                                     onChange={(e) => updateFormData({ email: e.target.value })}
                                     className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-700 border border-slate-300 dark:border-slate-600 rounded-xl focus:outline-none focus:ring-4 focus:ring-red-600/20 dark:text-white"
                                 />
                             </div>
                             <div>
-                                <label className="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-2">Phone</label>
+                                <label className="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-2">{labels.phone_number || 'Phone'}</label>
                                 <input
                                     type="tel"
-                                    placeholder="Phone"
+                                    placeholder={placeholders.phone_number || 'Phone'}
                                     value={formData.phone}
                                     onChange={(e) => updateFormData({ phone: e.target.value })}
                                     className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-700 border border-slate-300 dark:border-slate-600 rounded-xl focus:outline-none focus:ring-4 focus:ring-red-600/20 dark:text-white"
                                 />
                             </div>
                             <div>
-                                <label className="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-2">Mobile</label>
+                                <label className="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-2">{labels.mobile || 'Mobile'}</label>
                                 <input
                                     type="tel"
-                                    placeholder="Mobile"
+                                    placeholder={placeholders.phone_number || 'Mobile'}
                                     value={formData.mobile}
                                     onChange={(e) => updateFormData({ mobile: e.target.value })}
                                     className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-700 border border-slate-300 dark:border-slate-600 rounded-xl focus:outline-none focus:ring-4 focus:ring-red-600/20 dark:text-white"
                                 />
                             </div>
                             <div className="col-span-2">
-                                <label className="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-2">Notes</label>
+                                <label className="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-2">{labels.notes || 'Notes'}</label>
                                 <textarea
                                     value={formData.notes}
                                     onChange={(e) => updateFormData({ notes: e.target.value })}
                                     rows={3}
-                                    placeholder="Any special requirements or messages for the host..."
+                                    placeholder={placeholders.special_requests || "Any special requirements or messages for the host..."}
                                     className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-700 border border-slate-300 dark:border-slate-600 rounded-xl focus:outline-none focus:ring-4 focus:ring-red-600/20 dark:text-white"
                                 />
                             </div>
@@ -265,12 +269,12 @@ export default function BookingWizard({ serviceName, servicePrice, onComplete, i
                 {currentStep === 2 && (
                     <div className="space-y-6">
                         <div className="flex items-center justify-between mb-4">
-                            <h2 className="text-2xl font-black text-slate-900 dark:text-white">Traveler Information</h2>
+                            <h2 className="text-2xl font-black text-slate-900 dark:text-white">{labels.traveler_information || 'Traveler Information'}</h2>
                             <button
                                 onClick={addTraveler}
                                 className="px-4 py-2 bg-red-600 text-white rounded-xl font-bold hover:bg-slate-900 transition-all text-sm"
                             >
-                                + Add Traveler
+                                {labels.add_traveler_btn || '+ Add Traveler'}
                             </button>
                         </div>
                         {formData.travelers.map((traveler, idx) => (
@@ -324,9 +328,9 @@ export default function BookingWizard({ serviceName, servicePrice, onComplete, i
                 {/* Step 3: Preferences */}
                 {currentStep === 3 && (
                     <div className="space-y-6">
-                        <h2 className="text-2xl font-black text-slate-900 dark:text-white mb-4">Your Preferences</h2>
+                        <h2 className="text-2xl font-black text-slate-900 dark:text-white mb-4">{labels.your_preferences || 'Your Preferences'}</h2>
                         <div>
-                            <label className="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-2">Meal Preference</label>
+                            <label className="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-2">{labels.meal_preference || 'Meal Preference'}</label>
                             <select
                                 value={formData.mealPreference}
                                 onChange={(e) => updateFormData({ mealPreference: e.target.value })}
@@ -341,7 +345,7 @@ export default function BookingWizard({ serviceName, servicePrice, onComplete, i
                         </div>
                         {showRoomSelection && (
                             <div>
-                                <label className="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-2">Room Type</label>
+                                <label className="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-2">{labels.room_type || 'Room Type'}</label>
                                 <select
                                     value={formData.roomPreference}
                                     onChange={(e) => updateFormData({ roomPreference: e.target.value })}
@@ -370,7 +374,7 @@ export default function BookingWizard({ serviceName, servicePrice, onComplete, i
                 {/* Step 4: Review */}
                 {currentStep === 4 && (
                     <div className="space-y-6">
-                        <h2 className="text-2xl font-black text-slate-900 dark:text-white mb-4">Review Your Booking</h2>
+                        <h2 className="text-2xl font-black text-slate-900 dark:text-white mb-4">{labels.review_booking || 'Review Your Booking'}</h2>
                         <div className="space-y-4">
                             <div className="p-4 bg-slate-50 dark:bg-slate-700 rounded-xl">
                                 <h3 className="font-bold text-slate-900 dark:text-white mb-2">{serviceName}</h3>
@@ -389,9 +393,9 @@ export default function BookingWizard({ serviceName, servicePrice, onComplete, i
                                     )}
                                 </div>
                             </div>
-                            <div className="p-4 bg-red-50 dark:bg-red-900/20 rounded-xl">
+                             <div className="p-4 bg-red-50 dark:bg-red-900/20 rounded-xl">
                                 <div className="flex justify-between items-center">
-                                    <span className="font-bold text-slate-900 dark:text-white">Total Amount</span>
+                                    <span className="font-bold text-slate-900 dark:text-white">{labels.total_amount || 'Total Amount'}</span>
                                     <span className="text-2xl font-black text-red-600">Rs {servicePrice.toLocaleString()}</span>
                                 </div>
                             </div>
@@ -406,7 +410,7 @@ export default function BookingWizard({ serviceName, servicePrice, onComplete, i
                             onClick={prevStep}
                             className="flex-1 px-6 py-4 border-2 border-slate-300 dark:border-slate-600 text-slate-700 dark:text-slate-300 rounded-xl font-bold hover:bg-slate-50 dark:hover:bg-slate-700 transition-all"
                         >
-                            Previous
+                            {labels.prev_btn || 'Previous'}
                         </button>
                     )}
                     {currentStep < 4 ? (
@@ -414,7 +418,7 @@ export default function BookingWizard({ serviceName, servicePrice, onComplete, i
                             onClick={nextStep}
                             className="flex-1 px-6 py-4 bg-red-600 text-white rounded-xl font-bold hover:bg-slate-900 transition-all"
                         >
-                            Next Step
+                            {labels.next_btn || 'Next Step'}
                         </button>
                     ) : (
                         <button
@@ -422,7 +426,7 @@ export default function BookingWizard({ serviceName, servicePrice, onComplete, i
                             disabled={isLoading}
                             className="flex-1 px-6 py-4 bg-red-600 text-white rounded-xl font-bold hover:bg-slate-900 transition-all disabled:opacity-50"
                         >
-                            {isLoading ? 'Submitting...' : 'Submit Booking Request'}
+                            {isLoading ? (labels.submitting_btn || 'Submitting...') : (labels.submit_booking_btn || 'Submit Booking Request')}
                         </button>
                     )}
                 </div>

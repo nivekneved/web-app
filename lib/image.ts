@@ -10,14 +10,14 @@ export function resolveImageUrl(path: string | null | undefined, fallback: strin
 
     // 3. Handle Supabase storage paths
     const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL;
+    const BUCKET_NAME = process.env.NEXT_PUBLIC_SUPABASE_STORAGE_BUCKET || 'bucket';
+
     if (SUPABASE_URL) {
-        // Assume it's a storage path if it doesn't start with /assets
-        // and it's not a local file
         let storagePath = path;
         
-        // Ensure the path has the bucket name (matches Admin App logic)
-        if (!storagePath.startsWith('bucket/')) {
-            storagePath = `bucket/${storagePath}`;
+        // Ensure the path has the bucket name
+        if (!storagePath.startsWith(`${BUCKET_NAME}/`)) {
+            storagePath = `${BUCKET_NAME}/${storagePath}`;
         }
         
         return `${SUPABASE_URL}/storage/v1/object/public/${storagePath}`;

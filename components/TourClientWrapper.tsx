@@ -17,6 +17,7 @@ import ReviewsSection from '@/components/ReviewsSection'
 import BookingWizard, { BookingWizardData } from '@/components/BookingWizard'
 import { createBookingRequest } from '@/lib/bookingService'
 import SocialShare from '@/components/SocialShare'
+import { useSettings } from '@/contexts/SettingsContext'
 
 type Tour = {
     id: string
@@ -34,6 +35,8 @@ type Tour = {
 }
 
 export default function TourClientWrapper({ tour }: { tour: Tour }) {
+    const { generalConfig: config } = useSettings()
+    const labels = (config?.ui_labels || {}) as Record<string, string>
     const [startDate, setStartDate] = useState('')
     const [guests, setGuests] = useState(2)
     const [showWizard, setShowWizard] = useState(false)
@@ -44,7 +47,7 @@ export default function TourClientWrapper({ tour }: { tour: Tour }) {
     function toggleWishlist() {
         if (isInWishlist(tour.id)) {
             removeFromWishlist(tour.id)
-            toast.success('Removed from wishlist')
+            toast.success(labels.wishlist_removed || 'Removed from wishlist')
         } else {
             addToWishlist({
                 id: tour.id,
@@ -54,17 +57,17 @@ export default function TourClientWrapper({ tour }: { tour: Tour }) {
                 base_price: tour.base_price,
                 location: tour.location
             })
-            toast.success('Added to wishlist')
+            toast.success(labels.wishlist_added || 'Added to wishlist')
         }
     }
 
     function handleBookNow() {
         if (!startDate) {
-            toast.error('Please select a start date')
+            toast.error(labels.select_date_error || 'Please select a start date')
             return
         }
         if (tour?.max_group_size && guests > tour.max_group_size) {
-            toast.error(`Maximum group size is ${tour.max_group_size}`)
+            toast.error(`${labels.max_group_error_prefix || 'Maximum group size is'} ${tour.max_group_size}`)
             return
         }
         setShowWizard(true)
@@ -91,11 +94,11 @@ export default function TourClientWrapper({ tour }: { tour: Tour }) {
         })
 
         if (result.success) {
-            toast.success('Booking request submitted successfully!')
+            toast.success(labels.booking_success || 'Booking request submitted successfully!')
             setShowWizard(false)
             router.push(`/booking-confirmation?id=${result.bookingId}&service=${encodeURIComponent(tour.name)}&amount=${tour.base_price}`)
         } else {
-            toast.error(result.error || 'Failed to submit booking request')
+            toast.error(result.error || (labels.booking_error || 'Failed to submit booking request'))
         }
         setBookingLoading(false)
     }
@@ -177,28 +180,28 @@ export default function TourClientWrapper({ tour }: { tour: Tour }) {
                     <div className="max-w-7xl mx-auto">
                         <div className="flex flex-wrap items-center gap-4 mb-6">
                             <Badge variant="warning" className="px-4 py-1.5 shadow-xl shadow-amber-600/20">
-                                Top Rated Tour
+                                {labels.top_rated_badge || 'Top Rated Tour'}
                             </Badge>
                             <div className="flex items-center gap-2">
                                 <StarRating rating={tour.rating} size={14} />
-                                <span className="text-[10px] font-black uppercase tracking-widest text-white/90">{tour.rating} Rating</span>
+                                <span className="text-[10px] font-black uppercase tracking-widest text-white/90">{tour.rating} {labels.rating_label || 'Rating'}</span>
                             </div>
                         </div>
                         <h1 className="text-5xl md:text-7xl lg:text-8xl font-black text-white mb-6 tracking-tighter leading-[1.1]">
                             {tour.name}
                         </h1>
                         <div className="flex flex-wrap items-center gap-6 text-white/90 font-medium text-lg">
-                            <div className="flex items-center gap-2">
+                             <div className="flex items-center gap-2">
                                 <MapPin size={22} className="text-red-500" />
                                 {tour.location}
                             </div>
                             <div className="flex items-center gap-2">
                                 <Calendar size={22} className="text-white/60" />
-                                {tour.duration_days} Days
+                                {tour.duration_days} {labels.days || 'Days'}
                             </div>
                             <div className="flex items-center gap-2">
                                 <Users size={22} className="text-white/60" />
-                                Max {tour.max_group_size} People
+                                {labels.max_label || 'Max'} {tour.max_group_size} {labels.people || 'People'}
                             </div>
                         </div>
                     </div>
@@ -218,8 +221,8 @@ export default function TourClientWrapper({ tour }: { tour: Tour }) {
                     <div className="lg:col-span-2 space-y-20">
                         {/* Description */}
                         <section>
-                            <h2 className="text-xs font-black text-red-600 uppercase tracking-[0.4em] mb-6">Discovery</h2>
-                            <h3 className="text-4xl font-black text-slate-900 mb-8 leading-tight">About this tour</h3>
+                            <h2 className="text-xs font-black text-red-600 uppercase tracking-[0.4em] mb-6">{labels.discovery || 'Discovery'}</h2>
+                            <h3 className="text-4xl font-black text-slate-900 mb-8 leading-tight">{labels.about_tour || 'About this tour'}</h3>
                             <p className="text-xl text-slate-500 leading-relaxed font-medium">
                                 {tour.description}
                             </p>
@@ -228,8 +231,8 @@ export default function TourClientWrapper({ tour }: { tour: Tour }) {
                         {/* Itinerary Section */}
                         {tour.itinerary && tour.itinerary.length > 0 && (
                             <section className="bg-white rounded-[2rem] p-10 border border-slate-100 shadow-sm relative overflow-hidden">
-                                <h2 className="text-xs font-black text-red-600 uppercase tracking-[0.4em] mb-6">Experience</h2>
-                                <h3 className="text-4xl font-black text-slate-900 mb-10 leading-tight">Detailed Itinerary</h3>
+                                <h2 className="text-xs font-black text-red-600 uppercase tracking-[0.4em] mb-6">{labels.experience_label || 'Experience'}</h2>
+                                <h3 className="text-4xl font-black text-slate-900 mb-10 leading-tight">{labels.detailed_itinerary || 'Detailed Itinerary'}</h3>
                                 <div className="space-y-0">
                                     {tour.itinerary.map((item, idx) => (
                                         <div key={idx} className="relative pl-12 pb-12 last:pb-0">
@@ -261,8 +264,8 @@ export default function TourClientWrapper({ tour }: { tour: Tour }) {
                         {/* Inclusions */}
                         {tour.amenities && tour.amenities.length > 0 && (
                             <section>
-                                <h2 className="text-xs font-black text-red-600 uppercase tracking-[0.4em] mb-6">Features</h2>
-                                <h3 className="text-4xl font-black text-slate-900 mb-10 leading-tight">What&apos;s Included</h3>
+                                <h2 className="text-xs font-black text-red-600 uppercase tracking-[0.4em] mb-6">{labels.features_label || 'Features'}</h2>
+                                <h3 className="text-4xl font-black text-slate-900 mb-10 leading-tight">{labels.whats_included || "What's Included"}</h3>
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                     {tour.amenities.map((amenity, idx) => (
                                         <div key={idx} className="flex items-center gap-4 p-6 bg-slate-50 rounded-[2rem] border border-slate-100 hover:bg-white hover:shadow-xl hover:shadow-slate-200/50 transition-all duration-300">
@@ -283,12 +286,12 @@ export default function TourClientWrapper({ tour }: { tour: Tour }) {
                             <div className="bg-white rounded-[3rem] border border-slate-100 p-10 shadow-[0_50px_100px_-20px_rgba(0,0,0,0.08)]">
                                 <div className="flex items-end gap-2 mb-10">
                                     <span className="text-5xl font-black text-slate-900 tracking-tighter">MUR {tour.base_price?.toLocaleString()}</span>
-                                    <span className="text-slate-400 font-black text-[10px] uppercase tracking-widest mb-3">/ person</span>
+                                    <span className="text-slate-400 font-black text-[10px] uppercase tracking-widest mb-3">/ {labels.per_person || 'person'}</span>
                                 </div>
 
                                 <div className="space-y-8">
                                     <div className="space-y-3">
-                                        <label className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] ml-2">Start Date</label>
+                                        <label className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] ml-2">{labels.start_date_label || 'Start Date'}</label>
                                         <div className="relative">
                                             <Calendar className="absolute left-5 top-1/2 -translate-y-1/2 text-slate-300" size={18} />
                                             <input
@@ -301,7 +304,7 @@ export default function TourClientWrapper({ tour }: { tour: Tour }) {
                                     </div>
 
                                     <div className="space-y-3">
-                                        <label className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] ml-2">Number of People</label>
+                                        <label className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] ml-2">{labels.num_people_label || 'Number of People'}</label>
                                         <div className="relative">
                                             <Users className="absolute left-5 top-1/2 -translate-y-1/2 text-slate-300" size={18} />
                                             <input
@@ -312,7 +315,7 @@ export default function TourClientWrapper({ tour }: { tour: Tour }) {
                                                 onChange={(e) => setGuests(parseInt(e.target.value))}
                                                 className="w-full pl-14 pr-6 py-5 bg-slate-50 border border-slate-100 rounded-2xl focus:outline-none focus:ring-2 focus:ring-red-600/50 focus:bg-white font-bold text-sm transition-all"
                                             />
-                                            <div className="text-[10px] text-slate-400 font-black uppercase tracking-widest mt-2 ml-2">Limit: {tour.max_group_size} people</div>
+                                            <div className="text-[10px] text-slate-400 font-black uppercase tracking-widest mt-2 ml-2">{labels.limit_label || 'Limit'}: {tour.max_group_size} {labels.people || 'people'}</div>
                                         </div>
                                     </div>
 
@@ -321,11 +324,11 @@ export default function TourClientWrapper({ tour }: { tour: Tour }) {
                                         onClick={handleBookNow}
                                         className="w-full shadow-2xl shadow-red-600/20"
                                     >
-                                        Book This Tour
+                                        {labels.book_this_tour || 'Book This Tour'}
                                     </Button>
 
                                     <p className="text-center text-slate-400 text-[10px] font-black uppercase tracking-[0.2em]">
-                                        Limited spots available
+                                        {labels.limited_spots_label || 'Limited spots available'}
                                     </p>
                                 </div>
                             </div>

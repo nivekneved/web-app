@@ -6,6 +6,8 @@ import { Loader2 } from 'lucide-react'
 import { motion } from 'framer-motion'
 import { createClient } from '@/lib/supabase'
 import { resolveImageUrl } from '@/lib/image'
+import { sanitizeHtml } from '@/lib/sanitize'
+import { useSettings } from '@/contexts/SettingsContext'
 
 type ContentBlock = {
     section_key: string
@@ -27,10 +29,14 @@ type AboutContent = {
         quote: string
         stats_label: string
         stats_value: string
+        image_primary?: string
+        image_secondary?: string
     }
 }
 
 export default function AboutPage() {
+    const { generalConfig: config } = useSettings()
+    const labels = (config?.ui_labels || {}) as Record<string, string>
     const [content, setContent] = useState<AboutContent | null>(null)
     const [loading, setLoading] = useState(true)
     const supabase = useMemo(() => createClient(), [])
@@ -63,19 +69,19 @@ export default function AboutPage() {
     }, [fetchContent])
 
     const hero = content?.hero || {
-        badge: "IATA Accredited Agency",
-        title: "Your World, <br />Our <span class=\"text-red-600\">Expertise</span>",
-        description: "Since 2014, Travel Lounge has been the premier destination for discerning travelers in Mauritius. We specialize in corporate travel and tailor-made leisure experiences worldwide.",
-        image: "/assets/heroes/hero-about.png"
+        badge: "",
+        title: "",
+        description: "",
+        image: ""
     }
 
     const identity = content?.identity || {
-        subtitle: "About Travel Lounge",
-        title: "Your Peace of Mind <br />is <span class=\"text-red-600\">Our Business</span>",
-        description: "Located in the heart of the city center of Port Louis, since 2014 TRAVEL LOUNGE LTD is an IATA accredited travel agency specializing in corporate business and personalized holiday leisure travel deals to Mauritian and international travelers.",
-        quote: "Travel Lounge Ltd is a one stop travel solutions provider which aims to continuously grow across borders, in products and services, and always putting the customer’s delight at first place.",
-        stats_label: "Years of Excellence",
-        stats_value: "10+"
+        subtitle: "",
+        title: "",
+        description: "",
+        quote: "",
+        stats_label: "",
+        stats_value: ""
     }
 
     if (loading) {
@@ -111,7 +117,7 @@ export default function AboutPage() {
                         <h1 className="text-4xl md:text-6xl font-black text-white mb-6 uppercase tracking-tight leading-[1.1]">
                             {hero.title.split('<br />').map((line: string, idx: number) => (
                                 <React.Fragment key={idx}>
-                                    <span dangerouslySetInnerHTML={{ __html: line }} />
+                                    <span dangerouslySetInnerHTML={{ __html: sanitizeHtml(line) }} />
                                     {idx < hero.title.split('<br />').length - 1 && <br />}
                                 </React.Fragment>
                             ))}
@@ -128,10 +134,10 @@ export default function AboutPage() {
                     <div className="grid grid-cols-1 lg:grid-cols-2 gap-20 items-center">
                         <div className="space-y-8">
                             <div className="space-y-4">
-                                <span className="text-xs font-black text-red-600 uppercase tracking-[0.4em]">Who we are</span>
+                                <span className="text-xs font-black text-red-600 uppercase tracking-[0.4em]">{labels.who_we_are_badge || 'Who we are'}</span>
                                 <h2 
                                     className="text-4xl font-black text-slate-900 leading-tight uppercase tracking-tight"
-                                    dangerouslySetInnerHTML={{ __html: identity.title.replace(/<br\s*\/?>/g, ' ') }}
+                                    dangerouslySetInnerHTML={{ __html: sanitizeHtml(identity.title.replace(/<br\s*\/?>/g, ' ')) }}
                                 />
                             </div>
                             <p className="text-lg text-slate-600 leading-relaxed">
@@ -141,27 +147,27 @@ export default function AboutPage() {
                                 <p className="text-xl italic font-medium text-slate-900 leading-relaxed mb-4">
                                     &quot;{identity.quote}&quot;
                                 </p>
-                                <span className="text-xs font-black uppercase tracking-widest text-red-600">The Travel Lounge Vision</span>
+                                <span className="text-xs font-black uppercase tracking-widest text-red-600">{labels.vision_label || 'The Travel Lounge Vision'}</span>
                             </div>
                         </div>
 
                         <div className="grid grid-cols-2 gap-6">
                            <div className="space-y-6 pt-12">
                                 <div className="bg-slate-900 p-8 rounded-[2.5rem] text-white shadow-2xl">
-                                    <div className="text-5xl font-black text-red-600 mb-2">{identity.stats_value}</div>
+                                     <div className="text-5xl font-black text-red-600 mb-2">{identity.stats_value}</div>
                                     <div className="text-xs font-black text-slate-400 uppercase tracking-widest">{identity.stats_label}</div>
                                 </div>
                                 <div className="aspect-[4/5] relative rounded-[2.5rem] overflow-hidden shadow-2xl">
-                                    <Image src={resolveImageUrl("/hero-adventure.png")} alt="Identity" fill className="object-cover" />
+                                    <Image src={resolveImageUrl(identity.image_secondary || "/hero-adventure.png")} alt="Identity" fill className="object-cover" />
                                 </div>
                            </div>
                            <div className="space-y-6">
                                 <div className="aspect-[4/5] relative rounded-[2.5rem] overflow-hidden shadow-2xl">
-                                    <Image src={resolveImageUrl("/hero-hotel.png")} alt="Identity" fill className="object-cover" />
+                                    <Image src={resolveImageUrl(identity.image_primary || "/hero-hotel.png")} alt="Identity" fill className="object-cover" />
                                 </div>
                                 <div className="bg-red-600 p-8 rounded-[2.5rem] text-white shadow-2xl">
-                                    <div className="text-4xl font-black mb-2">IATA</div>
-                                    <div className="text-xs font-black text-red-100 uppercase tracking-widest">Accredited Member</div>
+                                    <div className="text-4xl font-black mb-2">{labels.iata_label || 'IATA'}</div>
+                                    <div className="text-xs font-black text-red-100 uppercase tracking-widest">{labels.iata_sublabel || 'Accredited Member'}</div>
                                 </div>
                            </div>
                         </div>

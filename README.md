@@ -4,52 +4,24 @@ A Unified Booking & Management Ecosystem aiming for 11/10 Elite Standards.
 
 ---
 
-## 🏗️ Technical Architecture
-
-- **Web App**: Next.js 15, React 19, Tailwind CSS v4, Framer Motion.
-- **Admin App**: Vite, React, Ant Design/Tailwind.
-- **Mobile App**: Expo, React Native, Nativewind.
-- **Backend**: Supabase (PostgreSQL, Real-time, Auth).
-
----
-
-## 💎 Elite Standards (11/10 Goal)
-
-- **Typography & Branding**: Standardized on **Outfit Black (900)** and **Slate-300** high-definition palette.
-- **Visual Parity**: Shared asset directory and standardized UI components across all platforms.
-- **Conversion Focus**: Integrated WhatsApp/Email concierge paths on all detail-rich pages.
+## 📖 Standardized Documentation
+Explore the full documentation bundle in the `docs/` folder:
+1.  **[Overview & Ecosystem](./docs/01_overview.md)**: Vision and the "Elite" tech stack.
+2.  **[Architecture & Flow](./docs/02_architecture.md)**: Repository structure and design standards.
+3.  **[Database & Data Model](./docs/03_database.md)**: Supabase schema and RPC logic.
+4.  **[Development & Guide](./docs/04_development.md)**: Local setup and build processes.
+5.  **[Agent Progress Log](./docs/05_history.md)**: Historical milestones and audit trail.
 
 ---
 
-## 🛠️ Functional Capabilities
-
-- **Universal Search**: Multi-module discovery (Hotels, Flights, Activities, Cruises).
-- **Elite Booking**: 4-step interactive Wizard on Web & Mobile.
-- **Management**: Admin portal for SEO management and real-time content propagation.
-
----
-
-## 📁 Repository Structure
-
-- **web-app/**: Primary customer-facing platform.
-- **admin-app/**: Strategic portal for service management.
-- **mobile-app/**: High-engagement app for itinerary tracking.
+## 🚀 Quick Start
+1.  **Dependencies**: `npm install`
+2.  **Launch**: `npm run dev`
+3.  **Build**: `npm run build`
 
 ---
 
-## 📖 Global Documentation
-
-- [AGENTS.md](file:///c:/Users/deven/Desktop/web-app/AGENTS.md): Full development log and audit trail.
-- [PROJECT_RULES.md](file:///c:/Users/deven/Desktop/web-app/PROJECT_RULES.md): Mandatory architectural and code standards.
-
----
-
-## 🚀 Setup & Launch
-
-1. **Clone all repositories** into their respective workspace folders.
-2. **Environment Specs**: Configure `.env.local` with Supabase keys in each root.
-3. **Dependencies**: Execute `npm install` across all platforms.
-4. **Development**:
-   - Web: `npm run dev`
-   - Admin: `npm run dev`
-   - Mobile: `npx expo start`
+## 💎 Elite Alignment
+For ecosystem-wide context, refer to:
+- [Admin Portal](../admin-app/README.md)
+- [Mobile Application](../mobile-app/README.md)

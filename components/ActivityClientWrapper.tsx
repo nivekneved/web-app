@@ -10,6 +10,7 @@ import BookingWizard, { BookingWizardData } from '@/components/BookingWizard'
 import { createBookingRequest } from '@/lib/bookingService'
 import StarRating from '@/components/ui/StarRating'
 import ReviewsSection from '@/components/ReviewsSection'
+import { useSettings } from '@/contexts/SettingsContext'
 
 type ActivityService = {
     id: string
@@ -26,6 +27,8 @@ type ActivityService = {
 }
 
 export default function ActivityClientWrapper({ activity }: { activity: ActivityService }) {
+    const { generalConfig: config } = useSettings()
+    const labels = (config?.ui_labels || {}) as Record<string, string>
     const router = useRouter()
     const [date, setDate] = useState('')
     const [participants, setParticipants] = useState(2)
@@ -36,7 +39,7 @@ export default function ActivityClientWrapper({ activity }: { activity: Activity
     function toggleWishlist() {
         if (isInWishlist(activity.id)) {
             removeFromWishlist(activity.id)
-            toast.success('Removed from wishlist')
+            toast.success(labels.wishlist_removed || 'Removed from wishlist')
         } else {
             addToWishlist({
                 id: activity.id,
@@ -46,13 +49,13 @@ export default function ActivityClientWrapper({ activity }: { activity: Activity
                 base_price: activity.base_price,
                 location: activity.location
             })
-            toast.success('Added to wishlist')
+            toast.success(labels.wishlist_added || 'Added to wishlist')
         }
     }
 
     function handleBookNow() {
         if (!date) {
-            toast.error('Please select a date')
+            toast.error(labels.select_date_error || 'Please select a date')
             return
         }
         setShowWizard(true)
@@ -79,11 +82,11 @@ export default function ActivityClientWrapper({ activity }: { activity: Activity
         })
 
         if (result.success) {
-            toast.success('Booking request submitted successfully!')
+            toast.success(labels.booking_success || 'Booking request submitted successfully!')
             setShowWizard(false)
             router.push(`/booking-confirmation?id=${result.bookingId}&service=${encodeURIComponent(activity.name)}&amount=${activity.base_price}`)
         } else {
-            toast.error(result.error || 'Failed to submit booking request')
+            toast.error(result.error || labels.booking_error || 'Failed to submit booking request')
         }
         setBookingLoading(false)
     }
@@ -124,7 +127,7 @@ export default function ActivityClientWrapper({ activity }: { activity: Activity
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
                     <Link href="/activities" className="inline-flex items-center gap-2 text-slate-600 hover:text-red-600 font-medium transition-colors">
                         <ArrowLeft size={18} />
-                        Back to Activities
+                        {labels.back_to_activities || 'Back to Activities'}
                     </Link>
                 </div>
             </div>
@@ -155,7 +158,7 @@ export default function ActivityClientWrapper({ activity }: { activity: Activity
                                                 </div>
                                                 <div className="flex items-center gap-1 text-slate-600">
                                                     <Clock size={18} />
-                                                    <span className="font-medium">{activity.duration_hours} hours</span>
+                                                    <span className="font-medium">{activity.duration_hours} {labels.hours || 'hours'}</span>
                                                 </div>
                                                 <div className="flex items-center gap-2 px-4 py-1.5 bg-amber-50 rounded-full border border-amber-100">
                                                     <StarRating rating={activity.rating} size={16} />
@@ -181,15 +184,15 @@ export default function ActivityClientWrapper({ activity }: { activity: Activity
 
                                 <div className="lg:w-96 bg-slate-50 rounded-2xl p-6 border border-slate-300">
                                     <div className="text-center mb-6">
-                                        <div className="text-sm text-slate-500 mb-1">Starting from</div>
+                                        <div className="text-sm text-slate-500 mb-1">{labels.starting_from || 'Starting from'}</div>
                                         <div className="text-4xl font-black text-slate-900">Rs {activity.base_price?.toLocaleString()}</div>
-                                        <div className="text-sm text-slate-500">per person</div>
+                                        <div className="text-sm text-slate-500">{labels.per_person || 'per person'}</div>
                                     </div>
 
                                     <div className="space-y-4">
                                         <div>
                                             <label className="block text-xs font-bold text-slate-600 uppercase tracking-wide mb-2">
-                                                Date
+                                                {labels.date_label || 'Date'}
                                             </label>
                                             <input
                                                 type="date"
@@ -201,7 +204,7 @@ export default function ActivityClientWrapper({ activity }: { activity: Activity
 
                                         <div>
                                             <label className="block text-xs font-bold text-slate-600 uppercase tracking-wide mb-2">
-                                                Participants
+                                                {labels.participants_label || 'Participants'}
                                             </label>
                                             <input
                                                 type="number"
@@ -216,7 +219,7 @@ export default function ActivityClientWrapper({ activity }: { activity: Activity
                                             onClick={handleBookNow}
                                             className="w-full px-6 py-4 bg-red-600 text-white rounded-xl font-black uppercase tracking-wider hover:bg-slate-900 transition-all shadow-lg shadow-red-600/20"
                                         >
-                                            Book Now
+                                            {labels.book_now || 'Book Now'}
                                         </button>
                                     </div>
                                 </div>
@@ -227,8 +230,8 @@ export default function ActivityClientWrapper({ activity }: { activity: Activity
                 {activity.itinerary && activity.itinerary.length > 0 && (
                     <div className="bg-white rounded-[2rem] p-10 border border-slate-100 shadow-sm mb-12">
                         <section>
-                            <h2 className="text-xs font-black text-red-600 uppercase tracking-[0.4em] mb-6">Experience</h2>
-                            <h3 className="text-4xl font-black text-slate-900 mb-10 leading-tight">Detailed Itinerary</h3>
+                            <h2 className="text-xs font-black text-red-600 uppercase tracking-[0.4em] mb-6">{labels.experience_label || 'Experience'}</h2>
+                            <h3 className="text-4xl font-black text-slate-900 mb-10 leading-tight">{labels.detailed_itinerary || 'Detailed Itinerary'}</h3>
                             <div className="space-y-0">
                                 {activity.itinerary.map((item, idx) => (
                                     <div key={idx} className="relative pl-12 pb-12 last:pb-0">
@@ -261,8 +264,8 @@ export default function ActivityClientWrapper({ activity }: { activity: Activity
                 {/* Inclusions */}
                 {activity.amenities && activity.amenities.length > 0 && (
                     <div className="bg-white rounded-[2rem] p-10 border border-slate-100 shadow-sm mb-12">
-                        <h2 className="text-xs font-black text-red-600 uppercase tracking-[0.4em] mb-6">Service Details</h2>
-                        <h3 className="text-4xl font-black text-slate-900 mb-10 leading-tight">What&apos;s Included</h3>
+                        <h2 className="text-xs font-black text-red-600 uppercase tracking-[0.4em] mb-6">{labels.service_details_label || 'Service Details'}</h2>
+                        <h3 className="text-4xl font-black text-slate-900 mb-10 leading-tight">{labels.whats_included || "What's Included"}</h3>
                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                             {activity.amenities.map((amenity, idx) => (
                                 <div key={idx} className="flex items-center gap-4 p-6 bg-slate-50 rounded-[2rem] border border-slate-100 hover:bg-white hover:shadow-xl hover:shadow-slate-200/50 transition-all duration-300">

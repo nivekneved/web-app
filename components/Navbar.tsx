@@ -15,6 +15,7 @@ import { NavRecursive } from './Navbar/NavRecursive'
 // import { MegaMenu } from './MegaMenu'
 import { cn } from '@/lib/utils'
 import { Button } from './ui/Button'
+import { useSettings } from '@/contexts/SettingsContext'
 
 interface NavRow {
     id: string;
@@ -26,12 +27,12 @@ interface NavRow {
     created_at: string;
     updated_at: string;
 }
-import { type SiteSettings } from '@/types/settings'
 
 export default function Navbar() {
+    const { generalConfig: config } = useSettings()
+    const labels = (config?.ui_labels || {}) as Record<string, string>
     const [isOpen, setIsOpen] = useState(false)
     const [isScrolled, setIsScrolled] = useState(false)
-    const [settings, setSettings] = useState<SiteSettings | null>(null)
     const [items, setItems] = useState<NavMenuItem[]>([])
     // const [activeMegaMenu, setActiveMegaMenu] = useState<NavMenuItem | null>(null)
     const { wishlist } = useWishlist()
@@ -79,28 +80,7 @@ export default function Navbar() {
         }
     }, [supabase])
 
-    const fetchSettings = useCallback(async () => {
-        try {
-            const { data, error } = await supabase
-                .from('site_settings')
-                .select('key, value')
-
-            if (error) throw error
-
-            if (data) {
-                const config: SiteSettings = {}
-                data.forEach((item: { key: string; value: unknown }) => {
-                    config[item.key] = item.value
-                })
-                setSettings(config)
-            }
-        } catch (err) {
-            console.error('Error fetching navbar settings:', err)
-        }
-    }, [supabase])
-
     useEffect(() => {
-        fetchSettings()
         fetchNavigations()
 
         const handleScroll = () => {
@@ -108,11 +88,11 @@ export default function Navbar() {
         }
         window.addEventListener('scroll', handleScroll)
         return () => window.removeEventListener('scroll', handleScroll)
-    }, [fetchSettings, fetchNavigations])
+    }, [fetchNavigations])
 
-    const siteTitle = settings?.general_config?.siteTitle || ''
-    const facebookUrl = settings?.general_config?.facebookUrl || ''
-    const instagramUrl = settings?.general_config?.instagramUrl || ''
+    const siteTitle = config?.siteTitle || ''
+    const facebookUrl = config?.facebookUrl || ''
+    const instagramUrl = config?.instagramUrl || ''
 
     const menuItems = items.length > 0 ? items : navigationConfig.menu
 
@@ -131,28 +111,28 @@ export default function Navbar() {
                         <div className="w-full px-4 sm:px-4 lg:px-2 flex items-center justify-between">
                             <div className="flex items-center justify-between text-sm font-medium">
                                 <div className="flex flex-wrap items-center gap-4 md:gap-6">
-                                    {settings?.general_config?.contactPhone && (
-                                        <a href={`tel:${settings.general_config.contactPhone.replace(/\s+/g, '')}`} className="flex items-center gap-2 hover:bg-white/10 p-1 rounded transition-colors whitespace-nowrap">
+                                    {config?.contactPhone && (
+                                        <a href={`tel:${config.contactPhone.replace(/\s+/g, '')}`} className="flex items-center gap-2 hover:bg-white/10 p-1 rounded transition-colors whitespace-nowrap">
                                             <Phone size={14} />
-                                            <span>{settings.general_config.contactPhone}</span>
+                                            <span>{config.contactPhone}</span>
                                         </a>
                                     )}
-                                    {settings?.general_config?.whatsappNumber1 && (
-                                        <a href={`https://wa.me/${settings.general_config.whatsappNumber1.replace(/\s+/g, '').replace('+', '')}`} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 hover:bg-white/10 p-1 rounded transition-colors whitespace-nowrap">
+                                    {config?.whatsappNumber1 && (
+                                        <a href={`https://wa.me/${config.whatsappNumber1.replace(/\s+/g, '').replace('+', '')}`} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 hover:bg-white/10 p-1 rounded transition-colors whitespace-nowrap">
                                             <MessageCircle size={14} className="text-white" />
-                                            <span>{settings.general_config.whatsappNumber1}</span>
+                                            <span>{config.whatsappNumber1}</span>
                                         </a>
                                     )}
-                                    {settings?.general_config?.whatsappNumber2 && (
-                                        <a href={`https://wa.me/${settings.general_config.whatsappNumber2.replace(/\s+/g, '').replace('+', '')}`} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 hover:bg-white/10 p-1 rounded transition-colors whitespace-nowrap">
+                                    {config?.whatsappNumber2 && (
+                                        <a href={`https://wa.me/${config.whatsappNumber2.replace(/\s+/g, '').replace('+', '')}`} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 hover:bg-white/10 p-1 rounded transition-colors whitespace-nowrap">
                                             <MessageCircle size={14} className="text-white" />
-                                            <span>{settings.general_config.whatsappNumber2}</span>
+                                            <span>{config.whatsappNumber2}</span>
                                         </a>
                                     )}
-                                    {settings?.general_config?.contactEmail && (
-                                        <a href={`mailto:${settings.general_config.contactEmail}`} className="flex items-center gap-2 hover:bg-white/10 p-1 rounded transition-colors whitespace-nowrap">
+                                    {config?.contactEmail && (
+                                        <a href={`mailto:${config.contactEmail}`} className="flex items-center gap-2 hover:bg-white/10 p-1 rounded transition-colors whitespace-nowrap">
                                             <Mail size={14} />
-                                            <span>{settings.general_config.contactEmail}</span>
+                                            <span>{config.contactEmail}</span>
                                         </a>
                                     )}
                                 </div>
@@ -192,13 +172,13 @@ export default function Navbar() {
                         {/* Logo */}
                         <Link href="/" className="flex items-center gap-3 z-50 shrink-0">
                             <Image
-                                src={resolveImageUrl(settings?.general_config?.logoUrl || "/assets/logo.png")}
+                                src={resolveImageUrl(config?.logoUrl || "/assets/logo.png")}
                                 alt={siteTitle}
-                                width={parseInt(settings?.general_config?.logoWidth || "240") || 240}
-                                height={parseInt(settings?.general_config?.logoHeight || "72") || 72}
+                                width={parseInt(config?.logoWidth || "240") || 240}
+                                height={parseInt(config?.logoHeight || "72") || 72}
                                 style={{
-                                    height: settings?.general_config?.logoHeight ? `${settings.general_config.logoHeight}px` : 'auto',
-                                    width: settings?.general_config?.logoWidth && settings.general_config.logoWidth !== 'auto' ? `${settings.general_config.logoWidth}px` : 'auto'
+                                    height: config?.logoHeight ? `${config.logoHeight}px` : 'auto',
+                                    width: config?.logoWidth && config.logoWidth !== 'auto' ? `${config.logoWidth}px` : 'auto'
                                 }}
                                 className="w-auto object-contain transition-transform duration-300 hover:scale-105"
                                 priority
@@ -219,8 +199,8 @@ export default function Navbar() {
                                 size="sm"
                                 className="hidden md:flex shadow-none hover:shadow-lg transition-all"
                             >
-                                <Link href={navigationConfig.cta.href}>
-                                    {navigationConfig.cta.label}
+                                <Link href={config?.navbarCtaHref || '#'}>
+                                    {config?.navbarCtaLabel || ''}
                                 </Link>
                             </Button>
 
@@ -255,7 +235,7 @@ export default function Navbar() {
                                         aria-label="Toggle navigation menu"
                                     >
                                         <span className="text-[10px] font-black text-slate-900 dark:text-slate-100 tracking-[0.3em] uppercase transition-colors group-hover:text-red-600">
-                                            {isOpen ? "Close" : "Menu"}
+                                            {isOpen ? (labels.close_btn || 'Close') : (labels.menu_btn || 'Menu')}
                                         </span>
                                         <div className="w-8 h-8 flex items-center justify-center bg-white dark:bg-slate-900 rounded-full text-slate-900 dark:text-white shadow-sm border border-slate-100 dark:border-slate-800">
                                             {isOpen ? <X size={18} /> : <Menu size={18} />}
@@ -295,12 +275,12 @@ export default function Navbar() {
                                 <div className="p-8 flex items-center justify-between border-b border-slate-100 dark:border-slate-200">
                                     <Link href="/" onClick={() => setIsOpen(false)}>
                                         <Image
-                                            src={resolveImageUrl(settings?.general_config?.logoUrl || "/assets/logo.png")}
+                                            src={resolveImageUrl(config?.logoUrl || "/assets/logo.png")}
                                             alt={siteTitle}
                                             width={140}
                                             height={40}
                                             style={{
-                                                height: settings?.general_config?.logoHeight ? `${Math.min(parseInt(settings.general_config.logoHeight), 40)}px` : '40px',
+                                                height: config?.logoHeight ? `${Math.min(parseInt(config.logoHeight), 40)}px` : '40px',
                                                 width: 'auto'
                                             }}
                                             className="w-auto object-contain"
@@ -329,8 +309,8 @@ export default function Navbar() {
                                         className="w-full shadow-2xl shadow-red-600/20 py-8 text-sm tracking-[0.2em] font-black focus:ring-4 focus:ring-red-600/50"
                                         onClick={() => setIsOpen(false)}
                                     >
-                                        <Link href={navigationConfig.cta.href}>
-                                            {navigationConfig.cta.label}
+                                        <Link href={config?.navbarCtaHref || navigationConfig.cta.href}>
+                                            {config?.navbarCtaLabel || navigationConfig.cta.label}
                                         </Link>
                                     </Button>
 

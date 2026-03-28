@@ -6,6 +6,7 @@ import { createClient } from '@/lib/supabase'
 import { resolveImageUrl } from '@/lib/image'
 import { ChevronDown, HelpCircle, Loader2, Mail, MessageCircle } from 'lucide-react'
 import Link from 'next/link'
+import { useSettings } from '@/contexts/SettingsContext'
 
 const supabase = createClient()
 
@@ -23,6 +24,8 @@ type GroupedFAQ = {
 }
 
 export default function FAQPage() {
+    const { generalConfig: config } = useSettings()
+    const labels = (config?.ui_labels || {}) as Record<string, string>
     const [openItems, setOpenItems] = useState<string[]>([])
     const [faqData, setFaqData] = useState<GroupedFAQ[]>([])
     const [loading, setLoading] = useState(true)
@@ -90,9 +93,9 @@ export default function FAQPage() {
                 />
                 <div className="absolute inset-0 bg-gradient-to-b from-black/20 via-transparent to-black/60" />
                 <div className="relative z-10 text-center text-white px-6">
-                    <h1 className="text-4xl md:text-6xl font-black mb-6 uppercase tracking-tight leading-none">Help Center</h1>
+                    <h1 className="text-4xl md:text-6xl font-black mb-6 uppercase tracking-tight leading-none">{labels.faq_hero_title || 'Help Center'}</h1>
                     <p className="text-lg text-white/80 font-medium max-w-2xl mx-auto leading-relaxed">
-                        Find answers to commonly asked questions about our services and bookings.
+                        {labels.faq_hero_subtitle || 'Find answers to commonly asked questions about our services and bookings.'}
                     </p>
                 </div>
             </div>
@@ -103,7 +106,7 @@ export default function FAQPage() {
                      <div className="max-w-2xl mx-auto relative">
                         <input
                             type="text"
-                            placeholder="Search for answers..."
+                            placeholder={labels.faq_search_placeholder || 'Search for answers...'}
                             className="w-full px-8 py-5 bg-slate-50 border border-slate-300 rounded-2xl focus:outline-none focus:ring-4 focus:ring-red-600/10 focus:border-red-600 text-lg font-medium transition-all"
                             value={searchTerm}
                             onChange={(e) => setSearchTerm(e.target.value)}
@@ -164,14 +167,14 @@ export default function FAQPage() {
                     {/* Contact CTA */}
                     <div className="mt-20 bg-slate-900 rounded-[3rem] p-12 text-center text-white overflow-hidden relative">
                          <div className="absolute top-0 right-0 w-64 h-64 bg-red-600/10 rounded-full blur-3xl -mr-32 -mt-32" />
-                         <h2 className="text-3xl font-black mb-4">Still have questions?</h2>
-                         <p className="text-slate-400 mb-10 max-w-xl mx-auto">Our support team is available 24/7 to help you with your bookings and travel plans.</p>
+                         <h2 className="text-3xl font-black mb-4">{labels.faq_cta_title || 'Still have questions?'}</h2>
+                         <p className="text-slate-400 mb-10 max-w-xl mx-auto">{labels.faq_cta_subtitle || 'Our support team is available 24/7 to help you with your bookings and travel plans.'}</p>
                          <div className="flex flex-wrap justify-center gap-6">
                              <Link href="/contact" className="px-8 py-4 bg-red-600 text-white font-bold rounded-full hover:bg-red-500 transition-all shadow-xl shadow-red-600/20 flex items-center gap-2">
-                                <Mail size={20} /> Email Support
+                                <Mail size={20} /> {labels.email_support_label || 'Email Support'}
                              </Link>
-                             <a href="https://wa.me/23059407711" target="_blank" className="px-8 py-4 bg-white text-slate-900 font-bold rounded-full hover:bg-slate-50 transition-all flex items-center gap-2">
-                                <MessageCircle size={20} className="text-green-600" /> WhatsApp Chat
+                             <a href={`https://wa.me/${config?.whatsappNumber1?.replace(/\D/g, '') || '23059407711'}`} target="_blank" className="px-8 py-4 bg-white text-slate-900 font-bold rounded-full hover:bg-slate-50 transition-all flex items-center gap-2">
+                                <MessageCircle size={20} className="text-green-600" /> {labels.whatsapp_chat_label || 'WhatsApp Chat'}
                              </a>
                          </div>
                     </div>

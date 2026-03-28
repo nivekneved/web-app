@@ -9,7 +9,8 @@ import {
   PhoneCall,
   MessageCircle,
   Users,
-  Mail
+  Mail,
+  Send
 } from 'lucide-react';
 import { createClient } from '@/lib/supabase';
 import { resolveImageUrl } from '@/lib/image';
@@ -19,9 +20,13 @@ import { Button } from '@/components/ui/Button';
 import { Input } from '@/components/ui/Input';
 import { toast } from 'sonner';
 import { cn } from '@/lib/utils';
-import { usePageContent } from '@/hooks/usePageContent';
+import { useSettings } from '@/contexts/SettingsContext';
 
 export default function TailorMadePage() {
+  const { generalConfig: settings } = useSettings();
+  const labels = (settings?.ui_labels || {}) as Record<string, string>;
+  const placeholders = (settings?.form_placeholders || {}) as Record<string, string>;
+
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitStatus, setSubmitStatus] = useState<'idle' | 'success' | 'error'>('idle');
   const supabase = createClient();
@@ -51,27 +56,24 @@ export default function TailorMadePage() {
       const { error } = await supabase.from('inquiries').insert([data]);
       if (error) throw error;
       setSubmitStatus('success');
-      toast.success('Your tailor-made request has been sent! Our experts will contact you soon.');
+      toast.success(labels.tailor_made_success || 'Your tailor-made request has been sent! Our team will contact you soon.');
       (e.target as HTMLFormElement).reset();
     } catch (error) {
       console.error('Error submitting inquiry:', error);
       setSubmitStatus('error');
-      toast.error('Something went wrong. Please try again or call us.');
+      toast.error(labels.tailor_made_error || 'Something went wrong. Please try again or call us.');
     } finally {
       setIsSubmitting(false);
     }
   };
-
-  const { content } = usePageContent('tailormade');
-  const hero = content.hero || {};
 
   return (
     <div className="bg-white min-h-screen">
       {/* Hero Section */}
       <section className="relative h-[250px] md:h-[350px] flex items-center overflow-hidden bg-slate-900">
         <Image
-          src={resolveImageUrl(hero.image_url, "/assets/placeholders/hero-placeholder.png")}
-          alt={hero.title || "Tailor-Made Travel"}
+          src={resolveImageUrl(null, "/assets/placeholders/hero-placeholder.png")}
+          alt="Tailor-Made Travel"
           fill
           className="object-cover opacity-60"
           priority
@@ -80,13 +82,14 @@ export default function TailorMadePage() {
         
         <div className="container mx-auto px-6 relative z-10 text-center flex flex-col items-center justify-center">
             <span className="inline-block py-2 px-6 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-white text-[10px] font-black uppercase tracking-[0.4em] mb-6">
-                {hero.subtitle || "Bespoke Journeys"}
+                {labels.tailor_made_hero_badge || "Bespoke Journeys"}
             </span>
             <h1 className="text-4xl md:text-6xl font-black text-white mb-6 uppercase tracking-tight leading-[1.1]">
-                {hero.title || "Your Journey,"} {!hero.title && <><br /> <span className="text-red-500 italic">Exactly as You Imagine.</span></>}
+                {labels.tailor_made_hero_title_1 || "Your Journey,"} <br />
+                <span className="text-red-500 italic">{labels.tailor_made_hero_title_2 || "Exactly as You Imagine."}</span>
             </h1>
             <p className="text-lg text-white/70 font-medium max-w-2xl mx-auto leading-relaxed">
-                {hero.description || "Customise your trips including accommodation, transport, activities, or places of interest with our travel specialists."}
+                {labels.tailor_made_hero_subtitle || "Customise your trips including accommodation, transport, activities, or places of interest with our travel specialists."}
             </p>
         </div>
       </section>
@@ -95,7 +98,7 @@ export default function TailorMadePage() {
         <div className="max-w-7xl mx-auto px-8">
           <Breadcrumbs 
             items={[
-                { label: 'Tailor-Made Travel', active: true }
+                { label: labels.breadcrumb_tailor_made || 'Tailor-Made Travel', active: true }
             ]}
             className="mb-8"
           />
@@ -106,22 +109,22 @@ export default function TailorMadePage() {
             <div className="lg:col-span-2">
               <div className="bg-white rounded-[2rem] border border-slate-300 p-8 shadow-[0_50px_100px_-20px_rgba(0,0,0,0.08)]">
                 <div className="mb-8">
-                  <h2 className="text-xs font-black text-red-600 uppercase tracking-[0.4em] mb-4">Inquiry</h2>
-                  <h3 className="text-4xl font-black text-slate-900 tracking-tight">Design Your Trip</h3>
+                  <h2 className="text-xs font-black text-red-600 uppercase tracking-[0.4em] mb-4">{labels.form_inquiry_badge || 'Inquiry'}</h2>
+                  <h3 className="text-4xl font-black text-slate-900 tracking-tight">{labels.form_design_title || 'Design Your Trip'}</h3>
                 </div>
 
                 <form onSubmit={handleSubmit} className="space-y-8">
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     {/* Destination */}
                     <div className="space-y-3">
-                        <label className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] ml-2">Where would you like to go? *</label>
+                        <label className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] ml-2">{labels.label_destination || 'Where would you like to go?'} *</label>
                         <div className="relative">
                             <MapPin className="absolute left-5 top-1/2 -translate-y-1/2 text-slate-300" size={18} />
                             <input 
                                 type="text" 
                                 name="destination"
                                 required 
-                                placeholder="e.g. Dubai, Paris, Maldives"
+                                placeholder={placeholders.destination || "e.g. Dubai, Paris, Maldives"}
                                 className="w-full pl-14 pr-6 py-5 bg-slate-50 border border-slate-300 rounded-2xl focus:outline-none focus:ring-2 focus:ring-red-600/50 focus:bg-white font-bold text-sm text-slate-900 placeholder:text-slate-400 transition-all" 
                             />
                         </div>
@@ -129,7 +132,7 @@ export default function TailorMadePage() {
 
                     {/* Dates */}
                     <div className="space-y-3">
-                        <label className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] ml-2">Departure *</label>
+                        <label className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] ml-2">{labels.label_departure || 'Departure'} *</label>
                         <input 
                             type="date" 
                             name="departure_date"
@@ -141,7 +144,7 @@ export default function TailorMadePage() {
                     {/* Travelers */}
                     <div className="grid grid-cols-2 gap-4">
                         <div className="space-y-3">
-                            <label className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] ml-2">Adults *</label>
+                            <label className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] ml-2">{labels.label_adults || 'Adults'} *</label>
                             <div className="relative">
                                 <Users className="absolute left-5 top-1/2 -translate-y-1/2 text-slate-300" size={18} />
                                 <select 
@@ -149,19 +152,19 @@ export default function TailorMadePage() {
                                     required
                                     className="w-full pl-14 pr-6 py-5 bg-slate-50 border border-slate-300 rounded-2xl focus:outline-none focus:ring-2 focus:ring-red-600/50 focus:bg-white font-bold text-sm text-slate-900 transition-all appearance-none"
                                 >
-                                    {[1,2,3,4,5,6,7,8,9,10].map(n => <option key={n} value={n.toString()}>{n} Adults</option>)}
+                                    {[1,2,3,4,5,6,7,8,9,10].map(n => <option key={n} value={n.toString()}>{n} {labels.adults_suffix || 'Adults'}</option>)}
                                 </select>
                             </div>
                         </div>
                         <div className="space-y-3">
-                            <label className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] ml-2">Children</label>
+                            <label className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] ml-2">{labels.label_children || 'Children'}</label>
                             <div className="relative">
                                 <Users className="absolute left-5 top-1/2 -translate-y-1/2 text-slate-300 pointer-events-none" size={18} />
                                 <select 
                                     name="children"
                                     className="w-full pl-14 pr-6 py-5 bg-slate-50 border border-slate-300 rounded-2xl focus:outline-none focus:ring-2 focus:ring-red-600/50 focus:bg-white font-bold text-sm text-slate-900 transition-all appearance-none"
                                 >
-                                    {[0,1,2,3,4,5,6].map(n => <option key={n} value={n.toString()}>{n} Children</option>)}
+                                    {[0,1,2,3,4,5,6].map(n => <option key={n} value={n.toString()}>{n} {labels.children_suffix || 'Children'}</option>)}
                                 </select>
                             </div>
                         </div>
@@ -175,33 +178,33 @@ export default function TailorMadePage() {
                   {/* Contact Info */}
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                     <Input 
-                        label="Your Name *"
+                        label={labels.label_your_name || "Your Name *"}
                         name="name"
                         required 
-                        placeholder="John Doe"
+                        placeholder={placeholders.name || "John Doe"}
                     />
                     <Input 
-                        label="Email Address *"
+                        label={labels.label_email_address || "Email Address *"}
                         type="email" 
                         name="email"
                         required 
-                        placeholder="john@example.com"
+                        placeholder={placeholders.email || "john@example.com"}
                     />
                     <Input 
-                        label="Phone Number *"
+                        label={labels.label_phone_number || "Phone Number *"}
                         type="tel" 
                         name="phone"
                         required 
-                        placeholder="+230"
+                        placeholder={placeholders.phone || "+230"}
                     />
                   </div>
 
                   <div className="space-y-3">
-                    <label className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] ml-2">Special Requests / Message</label>
+                    <label className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] ml-2">{labels.label_special_requests || 'Special Requests / Message'}</label>
                     <textarea 
                       name="message"
                       rows={4}
-                      placeholder="Share any specific interests, dietary requirements, or special occasions..."
+                      placeholder={placeholders.special_requests || "Share any specific interests, dietary requirements, or special occasions..."}
                       className="w-full px-6 py-5 bg-slate-50 border border-slate-300 rounded-2xl focus:outline-none focus:ring-2 focus:ring-red-600/50 focus:bg-white font-bold text-sm text-slate-900 placeholder:text-slate-400 transition-all resize-none" 
                     ></textarea>
                   </div>
@@ -213,7 +216,7 @@ export default function TailorMadePage() {
                       isLoading={isSubmitting}
                       className="w-full md:w-auto min-w-[300px] shadow-2xl shadow-red-600/20"
                     >
-                      Send Tailor-Made Request
+                      <Send size={18} className="mr-2" /> {labels.button_send_tailor_made || 'Send Tailor-Made Request'}
                     </Button>
 
                     <AnimatePresence mode="wait">
@@ -225,7 +228,7 @@ export default function TailorMadePage() {
                           className="flex items-center gap-3 text-green-600 font-bold bg-green-50 px-8 py-4 rounded-2xl border border-green-100"
                         >
                           <CheckCircle2 size={20} />
-                          Request sent successfully! Our team will contact you soon.
+                          {labels.tailor_made_success_message || 'Request sent successfully! Our team will contact you soon.'}
                         </motion.div>
                       )}
                     </AnimatePresence>
@@ -238,12 +241,12 @@ export default function TailorMadePage() {
             <div className="space-y-8">
               {/* Process Section */}
               <section>
-                <h3 className="text-xs font-black text-red-600 uppercase tracking-[0.4em] mb-6">The Process</h3>
+                <h3 className="text-xs font-black text-red-600 uppercase tracking-[0.4em] mb-6">{labels.process_badge || 'The Process'}</h3>
                 <div className="space-y-6">
                   {[
-                    { step: '01', title: 'Consultation', desc: 'We chat about your dreams, interests, and must-sees.' },
-                    { step: '02', title: 'Curated Design', desc: 'Our experts draft a unique itinerary for your review.' },
-                    { step: '03', title: 'Perfected Details', desc: 'We refine everything until it is absolutely perfect.' },
+                    { step: '01', title: labels.step1_title || 'Consultation', desc: labels.step1_desc || 'We chat about your dreams, interests, and must-sees.' },
+                    { step: '02', title: labels.step2_title || 'Curated Design', desc: labels.step2_desc || 'Our experts draft a unique itinerary for your review.' },
+                    { step: '03', title: labels.step3_title || 'Perfected Details', desc: labels.step3_desc || 'We refine everything until it is absolutely perfect.' },
                   ].map((item, i) => (
                     <div key={i} className="p-6 bg-slate-50 rounded-2xl border border-slate-300">
                       <span className="text-xs font-black text-red-500 mb-2 block">{item.step}</span>
@@ -258,32 +261,47 @@ export default function TailorMadePage() {
               <div className="bg-slate-900 text-white rounded-[2rem] p-8 shadow-2xl shadow-slate-900/20">
                 <h3 className="text-xl font-black mb-6 flex items-center gap-4 text-red-500">
                   <Clock size={28} />
-                  Hours
+                  {labels.hours_title || 'Hours'}
                 </h3>
                 <div className="space-y-6 font-medium">
-                  <div className="flex justify-between items-center border-b border-white/10 pb-4">
-                    <span className="text-white/60">Mon – Fri</span>
-                    <span className="font-black">08:30 – 17:00</span>
-                  </div>
-                  <div className="flex justify-between items-center border-b border-white/10 pb-4">
-                    <span className="text-white/60">Saturday</span>
-                    <span className="font-black">08:30 – 12:30</span>
-                  </div>
-                  <div className="flex justify-between items-center text-red-400">
-                    <span className="font-black uppercase text-[10px] tracking-widest">Sunday</span>
-                    <span className="font-black uppercase text-[10px] tracking-widest">Closed</span>
-                  </div>
+                  {settings?.workingHours?.split('\n').map((line, i) => {
+                      const parts = line.split(':');
+                      if (parts.length < 2) return null;
+                      const [days, time] = parts;
+                      return (
+                        <div key={i} className="flex justify-between items-center border-b border-white/10 pb-4 last:border-0 last:pb-0">
+                            <span className="text-white/60">{days}</span>
+                            <span className="font-black">{time}</span>
+                        </div>
+                      )
+                  })}
+                  {!settings?.workingHours && (
+                      <>
+                        <div className="flex justify-between items-center border-b border-white/10 pb-4">
+                            <span className="text-white/60">Mon – Fri</span>
+                            <span className="font-black">08:30 – 17:00</span>
+                        </div>
+                        <div className="flex justify-between items-center border-b border-white/10 pb-4">
+                            <span className="text-white/60">Saturday</span>
+                            <span className="font-black">08:30 – 12:30</span>
+                        </div>
+                        <div className="flex justify-between items-center text-red-400">
+                            <span className="font-black uppercase text-[10px] tracking-widest">Sunday</span>
+                            <span className="font-black uppercase text-[10px] tracking-widest">Closed</span>
+                        </div>
+                      </>
+                  )}
                 </div>
               </div>
 
               {/* Contact Numbers */}
               <section>
-                  <h3 className="text-xs font-black text-red-600 uppercase tracking-[0.4em] mb-6">Concierge</h3>
+                  <h3 className="text-xs font-black text-red-600 uppercase tracking-[0.4em] mb-6">{labels.concierge_badge || 'Concierge'}</h3>
                   <div className="space-y-4">
                     {[
-                        { label: 'General', number: '(+230) 212 4070', icon: PhoneCall },
-                        { label: 'WhatsApp', number: '(+230) 5940 7711', icon: MessageCircle, isWhatsApp: true },
-                        { label: 'Email', number: 'reservation@travellounge.mu', icon: Mail }
+                        { label: labels.label_general || 'General', number: settings?.contactPhone || '(+230) 212 4070', icon: PhoneCall },
+                        { label: labels.label_whatsapp || 'WhatsApp', number: settings?.whatsappNumber1 || '(+230) 5940 7711', icon: MessageCircle, isWhatsApp: true },
+                        { label: labels.label_email || 'Email', number: settings?.contactEmail || 'reservation@travellounge.mu', icon: Mail }
                     ].map((item, i) => (
                         <div key={i} className="group flex items-center gap-5 p-4 hover:bg-slate-50 rounded-2xl transition-all duration-300">
                             <div className={cn(

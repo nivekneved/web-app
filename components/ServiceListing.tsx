@@ -8,6 +8,7 @@ import { createClient } from '@/lib/supabase'
 import { Filter, Star, Check, Search, X } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { resolveImageUrl } from '@/lib/image'
+import { useSettings } from '@/contexts/SettingsContext'
 
 const supabase = createClient()
 
@@ -104,6 +105,9 @@ function ServiceListingInner({
     searchPlaceholder,
     categorySlug
 }: ServiceListingProps) {
+    const { generalConfig: config } = useSettings()
+    const labels = (config?.ui_labels || {}) as Record<string, string>
+    const placeholders = (config?.form_placeholders || {}) as Record<string, string>
     const searchParams = useSearchParams()
     const urlRegion = searchParams.get('region')
 
@@ -329,24 +333,24 @@ function ServiceListingInner({
                             <div className="flex items-center justify-between mb-8 pb-4 border-b border-slate-100">
                                 <h3 className="text-xl font-bold text-slate-900 flex items-center gap-2">
                                     <Filter size={20} className="text-red-600" />
-                                    Filter Tools
+                                    {labels.filter_tools || 'Filter Tools'}
                                 </h3>
                                 <button 
                                     onClick={resetFilters}
                                     className="text-xs font-black text-red-600 hover:text-red-700 uppercase tracking-widest"
                                 >
-                                    Reset
+                                    {labels.reset_btn || 'Reset'}
                                 </button>
                             </div>
 
                             {/* Search within page */}
                             <div className="mb-8">
-                                <label className="block text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mb-3">Quick Search</label>
+                                <label className="block text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mb-3">{labels.quick_search || 'Quick Search'}</label>
                                 <div className="relative">
                                     <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-300" size={16} />
                                     <input
                                         type="text"
-                                        placeholder={searchPlaceholder}
+                                        placeholder={placeholders.search_placeholder || searchPlaceholder}
                                         value={searchTerm}
                                         onChange={(e) => setSearchTerm(e.target.value)}
                                         className="w-full pl-11 pr-4 py-3 bg-slate-50 border border-slate-300 rounded-2xl focus:outline-none focus:ring-2 focus:ring-red-600/20 focus:bg-white font-bold text-sm transition-all"
@@ -357,7 +361,7 @@ function ServiceListingInner({
                             {/* Price Filter */}
                             <div className="mb-8">
                                 <label className="block text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mb-4">
-                                    Budget (Up to Rs {filterPrice.toLocaleString()})
+                                    {labels.budget_label || 'Budget'} ({labels.up_to || 'Up to'} Rs {filterPrice.toLocaleString()})
                                 </label>
                                 <input
                                     type="range"
@@ -377,7 +381,7 @@ function ServiceListingInner({
                             {/* Region Filter */}
                             {availableRegions.length > 0 && (
                                 <div className="mb-8">
-                                    <label className="block text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mb-4">Region</label>
+                                    <label className="block text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mb-4">{labels.region_label || 'Region'}</label>
                                     <div className="grid grid-cols-1 gap-2">
                                         {availableRegions.map(region => (
                                             <button
@@ -400,7 +404,7 @@ function ServiceListingInner({
                             {/* Popular Amenities / Tags */}
                             {availableAmenities.length > 0 && (
                                 <div className="mb-8">
-                                    <label className="block text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mb-4">Popular Tags</label>
+                                    <label className="block text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mb-4">{labels.popular_tags || 'Popular Tags'}</label>
                                     <div className="flex flex-wrap gap-2">
                                         {['Sea Adventure', 'Land Adventure', 'Family Friendly', 'Romantic', 'All Inclusive'].filter(a => availableAmenities.includes(a)).map(amenity => (
                                             <button
@@ -421,7 +425,7 @@ function ServiceListingInner({
 
                             {/* Rating Filter */}
                             <div>
-                                <label className="block text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mb-4">Rating</label>
+                                <label className="block text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mb-4">{labels.rating_label || 'Rating'}</label>
                                 <div className="space-y-2">
                                     {[5, 4, 3].map(rating => (
                                         <button 
@@ -437,7 +441,7 @@ function ServiceListingInner({
                                                 {[...Array(rating)].map((_, i) => (
                                                     <Star key={i} size={14} className="fill-yellow-400 text-yellow-400" />
                                                 ))}
-                                                <span className="text-[10px] font-black text-slate-400 ml-1 uppercase">& Up</span>
+                                                <span className="text-[10px] font-black text-slate-400 ml-1 uppercase">& {labels.up_suffix || 'Up'}</span>
                                             </div>
                                             {selectedRatings.includes(rating) && <Check size={14} className="text-red-600" />}
                                         </button>
@@ -457,7 +461,7 @@ function ServiceListingInner({
                                 </div>
                                 <input
                                     type="text"
-                                    placeholder={searchPlaceholder}
+                                    placeholder={placeholders.search_placeholder || searchPlaceholder}
                                     value={searchTerm}
                                     onChange={(e) => setSearchTerm(e.target.value)}
                                     className="w-full pl-16 pr-6 py-6 bg-white border-2 border-slate-300 rounded-[2rem] text-xl font-bold text-slate-900 placeholder:text-slate-400 shadow-sm transition-all focus:outline-none focus:border-red-600/50 focus:ring-4 focus:ring-red-600/10"
@@ -476,15 +480,15 @@ function ServiceListingInner({
                         {/* Sort Bar */}
                         <div className="bg-white rounded-[2rem] p-6 shadow-sm border border-slate-100 mb-8 flex flex-wrap items-center justify-between gap-6">
                             <div className="text-slate-500 font-bold">
-                                Found <span className="text-slate-900 font-black">{processedServices.length}</span> adventures for you
+                                {labels.found_prefix || 'Found'} <span className="text-slate-900 font-black">{processedServices.length}</span> {labels.found_suffix || 'adventures for you'}
                             </div>
                             <div className="flex items-center gap-6">
-                                <span className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em]">Sort By</span>
+                                <span className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em]">{labels.sort_by || 'Sort By'}</span>
                                 <div className="flex bg-slate-50 p-1 rounded-2xl">
                                     {[
-                                        { id: 'price-asc', label: 'Price (Low)' },
-                                        { id: 'price-desc', label: 'Price (High)' },
-                                        { id: 'rating-desc', label: 'Recommended' }
+                                        { id: 'price-asc', label: labels.price_low || 'Price (Low)' },
+                                        { id: 'price-desc', label: labels.price_high || 'Price (High)' },
+                                        { id: 'rating-desc', label: labels.recommended || 'Recommended' }
                                     ].map(opt => (
                                         <button
                                             key={opt.id}
@@ -525,13 +529,13 @@ function ServiceListingInner({
                                             <div className="w-24 h-24 bg-slate-50 rounded-full flex items-center justify-center mx-auto mb-8 text-slate-200">
                                                 <Filter size={48} />
                                             </div>
-                                            <h3 className="text-3xl font-black text-slate-900 mb-4 tracking-tight">No adventures found</h3>
-                                            <p className="text-slate-500 font-medium max-w-xs mx-auto mb-10"> We couldn&apos;t find any matches for your current filters. Try broadening your search. </p>
+                                            <h3 className="text-3xl font-black text-slate-900 mb-4 tracking-tight">{labels.no_results_title || 'No adventures found'}</h3>
+                                            <p className="text-slate-500 font-medium max-w-xs mx-auto mb-10"> {labels.no_results_subtitle || "We couldn't find any matches for your current filters. Try broadening your search."} </p>
                                             <button 
                                                 onClick={resetFilters}
                                                 className="px-12 py-4 bg-red-600 text-white rounded-2xl font-black uppercase text-xs tracking-widest hover:bg-red-700 transition-all shadow-xl shadow-red-600/20"
                                             >
-                                                Reset All Filters
+                                                {labels.reset_all_filters || 'Reset All Filters'}
                                             </button>
                                         </div>
                                     </motion.div>

@@ -1,6 +1,6 @@
 import { createClient } from './supabase'
 
-const supabase = createClient()
+// H-07 FIX: Supabase client created inside function, not at module level
 
 export type BookingRequestData = {
     serviceId: string
@@ -23,6 +23,7 @@ export type BookingRequestData = {
 
 export async function createBookingRequest(data: BookingRequestData) {
     try {
+        const supabase = createClient()
         const { data: { user } } = await supabase.auth.getUser()
         
         // 1. Identify or create customer via secure RPC

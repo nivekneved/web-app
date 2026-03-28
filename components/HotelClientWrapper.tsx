@@ -25,6 +25,7 @@ import { cn } from '@/lib/utils'
 import { resolveImageUrl } from '@/lib/image'
 import StarRating from './ui/StarRating'
 import SocialShare from '@/components/SocialShare'
+import { useSettings } from '@/contexts/SettingsContext'
 
 type RoomType = {
     type: string;
@@ -79,6 +80,8 @@ type Hotel = {
 }
 
 export default function HotelClientWrapper({ hotel }: { hotel: Hotel }) {
+    const { generalConfig: config } = useSettings()
+    const labels = (config?.ui_labels || {}) as Record<string, string>
     const { addToWishlist, removeFromWishlist, isInWishlist } = useWishlist()
     
     const [checkIn, setCheckIn] = useState('')
@@ -94,7 +97,7 @@ export default function HotelClientWrapper({ hotel }: { hotel: Hotel }) {
         if (!hotel) return
         if (isInWishlist(hotel.id)) {
             removeFromWishlist(hotel.id)
-            toast.success('Removed from wishlist')
+            toast.success(labels.wishlist_removed || 'Removed from wishlist')
         } else {
             addToWishlist({
                 id: hotel.id,
@@ -104,7 +107,7 @@ export default function HotelClientWrapper({ hotel }: { hotel: Hotel }) {
                 base_price: hotel.base_price,
                 location: hotel.location
             })
-            toast.success('Added to wishlist')
+            toast.success(labels.wishlist_added || 'Added to wishlist')
         }
     }
     
@@ -124,11 +127,11 @@ export default function HotelClientWrapper({ hotel }: { hotel: Hotel }) {
 
     function handleBookNow() {
         if (!checkIn || !checkOut) {
-            toast.error('Please select check-in and check-out dates')
+            toast.error(labels.select_dates_error || 'Please select check-in and check-out dates')
             return
         }
         if (!selectedRoom && hotel.room_types && hotel.room_types.length > 0) {
-            toast.error('Please select a room type')
+            toast.error(labels.select_room_error || 'Please select a room type')
             const element = document.getElementById('rooms-selection');
             element?.scrollIntoView({ behavior: 'smooth' });
             return
@@ -141,7 +144,7 @@ export default function HotelClientWrapper({ hotel }: { hotel: Hotel }) {
             const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
             
             if (diffDays < selectedRoom.min_stay) {
-                toast.error(`This room requires a minimum stay of ${selectedRoom.min_stay} nights. Your selection is ${diffDays} ${diffDays === 1 ? 'night' : 'nights'}.`);
+                toast.error(`${labels.min_stay_error_prefix || 'This room requires a minimum stay of'} ${selectedRoom.min_stay} ${labels.nights || 'nights'}. ${labels.your_selection_is || 'Your selection is'} ${diffDays} ${diffDays === 1 ? (labels.night || 'night') : (labels.nights || 'nights')}.`);
                 return;
             }
         }
@@ -176,13 +179,13 @@ export default function HotelClientWrapper({ hotel }: { hotel: Hotel }) {
             })
 
             if (success) {
-                toast.success('Booking request sent successfully!')
+                toast.success(labels.booking_success || 'Booking request sent successfully!')
                 setShowWizard(false)
             } else {
                 throw new Error(error || 'Booking failed')
             }
         } catch (error: unknown) {
-            const message = error instanceof Error ? error.message : 'Failed to send booking request'
+            const message = error instanceof Error ? error.message : (labels.booking_error || 'Failed to send booking request')
             console.error('Booking error:', error)
             toast.error(message)
         } finally {
@@ -237,7 +240,7 @@ export default function HotelClientWrapper({ hotel }: { hotel: Hotel }) {
                     <div className="max-w-7xl mx-auto">
                         <div className="flex flex-wrap items-center gap-4 mb-6">
                             <Badge variant="destructive" className="px-4 py-1.5 shadow-xl shadow-red-600/20">
-                                Luxury Stay
+                                {labels.luxury_stay_badge || 'Luxury Stay'}
                             </Badge>
                             <div className="flex items-center gap-3 px-6 py-2 bg-white/10 backdrop-blur-md border border-white/20 rounded-full text-white">
                                 <StarRating rating={hotel.rating} size={16} />
@@ -267,16 +270,16 @@ export default function HotelClientWrapper({ hotel }: { hotel: Hotel }) {
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
                     <div className="lg:col-span-2 space-y-8">
                         <section>
-                            <h2 className="text-xs font-black text-red-600 uppercase tracking-[0.4em] mb-3">Introduction</h2>
-                            <h3 className="text-4xl font-black text-slate-900 mb-4 leading-tight">About this destination</h3>
+                            <h2 className="text-xs font-black text-red-600 uppercase tracking-[0.4em] mb-3">{labels.introduction || 'Introduction'}</h2>
+                            <h3 className="text-4xl font-black text-slate-900 mb-4 leading-tight">{labels.about_destination || 'About this destination'}</h3>
                             <p className="text-xl text-slate-500 leading-relaxed font-medium">
                                 {hotel.description}
                             </p>
                         </section>
 
                         <section id="rooms-selection">
-                            <h2 className="text-xs font-black text-red-600 uppercase tracking-[0.4em] mb-3">Accommodation</h2>
-                            <h3 className="text-4xl font-black text-slate-900 mb-6 leading-tight">Choose Your Room</h3>
+                            <h2 className="text-xs font-black text-red-600 uppercase tracking-[0.4em] mb-3">{labels.accommodation_label || 'Accommodation'}</h2>
+                            <h3 className="text-4xl font-black text-slate-900 mb-6 leading-tight">{labels.choose_room || 'Choose Your Room'}</h3>
                             <div className="space-y-6">
                                 {hotel.room_types && hotel.room_types.length > 0 ? (
                                     hotel.room_types.map((room, idx) => {
@@ -317,7 +320,7 @@ export default function HotelClientWrapper({ hotel }: { hotel: Hotel }) {
                                                         >
                                                             <div className="flex items-center gap-2">
                                                                 <Users size={14} className="animate-pulse" />
-                                                                <span className="text-[9px] font-black uppercase tracking-widest leading-none">View Gallery ({room.images.length + 1})</span>
+                                                                <span className="text-[9px] font-black uppercase tracking-widest leading-none">{labels.view_gallery || 'View Gallery'} ({room.images.length + 1})</span>
                                                             </div>
                                                         </button>
                                                     )}
@@ -341,7 +344,7 @@ export default function HotelClientWrapper({ hotel }: { hotel: Hotel }) {
                                                                     MUR {roomPrice.toLocaleString()}
                                                                 </div>
                                                                 <div className={cn("text-[8px] font-black uppercase tracking-widest", isSelected ? "text-slate-500" : "text-slate-400")}>
-                                                                    Per Night
+                                                                    {labels.per_night || 'Per Night'}
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -355,7 +358,7 @@ export default function HotelClientWrapper({ hotel }: { hotel: Hotel }) {
                                                                     isSelected && "bg-red-600/10 border-red-500/20 text-red-400"
                                                                 )}>
                                                                     <Moon size={12} />
-                                                                    {room.min_stay} Nights Min
+                                                                    {room.min_stay} {labels.nights_min || 'Nights Min'}
                                                                 </span>
                                                             )}
                                                             {room.features?.map((f, i) => (
@@ -376,15 +379,15 @@ export default function HotelClientWrapper({ hotel }: { hotel: Hotel }) {
                                     })
                                 ) : (
                                     <div className="p-12 text-center bg-slate-50 rounded-[2rem] border border-dashed border-slate-200">
-                                        <p className="text-slate-400 font-bold">Multiple room types coming soon...</p>
+                                        <p className="text-slate-400 font-bold">{labels.rooms_coming_soon || 'Multiple room types coming soon...'}</p>
                                     </div>
                                 )}
                             </div>
                         </section>
 
                         <section>
-                            <h2 className="text-xs font-black text-red-600 uppercase tracking-[0.4em] mb-3">Experience</h2>
-                            <h3 className="text-4xl font-black text-slate-900 mb-6 leading-tight">Premium Amenities</h3>
+                            <h2 className="text-xs font-black text-red-600 uppercase tracking-[0.4em] mb-3">{labels.experience_label || 'Experience'}</h2>
+                            <h3 className="text-4xl font-black text-slate-900 mb-6 leading-tight">{labels.premium_amenities || 'Premium Amenities'}</h3>
                             <div className="grid grid-cols-2 md:grid-cols-3 gap-6">
                                 {hotel.amenities?.map((amenity, idx) => (
                                     <div key={idx} className="flex items-center gap-4 p-6 bg-slate-50 rounded-[2rem] border border-slate-100 hover:bg-white hover:shadow-xl hover:shadow-slate-200/50 transition-all duration-300">
@@ -409,13 +412,13 @@ export default function HotelClientWrapper({ hotel }: { hotel: Hotel }) {
                                             ? parseFloat(selectedRoom.prices?.[currentDayKey] || selectedRoom.prices?.mon || selectedRoom.price?.toString() || hotel.base_price.toString()).toLocaleString()
                                             : hotel.base_price.toLocaleString()}
                                     </span>
-                                    <span className="text-slate-400 font-black text-[10px] uppercase tracking-widest mb-3">/ night</span>
+                                    <span className="text-slate-400 font-black text-[10px] uppercase tracking-widest mb-3">/ {labels.night || 'night'}</span>
                                 </div>
 
                                 <div className="space-y-8">
                                     <div className="grid grid-cols-2 gap-4">
                                         <div className="space-y-3">
-                                            <label className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] ml-2">Check In</label>
+                                            <label className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] ml-2">{labels.check_in || 'Check In'}</label>
                                             <div className="relative">
                                                 <Calendar className="absolute left-5 top-1/2 -translate-y-1/2 text-slate-300" size={18} />
                                                 <input
@@ -427,7 +430,7 @@ export default function HotelClientWrapper({ hotel }: { hotel: Hotel }) {
                                             </div>
                                         </div>
                                         <div className="space-y-3">
-                                            <label className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] ml-2">Check Out</label>
+                                            <label className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] ml-2">{labels.check_out || 'Check Out'}</label>
                                             <div className="relative">
                                                 <Calendar className="absolute left-5 top-1/2 -translate-y-1/2 text-slate-300" size={18} />
                                                 <input
@@ -441,7 +444,7 @@ export default function HotelClientWrapper({ hotel }: { hotel: Hotel }) {
                                     </div>
 
                                     <div className="space-y-3">
-                                        <label className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] ml-2">Number of Guests</label>
+                                        <label className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] ml-2">{labels.num_guests_label || 'Number of Guests'}</label>
                                         <div className="relative">
                                             <Users className="absolute left-5 top-1/2 -translate-y-1/2 text-slate-300" size={18} />
                                             <select
@@ -450,7 +453,7 @@ export default function HotelClientWrapper({ hotel }: { hotel: Hotel }) {
                                                 onChange={(e) => setGuests(parseInt(e.target.value))}
                                             >
                                                 {[1, 2, 3, 4, 5, 6].map(n => (
-                                                    <option key={n} value={n}>{n} {n === 1 ? 'Guest' : 'Guests'}</option>
+                                                    <option key={n} value={n}>{n} {n === 1 ? (labels.guest || 'Guest') : (labels.guests || 'Guests')}</option>
                                                 ))}
                                             </select>
                                         </div>
@@ -461,11 +464,11 @@ export default function HotelClientWrapper({ hotel }: { hotel: Hotel }) {
                                         onClick={handleBookNow}
                                         className="w-full"
                                     >
-                                        Book Now
+                                        {labels.book_now || 'Book Now'}
                                     </Button>
 
                                     <p className="text-center text-slate-400 text-[10px] font-black uppercase tracking-[0.2em]">
-                                        No payment required at this stage
+                                        {labels.no_payment_required || 'No payment required at this stage'}
                                     </p>
                                 </div>
                             </div>
@@ -484,8 +487,8 @@ export default function HotelClientWrapper({ hotel }: { hotel: Hotel }) {
                             <X size={28} />
                         </button>
                         <div className="mb-12">
-                            <h2 className="text-sm font-black text-red-600 uppercase tracking-[0.4em] mb-4">Reservation</h2>
-                            <h1 className="text-4xl md:text-6xl font-black text-slate-900 dark:text-white tracking-tighter">Your Stay at {hotel.name}</h1>
+                            <h2 className="text-sm font-black text-red-600 uppercase tracking-[0.4em] mb-4">{labels.reservation_label || 'Reservation'}</h2>
+                            <h1 className="text-4xl md:text-6xl font-black text-slate-900 dark:text-white tracking-tighter">{labels.your_stay_at || 'Your Stay at'} {hotel.name}</h1>
                         </div>
                         <BookingWizard
                             serviceId={hotel.id}
@@ -522,11 +525,11 @@ export default function HotelClientWrapper({ hotel }: { hotel: Hotel }) {
                     <div className="w-full max-w-6xl px-8 flex flex-col gap-8">
                         <div className="flex items-center justify-between text-white">
                             <div>
-                                <h3 className="text-[10px] font-black uppercase tracking-[0.4em] text-red-500 mb-2">Room Preview</h3>
+                                <h3 className="text-[10px] font-black uppercase tracking-[0.4em] text-red-500 mb-2">{labels.room_preview || 'Room Preview'}</h3>
                                 <h2 className="text-3xl font-black tracking-tight">{activeGallery.title}</h2>
                             </div>
                             <div className="text-right">
-                                <span className="text-[10px] font-black uppercase tracking-widest text-slate-500">Image</span>
+                                <span className="text-[10px] font-black uppercase tracking-widest text-slate-500">{labels.image_label || 'Image'}</span>
                                 <div className="text-2xl font-black">{currentGalleryIdx + 1} / {activeGallery.images.length}</div>
                             </div>
                         </div>

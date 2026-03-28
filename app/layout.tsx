@@ -9,6 +9,7 @@ import { WishlistProvider } from '@/contexts/WishlistContext'
 import { ThemeProvider } from 'next-themes'
 import { CurrencyProvider } from '@/contexts/CurrencyContext'
 import BackToTop from '@/components/BackToTop'
+import { SettingsProvider } from '@/contexts/SettingsContext'
 // import { NextIntlClientProvider } from 'next-intl'
 // import { getMessages } from 'next-intl/server'
 
@@ -69,9 +70,10 @@ export default async function RootLayout({
         {/* <NextIntlClientProvider locale={currentLocale} messages={messages}> */}
           <ThemeProvider attribute="class" defaultTheme="light">
             <CurrencyProvider>
-              <AuthProvider>
-                <WishlistProvider>
-                  <div className="flex flex-col min-h-screen">
+              <SettingsProvider>
+                <AuthProvider>
+                  <WishlistProvider>
+                    <div className="flex flex-col min-h-screen">
                     <Navbar />
                     <main className="flex-grow">
                       {children}
@@ -82,8 +84,9 @@ export default async function RootLayout({
                   </div>
                 </WishlistProvider>
               </AuthProvider>
-            </CurrencyProvider>
-          </ThemeProvider>
+            </SettingsProvider>
+          </CurrencyProvider>
+        </ThemeProvider>
         {/* </NextIntlClientProvider> */}
       </body>
     </html>

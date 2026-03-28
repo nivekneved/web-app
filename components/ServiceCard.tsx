@@ -11,6 +11,7 @@ import { createBookingRequest } from '@/lib/bookingService'
 import { resolveImageUrl } from '@/lib/image'
 import { toast } from 'sonner'
 import { useRouter } from 'next/navigation'
+import { useSettings } from '@/contexts/SettingsContext'
 
 interface ServiceCardProps {
     id: string
@@ -28,6 +29,8 @@ interface ServiceCardProps {
 }
 
 export default function ServiceCard({ id, title, location, price, image, duration, link, tag, rating, service_type, isSeasonal, dealNote }: ServiceCardProps) {
+    const { generalConfig: config } = useSettings()
+    const labels = (config?.ui_labels || {}) as Record<string, string>
     const [showWizard, setShowWizard] = React.useState(false)
     const [bookingLoading, setBookingLoading] = React.useState(false)
     const router = useRouter()
@@ -52,11 +55,11 @@ export default function ServiceCard({ id, title, location, price, image, duratio
         })
 
         if (result.success) {
-            toast.success('Booking request submitted successfully!')
+            toast.success(labels.booking_success || 'Booking request submitted successfully!')
             setShowWizard(false)
             router.push(`/booking-confirmation?id=${result.bookingId}&service=${encodeURIComponent(title)}&amount=${price}`)
         } else {
-            toast.error(result.error || 'Failed to submit booking request')
+            toast.error(result.error || labels.booking_error || 'Failed to submit booking request')
         }
         setBookingLoading(false)
     }
@@ -108,7 +111,7 @@ export default function ServiceCard({ id, title, location, price, image, duratio
                 )}
                 {isSeasonal && (
                     <div className="absolute top-4 right-4 bg-red-600 text-white text-[10px] font-black px-4 py-1.5 rounded-full uppercase tracking-[0.2em] shadow-lg shadow-red-900/20 z-10">
-                        {dealNote || 'Limited Time'}
+                        {dealNote || labels.limited_time || 'Limited Time'}
                     </div>
                 )}
             </div>
@@ -139,7 +142,7 @@ export default function ServiceCard({ id, title, location, price, image, duratio
                 <div className="mt-auto pt-6">
                     <div className="flex items-end justify-between border-t border-slate-100 pt-4 mb-4">
                         <div>
-                            <span className="text-xs text-slate-400 font-bold block uppercase tracking-wider">From</span>
+                            <span className="text-xs text-slate-400 font-bold block uppercase tracking-wider">{labels.from || 'From'}</span>
                             <span className="text-xl font-black text-slate-900">Rs {price.toLocaleString()}</span>
                         </div>
                         <div className="flex gap-2">
@@ -155,7 +158,7 @@ export default function ServiceCard({ id, title, location, price, image, duratio
                                         }).catch(console.error);
                                     } else {
                                         navigator.clipboard.writeText(shareUrl);
-                                        import('sonner').then(({ toast }) => toast.success('Link copied to clipboard!'));
+                                        import('sonner').then(({ toast }) => toast.success(labels.link_copied || 'Link copied to clipboard!'));
                                     }
                                 }}
                                 className="w-10 h-10 rounded-full bg-slate-50 flex items-center justify-center text-slate-400 hover:bg-slate-950 hover:text-white transition-all shadow-sm"

@@ -1,41 +1,21 @@
 'use client'
 
-import React, { useState, useEffect, useCallback } from 'react'
+import React, { useState } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 import { MapPin, Phone, Mail, Clock, Facebook, Instagram, MessageCircle, Loader2 } from 'lucide-react'
 import { createClient } from '@/lib/supabase'
 import { toast } from 'sonner'
 import { resolveImageUrl } from '@/lib/image'
-
-import { type GeneralConfig } from '@/types/settings'
+import { useSettings } from '@/contexts/SettingsContext'
 
 export default function Footer() {
+    const { generalConfig: config } = useSettings()
+    const labels = (config?.ui_labels || {}) as Record<string, string>
+    const placeholders = (config?.form_placeholders || {}) as Record<string, string>
     const [email, setEmail] = useState('')
     const [submitting, setSubmitting] = useState(false)
-    const [settings, setSettings] = useState<GeneralConfig | null>(null)
     const supabase = createClient()
-
-    const fetchSettings = useCallback(async () => {
-        try {
-            const { data, error } = await supabase
-                .from('site_settings')
-                .select('value')
-                .eq('key', 'general_config')
-                .single()
-
-            if (error) throw error
-            if (data?.value) {
-                setSettings(data.value as GeneralConfig)
-            }
-        } catch (err) {
-            console.error('Footer: Error fetching settings:', err)
-        }
-    }, [supabase])
-
-    useEffect(() => {
-        fetchSettings()
-    }, [fetchSettings])
 
     async function handleSubscribe(e: React.FormEvent) {
         e.preventDefault()
@@ -49,30 +29,30 @@ export default function Footer() {
 
             if (error) {
                 if (error.code === '23505') {
-                    toast.error('You are already subscribed!')
+                    toast.error(labels.already_subscribed || 'You are already subscribed!')
                 } else {
                     throw error
                 }
             } else {
-                toast.success('Thank you for subscribing!')
+                toast.success(labels.subscribe_success || 'Thank you for subscribing!')
                 setEmail('')
             }
         } catch (err) {
             console.error('Error subscribing:', err)
-            toast.error('Failed to subscribe. Please try again.')
+            toast.error(labels.subscribe_error || 'Failed to subscribe. Please try again.')
         } finally {
             setSubmitting(false)
         }
     }
 
-    const contactEmail = settings?.contactEmail || 'reservation@travellounge.mu'
-    const contactPhone = settings?.contactPhone || '+230 5940 7701'
-    const whatsappNumber1 = settings?.whatsappNumber1 || '23059407701'
-    const workingHours = settings?.workingHours || 'Mon - Fri: 08:30 - 17:00'
-    const facebookUrl = settings?.facebookUrl || 'https://www.facebook.com/travellounge.mu'
-    const instagramUrl = settings?.instagramUrl || 'https://www.instagram.com/travellounge_ltd?igsh=MWljeWRiNG43aDN0OQ=='
+    const contactEmail = config?.contactEmail || ''
+    const contactPhone = config?.contactPhone || ''
+    const whatsappNumber1 = config?.whatsappNumber1 || ''
+    const workingHours = config?.workingHours || ''
+    const facebookUrl = config?.facebookUrl || ''
+    const instagramUrl = config?.instagramUrl || ''
 
-    if (settings?.showFooterWeb === false) return null;
+    if (config?.showFooterWeb === false) return null;
 
     return (
         <footer className="bg-slate-900 text-white">
@@ -90,7 +70,7 @@ export default function Footer() {
                                 />
                         </Link>
                         <p className="text-slate-400 mb-6 leading-relaxed text-sm font-medium">
-                            Your local and international holiday provider. IATA accredited travel agents for safe and memorable holidays.
+                            {labels.footer_tagline || 'Your local and international holiday provider. IATA accredited travel agents for safe and memorable holidays.'}
                         </p>
                         <div className="flex gap-3">
                             <a href={facebookUrl} target="_blank" rel="noopener noreferrer" className="w-9 h-9 bg-slate-800 rounded-lg flex items-center justify-center hover:bg-red-600 transition-colors">
@@ -107,45 +87,45 @@ export default function Footer() {
 
                     {/* Visit Us */}
                     <div>
-                        <h4 className="text-[11px] font-black mb-6 uppercase tracking-[0.3em] text-white">Visit Us</h4>
+                        <h4 className="text-[11px] font-black mb-6 uppercase tracking-[0.3em] text-white">{labels.visit_us || 'Visit Us'}</h4>
                         <div className="space-y-6 text-slate-400">
-                            {settings?.office1Address && (
+                            {config?.office1Address && (
                                 <div>
                                     <p className="font-bold text-white mb-1 uppercase text-[10px] tracking-widest flex items-center gap-2">
                                         <span className="w-1.5 h-1.5 bg-red-600 rounded-full"></span>
-                                        {settings.office1Title || ''}
+                                        {config?.office1Title || ''}
                                     </p>
                                     <p className="text-sm leading-relaxed mb-2">
-                                        {settings.office1Address}
+                                        {config?.office1Address}
                                     </p>
                                     <a 
-                                        href={`https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(settings.office1Address)}`} 
+                                        href={`https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(config?.office1Address || '')}`} 
                                         target="_blank" 
                                         rel="noopener noreferrer"
                                         className="text-xs font-black text-red-500 hover:text-red-400 flex items-center gap-1 uppercase tracking-[0.3em]"
                                     >
                                         <MapPin size={10} />
-                                        Directions
+                                        {labels.directions_btn || 'Directions'}
                                     </a>
                                 </div>
                             )}
-                            {settings?.office2Address && (
+                            {config?.office2Address && (
                                 <div>
                                     <p className="font-bold text-white mb-1 uppercase text-[10px] tracking-widest flex items-center gap-2">
                                         <span className="w-1.5 h-1.5 bg-red-600 rounded-full"></span>
-                                        {settings.office2Title || ''}
+                                        {config?.office2Title || ''}
                                     </p>
                                     <p className="text-sm leading-relaxed mb-2">
-                                        {settings.office2Address}
+                                        {config?.office2Address}
                                     </p>
                                     <a 
-                                        href={`https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(settings.office2Address)}`} 
+                                        href={`https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(config?.office2Address || '')}`} 
                                         target="_blank" 
                                         rel="noopener noreferrer"
                                         className="text-xs font-black text-red-500 hover:text-red-400 flex items-center gap-1 uppercase tracking-[0.3em]"
                                     >
                                         <MapPin size={10} />
-                                        Directions
+                                        {labels.directions_btn || 'Directions'}
                                     </a>
                                 </div>
                             )}
@@ -154,7 +134,7 @@ export default function Footer() {
 
                     {/* Contact Us */}
                     <div>
-                        <h4 className="text-[11px] font-black mb-6 uppercase tracking-[0.3em] text-white">Contact Us</h4>
+                        <h4 className="text-[11px] font-black mb-6 uppercase tracking-[0.3em] text-white">{labels.contact_us || 'Contact Us'}</h4>
                         <div className="space-y-4 text-slate-400 font-medium text-sm">
                             <a href={`tel:${contactPhone.replace(/\s+/g, '')}`} className="flex items-center gap-2 hover:text-red-600 transition-colors">
                                 <Phone size={16} className="text-red-600" />
@@ -167,7 +147,7 @@ export default function Footer() {
                             <div className="pt-3">
                                 <p className="font-bold text-white mb-2 flex items-center gap-2">
                                     <Clock size={16} className="text-red-600" />
-                                    Working Hours
+                                    {labels.working_hours || 'Working Hours'}
                                 </p>
                                 <p className="text-sm whitespace-pre-line">{workingHours}</p>
                             </div>
@@ -177,7 +157,7 @@ export default function Footer() {
                     {/* Quick Links & Newsletter */}
                     <div className="md:col-span-2 lg:col-span-1">
                         <div className="mb-10">
-                            <h4 className="text-[11px] font-black mb-6 uppercase tracking-[0.3em] text-white">Quick Links</h4>
+                            <h4 className="text-[11px] font-black mb-6 uppercase tracking-[0.3em] text-white">{labels.quick_links || 'Quick Links'}</h4>
                             <ul className="grid grid-cols-2 gap-x-4 gap-y-3 text-slate-400 text-sm font-medium">
                                 <li>
                                     <Link href="/packages" className="hover:text-red-600 transition-colors">Holiday Packages</Link>
@@ -201,11 +181,11 @@ export default function Footer() {
                         </div>
 
                         <div>
-                            <h4 className="text-[10px] font-black mb-4 uppercase tracking-[0.3em] text-slate-500">Newsletter</h4>
+                            <h4 className="text-[10px] font-black mb-4 uppercase tracking-[0.3em] text-slate-500">{labels.newsletter || 'Newsletter'}</h4>
                             <form onSubmit={handleSubscribe} className="flex gap-1">
                                 <input
                                     type="email"
-                                    placeholder="Enter your email"
+                                    placeholder={placeholders.email_address || "Enter your email"}
                                     required
                                     value={email}
                                     onChange={(e) => setEmail(e.target.value)}
@@ -216,7 +196,7 @@ export default function Footer() {
                                     disabled={submitting}
                                     className="px-6 py-3 bg-red-600 text-white rounded-xl font-black hover:bg-white hover:text-slate-900 transition-all text-[10px] flex items-center justify-center shrink-0 uppercase tracking-[0.2em] shadow-lg shadow-red-600/20"
                                 >
-                                    {submitting ? <Loader2 size={16} className="animate-spin" /> : 'Go'}
+                                    {submitting ? <Loader2 size={16} className="animate-spin" /> : (labels.go_btn || 'Go')}
                                 </button>
                             </form>
                         </div>
@@ -226,7 +206,7 @@ export default function Footer() {
                 {/* Copyright */}
                 <div className="mt-8 pt-6 border-t border-slate-800 text-center text-slate-400 text-sm">
                     <p>
-                        © {new Date().getFullYear()} {settings?.siteTitle || 'Travel Lounge'}. All rights reserved.
+                        © {new Date().getFullYear()} {config?.siteTitle || 'Travel Lounge'}. All rights reserved.
                     </p>
                 </div>
             </div>

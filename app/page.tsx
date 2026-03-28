@@ -1,6 +1,7 @@
 'use client'
 
-import React, { useState, useEffect, useRef } from 'react'
+import React, { useState, useEffect, useRef, useMemo } from 'react'
+import { sanitizeHtml } from '@/lib/sanitize'
 import Image from 'next/image'
 import Link from 'next/link'
 import {
@@ -14,8 +15,7 @@ import PartnerSlider from '@/components/PartnerSlider'
 
 import { createClient } from '@/lib/supabase'
 import { resolveImageUrl } from '@/lib/image'
-
-const supabase = createClient()
+import { useSettings } from '@/contexts/SettingsContext'
 
 type HeroSlide = {
   title: string
@@ -38,15 +38,18 @@ type HeroSlide = {
   image?: string
 }
 
-import { type GeneralConfig } from '@/types/settings'
-
 export default function HomePage() {
+  const { generalConfig: settings } = useSettings()
+  const labels = (settings?.ui_labels || {}) as Record<string, string>
+  
   const [currentSlide, setCurrentSlide] = useState(0)
   const [heroSlides, setHeroSlides] = useState<HeroSlide[]>([])
+  const [content, setContent] = useState<Record<string, any>>({})
   const [loading, setLoading] = useState(true)
-  const [settings, setSettings] = useState<GeneralConfig | null>(null)
   
+  const supabase = useMemo(() => createClient(), [])
   const targetRef = useRef(null)
+  
   const { scrollYProgress } = useScroll({
     target: targetRef,
     offset: ["start start", "end start"]
@@ -54,7 +57,6 @@ export default function HomePage() {
 
   const y = useTransform(scrollYProgress, [0, 1], ["0%", "50%"])
   const opacity = useTransform(scrollYProgress, [0, 0.5], [1, 0])
-
 
   useEffect(() => {
     async function loadHeroSlides() {
@@ -79,20 +81,20 @@ export default function HomePage() {
           setHeroSlides(filteredData.map(slide => ({
             ...slide,
             subtitle: slide.subtitle || slide.description || '',
-            cta: slide.cta_text || 'Explore',
+            cta: slide.cta_text || labels.hero_default_cta || 'Explore',
             link: slide.cta_link || '/search',
             image: slide.image_url,
-            tag: slide.badge_text || 'TRAVEL DEALS',
+            tag: slide.badge_text || labels.hero_default_tag || 'TRAVEL DEALS',
           })))
         } else {
           setHeroSlides([
             {
-              title: "Elevate Your Journey",
-              subtitle: "Travel with ease and comfort with our best flight deals.",
-              cta: "Book Your Flight",
+              title: labels.hero_fallback_title || "Elevate Your Journey",
+              subtitle: labels.hero_fallback_subtitle || "Travel with ease and comfort with our best flight deals.",
+              cta: labels.hero_fallback_cta || "Book Your Flight",
               link: "/flights",
               image: "/assets/placeholders/hero-flight.png",
-              tag: "TRAVEL DEALS",
+              tag: labels.hero_fallback_tag || "TRAVEL DEALS",
               media_type: 'image',
               video_url: null,
               image_url: "/assets/placeholders/hero-flight.png"
@@ -106,24 +108,28 @@ export default function HomePage() {
       }
     }
 
-    async function loadSettings() {
+    async function loadContent() {
       try {
-        const { data, error } = await supabase
-          .from('site_settings')
-          .select('value')
-          .eq('key', 'general_config')
-          .single()
-        if (!error && data) {
-          setSettings(data.value)
+        const { data } = await supabase
+          .from('content_blocks')
+          .select('section_key, content')
+          .eq('page_slug', 'home')
+        if (data) {
+          const blocks: Record<string, any> = {}
+          data.forEach(b => blocks[b.section_key] = b.content)
+          setContent(blocks)
         }
       } catch (err) {
-        console.error('Error loading settings:', err)
+        console.error('Error loading home content:', err)
       }
     }
 
-    loadHeroSlides()
-    loadSettings()
-  }, [])
+    const init = async () => {
+      await Promise.all([loadHeroSlides(), loadContent()])
+    }
+
+    init()
+  }, [supabase, labels])
 
   useEffect(() => {
     if (heroSlides.length === 0) return
@@ -217,7 +223,7 @@ export default function HomePage() {
               <h1 className="text-4xl md:text-6xl font-black text-white mb-6 uppercase tracking-tight leading-[1.05]">
                 {heroSlides[currentSlide]?.title}
               </h1>
-<p className="text-lg md:text-2xl text-white font-bold mb-8 max-w-2xl mx-auto leading-relaxed drop-shadow-lg">
+              <p className="text-lg md:text-2xl text-white font-bold mb-8 max-w-2xl mx-auto leading-relaxed drop-shadow-lg">
                 {heroSlides[currentSlide]?.subtitle ? heroSlides[currentSlide].subtitle.replace('<br />', ' ') : ''}
               </p>
 
@@ -227,14 +233,15 @@ export default function HomePage() {
                   className="px-10 py-5 bg-red-600 text-white rounded-full font-black text-xs tracking-[0.2em] hover:bg-white hover:text-slate-900 transition-all transform hover:scale-105 shadow-2xl shadow-red-600/40 uppercase outline-none focus:ring-4 focus:ring-red-600/50"
                   aria-label={`Explore ${heroSlides[currentSlide]?.title}`}
                 >
-                  {heroSlides[currentSlide]?.cta || 'Explore Now'}
+                  {heroSlides[currentSlide]?.cta || labels.hero_explore_cta || 'Explore Now'}
                 </Link>
-                <button 
+                <Link
+                  href="/about"
                   className="px-10 py-5 bg-white/10 backdrop-blur-md border border-white/20 text-white rounded-full font-black text-xs tracking-[0.2em] hover:bg-white/20 transition-all uppercase outline-none focus:ring-4 focus:ring-white/50"
                   aria-label="Discover more about our travel services"
                 >
-                  Discover More
-                </button>
+                  {labels.hero_secondary_cta || 'Discover More'}
+                </Link>
               </div>
             </motion.div>
           </div>
@@ -247,7 +254,7 @@ export default function HomePage() {
             className="absolute bottom-12 left-1/2 -translate-x-1/2 z-20 flex flex-col items-center gap-3"
         >
             <div className="w-px h-12 bg-gradient-to-b from-white to-transparent" />
-            <span className="text-[10px] font-black text-white/40 uppercase tracking-[0.5em]">Scroll</span>
+            <span className="text-[10px] font-black text-white/40 uppercase tracking-[0.5em]">{labels.scroll_label || 'Scroll'}</span>
         </motion.div>
 
         {/* Slide Indicators - Minimalist */}
@@ -262,7 +269,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Luxury Intro Section - Reduced spacing */}
+      {/* Luxury Intro Section */}
       <section className="py-10 bg-white relative">
         <div className="container mx-auto px-6">
           <div className="flex flex-col md:flex-row items-end justify-between gap-12 mb-6">
@@ -271,20 +278,20 @@ export default function HomePage() {
                 whileInView={{ opacity: 1, x: 0 }}
                 className="max-w-2xl"
             >
-                <h2 className="text-xs font-black text-red-600 uppercase tracking-[0.5em] mb-6">Our Services</h2>
-                <h3 className="text-4xl md:text-6xl font-black text-slate-900 leading-[1.1] tracking-tighter">
-                    Helping You Plan <br /> 
-                    <span className="text-slate-300">Perfect Holidays.</span>
-                </h3>
+                <h2 className="text-xs font-black text-red-600 uppercase tracking-[0.5em] mb-6">
+                    {content.services?.label}
+                </h2>
+                <h3 
+                    className="text-4xl md:text-6xl font-black text-slate-900 leading-[1.1] tracking-tighter"
+                    dangerouslySetInnerHTML={{ __html: sanitizeHtml(content.services?.title || '') }}
+                />
             </motion.div>
             <motion.p 
                 initial={{ opacity: 0, x: 50 }}
                 whileInView={{ opacity: 1, x: 0 }}
                 className="max-w-md text-slate-500 font-medium leading-relaxed"
             >
-                We specialize in comfortable escapes that everyone can enjoy. 
-                From beautiful beaches to local cultural spots, every journey 
-                is carefully planned for all travelers.
+                {content.services?.description}
             </motion.p>
           </div>
 
@@ -294,12 +301,12 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Deals Carousel - Reduced spacing */}
+      {/* Deals Carousel */}
       <section className="bg-slate-50 py-10 overflow-hidden">
          <DealsCarousel />
       </section>
 
-      {/* Enhanced Experience Section - Reduced spacing */}
+      {/* Enhanced Experience Section */}
       <section className="py-10 relative overflow-hidden bg-white">
         <div className="container mx-auto px-6">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
@@ -319,31 +326,28 @@ export default function HomePage() {
               <div className="absolute -bottom-10 -right-10 bg-slate-900 p-12 rounded-[2rem] shadow-2xl text-white">
                 <Award size={40} className="text-red-600 mb-6" />
                 <p className="font-black text-2xl leading-tight mb-2 tracking-tight">
-                  Accredited & <br />Awarded
+                  {labels.accredited_title || 'Accredited & Awarded'}
                 </p>
-                <p className="text-xs font-bold text-slate-500 uppercase tracking-widest">Global Travel Excellence 2024</p>
+                <p className="text-xs font-bold text-slate-500 uppercase tracking-widest">{labels.global_excellence_label || 'Global Travel Excellence 2024'}</p>
               </div>
             </motion.div>
 
             <div className="space-y-8">
               <div className="space-y-4">
-                <h2 className="text-[10px] font-black text-red-600 uppercase tracking-[0.5em]">The TL Advantage</h2>
-                <p className="text-4xl lg:text-5xl font-black text-slate-900 leading-[1.1] tracking-tighter">
-                  Where Expertise Meets <br />
-                  <span className="text-slate-300 italic">Pure Inspiration.</span>
-                </p>
+                <h2 className="text-[10px] font-black text-red-600 uppercase tracking-[0.5em]">
+                    {content.advantage?.label}
+                </h2>
+                <h3 
+                    className="text-4xl lg:text-5xl font-black text-slate-900 leading-[1.1] tracking-tighter"
+                    dangerouslySetInnerHTML={{ __html: sanitizeHtml(content.advantage?.title || '') }}
+                />
                 <p className="text-lg text-slate-500 font-medium leading-relaxed max-w-xl">
-                  As IATA accredited travel agents, we provide an unparalleled level of security, 
-                  access, and personalization. Join over 10,000 satisfied travelers who have 
-                  discovered the world through our lens.
+                  {content.advantage?.description}
                 </p>
               </div>
 
               <div className="grid grid-cols-2 gap-12 pt-8">
-                {[
-                  { label: "Elite Partners", value: "500+" },
-                  { label: "Client Satisfaction", value: "99%" },
-                ].map((stat, i) => (
+                {(content.advantage?.stats || []).map((stat: { label: string; value: string }, i: number) => (
                   <div key={i} className="space-y-2">
                     <div className="text-4xl font-black text-slate-900 tracking-tighter">{stat.value}</div>
                     <div className="text-[10px] font-black text-slate-400 uppercase tracking-[0.3em]">{stat.label}</div>
@@ -355,14 +359,16 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Partner Slider - Reduced spacing */}
+      {/* Partner Slider */}
       <section className="bg-slate-50 py-10 text-slate-900">
         <div className="container mx-auto px-6">
           <div className="flex items-center gap-8 mb-6">
              <div className="h-px flex-1 bg-slate-200" />
-             <h2 className="text-[10px] font-black uppercase tracking-[0.6em] text-slate-400">Our Global Partners</h2>
+             <h2 className="text-[10px] font-black uppercase tracking-[0.6em] text-slate-400">
+                {content.partners?.label}
+             </h2>
              <div className="h-px flex-1 bg-slate-200" />
-          </div>
+           </div>
           <PartnerSlider />
         </div>
       </section>

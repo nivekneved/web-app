@@ -22,6 +22,12 @@ export interface GeneralConfig {
     currency?: string;
     dateFormat?: string;
     timeFormat?: string;
+    navbarCtaLabel?: string;
+    navbarCtaHref?: string;
+    office1MapUrl?: string;
+    office2MapUrl?: string;
+    ui_labels?: Record<string, string>;
+    form_placeholders?: Record<string, string>;
 }
 
 export interface SiteSettings {

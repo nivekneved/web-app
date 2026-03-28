@@ -1,10 +1,11 @@
 'use client'
 
-import { createContext, useContext, useEffect, useState } from 'react'
+import { createContext, useContext, useEffect, useState, useMemo } from 'react'
 import { createClient } from '@/lib/supabase'
 import { User } from '@supabase/supabase-js'
 
-const supabase = createClient()
+// H-07 FIX: Moved supabase client creation inside component with useMemo
+// to prevent cross-request session leakage in Next.js SSR
 
 type AuthContextType = {
     user: User | null
@@ -21,6 +22,8 @@ const AuthContext = createContext<AuthContextType>({
 export function AuthProvider({ children }: { children: React.ReactNode }) {
     const [user, setUser] = useState<User | null>(null)
     const [loading, setLoading] = useState(true)
+    // H-07 FIX: Create client inside component with useMemo for SSR safety
+    const supabase = useMemo(() => createClient(), [])
 
     useEffect(() => {
         // Check active session
@@ -38,7 +41,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         })
 
         return () => subscription.unsubscribe()
-    }, [])
+    }, [supabase])
 
     const signOut = async () => {
         await supabase.auth.signOut()
