@@ -1,5 +1,13 @@
 # 05 History & Agent Progress
 
+## 2026-03-28 - Production Hardening & SSR Security
+- **SSR Session Security**: Refactored `AuthContext.tsx` and `bookingService.ts` to instantiate Supabase clients within component/function scope, eliminating cross-request session leakage during SSR.
+- **Configurable Storage**: Migrated `lib/image.ts` to use `NEXT_PUBLIC_SUPABASE_STORAGE_BUCKET`, removing hardcoded "bucket/" prefixes.
+- **Build Stability**: Resolved property mismatches in the Contact page (`mapUrl1` -> `office1MapUrl`) to ensure 100% build success.
+- **XSS Mitigation**: Implemented `DOMPurify` sanitization for all content blocks and dynamic HTML fields.
+
+---
+
 ## 2026-03-27 - Form Refactoring & Layout Compaction
 - **UI Simplification**: Streamlined the "Plan My Trip" and "Tailormade" forms by removing non-essential fields (Return Date, Preferred Budget, etc.).
 - **Layout Compaction**: Reduced excessive padding and margins across inquiry pages for an elegant, professional look.
