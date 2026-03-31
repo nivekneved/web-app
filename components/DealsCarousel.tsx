@@ -23,6 +23,8 @@ type Deal = {
     deal_note?: string
     region?: string
     location?: string
+    description?: string
+    short_description?: string
 }
 
 export default function DealsCarousel({ data: externalData }: { data?: Deal[] }) {
@@ -42,7 +44,7 @@ export default function DealsCarousel({ data: externalData }: { data?: Deal[] })
         try {
             const { data, error } = await supabase
                 .from('services')
-                .select('id, name, base_price, image_url, duration_days, duration_hours, service_type, rating, deal_note, region, location')
+                .select('id, name, base_price, image_url, duration_days, duration_hours, service_type, rating, deal_note, region, location, description, short_description')
                 .eq('is_seasonal_deal', true)
                 .limit(8)
                 .order('rating', { ascending: false })
@@ -94,6 +96,8 @@ export default function DealsCarousel({ data: externalData }: { data?: Deal[] })
                                     dealNote={deal.deal_note}
                                     region={deal.region}
                                     location={deal.location}
+                                    description={deal.description}
+                                    short_description={deal.short_description}
                                 />
                             </motion.div>
                         ))

@@ -29,6 +29,7 @@ type Service = {
     is_seasonal_deal?: boolean
     deal_note?: string
     description?: string
+    short_description?: string
     max_group_size?: number
     room_types?: unknown[]
     itinerary?: unknown[]
@@ -132,7 +133,7 @@ function ServiceListingInner({
                 'meta_description', 'seo_keywords', 'special_features', 'seasonality',
                 'highlights', 'included', 'not_included', 'cancellation_policy',
                 'terms_and_conditions', 'thumbnail_url', 'banner_url', 'featured',
-                'priority', 'secondary_image_url'
+                'priority', 'secondary_image_url', 'short_description'
             ].join(', ')
             
             const categorySelect = categorySlug ? ', service_categories!inner(category_id, categories!inner(slug))' : ''
@@ -562,6 +563,8 @@ function ServiceListingInner({
                                                 isSeasonal={service.is_seasonal_deal}
                                                 dealNote={service.deal_note}
                                                 region={service.region}
+                                                description={service.description}
+                                                short_description={service.short_description}
                                             />
                                         </motion.div>
                                     ))

@@ -27,9 +27,11 @@ interface ServiceCardProps {
     isSeasonal?: boolean
     dealNote?: string
     region?: string
+    description?: string
+    short_description?: string
 }
 
-export default function ServiceCard({ id, title, location, price, image, duration, link, tag, rating, service_type, isSeasonal, dealNote, region }: ServiceCardProps) {
+export default function ServiceCard({ id, title, location, price, image, duration, link, tag, rating, service_type, isSeasonal, dealNote, region, description, short_description }: ServiceCardProps) {
     const { generalConfig: config } = useSettings()
     const labels = (config?.ui_labels || {}) as Record<string, string>
     const [showWizard, setShowWizard] = React.useState(false)
@@ -121,11 +123,11 @@ export default function ServiceCard({ id, title, location, price, image, duratio
                     {(location || region) && (
                         <div className="flex items-center gap-2 text-slate-500 text-xs font-bold uppercase line-clamp-1">
                             <MapPin size={14} className="text-red-500 shrink-0" />
-                            {location} {location && region && <span className="text-slate-300 mx-1">/</span>} {region}
+                            <span>{location} {location && region && <span className="text-slate-300 mx-1">/</span>} {region}</span>
                         </div>
                     )}
                     {duration && (
-                        <div className="flex items-center gap-2 text-slate-400 text-xs font-bold uppercase">
+                        <div className="flex items-center gap-2 text-slate-400 text-xs font-bold uppercase shrink-0">
                             <Clock size={14} />
                             {duration}
                         </div>
@@ -135,6 +137,12 @@ export default function ServiceCard({ id, title, location, price, image, duratio
                 <h3 className="text-xl font-bold text-slate-900 mb-2 group-hover:text-red-600 transition-colors line-clamp-1">
                     {title}
                 </h3>
+
+                {(short_description || description) && (
+                    <p className="text-sm text-slate-500 line-clamp-2 mb-3 font-medium leading-relaxed">
+                        {short_description || description}
+                    </p>
+                )}
 
                 <div className="mb-4">
                     <StarRating rating={rating || 0} size={14} showNumber={true} />

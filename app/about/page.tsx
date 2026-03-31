@@ -129,7 +129,40 @@ export default function AboutPage() {
                 </div>
             </section>
 
-            <section className="py-24">
+            <section className="py-24 bg-white overflow-hidden">
+                <div className="container mx-auto px-6">
+                    <div className="flex flex-col items-center justify-center text-center">
+                        <motion.div
+                            initial={{ opacity: 0, scale: 0.9 }}
+                            whileInView={{ opacity: 1, scale: 1 }}
+                            viewport={{ once: true }}
+                            transition={{ duration: 1, ease: "easeOut" }}
+                            className="relative w-full max-w-2xl px-12 py-20 bg-slate-50 rounded-[4rem] border border-slate-100 shadow-2xl shadow-slate-100 overflow-hidden"
+                        >
+                            {/* Watermark decorations */}
+                            <div className="absolute top-0 right-0 w-64 h-64 bg-red-500/5 rounded-full blur-[80px] -mr-32 -mt-32"></div>
+                            <div className="absolute bottom-0 left-0 w-64 h-64 bg-indigo-500/5 rounded-full blur-[80px] -ml-32 -mb-32"></div>
+                            
+                            <div className="relative z-10 flex flex-col items-center">
+                                <span className="text-[10px] font-black text-slate-400 uppercase tracking-[0.6em] mb-12">{labels.legacy_label || 'A Legacy of Excellence'}</span>
+                                <div className="relative w-72 h-72 mb-12">
+                                    <Image 
+                                        src="/assets/logo-red-bird.png" 
+                                        alt="Travel Lounge Red Bird Logo" 
+                                        fill
+                                        className="object-contain drop-shadow-2xl"
+                                    />
+                                </div>
+                                <h2 className="text-3xl font-black text-slate-900 uppercase tracking-tighter max-w-lg mx-auto">
+                                    {labels.brand_tagline || 'Pioneering Luxury & Corporate Travel Since Day One.'}
+                                </h2>
+                            </div>
+                        </motion.div>
+                    </div>
+                </div>
+            </section>
+
+            <section className="py-24 relative overflow-hidden">
                 <div className="container mx-auto px-6">
                     <div className="grid grid-cols-1 lg:grid-cols-2 gap-20 items-center">
                         <div className="space-y-8">
@@ -157,13 +190,13 @@ export default function AboutPage() {
                                      <div className="text-5xl font-black text-red-600 mb-2">{identity.stats_value}</div>
                                     <div className="text-xs font-black text-slate-400 uppercase tracking-widest">{identity.stats_label}</div>
                                 </div>
-                                <div className="aspect-[4/5] relative rounded-[2.5rem] overflow-hidden shadow-2xl">
-                                    <Image src={resolveImageUrl(identity.image_secondary || "/hero-adventure.png")} alt="Identity" fill className="object-cover" />
+                                <div className="aspect-[4/5] relative rounded-[2.5rem] overflow-hidden shadow-2xl border border-slate-100">
+                                    <Image src="/corporate_identity_about_1774969770940.png" alt="Travel Lounge Corporate Services" fill className="object-cover" />
                                 </div>
                            </div>
                            <div className="space-y-6">
-                                <div className="aspect-[4/5] relative rounded-[2.5rem] overflow-hidden shadow-2xl">
-                                    <Image src={resolveImageUrl(identity.image_primary || "/hero-hotel.png")} alt="Identity" fill className="object-cover" />
+                                <div className="aspect-[4/5] relative rounded-[2.5rem] overflow-hidden shadow-2xl border border-slate-100">
+                                    <Image src="/leisure_identity_about_1774969745442.png" alt="Travel Lounge Leisure Experiences" fill className="object-cover" />
                                 </div>
                                 <div className="bg-red-600 p-8 rounded-[2.5rem] text-white shadow-2xl">
                                     <div className="text-4xl font-black mb-2">{labels.iata_label || 'IATA'}</div>

@@ -40,7 +40,7 @@ const bookingSchema = z.object({
     path: ["checkOut"]
 })
 
-type BookingWizardData = z.infer<typeof bookingSchema>
+export type BookingWizardData = z.infer<typeof bookingSchema>
 
 
 
