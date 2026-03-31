@@ -30,6 +30,8 @@ export interface GeneralConfig {
     form_placeholders?: Record<string, string>;
     tailorMadeHeroImage?: string;
     planTripHeroImage?: string;
+    visaHeroImage?: string;
+    aboutHeroImage?: string;
 }
 
 export interface SiteSettings {

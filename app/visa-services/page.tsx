@@ -8,10 +8,11 @@ import { motion } from 'framer-motion'
 import { Breadcrumbs } from '@/components/ui/Breadcrumbs'
 import { resolveImageUrl } from '@/lib/image'
 import { createClient } from '@/lib/supabase'
+import { useSettings } from '@/contexts/SettingsContext'
 
 type ContentBlock = {
     section_key: string
-    content: any
+    content: unknown
 }
 
 type VisaContent = {
@@ -54,6 +55,7 @@ const IconMap: Record<string, React.ElementType> = {
 }
 
 export default function VisaServicesPage() {
+    const { generalConfig: config } = useSettings()
     const [content, setContent] = useState<VisaContent | null>(null)
     const [loading, setLoading] = useState(true)
     const supabase = useMemo(() => createClient(), [])
@@ -66,7 +68,7 @@ export default function VisaServicesPage() {
                 .eq('page_slug', 'visa-services')
 
             if (data && data.length > 0) {
-                const blocks: Record<string, any> = {}
+                const blocks: Record<string, unknown> = {}
                 data.forEach((block: ContentBlock) => {
                     blocks[block.section_key] = block.content
                 })
@@ -108,7 +110,7 @@ export default function VisaServicesPage() {
             {/* Hero Section */}
             <div className="relative h-[250px] md:h-[350px] flex items-center overflow-hidden bg-slate-900 border-b border-white/10">
                 <Image
-                    src={resolveImageUrl('/hero-flight.png', '/assets/placeholders/hero-placeholder.png')}
+                    src={resolveImageUrl(config?.visaHeroImage, "https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?q=80&w=2017&auto=format&fit=crop")}
                     alt="Travel Visa Services"
                     fill
                     className="object-cover opacity-60"

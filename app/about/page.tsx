@@ -96,7 +96,7 @@ export default function AboutPage() {
         <div className="min-h-screen bg-white">
             <section className="relative h-[250px] md:h-[350px] flex items-center overflow-hidden bg-slate-950 border-b border-white/10">
                 <Image
-                    src={resolveImageUrl(hero.image)}
+                    src={resolveImageUrl(config?.aboutHeroImage, "https://images.unsplash.com/photo-1519451241324-20b4ea2c4220?q=80&w=2070&auto=format&fit=crop")}
                     alt="Travel Lounge Mauritius"
                     fill
                     className="object-cover opacity-60"
