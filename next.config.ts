@@ -34,6 +34,30 @@ const nextConfig: NextConfig = {
       },
     ];
   },
+  async redirects() {
+    return [
+      {
+        source: '/mauritius',
+        destination: '/destinations/mauritius',
+        permanent: true,
+      },
+      {
+        source: '/rodrigues',
+        destination: '/destinations/rodrigues',
+        permanent: true,
+      },
+      {
+        source: '/flight',
+        destination: '/flights',
+        permanent: true,
+      },
+      {
+        source: '/tours',
+        destination: '/guided-group-tours',
+        permanent: true,
+      },
+    ];
+  },
   images: {
     remotePatterns: [
       {

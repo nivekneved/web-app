@@ -1,44 +1,71 @@
 'use client'
 
-import { useState } from 'react'
+import React, { useState } from 'react'
 import { createClient } from '@/lib/supabase'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
-import { Mail, Lock, User, ArrowLeft } from 'lucide-react'
+import { Mail, Lock, User, ArrowLeft, AlertCircle } from 'lucide-react'
 import { toast } from 'sonner'
+import { useForm } from 'react-hook-form'
+import { zodResolver } from '@hookform/resolvers/zod'
+import * as z from 'zod'
+
+const authSchema = z.object({
+    email: z.string().email('Please enter a valid email address'),
+    password: z.string().min(6, 'Password must be at least 6 characters'),
+    name: z.string().optional()
+}).refine((data) => {
+    // If it's signup (we determine this in the component), name might be required
+    // But for simplicity, we'll handle the logic in the component or keep it optional
+    return true;
+}, {
+    message: "Name is required for signup",
+    path: ["name"]
+})
+
+type AuthFormData = z.infer<typeof authSchema>
 
 const supabase = createClient()
 
 export default function LoginPage() {
     const router = useRouter()
     const [isLogin, setIsLogin] = useState(true)
-    const [loading, setLoading] = useState(false)
-    const [formData, setFormData] = useState({
-        email: '',
-        password: '',
-        name: ''
+    
+    const { 
+        register, 
+        handleSubmit, 
+        formState: { errors, isSubmitting } 
+    } = useForm<AuthFormData>({
+        resolver: zodResolver(authSchema),
+        defaultValues: {
+            email: '',
+            password: '',
+            name: ''
+        }
     })
 
-    async function handleSubmit(e: React.FormEvent) {
-        e.preventDefault()
-        setLoading(true)
-
+    async function onSubmit(data: AuthFormData) {
         try {
             if (isLogin) {
                 // Login
                 const { error } = await supabase.auth.signInWithPassword({
-                    email: formData.email,
-                    password: formData.password,
+                    email: data.email,
+                    password: data.password,
                 })
 
                 if (error) throw error
                 toast.success('Welcome back!')
                 router.push('/dashboard')
             } else {
-                // Sign up
+                // Sign up - manual check for name
+                if (!data.name) {
+                    toast.error('Name is required for sign up')
+                    return
+                }
+
                 const { data: authData, error: authError } = await supabase.auth.signUp({
-                    email: formData.email,
-                    password: formData.password,
+                    email: data.email,
+                    password: data.password,
                 })
 
                 if (authError) throw authError
@@ -49,8 +76,8 @@ export default function LoginPage() {
                         .from('profiles')
                         .insert([{
                             id: authData.user.id,
-                            email: formData.email,
-                            name: formData.name
+                            email: data.email,
+                            name: data.name
                         }])
 
                     if (profileError) throw profileError
@@ -61,8 +88,6 @@ export default function LoginPage() {
             }
         } catch (error) {
             toast.error((error as Error).message || 'Authentication failed')
-        } finally {
-            setLoading(false)
         }
     }
 
@@ -89,7 +114,7 @@ export default function LoginPage() {
 
                 {/* Form */}
                 <div className="bg-white rounded-[3rem] p-8 shadow-xl border border-slate-100">
-                    <form onSubmit={handleSubmit} className="space-y-6">
+                    <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
                         {!isLogin && (
                             <div>
                                 <label className="block text-xs font-black text-slate-400 uppercase tracking-widest mb-2">
@@ -98,12 +123,15 @@ export default function LoginPage() {
                                 </label>
                                 <input
                                     type="text"
-                                    value={formData.name}
-                                    onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                                    required={!isLogin}
-                                    className="w-full px-4 py-3 bg-slate-50 border border-slate-300 rounded-xl focus:outline-none focus:ring-4 focus:ring-red-600/20 focus:border-red-600 transition-all font-medium"
+                                    {...register('name')}
+                                    className={`w-full px-4 py-3 bg-slate-50 border rounded-xl focus:outline-none focus:ring-4 focus:ring-red-600/20 focus:border-red-600 transition-all font-medium ${errors.name ? 'border-red-500' : 'border-slate-300'}`}
                                     placeholder="John Doe"
                                 />
+                                {errors.name && (
+                                    <p className="text-red-500 text-[10px] font-black uppercase flex items-center gap-1 mt-1 ml-1">
+                                        <AlertCircle size={10} /> {errors.name.message}
+                                    </p>
+                                )}
                             </div>
                         )}
 
@@ -114,12 +142,15 @@ export default function LoginPage() {
                             </label>
                             <input
                                 type="email"
-                                value={formData.email}
-                                onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                                required
-                                className="w-full px-4 py-3 bg-slate-50 border border-slate-300 rounded-xl focus:outline-none focus:ring-4 focus:ring-red-600/20 focus:border-red-600 transition-all font-medium"
+                                {...register('email')}
+                                className={`w-full px-4 py-3 bg-slate-50 border rounded-xl focus:outline-none focus:ring-4 focus:ring-red-600/20 focus:border-red-600 transition-all font-medium ${errors.email ? 'border-red-500' : 'border-slate-300'}`}
                                 placeholder="john@example.com"
                             />
+                            {errors.email && (
+                                <p className="text-red-500 text-[10px] font-black uppercase flex items-center gap-1 mt-1 ml-1">
+                                    <AlertCircle size={10} /> {errors.email.message}
+                                </p>
+                            )}
                         </div>
 
                         <div>
@@ -129,20 +160,23 @@ export default function LoginPage() {
                             </label>
                             <input
                                 type="password"
-                                value={formData.password}
-                                onChange={(e) => setFormData({ ...formData, password: e.target.value })}
-                                required
-                                className="w-full px-4 py-3 bg-slate-50 border border-slate-300 rounded-xl focus:outline-none focus:ring-4 focus:ring-red-600/20 focus:border-red-600 transition-all font-medium"
+                                {...register('password')}
+                                className={`w-full px-4 py-3 bg-slate-50 border rounded-xl focus:outline-none focus:ring-4 focus:ring-red-600/20 focus:border-red-600 transition-all font-medium ${errors.password ? 'border-red-500' : 'border-slate-300'}`}
                                 placeholder="••••••••"
                             />
+                            {errors.password && (
+                                <p className="text-red-500 text-[10px] font-black uppercase flex items-center gap-1 mt-1 ml-1">
+                                    <AlertCircle size={10} /> {errors.password.message}
+                                </p>
+                            )}
                         </div>
 
                         <button
                             type="submit"
-                            disabled={loading}
+                            disabled={isSubmitting}
                             className="w-full px-6 py-4 bg-red-600 text-white rounded-xl font-black uppercase tracking-wider hover:bg-slate-900 transition-all shadow-lg shadow-red-600/20 disabled:opacity-50 disabled:cursor-not-allowed"
                         >
-                            {loading ? (
+                            {isSubmitting ? (
                                 <div className="flex items-center justify-center gap-2">
                                     <div className="animate-spin rounded-full h-5 w-5 border-2 border-white border-t-transparent"></div>
                                     Processing...

@@ -2,18 +2,47 @@
 
 import React from 'react'
 import { useSettings } from '@/contexts/SettingsContext'
+import { useForm, useFieldArray } from 'react-hook-form'
+import { zodResolver } from '@hookform/resolvers/zod'
+import * as z from 'zod'
+import { AlertCircle, Plus, Trash2, Calendar, Users, Mail, Phone, MessageSquare, Utensils, Home, ChevronRight, ChevronLeft } from 'lucide-react'
+import { motion, AnimatePresence } from 'framer-motion'
 
-type TravelerDetails = {
-    firstName: string
-    lastName: string
-    email: string
-    phone: string
-    mobile?: string
-    age?: number
-    passportNumber?: string
-}
+const travelerSchema = z.object({
+    firstName: z.string().min(2, 'First name is required'),
+    lastName: z.string().min(2, 'Last name is required'),
+    email: z.string().email('Invalid email address'),
+    phone: z.string().min(8, 'Phone number is required'),
+    mobile: z.string().default(''),
+    age: z.number().optional(),
+    passportNumber: z.string().default('')
+})
 
-type BookingWizardStep = 1 | 2 | 3 | 4
+const bookingSchema = z.object({
+    checkIn: z.string().min(1, 'Check-in date is required'),
+    checkOut: z.string().min(1, 'Check-out date is required'),
+    guests: z.number().min(1).max(20),
+    firstName: z.string().min(2, 'First name is required'),
+    lastName: z.string().min(2, 'Last name is required'),
+    email: z.string().email('Invalid email address'),
+    phone: z.string().min(8, 'Phone number is required'),
+    mobile: z.string().default(''),
+    notes: z.string().default(''),
+    travelers: z.array(travelerSchema).default([]),
+    mealPreference: z.string().default('none'),
+    roomPreference: z.string().default('standard')
+}).refine((data) => {
+    const start = new Date(data.checkIn)
+    const end = new Date(data.checkOut)
+    return end > start
+}, {
+    message: "Check-out date must be after check-in date",
+    path: ["checkOut"]
+})
+
+type BookingWizardData = z.infer<typeof bookingSchema>
+
+
 
 type BookingWizardProps = {
     serviceId: string
@@ -27,88 +56,75 @@ type BookingWizardProps = {
     showRoomSelection?: boolean
 }
 
-export type BookingWizardData = {
-    checkIn: string
-    checkOut: string
-    guests: number
-    firstName: string
-    lastName: string
-    email: string
-    phone: string
-    mobile: string
-    notes: string
-    travelers: TravelerDetails[]
-    mealPreference?: string
-    roomPreference?: string
-}
-
-export default function BookingWizard({ serviceName, servicePrice, onComplete, isLoading, initialData, roomOptions, showRoomSelection = true }: BookingWizardProps) {
+export default function BookingWizard({ 
+    serviceName, 
+    servicePrice, 
+    onComplete, 
+    isLoading, 
+    initialData, 
+    roomOptions, 
+    showRoomSelection = true 
+}: BookingWizardProps) {
     const { generalConfig } = useSettings()
     const labels = generalConfig?.ui_labels || {}
     const placeholders = generalConfig?.form_placeholders || {}
-    const [currentStep, setCurrentStep] = React.useState<BookingWizardStep>(1)
-    const [formData, setFormData] = React.useState<BookingWizardData>({
-        checkIn: initialData?.checkIn || '',
-        checkOut: initialData?.checkOut || '',
-        guests: initialData?.guests || 1,
-        firstName: initialData?.firstName || '',
-        lastName: initialData?.lastName || '',
-        email: initialData?.email || '',
-        phone: initialData?.phone || '',
-        mobile: initialData?.mobile || '',
-        notes: initialData?.notes || '',
-        travelers: initialData?.travelers || [],
-        mealPreference: initialData?.mealPreference || 'none',
-        roomPreference: initialData?.roomPreference || (roomOptions && roomOptions.length > 0
-            ? (typeof roomOptions[0] === 'string' ? roomOptions[0] : roomOptions[0].type)
-            : (showRoomSelection ? 'standard' : undefined))
+    const [currentStep, setCurrentStep] = React.useState<number>(1)
+
+    const form = useForm<BookingWizardData>({
+        resolver: zodResolver(bookingSchema) as any,
+        defaultValues: {
+            checkIn: initialData?.checkIn || '',
+            checkOut: initialData?.checkOut || '',
+            guests: initialData?.guests || 1,
+            firstName: initialData?.firstName || '',
+            lastName: initialData?.lastName || '',
+            email: initialData?.email || '',
+            phone: initialData?.phone || '',
+            mobile: initialData?.mobile || '',
+            notes: initialData?.notes || '',
+            travelers: initialData?.travelers || [],
+            mealPreference: initialData?.mealPreference || 'none',
+            roomPreference: initialData?.roomPreference || (roomOptions && roomOptions.length > 0
+                ? (typeof roomOptions[0] === 'string' ? roomOptions[0] : roomOptions[0].type)
+                : (showRoomSelection ? 'standard' : 'standard'))
+        }
     })
 
-    function updateFormData(updates: Partial<BookingWizardData>) {
-        setFormData(prev => ({ ...prev, ...updates }))
-    }
+    const { 
+        register, 
+        control, 
+        handleSubmit, 
+        trigger, 
+        watch,
+        formState: { errors } 
+    } = form
 
-    function updateTraveler(index: number, updates: Partial<TravelerDetails>) {
-        const updated = [...formData.travelers]
-        updated[index] = { ...updated[index], ...updates }
-        setFormData(prev => ({ ...prev, travelers: updated }))
-    }
+    const { fields, append, remove } = useFieldArray({
+        control,
+        name: "travelers"
+    })
 
-    function addTraveler() {
-        setFormData(prev => ({
-            ...prev,
-            travelers: [...prev.travelers, { firstName: '', lastName: '', email: '', phone: '' }]
-        }))
-    }
+    const watchAllFields = watch()
 
-    function removeTraveler(index: number) {
-        setFormData(prev => ({
-            ...prev,
-            travelers: prev.travelers.filter((_, i) => i !== index)
-        }))
-    }
+    const validateStep = async (step: number) => {
+        let fieldsToValidate: any[] = []
+        if (step === 1) {
+            fieldsToValidate = ['checkIn', 'checkOut', 'guests', 'firstName', 'lastName', 'email', 'phone']
+        } else if (step === 2) {
+            fieldsToValidate = ['travelers']
+        } else if (step === 3) {
+            fieldsToValidate = ['mealPreference', 'roomPreference']
+        }
 
-    function nextStep() {
-        if (currentStep === 1) {
-            // Validation for Step 1
-            if (!formData.checkIn || !formData.checkOut) {
-                alert('Please select both check-in and check-out dates')
-                return
-            }
+        const result = await trigger(fieldsToValidate)
+        
+        // Special logic for min_stay if it's step 1
+        if (step === 1 && result) {
+            const start = new Date(watchAllFields.checkIn)
+            const end = new Date(watchAllFields.checkOut)
+            const diffDays = Math.ceil(Math.abs(end.getTime() - start.getTime()) / (1000 * 60 * 60 * 24))
 
-            // Min stay check
-            const start = new Date(formData.checkIn)
-            const end = new Date(formData.checkOut)
-            const diffTime = Math.abs(end.getTime() - start.getTime())
-            const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24))
-
-            if (diffDays < 1 && formData.checkIn && formData.checkOut) {
-                alert('Checkout date must be after check-in date')
-                return
-            }
-
-            // Find selected room's min stay
-            const selectedRoomName = formData.roomPreference
+            const selectedRoomName = watchAllFields.roomPreference
             const roomConfig = roomOptions?.find(opt => 
                 typeof opt === 'string' ? opt === selectedRoomName : opt.type === selectedRoomName
             )
@@ -116,44 +132,53 @@ export default function BookingWizard({ serviceName, servicePrice, onComplete, i
             if (roomConfig && typeof roomConfig !== 'string' && roomConfig.min_stay && roomConfig.min_stay > 1) {
                 if (diffDays < roomConfig.min_stay) {
                     alert(`This room requires a minimum stay of ${roomConfig.min_stay} nights. Your selection is ${diffDays} nights.`)
-                    return
+                    return false
                 }
             }
         }
-        if (currentStep < 4) setCurrentStep((currentStep + 1) as BookingWizardStep)
+
+        return result
     }
 
-    function prevStep() {
-        if (currentStep > 1) setCurrentStep((currentStep - 1) as BookingWizardStep)
+    const nextStep = async () => {
+        if (await validateStep(currentStep)) {
+            if (currentStep < 4) setCurrentStep((prev) => (prev + 1))
+        }
     }
 
-    function handleSubmit() {
-        onComplete(formData)
+    const prevStep = () => {
+        if (currentStep > 1) setCurrentStep((prev) => (prev - 1))
+    }
+
+    const onSubmit = (data: BookingWizardData) => {
+        onComplete(data)
     }
 
     return (
         <div className="w-full">
             {/* Progress Steps */}
-            <div className="mb-8">
+            <div className="mb-12">
                 <div className="flex items-center justify-between">
                     {[
-                        { num: 1, label: labels.dates_guests || 'Dates & Guests' },
-                        { num: 2, label: labels.traveler_details_label || 'Traveler Details' },
-                        { num: 3, label: labels.preferences || 'Preferences' },
-                        { num: 4, label: labels.review || 'Review' }
+                        { num: 1, label: labels.dates_guests || 'Dates & Guests', icon: Calendar },
+                        { num: 2, label: labels.traveler_details_label || 'Travelers', icon: Users },
+                        { num: 3, label: labels.preferences || 'Preferences', icon: Utensils },
+                        { num: 4, label: labels.review || 'Review', icon: Home }
                     ].map((step, idx) => (
                         <React.Fragment key={step.num}>
-                            <div className="flex flex-col items-center">
-                                <div className={`w-10 h-10 rounded-full flex items-center justify-center font-bold transition-all ${currentStep >= step.num
-                                        ? 'bg-red-600 text-white'
-                                        : 'bg-slate-300 dark:bg-slate-700 text-slate-400'
+                            <div className="flex flex-col items-center flex-1 relative">
+                                <div className={`w-12 h-12 rounded-2xl flex items-center justify-center font-bold transition-all shadow-lg ${currentStep >= step.num
+                                        ? 'bg-red-600 text-white scale-110'
+                                        : 'bg-slate-100 dark:bg-slate-800 text-slate-400'
                                     }`}>
-                                    {step.num}
+                                    <step.icon size={20} />
                                 </div>
-                                <span className="text-xs mt-2 font-medium text-slate-600 dark:text-slate-400">{step.label}</span>
+                                <span className={`text-[10px] mt-3 font-black uppercase tracking-widest ${currentStep >= step.num ? 'text-red-600' : 'text-slate-400'}`}>
+                                    {step.label}
+                                </span>
                             </div>
                             {idx < 3 && (
-                                <div className={`flex-1 h-1 mx-2 rounded transition-all ${currentStep > step.num ? 'bg-red-600' : 'bg-slate-300 dark:bg-slate-700'
+                                <div className={`flex-[0.5] h-[2px] mt-6 rounded transition-all ${currentStep > step.num ? 'bg-red-600 shadow-[0_0_10px_rgba(220,38,38,0.5)]' : 'bg-slate-200 dark:bg-slate-700'
                                     }`} />
                             )}
                         </React.Fragment>
@@ -162,275 +187,348 @@ export default function BookingWizard({ serviceName, servicePrice, onComplete, i
             </div>
 
             {/* Step Content */}
-            <div className="bg-white dark:bg-slate-800 rounded-[3rem] p-8 md:p-12 border border-slate-300 dark:border-slate-700 shadow-sm">
-                {/* Step 1: Booking Details */}
-                {currentStep === 1 && (
-                    <div className="space-y-6">
-                        <h2 className="text-2xl font-black text-slate-900 dark:text-white mb-4">{labels.complete_reservation || 'Complete Your Reservation'}</h2>
-                        
-                        <div className="grid grid-cols-2 gap-4 p-6 bg-slate-50 dark:bg-slate-700/50 rounded-2xl border border-slate-100 dark:border-slate-700">
-                            <div>
-                                <label className="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-2">{labels.check_in || 'Check-in'}</label>
-                                <input
-                                    type="date"
-                                    value={formData.checkIn}
-                                    onChange={(e) => updateFormData({ checkIn: e.target.value })}
-                                    className="w-full px-4 py-3 bg-white dark:bg-slate-700 border border-slate-300 dark:border-slate-600 rounded-xl focus:outline-none focus:ring-4 focus:ring-red-600/20 dark:text-white"
-                                />
-                            </div>
-                            <div>
-                                <label className="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-2">{labels.check_out || 'Check-out'}</label>
-                                <input
-                                    type="date"
-                                    value={formData.checkOut}
-                                    onChange={(e) => updateFormData({ checkOut: e.target.value })}
-                                    className="w-full px-4 py-3 bg-white dark:bg-slate-700 border border-slate-300 dark:border-slate-600 rounded-xl focus:outline-none focus:ring-4 focus:ring-red-600/20 dark:text-white"
-                                />
-                            </div>
-                            <div className="col-span-2">
-                                <label className="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-2">{labels.number_of_guests || 'Number of Guests'}</label>
-                                <input
-                                    type="number"
-                                    min="1"
-                                    max="10"
-                                    value={formData.guests}
-                                    onChange={(e) => updateFormData({ guests: parseInt(e.target.value) })}
-                                    className="w-full px-4 py-3 bg-white dark:bg-slate-700 border border-slate-300 dark:border-slate-600 rounded-xl focus:outline-none focus:ring-4 focus:ring-red-600/20 dark:text-white"
-                                />
-                            </div>
-                        </div>
-
-                        <div className="grid grid-cols-2 gap-4">
-                            <div>
-                                <label className="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-2">{labels.first_name || 'First Name'}</label>
-                                <input
-                                    type="text"
-                                    placeholder={placeholders.first_name || 'First Name'}
-                                    value={formData.firstName}
-                                    onChange={(e) => updateFormData({ firstName: e.target.value })}
-                                    className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-700 border border-slate-300 dark:border-slate-600 rounded-xl focus:outline-none focus:ring-4 focus:ring-red-600/20 dark:text-white"
-                                />
-                            </div>
-                            <div>
-                                <label className="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-2">{labels.last_name || 'Last Name'}</label>
-                                <input
-                                    type="text"
-                                    placeholder={placeholders.last_name || 'Last Name'}
-                                    value={formData.lastName}
-                                    onChange={(e) => updateFormData({ lastName: e.target.value })}
-                                    className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-700 border border-slate-300 dark:border-slate-600 rounded-xl focus:outline-none focus:ring-4 focus:ring-red-600/20 dark:text-white"
-                                />
-                            </div>
-                            <div className="col-span-2">
-                                <label className="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-2">{labels.email_address || 'Email Address'}</label>
-                                <input
-                                    type="email"
-                                    placeholder={placeholders.email_address || 'Email'}
-                                    value={formData.email}
-                                    onChange={(e) => updateFormData({ email: e.target.value })}
-                                    className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-700 border border-slate-300 dark:border-slate-600 rounded-xl focus:outline-none focus:ring-4 focus:ring-red-600/20 dark:text-white"
-                                />
-                            </div>
-                            <div>
-                                <label className="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-2">{labels.phone_number || 'Phone'}</label>
-                                <input
-                                    type="tel"
-                                    placeholder={placeholders.phone_number || 'Phone'}
-                                    value={formData.phone}
-                                    onChange={(e) => updateFormData({ phone: e.target.value })}
-                                    className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-700 border border-slate-300 dark:border-slate-600 rounded-xl focus:outline-none focus:ring-4 focus:ring-red-600/20 dark:text-white"
-                                />
-                            </div>
-                            <div>
-                                <label className="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-2">{labels.mobile || 'Mobile'}</label>
-                                <input
-                                    type="tel"
-                                    placeholder={placeholders.phone_number || 'Mobile'}
-                                    value={formData.mobile}
-                                    onChange={(e) => updateFormData({ mobile: e.target.value })}
-                                    className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-700 border border-slate-300 dark:border-slate-600 rounded-xl focus:outline-none focus:ring-4 focus:ring-red-600/20 dark:text-white"
-                                />
-                            </div>
-                            <div className="col-span-2">
-                                <label className="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-2">{labels.notes || 'Notes'}</label>
-                                <textarea
-                                    value={formData.notes}
-                                    onChange={(e) => updateFormData({ notes: e.target.value })}
-                                    rows={3}
-                                    placeholder={placeholders.special_requests || "Any special requirements or messages for the host..."}
-                                    className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-700 border border-slate-300 dark:border-slate-600 rounded-xl focus:outline-none focus:ring-4 focus:ring-red-600/20 dark:text-white"
-                                />
-                            </div>
-                        </div>
-                    </div>
-                )}
-
-                {/* Step 2: Traveler Details */}
-                {currentStep === 2 && (
-                    <div className="space-y-6">
-                        <div className="flex items-center justify-between mb-4">
-                            <h2 className="text-2xl font-black text-slate-900 dark:text-white">{labels.traveler_information || 'Traveler Information'}</h2>
-                            <button
-                                onClick={addTraveler}
-                                className="px-4 py-2 bg-red-600 text-white rounded-xl font-bold hover:bg-slate-900 transition-all text-sm"
-                            >
-                                {labels.add_traveler_btn || '+ Add Traveler'}
-                            </button>
-                        </div>
-                        {formData.travelers.map((traveler, idx) => (
-                            <div key={idx} className="p-6 bg-slate-50 dark:bg-slate-700 rounded-2xl space-y-4">
-                                <div className="flex items-center justify-between mb-2">
-                                    <h3 className="font-bold text-slate-900 dark:text-white">Traveler {idx + 1}</h3>
-                                    {idx > 0 && (
-                                        <button
-                                            onClick={() => removeTraveler(idx)}
-                                            className="text-red-600 text-sm font-medium hover:underline"
-                                        >
-                                            Remove
-                                        </button>
-                                    )}
+            <form onSubmit={handleSubmit(onSubmit as any)} className="bg-white dark:bg-slate-900 rounded-[3rem] p-10 border border-slate-200 dark:border-slate-800 shadow-2xl overflow-hidden">
+                <AnimatePresence mode="wait">
+                    <motion.div
+                        key={currentStep}
+                        initial={{ opacity: 0, x: 20 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        exit={{ opacity: 0, x: -20 }}
+                        transition={{ duration: 0.3 }}
+                    >
+                        {currentStep === 1 && (
+                            <div className="space-y-8">
+                                <div className="space-y-2">
+                                    <h2 className="text-3xl font-black text-slate-900 dark:text-white leading-tight">
+                                        {labels.complete_reservation || 'Complete Your Reservation'}
+                                    </h2>
+                                    <p className="text-slate-500 font-medium">Please provide your booking and contact details.</p>
                                 </div>
-                                <div className="grid grid-cols-2 gap-4">
-                                    <input
-                                        type="text"
-                                        placeholder="First Name"
-                                        value={traveler.firstName}
-                                        onChange={(e) => updateTraveler(idx, { firstName: e.target.value })}
-                                        className="px-4 py-3 bg-white dark:bg-slate-600 border border-slate-300 dark:border-slate-500 rounded-xl focus:outline-none focus:ring-4 focus:ring-red-600/20 dark:text-white"
-                                    />
-                                    <input
-                                        type="text"
-                                        placeholder="Last Name"
-                                        value={traveler.lastName}
-                                        onChange={(e) => updateTraveler(idx, { lastName: e.target.value })}
-                                        className="px-4 py-3 bg-white dark:bg-slate-600 border border-slate-300 dark:border-slate-500 rounded-xl focus:outline-none focus:ring-4 focus:ring-red-600/20 dark:text-white"
-                                    />
-                                    <input
-                                        type="email"
-                                        placeholder="Email"
-                                        value={traveler.email}
-                                        onChange={(e) => updateTraveler(idx, { email: e.target.value })}
-                                        className="px-4 py-3 bg-white dark:bg-slate-600 border border-slate-300 dark:border-slate-500 rounded-xl focus:outline-none focus:ring-4 focus:ring-red-600/20 dark:text-white"
-                                    />
-                                    <input
-                                        type="tel"
-                                        placeholder="Phone"
-                                        value={traveler.phone}
-                                        onChange={(e) => updateTraveler(idx, { phone: e.target.value })}
-                                        className="px-4 py-3 bg-white dark:bg-slate-600 border border-slate-300 dark:border-slate-500 rounded-xl focus:outline-none focus:ring-4 focus:ring-red-600/20 dark:text-white"
-                                    />
+                                
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 p-8 bg-slate-50 dark:bg-slate-800/50 rounded-[2rem] border border-slate-100 dark:border-slate-800">
+                                    <div className="space-y-2">
+                                        <label className="text-xs font-black text-slate-400 uppercase tracking-widest">{labels.check_in || 'Check-in'}</label>
+                                        <div className="relative">
+                                            <Calendar className="absolute left-4 top-1/2 -translate-y-1/2 text-red-600" size={18} />
+                                            <input
+                                                type="date"
+                                                {...register('checkIn')}
+                                                className={`w-full pl-12 pr-4 py-4 bg-white dark:bg-slate-800 border ${errors.checkIn ? 'border-red-500' : 'border-slate-200 dark:border-slate-700'} rounded-2xl focus:ring-4 focus:ring-red-600/10 outline-none transition-all font-bold dark:text-white`}
+                                            />
+                                        </div>
+                                        {errors.checkIn && <p className="text-red-500 text-[10px] font-bold uppercase tracking-widest flex items-center gap-1"><AlertCircle size={10} /> {errors.checkIn.message}</p>}
+                                    </div>
+                                    <div className="space-y-2">
+                                        <label className="text-xs font-black text-slate-400 uppercase tracking-widest">{labels.check_out || 'Check-out'}</label>
+                                        <div className="relative">
+                                            <Calendar className="absolute left-4 top-1/2 -translate-y-1/2 text-red-600" size={18} />
+                                            <input
+                                                type="date"
+                                                {...register('checkOut')}
+                                                className={`w-full pl-12 pr-4 py-4 bg-white dark:bg-slate-800 border ${errors.checkOut ? 'border-red-500' : 'border-slate-200 dark:border-slate-700'} rounded-2xl focus:ring-4 focus:ring-red-600/10 outline-none transition-all font-bold dark:text-white`}
+                                            />
+                                        </div>
+                                        {errors.checkOut && <p className="text-red-500 text-[10px] font-bold uppercase tracking-widest flex items-center gap-1"><AlertCircle size={10} /> {errors.checkOut.message}</p>}
+                                    </div>
+                                    <div className="md:col-span-2 space-y-2">
+                                        <label className="text-xs font-black text-slate-400 uppercase tracking-widest">{labels.number_of_guests || 'Guests'}</label>
+                                        <div className="relative">
+                                            <Users className="absolute left-4 top-1/2 -translate-y-1/2 text-red-600" size={18} />
+                                            <input
+                                                type="number"
+                                                min="1"
+                                                {...register('guests', { valueAsNumber: true })}
+                                                className="w-full pl-12 pr-4 py-4 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl focus:ring-4 focus:ring-red-600/10 outline-none transition-all font-bold dark:text-white"
+                                            />
+                                        </div>
+                                    </div>
                                 </div>
-                            </div>
-                        ))}
-                    </div>
-                )}
 
-                {/* Step 3: Preferences */}
-                {currentStep === 3 && (
-                    <div className="space-y-6">
-                        <h2 className="text-2xl font-black text-slate-900 dark:text-white mb-4">{labels.your_preferences || 'Your Preferences'}</h2>
-                        <div>
-                            <label className="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-2">{labels.meal_preference || 'Meal Preference'}</label>
-                            <select
-                                value={formData.mealPreference}
-                                onChange={(e) => updateFormData({ mealPreference: e.target.value })}
-                                className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-700 border border-slate-300 dark:border-slate-600 rounded-xl focus:outline-none focus:ring-4 focus:ring-red-600/20 dark:text-white"
-                            >
-                                <option value="none">No Preference</option>
-                                <option value="vegetarian">Vegetarian</option>
-                                <option value="vegan">Vegan</option>
-                                <option value="halal">Halal</option>
-                                <option value="kosher">Kosher</option>
-                            </select>
-                        </div>
-                        {showRoomSelection && (
-                            <div>
-                                <label className="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-2">{labels.room_type || 'Room Type'}</label>
-                                <select
-                                    value={formData.roomPreference}
-                                    onChange={(e) => updateFormData({ roomPreference: e.target.value })}
-                                    className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-700 border border-slate-300 dark:border-slate-600 rounded-xl focus:outline-none focus:ring-4 focus:ring-red-600/20 dark:text-white font-bold"
-                                >
-                                {roomOptions && roomOptions.length > 0 ? (
-                                    roomOptions.map(opt => {
-                                        const value = typeof opt === 'string' ? opt : opt.type
-                                        const label = typeof opt === 'string' ? opt : `${opt.type} ${opt.min_stay && opt.min_stay > 1 ? `(${opt.min_stay} nights min)` : ''}`
-                                        return <option key={value} value={value}>{label}</option>
-                                    })
-                                ) : (
-                                    <>
-                                        <option value="standard">Standard Room</option>
-                                        <option value="deluxe">Deluxe Room</option>
-                                        <option value="suite">Suite</option>
-                                        <option value="connecting">Connecting Rooms</option>
-                                    </>
-                                )}
-                                </select>
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                    <div className="space-y-2">
+                                        <label className="text-xs font-black text-slate-400 uppercase tracking-widest">First Name</label>
+                                        <input
+                                            {...register('firstName')}
+                                            placeholder={placeholders.first_name || 'First Name'}
+                                            className={`w-full px-6 py-4 bg-slate-100 dark:bg-slate-800 border ${errors.firstName ? 'border-red-500' : 'border-slate-200 dark:border-slate-700'} rounded-2xl focus:ring-4 focus:ring-red-600/10 outline-none transition-all font-bold dark:text-white`}
+                                        />
+                                        {errors.firstName && <p className="text-red-500 text-[10px] font-bold uppercase tracking-widest flex items-center gap-1"><AlertCircle size={10} /> {errors.firstName.message}</p>}
+                                    </div>
+                                    <div className="space-y-2">
+                                        <label className="text-xs font-black text-slate-400 uppercase tracking-widest">Last Name</label>
+                                        <input
+                                            {...register('lastName')}
+                                            placeholder={placeholders.last_name || 'Last Name'}
+                                            className={`w-full px-6 py-4 bg-slate-100 dark:bg-slate-800 border ${errors.lastName ? 'border-red-500' : 'border-slate-200 dark:border-slate-700'} rounded-2xl focus:ring-4 focus:ring-red-600/10 outline-none transition-all font-bold dark:text-white`}
+                                        />
+                                        {errors.lastName && <p className="text-red-500 text-[10px] font-bold uppercase tracking-widest flex items-center gap-1"><AlertCircle size={10} /> {errors.lastName.message}</p>}
+                                    </div>
+                                    <div className="md:col-span-2 space-y-2">
+                                        <label className="text-xs font-black text-slate-400 uppercase tracking-widest">Email Address</label>
+                                        <div className="relative">
+                                            <Mail className="absolute left-6 top-1/2 -translate-y-1/2 text-slate-400" size={18} />
+                                            <input
+                                                type="email"
+                                                {...register('email')}
+                                                placeholder={placeholders.email_address || 'Email'}
+                                                className={`w-full pl-16 pr-6 py-4 bg-slate-100 dark:bg-slate-800 border ${errors.email ? 'border-red-500' : 'border-slate-200 dark:border-slate-700'} rounded-2xl focus:ring-4 focus:ring-red-600/10 outline-none transition-all font-bold dark:text-white`}
+                                            />
+                                        </div>
+                                        {errors.email && <p className="text-red-500 text-[10px] font-bold uppercase tracking-widest flex items-center gap-1"><AlertCircle size={10} /> {errors.email.message}</p>}
+                                    </div>
+                                    <div className="space-y-2">
+                                        <label className="text-xs font-black text-slate-400 uppercase tracking-widest">Phone</label>
+                                        <div className="relative">
+                                            <Phone className="absolute left-6 top-1/2 -translate-y-1/2 text-slate-400" size={18} />
+                                            <input
+                                                type="tel"
+                                                {...register('phone')}
+                                                placeholder={placeholders.phone_number || 'Phone'}
+                                                className={`w-full pl-16 pr-6 py-4 bg-slate-100 dark:bg-slate-800 border ${errors.phone ? 'border-red-500' : 'border-slate-200 dark:border-slate-700'} rounded-2xl focus:ring-4 focus:ring-red-600/10 outline-none transition-all font-bold dark:text-white`}
+                                            />
+                                        </div>
+                                        {errors.phone && <p className="text-red-500 text-[10px] font-bold uppercase tracking-widest flex items-center gap-1"><AlertCircle size={10} /> {errors.phone.message}</p>}
+                                    </div>
+                                    <div className="space-y-2">
+                                        <label className="text-xs font-black text-slate-400 uppercase tracking-widest">Mobile (Optional)</label>
+                                        <input
+                                            type="tel"
+                                            {...register('mobile')}
+                                            placeholder={placeholders.phone_number || 'Mobile'}
+                                            className="w-full px-6 py-4 bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl focus:ring-4 focus:ring-red-600/10 outline-none transition-all font-bold dark:text-white"
+                                        />
+                                    </div>
+                                    <div className="md:col-span-2 space-y-2">
+                                        <label className="text-xs font-black text-slate-400 uppercase tracking-widest">Additional Notes</label>
+                                        <div className="relative">
+                                            <MessageSquare className="absolute left-6 top-6 text-slate-400" size={18} />
+                                            <textarea
+                                                {...register('notes')}
+                                                rows={3}
+                                                placeholder={placeholders.special_requests || "Special requirements..."}
+                                                className="w-full pl-16 pr-6 py-6 bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-[2rem] focus:ring-4 focus:ring-red-600/10 outline-none transition-all font-bold dark:text-white resize-none"
+                                            />
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         )}
-                    </div>
-                )}
 
-                {/* Step 4: Review */}
-                {currentStep === 4 && (
-                    <div className="space-y-6">
-                        <h2 className="text-2xl font-black text-slate-900 dark:text-white mb-4">{labels.review_booking || 'Review Your Booking'}</h2>
-                        <div className="space-y-4">
-                            <div className="p-4 bg-slate-50 dark:bg-slate-700 rounded-xl">
-                                <h3 className="font-bold text-slate-900 dark:text-white mb-2">{serviceName}</h3>
-                                <div className="grid grid-cols-2 gap-4 text-sm text-slate-600 dark:text-slate-400">
-                                    <div><strong>Check-in:</strong> {formData.checkIn}</div>
-                                    <div><strong>Check-out:</strong> {formData.checkOut}</div>
-                                    <div><strong>Guests:</strong> {formData.guests}</div>
-                                    <div><strong>Travelers:</strong> {formData.travelers.length + 1}</div>
-                                    <div className="col-span-2 border-t border-slate-300 dark:border-slate-600 pt-2 mt-2">
-                                        <strong>Primary Contact:</strong> {formData.firstName} {formData.lastName} ({formData.email})
+                        {currentStep === 2 && (
+                            <div className="space-y-8">
+                                <div className="flex items-center justify-between">
+                                    <div className="space-y-1">
+                                        <h2 className="text-3xl font-black text-slate-900 dark:text-white">{labels.traveler_information || 'Travelers'}</h2>
+                                        <p className="text-slate-500 font-medium">Add details for everyone traveling with you.</p>
                                     </div>
-                                    {formData.notes && (
-                                        <div className="col-span-2 italic">
-                                            <strong>Notes:</strong> {formData.notes}
+                                    <button
+                                        type="button"
+                                        onClick={() => append({ firstName: '', lastName: '', email: '', phone: '', mobile: '', passportNumber: '' })}
+                                        className="h-14 px-8 bg-red-600 text-white rounded-2xl font-black uppercase text-[10px] tracking-widest hover:bg-slate-900 transition-all shadow-[0_10px_20px_rgba(220,38,38,0.2)] flex items-center gap-2"
+                                    >
+                                        <Plus size={16} /> {labels.add_traveler_btn || 'Add Traveler'}
+                                    </button>
+                                </div>
+
+                                <div className="space-y-4 max-h-[500px] overflow-y-auto pr-4 custom-scrollbar">
+                                    {fields.length === 0 && (
+                                        <div className="p-12 text-center border-2 border-dashed border-slate-200 dark:border-slate-800 rounded-[2rem]">
+                                            <Users className="mx-auto text-slate-200 dark:text-slate-800 mb-4" size={48} />
+                                            <p className="text-slate-400 font-bold uppercase text-[10px] tracking-widest">No additional travelers added</p>
+                                        </div>
+                                    )}
+                                    {fields.map((item, index) => (
+                                        <motion.div 
+                                            key={item.id}
+                                            initial={{ opacity: 0, y: 10 }}
+                                            animate={{ opacity: 1, y: 0 }}
+                                            className="p-8 bg-slate-50 dark:bg-slate-800/50 rounded-[2rem] border border-slate-100 dark:border-slate-800 relative group"
+                                        >
+                                            <div className="flex items-center justify-between mb-8">
+                                                <div className="flex items-center gap-3">
+                                                    <div className="w-8 h-8 rounded-lg bg-red-600 text-white flex items-center justify-center font-black text-xs">
+                                                        {index + 1}
+                                                    </div>
+                                                    <h3 className="font-black text-slate-900 dark:text-white uppercase text-[10px] tracking-widest">Additional Traveler</h3>
+                                                </div>
+                                                <button
+                                                    type="button"
+                                                    onClick={() => remove(index)}
+                                                    className="p-2 text-slate-400 hover:text-red-600 transition-colors"
+                                                >
+                                                    <Trash2 size={18} />
+                                                </button>
+                                            </div>
+                                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                                <input
+                                                    {...register(`travelers.${index}.firstName` as const)}
+                                                    placeholder="First Name"
+                                                    className="w-full px-6 py-4 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl focus:ring-4 focus:ring-red-600/10 outline-none transition-all font-bold dark:text-white"
+                                                />
+                                                <input
+                                                    {...register(`travelers.${index}.lastName` as const)}
+                                                    placeholder="Last Name"
+                                                    className="w-full px-6 py-4 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl focus:ring-4 focus:ring-red-600/10 outline-none transition-all font-bold dark:text-white"
+                                                />
+                                                <input
+                                                    {...register(`travelers.${index}.email` as const)}
+                                                    placeholder="Email"
+                                                    className="w-full px-6 py-4 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl focus:ring-4 focus:ring-red-600/10 outline-none transition-all font-bold dark:text-white"
+                                                />
+                                                <input
+                                                    {...register(`travelers.${index}.phone` as const)}
+                                                    placeholder="Phone"
+                                                    className="w-full px-6 py-4 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl focus:ring-4 focus:ring-red-600/10 outline-none transition-all font-bold dark:text-white"
+                                                />
+                                            </div>
+                                        </motion.div>
+                                    ))}
+                                </div>
+                            </div>
+                        )}
+
+                        {currentStep === 3 && (
+                            <div className="space-y-12">
+                                <div className="space-y-1 text-center">
+                                    <h2 className="text-3xl font-black text-slate-900 dark:text-white">{labels.your_preferences || 'Your Preferences'}</h2>
+                                    <p className="text-slate-500 font-medium">Fine-tune your experience for maximum comfort.</p>
+                                </div>
+
+                                <div className="space-y-8">
+                                    <div className="space-y-4">
+                                        <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest block text-center">{labels.meal_preference || 'Meal Preference'}</label>
+                                        <div className="grid grid-cols-2 lg:grid-cols-5 gap-4">
+                                            {['none', 'vegetarian', 'vegan', 'halal', 'kosher'].map((pref) => (
+                                                <label key={pref} className="cursor-pointer">
+                                                    <input
+                                                        type="radio"
+                                                        value={pref}
+                                                        {...register('mealPreference')}
+                                                        className="peer hidden"
+                                                    />
+                                                    <div className="h-full px-4 py-8 bg-slate-50 dark:bg-slate-800/50 border-2 border-transparent peer-checked:border-red-600 peer-checked:bg-white dark:peer-checked:bg-slate-800 rounded-3xl transition-all text-center">
+                                                        <span className="block font-black text-slate-400 peer-checked:text-slate-900 dark:peer-checked:text-white text-[10px] uppercase tracking-widest">{pref}</span>
+                                                    </div>
+                                                </label>
+                                            ))}
+                                        </div>
+                                    </div>
+
+                                    {showRoomSelection && (
+                                        <div className="space-y-4">
+                                            <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest block text-center">{labels.room_type || 'Room Preference'}</label>
+                                            <select
+                                                {...register('roomPreference')}
+                                                className="w-full px-8 py-6 bg-slate-50 dark:bg-slate-800 border-2 border-slate-100 dark:border-slate-800 rounded-[2rem] focus:ring-4 focus:ring-red-600/10 outline-none transition-all font-black text-xl text-center dark:text-white"
+                                            >
+                                            {roomOptions && roomOptions.length > 0 ? (
+                                                roomOptions.map(opt => {
+                                                    const value = typeof opt === 'string' ? opt : opt.type
+                                                    const label = typeof opt === 'string' ? opt : `${opt.type} ${opt.min_stay && opt.min_stay > 1 ? `(${opt.min_stay} nights min)` : ''}`
+                                                    return <option key={value} value={value}>{label}</option>
+                                                })
+                                            ) : (
+                                                <>
+                                                    <option value="standard">Standard Room</option>
+                                                    <option value="deluxe">Deluxe Room</option>
+                                                    <option value="suite">Suite</option>
+                                                    <option value="connecting">Connecting Rooms</option>
+                                                </>
+                                            )}
+                                            </select>
                                         </div>
                                     )}
                                 </div>
                             </div>
-                             <div className="p-4 bg-red-50 dark:bg-red-900/20 rounded-xl">
-                                <div className="flex justify-between items-center">
-                                    <span className="font-bold text-slate-900 dark:text-white">{labels.total_amount || 'Total Amount'}</span>
-                                    <span className="text-2xl font-black text-red-600">Rs {servicePrice.toLocaleString()}</span>
+                        )}
+
+                        {currentStep === 4 && (
+                            <div className="space-y-10">
+                                <div className="space-y-1 text-center">
+                                    <h2 className="text-3xl font-black text-slate-900 dark:text-white">{labels.review_booking || 'Review & Confirm'}</h2>
+                                    <p className="text-slate-500 font-medium">Please review your journey details before submitting.</p>
+                                </div>
+
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                                    <div className="p-10 bg-slate-900 text-white rounded-[3rem] space-y-6 shadow-2xl relative overflow-hidden">
+                                        <div className="absolute top-0 right-0 w-32 h-32 bg-red-600/10 rounded-full blur-3xl -mr-16 -mt-16" />
+                                        <div className="relative space-y-6">
+                                            <div className="space-y-1">
+                                                <h3 className="text-xs font-black text-red-600 uppercase tracking-widest">Service</h3>
+                                                <p className="text-2xl font-black leading-tight">{serviceName}</p>
+                                            </div>
+                                            <div className="grid grid-cols-2 gap-8">
+                                                <div className="space-y-1">
+                                                    <h3 className="text-[10px] font-black text-slate-500 uppercase tracking-widest">Check-in</h3>
+                                                    <p className="font-bold text-lg">{watchAllFields.checkIn}</p>
+                                                </div>
+                                                <div className="space-y-1">
+                                                    <h3 className="text-[10px] font-black text-slate-500 uppercase tracking-widest">Check-out</h3>
+                                                    <p className="font-bold text-lg">{watchAllFields.checkOut}</p>
+                                                </div>
+                                            </div>
+                                            <div className="pt-6 border-t border-white/10 flex justify-between items-end">
+                                                <span className="text-[10px] font-black text-slate-500 uppercase tracking-widest">Total Investment</span>
+                                                <span className="text-3xl font-black text-red-600">Rs {servicePrice.toLocaleString()}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div className="p-10 bg-slate-50 dark:bg-slate-800 rounded-[3rem] space-y-6 border border-slate-100 dark:border-slate-800">
+                                        <div className="space-y-4">
+                                            <div className="space-y-1">
+                                                <h3 className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Primary Guest</h3>
+                                                <p className="font-black text-slate-900 dark:text-white uppercase leading-tight">{watchAllFields.firstName} {watchAllFields.lastName}</p>
+                                                <p className="text-slate-500 font-medium text-sm">{watchAllFields.email}</p>
+                                            </div>
+                                            <div className="space-y-1">
+                                                <h3 className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Group Composition</h3>
+                                                <p className="font-black text-slate-900 dark:text-white uppercase tracking-tighter">{watchAllFields.guests} Adults / {fields.length} Additional Travelers</p>
+                                            </div>
+                                            {watchAllFields.notes && (
+                                                <div className="space-y-1">
+                                                    <h3 className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Special Notes</h3>
+                                                    <p className="text-slate-500 text-sm italic">&ldquo;{watchAllFields.notes}&rdquo;</p>
+                                                </div>
+                                            )}
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    </div>
-                )}
+                        )}
+                    </motion.div>
+                </AnimatePresence>
 
                 {/* Navigation Buttons */}
-                <div className="flex gap-4 mt-8">
+                <div className="flex gap-4 mt-12">
                     {currentStep > 1 && (
                         <button
+                            type="button"
                             onClick={prevStep}
-                            className="flex-1 px-6 py-4 border-2 border-slate-300 dark:border-slate-600 text-slate-700 dark:text-slate-300 rounded-xl font-bold hover:bg-slate-50 dark:hover:bg-slate-700 transition-all"
+                            className="h-16 flex-1 px-8 border-2 border-slate-200 dark:border-slate-800 text-slate-500 dark:text-slate-400 rounded-2xl font-black uppercase text-[10px] tracking-widest hover:bg-slate-100 dark:hover:bg-slate-800 transition-all flex items-center justify-center gap-2"
                         >
-                            {labels.prev_btn || 'Previous'}
+                            <ChevronLeft size={16} /> {labels.prev_btn || 'Back'}
                         </button>
                     )}
                     {currentStep < 4 ? (
                         <button
+                            type="button"
                             onClick={nextStep}
-                            className="flex-1 px-6 py-4 bg-red-600 text-white rounded-xl font-bold hover:bg-slate-900 transition-all"
+                            className="h-16 flex-[2] px-8 bg-red-600 text-white rounded-2xl font-black uppercase text-[10px] tracking-widest hover:bg-slate-900 transition-all shadow-[0_20px_40px_rgba(220,38,38,0.2)] flex items-center justify-center gap-2"
                         >
-                            {labels.next_btn || 'Next Step'}
+                            {labels.next_btn || 'Continue'} <ChevronRight size={16} />
                         </button>
                     ) : (
                         <button
-                            onClick={handleSubmit}
+                            type="submit"
                             disabled={isLoading}
-                            className="flex-1 px-6 py-4 bg-red-600 text-white rounded-xl font-bold hover:bg-slate-900 transition-all disabled:opacity-50"
+                            className="h-16 flex-[2] px-8 bg-red-600 text-white rounded-2xl font-black uppercase text-[10px] tracking-widest hover:bg-slate-900 transition-all shadow-[0_20px_40px_rgba(220,38,38,0.3)] disabled:opacity-50 flex items-center justify-center gap-2"
                         >
-                            {isLoading ? (labels.submitting_btn || 'Submitting...') : (labels.submit_booking_btn || 'Submit Booking Request')}
+                            {isLoading ? (labels.submitting_btn || 'Processing...') : (labels.submit_booking_btn || 'Confirm Reservation')}
                         </button>
                     )}
                 </div>
-            </div>
+            </form>
         </div>
     )
 }

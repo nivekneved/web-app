@@ -37,14 +37,36 @@ type HeroSlide = {
   link?: string
   image?: string
 }
+interface Category {
+    id: string
+    name: string
+    image_url: string
+    link: string
+}
+
+interface Deal {
+    id: string
+    name: string
+    base_price: number
+    image_url: string
+    duration_days?: number
+    duration_hours?: number
+    service_type: string
+    rating?: number
+    is_seasonal_deal?: boolean
+    deal_note?: string
+}
 
 export default function HomePage() {
   const { generalConfig: settings } = useSettings()
-  const labels = (settings?.ui_labels || {}) as Record<string, string>
+  
+  const labels = useMemo(() => (settings?.ui_labels || {}) as Record<string, string>, [settings?.ui_labels])
   
   const [currentSlide, setCurrentSlide] = useState(0)
   const [heroSlides, setHeroSlides] = useState<HeroSlide[]>([])
   const [content, setContent] = useState<Record<string, any>>({})
+  const [categories, setCategories] = useState<Category[]>([])
+  const [deals, setDeals] = useState<Deal[]>([])
   const [loading, setLoading] = useState(true)
   
   const supabase = useMemo(() => createClient(), [])
@@ -103,8 +125,6 @@ export default function HomePage() {
         }
       } catch (error) {
         console.error('Error loading hero slides:', error)
-      } finally {
-        setLoading(false)
       }
     }
 
@@ -124,8 +144,43 @@ export default function HomePage() {
       }
     }
 
+    async function loadCategories() {
+        try {
+            const { data } = await supabase
+                .from('categories')
+                .select('id, name, image_url, link')
+                .eq('is_active', true)
+                .eq('show_on_home', true)
+                .order('display_order', { ascending: true })
+            if (data) setCategories(data as Category[])
+        } catch (err) {
+            console.error('Error loading categories:', err)
+        }
+    }
+
+    async function loadDeals() {
+        try {
+            const { data } = await supabase
+                .from('services')
+                .select('id, name, base_price, image_url, duration_days, duration_hours, service_type, rating, deal_note')
+                .eq('is_seasonal_deal', true)
+                .limit(8)
+                .order('rating', { ascending: false })
+            if (data) setDeals(data as Deal[])
+        } catch (err) {
+            console.error('Error loading deals:', err)
+        }
+    }
+
     const init = async () => {
-      await Promise.all([loadHeroSlides(), loadContent()])
+      setLoading(true)
+      await Promise.all([
+          loadHeroSlides(), 
+          loadContent(), 
+          loadCategories(), 
+          loadDeals()
+      ])
+      setLoading(false)
     }
 
     init()
@@ -296,14 +351,13 @@ export default function HomePage() {
           </div>
 
           <div className="relative z-30">
-            <CategoryGrid />
+            <CategoryGrid data={categories} />
           </div>
         </div>
       </section>
 
-      {/* Deals Carousel */}
       <section className="bg-slate-50 py-10 overflow-hidden">
-         <DealsCarousel />
+         <DealsCarousel data={deals} />
       </section>
 
       {/* Enhanced Experience Section */}

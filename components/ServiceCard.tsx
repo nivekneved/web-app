@@ -99,7 +99,7 @@ export default function ServiceCard({ id, title, location, price, image, duratio
         >
             <div className="relative h-64 overflow-hidden">
                 <Image
-                    src={resolveImageUrl(image, "/hero-hotel.png")}
+                    src={resolveImageUrl(image, "/hero-hotel.png", { width: 600, height: 400, resize: 'cover' })}
                     alt={title}
                     fill
                     className="object-cover group-hover:scale-110 transition-transform duration-700"

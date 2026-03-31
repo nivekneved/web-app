@@ -23,13 +23,18 @@ type Deal = {
     deal_note?: string
 }
 
-export default function DealsCarousel() {
-    const [deals, setDeals] = useState<Deal[]>([])
-    const [loading, setLoading] = useState(true)
+export default function DealsCarousel({ data: externalData }: { data?: Deal[] }) {
+    const [deals, setDeals] = useState<Deal[]>(externalData || [])
+    const [loading, setLoading] = useState(!externalData)
 
     useEffect(() => {
+        if (externalData) {
+            setDeals(externalData)
+            setLoading(false)
+            return
+        }
         loadDeals()
-    }, [])
+    }, [externalData])
 
     async function loadDeals() {
         try {

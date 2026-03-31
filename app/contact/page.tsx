@@ -1,7 +1,7 @@
 'use client'
 
 import React, { useState } from 'react'
-import { MapPin, Phone, Mail, MessageCircle, Send } from 'lucide-react'
+import { MapPin, Phone, Mail, MessageCircle, Send, AlertCircle } from 'lucide-react'
 import { toast } from 'sonner'
 import { createClient } from '@/lib/supabase'
 import { Breadcrumbs } from '@/components/ui/Breadcrumbs'
@@ -11,42 +11,58 @@ import Image from 'next/image'
 import { resolveImageUrl } from '@/lib/image'
 import { useSettings } from '@/contexts/SettingsContext'
 import { motion } from 'framer-motion'
+import { useForm } from 'react-hook-form'
+import { zodResolver } from '@hookform/resolvers/zod'
+import * as z from 'zod'
+
+const contactSchema = z.object({
+    name: z.string().min(2, 'Name must be at least 2 characters'),
+    email: z.string().email('Please enter a valid email address'),
+    phone: z.string().min(8, 'Please enter a valid phone number'),
+    subject: z.string().min(3, 'Please enter a subject'),
+    message: z.string().min(10, 'Message must be at least 10 characters')
+})
+
+type ContactFormData = z.infer<typeof contactSchema>
 
 export default function ContactPage() {
     const { generalConfig: settings } = useSettings()
     const labels = (settings?.ui_labels || {}) as Record<string, string>
     
-    const [formData, setFormData] = useState({
-        name: '',
-        email: '',
-        phone: '',
-        subject: '',
-        message: ''
+    const { 
+        register, 
+        handleSubmit, 
+        reset,
+        formState: { errors, isSubmitting } 
+    } = useForm<ContactFormData>({
+        resolver: zodResolver(contactSchema),
+        defaultValues: {
+            name: '',
+            email: '',
+            phone: '',
+            subject: '',
+            message: ''
+        }
     })
-    const [submitting, setSubmitting] = useState(false)
+
     const supabase = createClient()
 
-    async function handleSubmit(e: React.FormEvent) {
-        e.preventDefault()
-        setSubmitting(true)
-
+    async function onSubmit(data: ContactFormData) {
         try {
             const { error } = await supabase
                 .from('inquiries')
                 .insert([{
-                    ...formData,
+                    ...data,
                     status: 'unread'
                 }])
 
             if (error) throw error
 
             toast.success(labels.contact_success_message || 'Message sent! We\'ll get back to you soon.')
-            setFormData({ name: '', email: '', phone: '', subject: '', message: '' })
+            reset()
         } catch (error) {
             console.error('Error sending message:', error)
             toast.error(labels.contact_error_message || 'Failed to send message. Please try again.')
-        } finally {
-            setSubmitting(false)
         }
     }
 
@@ -170,61 +186,89 @@ export default function ContactPage() {
                             <div className="bg-white rounded-[3rem] border border-slate-300 p-12 shadow-[0_50px_100px_-20px_rgba(0,0,0,0.08)]">
                                 <h3 className="text-3xl font-black text-slate-900 mb-10 tracking-tight">{labels.contact_form_title || 'Direct Inquiry'}</h3>
                                 
-                                <form onSubmit={handleSubmit} className="space-y-8">
-                                    <Input
-                                        label={labels.label_full_name || 'Full Name'}
-                                        required
-                                        value={formData.name}
-                                        onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                                        placeholder={labels.placeholder_name || 'Enter your name'}
-                                    />
-                                    
-                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                                        <Input
-                                            label={labels.label_email || 'Email Address'}
-                                            type="email"
-                                            required
-                                            value={formData.email}
-                                            onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                                            placeholder={labels.placeholder_email || 'your@email.com'}
-                                        />
-                                        <Input
-                                            label={labels.label_phone || 'Phone Number'}
-                                            type="tel"
-                                            value={formData.phone}
-                                            onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                                            placeholder={labels.placeholder_phone || '+230'}
-                                        />
-                                    </div>
+                                <form onSubmit={handleSubmit(onSubmit)} className="space-y-8">
+                                     <div className="space-y-2">
+                                         <Input
+                                             label={labels.label_full_name || 'Full Name'}
+                                             {...register('name')}
+                                             error={errors.name?.message}
+                                             placeholder={labels.placeholder_name || 'Enter your name'}
+                                         />
+                                         {errors.name && (
+                                             <p className="text-red-500 text-[10px] font-black uppercase flex items-center gap-1 ml-2">
+                                                 <AlertCircle size={10} /> {errors.name.message}
+                                             </p>
+                                         )}
+                                     </div>
+                                     
+                                     <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                                         <div className="space-y-2">
+                                             <Input
+                                                 label={labels.label_email || 'Email Address'}
+                                                 type="email"
+                                                 {...register('email')}
+                                                 error={errors.email?.message}
+                                                 placeholder={labels.placeholder_email || 'your@email.com'}
+                                             />
+                                             {errors.email && (
+                                                 <p className="text-red-500 text-[10px] font-black uppercase flex items-center gap-1 ml-2">
+                                                     <AlertCircle size={10} /> {errors.email.message}
+                                                 </p>
+                                             )}
+                                         </div>
+                                         <div className="space-y-2">
+                                             <Input
+                                                 label={labels.label_phone || 'Phone Number'}
+                                                 type="tel"
+                                                 {...register('phone')}
+                                                 error={errors.phone?.message}
+                                                 placeholder={labels.placeholder_phone || '+230'}
+                                             />
+                                             {errors.phone && (
+                                                 <p className="text-red-500 text-[10px] font-black uppercase flex items-center gap-1 ml-2">
+                                                     <AlertCircle size={10} /> {errors.phone.message}
+                                                 </p>
+                                             )}
+                                         </div>
+                                     </div>
 
-                                    <Input
-                                        label={labels.label_subject || 'Subject'}
-                                        required
-                                        value={formData.subject}
-                                        onChange={(e) => setFormData({ ...formData, subject: e.target.value })}
-                                        placeholder={labels.placeholder_subject || 'What can we help you with?'}
-                                    />
+                                     <div className="space-y-2">
+                                         <Input
+                                             label={labels.label_subject || 'Subject'}
+                                             {...register('subject')}
+                                             error={errors.subject?.message}
+                                             placeholder={labels.placeholder_subject || 'What can we help you with?'}
+                                         />
+                                         {errors.subject && (
+                                             <p className="text-red-500 text-[10px] font-black uppercase flex items-center gap-1 ml-2">
+                                                 <AlertCircle size={10} /> {errors.subject.message}
+                                             </p>
+                                         )}
+                                     </div>
 
-                                    <div className="space-y-3">
-                                        <label className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] ml-2">{labels.label_message || 'Message'}</label>
-                                        <textarea
-                                            required
-                                            rows={5}
-                                            value={formData.message}
-                                            onChange={(e) => setFormData({ ...formData, message: e.target.value })}
-                                            className="w-full px-6 py-5 bg-slate-50 border border-slate-300 rounded-2xl focus:outline-none focus:ring-2 focus:ring-red-600/50 focus:bg-white font-bold text-sm transition-all resize-none"
-                                            placeholder={labels.placeholder_message || 'Tell us about your travel plans...'}
-                                        />
-                                    </div>
+                                     <div className="space-y-3">
+                                         <label className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] ml-2">{labels.label_message || 'Message'}</label>
+                                         <textarea
+                                             {...register('message')}
+                                             rows={5}
+                                             className={`w-full px-6 py-5 bg-slate-50 border rounded-2xl focus:outline-none focus:ring-2 focus:ring-red-600/50 focus:bg-white font-bold text-sm transition-all resize-none ${errors.message ? 'border-red-500 ring-1 ring-red-500' : 'border-slate-300'}`}
+                                             placeholder={labels.placeholder_message || 'Tell us about your travel plans...'}
+                                         />
+                                         {errors.message && (
+                                             <p className="text-red-500 text-[10px] font-black uppercase flex items-center gap-1 ml-2">
+                                                 <AlertCircle size={10} /> {errors.message.message}
+                                             </p>
+                                         )}
+                                     </div>
 
-                                    <Button
-                                        size="xl"
-                                        type="submit"
-                                        isLoading={submitting}
-                                        className="w-full shadow-2xl shadow-red-600/20"
-                                    >
-                                        <Send size={18} className="mr-2" /> {labels.button_send_message || 'Send Message'}
-                                    </Button>
+                                     <Button
+                                         size="xl"
+                                         type="submit"
+                                         isLoading={isSubmitting}
+                                         className="w-full shadow-2xl shadow-red-600/20"
+                                     >
+                                         <Send size={18} className="mr-2" /> {labels.button_send_message || 'Send Message'}
+                                     </Button>
 
                                     <p className="text-center text-slate-400 text-[10px] font-black uppercase tracking-[0.2em]">
                                         {labels.contact_response_time || 'Response time: < 24 Hours'}

@@ -14,11 +14,17 @@ type Category = {
     link: string
 }
 const supabase = createClient()
-export default function CategoryGrid() {
-    const [categories, setCategories] = useState<Category[]>([])
-    const [loading, setLoading] = useState(true)
+export default function CategoryGrid({ data: externalData }: { data?: Category[] }) {
+    const [categories, setCategories] = useState<Category[]>(externalData || [])
+    const [loading, setLoading] = useState(!externalData)
 
     useEffect(() => {
+        if (externalData) {
+            setCategories(externalData)
+            setLoading(false)
+            return
+        }
+
         async function fetchCategories() {
             try {
                 const { data, error } = await supabase
@@ -38,7 +44,7 @@ export default function CategoryGrid() {
         }
 
         fetchCategories()
-    }, [])
+    }, [externalData])
 
     if (loading) {
         return (
