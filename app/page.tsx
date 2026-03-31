@@ -12,6 +12,7 @@ import CategoryGrid from '@/components/CategoryGrid'
 import DealsCarousel from '@/components/DealsCarousel'
 import AnnouncementPopup from '@/components/AnnouncementPopup'
 import PartnerSlider from '@/components/PartnerSlider'
+import NewsSection from '@/components/NewsSection'
 
 import { createClient } from '@/lib/supabase'
 import { resolveImageUrl } from '@/lib/image'
@@ -412,6 +413,9 @@ export default function HomePage() {
           </div>
         </div>
       </section>
+
+      {/* News & Insights */}
+      <NewsSection />
 
       {/* Partner Slider */}
       <section className="bg-slate-50 py-10 text-slate-900">
