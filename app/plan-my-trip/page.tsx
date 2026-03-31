@@ -55,6 +55,19 @@ export default function PlanMyTrip() {
     try {
       const { error } = await supabase.from('inquiries').insert([data]);
       if (error) throw error;
+      
+      // Trigger Email Notification (Server Action)
+      try {
+          const { notifyInquiryReceived } = await import('@/lib/emailActions')
+          await notifyInquiryReceived({
+              email: String(data.email),
+              customerName: String(data.name),
+              serviceName: data.subject
+          })
+      } catch (e) {
+          console.error('Email notification failed but inquiry saved:', e)
+      }
+
       setSubmitStatus('success');
       toast.success(labels.plan_trip_success || 'Your request has been sent! Our experts will contact you soon.');
       (e.target as HTMLFormElement).reset();

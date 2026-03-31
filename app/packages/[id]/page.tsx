@@ -121,6 +121,21 @@ export default function PackageDetailPage() {
 
         if (result.success) {
             toast.success('Booking request submitted successfully!')
+            
+            // Trigger Email Notification (Server Action)
+            try {
+                const { notifyBookingSuccess } = await import('@/lib/emailActions')
+                await notifyBookingSuccess({
+                    email: data.email,
+                    customerName: `${data.firstName} ${data.lastName}`,
+                    bookingId: String(result.bookingId),
+                    serviceName: pkg.name,
+                    amount: pkg.base_price
+                })
+            } catch (e) {
+                console.error('Email notification failed but booking succeeded:', e)
+            }
+
             setShowWizard(false)
             router.push(`/booking-confirmation?id=${result.bookingId}&service=${encodeURIComponent(pkg.name)}&amount=${pkg.base_price}`)
         } else {

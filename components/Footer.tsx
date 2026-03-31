@@ -35,6 +35,15 @@ export default function Footer() {
                 }
             } else {
                 toast.success(labels.subscribe_success || 'Thank you for subscribing!')
+                
+                // Trigger Welcome Email (Server Action)
+                try {
+                    const { notifySubscriptionWelcome } = await import('@/lib/emailActions')
+                    await notifySubscriptionWelcome(email)
+                } catch (e) {
+                    console.error('Email welcome failed but subscription saved:', e)
+                }
+
                 setEmail('')
             }
         } catch (err) {

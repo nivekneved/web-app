@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState } from 'react'
+import React from 'react'
 import { MapPin, Phone, Mail, MessageCircle, Send, AlertCircle } from 'lucide-react'
 import { toast } from 'sonner'
 import { createClient } from '@/lib/supabase'
@@ -57,6 +57,18 @@ export default function ContactPage() {
                 }])
 
             if (error) throw error
+            
+            // Trigger Email Notification (Server Action)
+            try {
+                const { notifyInquiryReceived } = await import('@/lib/emailActions')
+                await notifyInquiryReceived({
+                    email: data.email,
+                    customerName: data.name,
+                    serviceName: data.subject
+                })
+            } catch (e) {
+                console.error('Email notification failed but inquiry saved:', e)
+            }
 
             toast.success(labels.contact_success_message || 'Message sent! We\'ll get back to you soon.')
             reset()
