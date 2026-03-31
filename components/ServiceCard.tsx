@@ -26,9 +26,10 @@ interface ServiceCardProps {
     service_type?: string
     isSeasonal?: boolean
     dealNote?: string
+    region?: string
 }
 
-export default function ServiceCard({ id, title, location, price, image, duration, link, tag, rating, service_type, isSeasonal, dealNote }: ServiceCardProps) {
+export default function ServiceCard({ id, title, location, price, image, duration, link, tag, rating, service_type, isSeasonal, dealNote, region }: ServiceCardProps) {
     const { generalConfig: config } = useSettings()
     const labels = (config?.ui_labels || {}) as Record<string, string>
     const [showWizard, setShowWizard] = React.useState(false)
@@ -117,10 +118,10 @@ export default function ServiceCard({ id, title, location, price, image, duratio
             </div>
             <div className="p-6 flex flex-col flex-1">
                 <div className="flex items-center justify-between mb-2">
-                    {location && (
-                        <div className="flex items-center gap-2 text-slate-500 text-xs font-bold uppercase">
-                            <MapPin size={14} className="text-red-500" />
-                            {location}
+                    {(location || region) && (
+                        <div className="flex items-center gap-2 text-slate-500 text-xs font-bold uppercase line-clamp-1">
+                            <MapPin size={14} className="text-red-500 shrink-0" />
+                            {location} {location && region && <span className="text-slate-300 mx-1">/</span>} {region}
                         </div>
                     )}
                     {duration && (

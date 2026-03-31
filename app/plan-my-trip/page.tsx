@@ -110,7 +110,7 @@ export default function PlanMyTrip() {
               <div className="bg-white rounded-[2rem] border border-slate-100 p-8 shadow-[0_50px_100px_-20px_rgba(0,0,0,0.08)]">
                 <div className="mb-8">
                   <h2 className="text-xs font-black text-red-600 uppercase tracking-[0.4em] mb-4">{labels.form_inquiry_badge || 'Inquiry'}</h2>
-                  <h3 className="text-4xl font-black text-slate-900 tracking-tight">{labels.form_questionnaire_title || 'Trip Questionnaire'}</h3>
+                  <h3 className="text-4xl font-black text-slate-900 tracking-tight">{labels.form_questionnaire_title || 'Design Your Trip'}</h3>
                 </div>
 
                 <form onSubmit={handleSubmit} className="space-y-8">

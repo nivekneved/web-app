@@ -561,6 +561,7 @@ function ServiceListingInner({
                                                 service_type={service.service_type}
                                                 isSeasonal={service.is_seasonal_deal}
                                                 dealNote={service.deal_note}
+                                                region={service.region}
                                             />
                                         </motion.div>
                                     ))

@@ -20,6 +20,7 @@ type Service = {
     duration_hours?: number
     service_type: string
     rating?: number
+    region?: string
 }
 
 type DestinationListingProps = {
@@ -51,7 +52,7 @@ export default function DestinationListing({
             setLoading(true)
             let query = supabase
                 .from('services')
-                .select('id, name, location, base_price, image_url, duration_days, duration_hours, service_type, rating')
+                .select('id, name, location, base_price, image_url, duration_days, duration_hours, service_type, rating, region')
 
             if (regions && regions.length > 0) {
                 query = query.in('region', regions)
@@ -366,6 +367,7 @@ export default function DestinationListing({
                                             tag={tag || service.service_type.toUpperCase()}
                                             rating={service.rating}
                                             service_type={service.service_type}
+                                            region={service.region}
                                         />
                                     ))
                                 )}
