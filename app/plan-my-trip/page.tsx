@@ -85,7 +85,7 @@ export default function PlanMyTrip() {
       {/* Hero Section */}
       <section className="relative h-[40vh] min-h-[400px] flex items-center overflow-hidden bg-slate-900">
         <Image
-          src={resolveImageUrl(null, "/assets/placeholders/hero-adventure.png")}
+          src={resolveImageUrl(settings?.planTripHeroImage, "https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?q=80&w=2070&auto=format&fit=crop")}
           alt="Plan My Trip"
           fill
           className="object-cover opacity-60"

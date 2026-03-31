@@ -72,7 +72,7 @@ export default function TailorMadePage() {
       {/* Hero Section */}
       <section className="relative h-[250px] md:h-[350px] flex items-center overflow-hidden bg-slate-900">
         <Image
-          src={resolveImageUrl(null, "/assets/placeholders/hero-placeholder.png")}
+          src={resolveImageUrl(settings?.tailorMadeHeroImage, "https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?q=80&w=2042&auto=format&fit=crop")}
           alt="Tailor-Made Travel"
           fill
           className="object-cover opacity-60"

@@ -28,6 +28,8 @@ export interface GeneralConfig {
     office2MapUrl?: string;
     ui_labels?: Record<string, string>;
     form_placeholders?: Record<string, string>;
+    tailorMadeHeroImage?: string;
+    planTripHeroImage?: string;
 }
 
 export interface SiteSettings {
