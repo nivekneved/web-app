@@ -129,38 +129,7 @@ export default function AboutPage() {
                 </div>
             </section>
 
-            <section className="py-24 bg-white overflow-hidden">
-                <div className="container mx-auto px-6">
-                    <div className="flex flex-col items-center justify-center text-center">
-                        <motion.div
-                            initial={{ opacity: 0, scale: 0.9 }}
-                            whileInView={{ opacity: 1, scale: 1 }}
-                            viewport={{ once: true }}
-                            transition={{ duration: 1, ease: "easeOut" }}
-                            className="relative w-full max-w-2xl px-12 py-20 bg-slate-50 rounded-[4rem] border border-slate-100 shadow-2xl shadow-slate-100 overflow-hidden"
-                        >
-                            {/* Watermark decorations */}
-                            <div className="absolute top-0 right-0 w-64 h-64 bg-red-500/5 rounded-full blur-[80px] -mr-32 -mt-32"></div>
-                            <div className="absolute bottom-0 left-0 w-64 h-64 bg-indigo-500/5 rounded-full blur-[80px] -ml-32 -mb-32"></div>
-                            
-                            <div className="relative z-10 flex flex-col items-center">
-                                <span className="text-[10px] font-black text-slate-400 uppercase tracking-[0.6em] mb-12">{labels.legacy_label || 'A Legacy of Excellence'}</span>
-                                <div className="relative w-72 h-72 mb-12">
-                                    <Image 
-                                        src="/assets/logo-red-bird.png" 
-                                        alt="Travel Lounge Red Bird Logo" 
-                                        fill
-                                        className="object-contain drop-shadow-2xl"
-                                    />
-                                </div>
-                                <h2 className="text-3xl font-black text-slate-900 uppercase tracking-tighter max-w-lg mx-auto">
-                                    {labels.brand_tagline || 'Pioneering Luxury & Corporate Travel Since Day One.'}
-                                </h2>
-                            </div>
-                        </motion.div>
-                    </div>
-                </div>
-            </section>
+            {/* Standalone logo section removed — logo moved inline above identity description */}
 
             <section className="py-24 relative overflow-hidden">
                 <div className="container mx-auto px-6">
@@ -172,6 +141,19 @@ export default function AboutPage() {
                                     className="text-4xl font-black text-slate-900 leading-tight uppercase tracking-tight"
                                     dangerouslySetInnerHTML={{ __html: sanitizeHtml(identity.title.replace(/<br\s*\/?>/g, ' ')) }}
                                 />
+                            </div>
+                            {/* Inline logo before description */}
+                            <div className="flex items-center gap-3 mb-4">
+                                <Image
+                                    src="/assets/logo-red-bird.png"
+                                    alt="Travel Lounge"
+                                    width={48}
+                                    height={48}
+                                    className="object-contain"
+                                />
+                                <span className="text-[10px] font-black text-slate-400 uppercase tracking-[0.4em]">
+                                    {labels.legacy_label || 'A Legacy of Excellence'}
+                                </span>
                             </div>
                             <p className="text-lg text-slate-600 leading-relaxed">
                                 {identity.description}
