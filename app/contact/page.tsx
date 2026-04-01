@@ -64,7 +64,12 @@ export default function ContactPage() {
                 await notifyInquiryReceived({
                     email: data.email,
                     customerName: data.name,
-                    serviceName: data.subject
+                    customerPhone: data.phone,
+                    destination: 'General Inquiry',
+                    departureDate: 'N/A',
+                    adults: 'N/A',
+                    children: 'N/A',
+                    message: data.message
                 })
             } catch (e) {
                 console.error('Email notification failed but inquiry saved:', e)

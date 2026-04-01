@@ -50,16 +50,48 @@ export async function notifyBookingSuccess(data: {
 export async function notifyInquiryReceived(data: {
     email: string
     customerName: string
-    serviceName: string
+    customerPhone: string
+    destination: string
+    departureDate: string
+    adults: string
+    children: string
+    message: string
 }) {
-    return await sendTemplatedEmail({
+    // 1. Send Receipt to Customer
+    const customerResult = await sendTemplatedEmail({
         to: data.email,
         templateName: 'inquiry_received',
         variables: {
             customer_name: data.customerName,
-            service_name: data.serviceName
+            service_name: `Trip to ${data.destination}`
         }
     })
+
+    // 2. Send Notifications to Admins
+    const adminRecipients = ['reservation@travellounge.mu', 'devenpawaray@gmail.com']
+    const adminResults = await Promise.all(
+        adminRecipients.map(recipient => 
+            sendTemplatedEmail({
+                to: recipient,
+                templateName: 'admin_new_inquiry',
+                variables: {
+                    customer_name: data.customerName,
+                    customer_email: data.email,
+                    customer_phone: data.customerPhone,
+                    destination: data.destination,
+                    departure_date: data.departureDate,
+                    adults: data.adults,
+                    children: data.children,
+                    message: data.message
+                }
+            })
+        )
+    )
+
+    return {
+        customerNotified: customerResult.success,
+        adminsNotified: adminResults.every(r => r.success)
+    }
 }
 
 /**

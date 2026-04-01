@@ -62,7 +62,12 @@ export default function PlanMyTrip() {
           await notifyInquiryReceived({
               email: String(data.email),
               customerName: String(data.name),
-              serviceName: data.subject
+              customerPhone: String(data.phone),
+              destination: String(formData.get('destination')),
+              departureDate: String(formData.get('departure_date')),
+              adults: String(formData.get('adults')),
+              children: String(formData.get('children')),
+              message: String(formData.get('message'))
           })
       } catch (e) {
           console.error('Email notification failed but inquiry saved:', e)

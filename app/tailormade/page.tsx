@@ -55,6 +55,24 @@ export default function TailorMadePage() {
     try {
       const { error } = await supabase.from('inquiries').insert([data]);
       if (error) throw error;
+
+      // Trigger Email Notification (Server Action)
+      try {
+          const { notifyInquiryReceived } = await import('@/lib/emailActions')
+          await notifyInquiryReceived({
+              email: String(data.email),
+              customerName: String(data.name),
+              customerPhone: String(data.phone),
+              destination: String(formData.get('destination')),
+              departureDate: String(formData.get('departure_date')),
+              adults: String(formData.get('adults')),
+              children: String(formData.get('children')),
+              message: String(formData.get('message'))
+          })
+      } catch (e) {
+          console.error('Email notification failed but inquiry saved:', e)
+      }
+
       setSubmitStatus('success');
       toast.success(labels.tailor_made_success || 'Your tailor-made request has been sent! Our team will contact you soon.');
       (e.target as HTMLFormElement).reset();
