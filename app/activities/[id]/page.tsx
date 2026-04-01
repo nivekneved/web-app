@@ -16,7 +16,7 @@ async function getActivity(id: string) {
         .from('services')
         .select('id, name, description, location, region, base_price, rating, image_url, amenities, duration_hours, itinerary')
         .eq('id', id)
-        .eq('service_type', 'activity')
+        .in('service_type', ['activity', 'land_activity', 'sea_activity'])
         .single()
 
     if (error || !data) return null
