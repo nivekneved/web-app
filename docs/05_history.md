@@ -1,5 +1,13 @@
 # 05 History & Agent Progress
 
+## 2026-04-01 - Stability Fixes & Search Redirect Architecture
+- **Booking RPC Fix**: Updated `create_booking_v1` in Supabase to sync with the current `bookings` table schema, resolving field mismatches (`start_date` → `check_in_date`). (B-01)
+- **Search Detail Redirector**: Implemented dynamic routing in `app/search/details/[id]` to fix 404s for non-hotel services, automatically mapping requests to specialized routes. (R-01)
+- **Enhanced Activity Support**: Updated the activities detail page to handle `land_activity` and `sea_activity` service types. (S-01)
+- **Git & Backup Maintenance**: Force-synchronized `backup` branches across the entire Travel Lounge ecosystem to preserve current state.
+
+---
+
 ## 2026-03-28 - Final Production Hardening & Navigation Refactor
 - **Navigation Architecture**: Removed hardcoded `lib/navigation.ts` and refactored `Navbar.tsx` to be 100% database-driven, eliminating data drift. (H-01)
 - **Security Sanitization**: Verified and enforced `sanitizeHtml` on all dynamic CMS content blocks to prevent stored XSS. (C-04)
