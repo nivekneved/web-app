@@ -1,10 +1,12 @@
 # 05 History & Agent Progress
 
-## 2026-04-01 - Stability Fixes & Search Redirect Architecture
-- **Booking RPC Fix**: Updated `create_booking_v1` in Supabase to sync with the current `bookings` table schema, resolving field mismatches (`start_date` → `check_in_date`). (B-01)
-- **Search Detail Redirector**: Implemented dynamic routing in `app/search/details/[id]` to fix 404s for non-hotel services, automatically mapping requests to specialized routes. (R-01)
-- **Enhanced Activity Support**: Updated the activities detail page to handle `land_activity` and `sea_activity` service types. (S-01)
-- **Git & Backup Maintenance**: Force-synchronized `backup` branches across the entire Travel Lounge ecosystem to preserve current state.
+## 2026-04-01 - Ecosystem E2E Production Readiness Audit
+- **Admin Auth Bug Fix**: Fixed a critical bug in `AuthContext.jsx` where the `isAdmin` check was incorrectly parsing the JSONB response from Supabase as an array. (A-02)
+- **Mobile Booking Sync**: Aligned `mobile-app` submission logic with the latest Supabase schema, mapping local keys to `check_in_date`, `check_out_date`, `service_type`, and `service_name`. (M-02)
+- **Search Detail Redirector**: Implemented dynamic routing in `app/search/details/[id]` to fix 404s, automatically mapping requests to specialized routes (`/hotels/`, `/activities/`). (R-01)
+- **Database Transaction Verification**: Confirmed `create_booking_v1` RPC correctly handles multi-table inserts (`bookings` + `booking_items`). (B-02)
+- **Regional Metadata E2E**: Verified 100% parity for regional filtering and display across Web (`ServiceListing`) and Admin (`Create Service`). (S-02)
+- **History Audit**: Completed a full-scale testing of all possible scenarios (Discovery → Inquiry → Booking → Report).
 
 ---
 
