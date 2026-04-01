@@ -1,13 +1,13 @@
 'use client'
 
 import React, { useState, useEffect, useMemo, useCallback } from 'react'
-import { AlertCircle, Scale, ChevronRight, FileText, CheckCircle2, Loader2 } from 'lucide-react'
+import { FileText, Lock, ChevronRight, CheckCircle2, Loader2 } from 'lucide-react'
 import { motion } from 'framer-motion'
 import { createClient } from '@/lib/supabase'
 
 type ContentBlock = {
     section_key: string
-    content: any
+    content: unknown
 }
 
 type TermsContent = {
@@ -16,14 +16,14 @@ type TermsContent = {
         subtitle: string
         last_updated: string
     }
-    glance?: string[]
     sections?: {
         title: string
         content: string
     }[]
-    footer_cta?: {
+    contact?: {
         title: string
-        help_text: string
+        description: string
+        action_label: string
     }
 }
 
@@ -40,14 +40,14 @@ export default function TermsConditionsPage() {
                 .eq('page_slug', 'terms-conditions')
 
             if (data && data.length > 0) {
-                const blocks: Record<string, any> = {}
+                const blocks: TermsContent = {}
                 data.forEach((block: ContentBlock) => {
-                    blocks[block.section_key] = block.content
+                    (blocks as Record<string, unknown>)[block.section_key] = block.content
                 })
-                setContent(blocks as TermsContent)
+                setContent(blocks)
             }
         } catch (err) {
-            console.error('Terms: Error fetching content blocks:', err)
+            console.error('Terms Conditions: Error fetching content blocks:', err)
         }
     }, [supabase])
 
@@ -61,22 +61,12 @@ export default function TermsConditionsPage() {
 
     const hero = content?.hero || {
         title: "Terms & Conditions",
-        subtitle: "Please review our service agreement carefully. These terms ensure a safe and transparent experience for all our travelers.",
+        subtitle: "Your agreement with Travel Lounge for our services and website usage.",
         last_updated: "March 2026"
     }
 
-    const glance = content?.glance || [
-        "IATA Accredited Agency",
-        "Secure Payment Processing",
-        "Transparent Refund Policy",
-        "Professional Travel Advice"
-    ]
-
     const sections = content?.sections || []
-    const footer_cta = content?.footer_cta || {
-        title: "Download Full PDF",
-        help_text: "Need a custom corporate agreement? Contact our business team for tailored solutions."
-    }
+    const contact = content?.contact || null
 
     if (loading) {
         return (
@@ -97,8 +87,8 @@ export default function TermsConditionsPage() {
                         animate={{ opacity: 1, scale: 1 }}
                         className="max-w-3xl"
                     >
-                        <div className="w-16 h-16 bg-red-600 rounded-2xl flex items-center justify-center mb-8 shadow-xl shadow-red-900/20">
-                            <Scale size={32} />
+                        <div className="w-16 h-16 bg-slate-900 rounded-2xl flex items-center justify-center mb-8 shadow-xl">
+                            <FileText size={32} />
                         </div>
                         <h1 className="text-4xl md:text-6xl font-black mb-6 leading-tight uppercase tracking-tight">{hero.title}</h1>
                         <p className="text-xl text-slate-400 font-medium leading-relaxed">
@@ -117,27 +107,29 @@ export default function TermsConditionsPage() {
                             <div className="sticky top-32 space-y-8">
                                 <div className="p-8 bg-slate-50 rounded-[2.5rem] border border-slate-100">
                                     <h3 className="text-lg font-black text-slate-900 mb-6 flex items-center gap-2">
-                                        <FileText size={20} className="text-red-600" />
-                                        At a Glance
+                                        <Lock size={20} className="text-red-600" />
+                                        Summary
                                     </h3>
-                                    <ul className="space-y-4">
-                                        {glance.map((item, i) => (
-                                            <li key={i} className="flex items-start gap-3 text-slate-600 font-medium text-sm">
-                                                <CheckCircle2 size={16} className="text-green-500 mt-0.5 shrink-0" />
-                                                {item}
-                                            </li>
-                                        ))}
-                                    </ul>
+                                    <div className="space-y-4">
+                                        <div className="flex items-start gap-3">
+                                            <CheckCircle2 size={18} className="text-green-500 mt-1 shrink-0" />
+                                            <p className="text-sm font-medium text-slate-600">Service Agreement</p>
+                                        </div>
+                                        <div className="flex items-start gap-3">
+                                            <CheckCircle2 size={18} className="text-green-500 mt-1 shrink-0" />
+                                            <p className="text-sm font-medium text-slate-600">Usage Rights</p>
+                                        </div>
+                                        <div className="flex items-start gap-3">
+                                            <CheckCircle2 size={18} className="text-green-500 mt-1 shrink-0" />
+                                            <p className="text-sm font-medium text-slate-600">Liability Terms</p>
+                                        </div>
+                                    </div>
                                 </div>
 
-                                {footer_cta && (
-                                    <div className="p-8 bg-red-50 rounded-[2.5rem] border border-red-100">
-                                        <AlertCircle size={32} className="text-red-600 mb-4" />
-                                        <p className="text-sm text-red-900 font-bold leading-relaxed">
-                                            {footer_cta.help_text}
-                                        </p>
+                                    <div className="text-center p-6 bg-slate-900 rounded-3xl border border-slate-800">
+                                        <p className="text-xs font-black text-slate-400 uppercase tracking-widest mb-1">Last Updated</p>
+                                        <p className="text-sm font-bold text-white">{hero.last_updated}</p>
                                     </div>
-                                )}
                             </div>
                         </div>
 
@@ -146,28 +138,38 @@ export default function TermsConditionsPage() {
                             {sections.map((section, i) => (
                                 <motion.div 
                                     key={i}
-                                    initial={{ opacity: 0, x: 20 }}
-                                    whileInView={{ opacity: 1, x: 0 }}
+                                    initial={{ opacity: 0, y: 20 }}
+                                    whileInView={{ opacity: 1, y: 0 }}
                                     viewport={{ once: true }}
-                                    className="pb-12 border-b border-slate-100 last:border-0"
                                 >
-                                    <span className="text-xs font-black text-red-600 uppercase tracking-widest mb-2 block">Section 0{i+1}</span>
-                                    <h2 className="text-2xl font-black text-slate-900 mb-4">{section.title}</h2>
-                                    <p className="text-slate-600 leading-relaxed text-lg font-light">
+                                    <h2 className="text-2xl font-black text-slate-900 mb-6 flex items-center gap-4">
+                                        <span className="w-8 h-8 rounded-lg bg-slate-900 text-white text-[10px] font-black flex items-center justify-center">0{i+1}</span>
+                                        {section.title}
+                                    </h2>
+                                    <p className="text-slate-600 text-lg leading-relaxed font-light">
                                         {section.content}
                                     </p>
                                 </motion.div>
                             ))}
 
-                            <div className="pt-12">
-                                <a 
-                                    href="mailto:legal@travellounge.mu" 
-                                    className="inline-flex items-center gap-2 px-10 py-5 bg-slate-900 text-white rounded-2xl font-bold hover:bg-red-600 transition-all shadow-xl group"
-                                >
-                                    {footer_cta?.title || 'Download Full PDF'}
-                                    <ChevronRight size={18} className="group-hover:translate-x-1 transition-transform" />
-                                </a>
-                            </div>
+                            {contact && (
+                                <div className="p-12 bg-slate-900 text-white rounded-[3rem] mt-20 flex flex-col md:flex-row items-center justify-between gap-8 relative overflow-hidden group">
+                                    <div className="absolute top-0 right-0 w-32 h-32 bg-red-600/10 rounded-full blur-2xl group-hover:scale-150 transition-transform duration-700" />
+                                    <div className="relative z-10 flex-1">
+                                        <h3 className="text-2xl font-black mb-4">{contact.title}</h3>
+                                        <p className="text-slate-400 font-medium">
+                                            {contact.description}
+                                        </p>
+                                    </div>
+                                    <a 
+                                        href="/contact" 
+                                        className="relative z-10 px-10 py-5 bg-white text-slate-900 font-bold rounded-2xl hover:bg-red-600 hover:text-white transition-all shadow-xl shadow-black/20 flex items-center gap-3"
+                                    >
+                                        {contact.action_label}
+                                        <ChevronRight size={18} />
+                                    </a>
+                                </div>
+                            )}
                         </div>
                     </div>
                 </div>

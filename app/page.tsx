@@ -38,6 +38,12 @@ type HeroSlide = {
   link?: string
   image?: string
 }
+
+type ContentBlock = {
+  section_key: string
+  content: unknown
+}
+
 interface Category {
     id: string
     name: string
@@ -58,6 +64,23 @@ interface Deal {
     deal_note?: string
 }
 
+type HomeContent = {
+  services?: {
+    label: string
+    title: string
+    description: string
+  }
+  advantage?: {
+    label: string
+    title: string
+    description: string
+    stats?: Array<{ label: string; value: string }>
+  }
+  partners?: {
+    label: string
+  }
+}
+
 export default function HomePage() {
   const { generalConfig: settings } = useSettings()
   
@@ -65,7 +88,7 @@ export default function HomePage() {
   
   const [currentSlide, setCurrentSlide] = useState(0)
   const [heroSlides, setHeroSlides] = useState<HeroSlide[]>([])
-  const [content, setContent] = useState<Record<string, any>>({})
+  const [content, setContent] = useState<HomeContent>({})
   const [categories, setCategories] = useState<Category[]>([])
   const [deals, setDeals] = useState<Deal[]>([])
   const [loading, setLoading] = useState(true)
@@ -136,9 +159,9 @@ export default function HomePage() {
           .select('section_key, content')
           .eq('page_slug', 'home')
         if (data) {
-          const blocks: Record<string, any> = {}
-          data.forEach(b => blocks[b.section_key] = b.content)
-          setContent(blocks)
+          const blocks: Record<string, unknown> = {}
+          data.forEach((b: ContentBlock) => blocks[b.section_key] = b.content)
+          setContent(blocks as HomeContent)
         }
       } catch (err) {
         console.error('Error loading home content:', err)
@@ -405,7 +428,7 @@ export default function HomePage() {
                 {(content.advantage?.stats || []).map((stat: { label: string; value: string }, i: number) => (
                   <div key={i} className="space-y-2">
                     <div className="text-4xl font-black text-slate-900 tracking-tighter">{stat.value}</div>
-                    <div className="text-[10px] font-black text-slate-400 uppercase tracking-[0.3em]">{stat.label}</div>
+                    <div className="text-[10px] font-bold text-slate-400 uppercase tracking-[0.3em]">{stat.label}</div>
                   </div>
                 ))}
               </div>

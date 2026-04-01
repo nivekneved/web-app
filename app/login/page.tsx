@@ -14,13 +14,6 @@ const authSchema = z.object({
     email: z.string().email('Please enter a valid email address'),
     password: z.string().min(6, 'Password must be at least 6 characters'),
     name: z.string().optional()
-}).refine((data) => {
-    // If it's signup (we determine this in the component), name might be required
-    // But for simplicity, we'll handle the logic in the component or keep it optional
-    return true;
-}, {
-    message: "Name is required for signup",
-    path: ["name"]
 })
 
 type AuthFormData = z.infer<typeof authSchema>

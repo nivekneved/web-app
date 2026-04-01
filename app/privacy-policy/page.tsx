@@ -1,30 +1,36 @@
 'use client'
 
 import React, { useState, useEffect, useMemo, useCallback } from 'react'
-import { AlertCircle, Lock, ChevronRight, FileText, CheckCircle2, Loader2 } from 'lucide-react'
+import { Lock, ChevronRight, FileText, CheckCircle2, Loader2 } from 'lucide-react'
 import { motion } from 'framer-motion'
 import { createClient } from '@/lib/supabase'
 
 type ContentBlock = {
     section_key: string
-    content: any
+    content: unknown
+}
+
+type SectionContent = {
+    title: string
+    content: string
+}
+
+type ContactContent = {
+    title: string
+    description: string
+    action_label: string
+}
+
+type HeroContent = {
+    title: string
+    subtitle: string
+    last_updated: string
 }
 
 type PrivacyContent = {
-    hero?: {
-        title: string
-        subtitle: string
-        last_updated: string
-    }
-    sections?: {
-        title: string
-        content: string
-    }[]
-    contact?: {
-        title: string
-        description: string
-        action_label: string
-    }
+    hero?: HeroContent
+    sections?: SectionContent[]
+    contact?: ContactContent
 }
 
 export default function PrivacyPolicyPage() {
@@ -40,11 +46,11 @@ export default function PrivacyPolicyPage() {
                 .eq('page_slug', 'privacy-policy')
 
             if (data && data.length > 0) {
-                const blocks: Record<string, any> = {}
+                const blocks: PrivacyContent = {}
                 data.forEach((block: ContentBlock) => {
-                    blocks[block.section_key] = block.content
+                    (blocks as Record<string, unknown>)[block.section_key] = block.content
                 })
-                setContent(blocks as PrivacyContent)
+                setContent(blocks)
             }
         } catch (err) {
             console.error('Privacy Policy: Error fetching content blocks:', err)
@@ -59,14 +65,14 @@ export default function PrivacyPolicyPage() {
         init()
     }, [fetchContent])
 
-    const hero = content?.hero || {
+    const hero = content?.hero ?? {
         title: "Privacy Policy",
         subtitle: "How we collect, use, and protect your personal information at Travel Lounge.",
         last_updated: "March 2026"
     }
 
-    const sections = content?.sections || []
-    const contact = content?.contact || null
+    const sections = content?.sections ?? []
+    const contact = content?.contact ?? null
 
     if (loading) {
         return (

@@ -2,7 +2,7 @@
 
 import React from 'react'
 import { useSettings } from '@/contexts/SettingsContext'
-import { useForm, useFieldArray } from 'react-hook-form'
+import { useForm, useFieldArray, useWatch } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import * as z from 'zod'
 import { AlertCircle, Plus, Trash2, Calendar, Users, Mail, Phone, MessageSquare, Utensils, Home, ChevronRight, ChevronLeft } from 'lucide-react'
@@ -13,9 +13,9 @@ const travelerSchema = z.object({
     lastName: z.string().min(2, 'Last name is required'),
     email: z.string().email('Invalid email address'),
     phone: z.string().min(8, 'Phone number is required'),
-    mobile: z.string().default(''),
+    mobile: z.string().optional(),
     age: z.number().optional(),
-    passportNumber: z.string().default('')
+    passportNumber: z.string().optional()
 })
 
 const bookingSchema = z.object({
@@ -26,11 +26,11 @@ const bookingSchema = z.object({
     lastName: z.string().min(2, 'Last name is required'),
     email: z.string().email('Invalid email address'),
     phone: z.string().min(8, 'Phone number is required'),
-    mobile: z.string().default(''),
-    notes: z.string().default(''),
-    travelers: z.array(travelerSchema).default([]),
-    mealPreference: z.string().default('none'),
-    roomPreference: z.string().default('standard')
+    mobile: z.string().optional(),
+    notes: z.string().optional(),
+    travelers: z.array(travelerSchema).optional(),
+    mealPreference: z.string().optional(),
+    roomPreference: z.string().optional()
 }).refine((data) => {
     const start = new Date(data.checkIn)
     const end = new Date(data.checkOut)
@@ -42,7 +42,7 @@ const bookingSchema = z.object({
 
 export type BookingWizardData = z.infer<typeof bookingSchema>
 
-
+type RoomOption = string | { type: string, min_stay?: number }
 
 type BookingWizardProps = {
     serviceId: string
@@ -52,7 +52,7 @@ type BookingWizardProps = {
     onComplete: (data: BookingWizardData) => void
     isLoading?: boolean
     initialData?: Partial<BookingWizardData>
-    roomOptions?: (string | { type: string, min_stay?: number })[]
+    roomOptions?: RoomOption[]
     showRoomSelection?: boolean
 }
 
@@ -71,7 +71,7 @@ export default function BookingWizard({
     const [currentStep, setCurrentStep] = React.useState<number>(1)
 
     const form = useForm<BookingWizardData>({
-        resolver: zodResolver(bookingSchema) as any,
+        resolver: zodResolver(bookingSchema),
         defaultValues: {
             checkIn: initialData?.checkIn || '',
             checkOut: initialData?.checkOut || '',
@@ -94,8 +94,7 @@ export default function BookingWizard({
         register, 
         control, 
         handleSubmit, 
-        trigger, 
-        watch,
+        trigger,
         formState: { errors } 
     } = form
 
@@ -104,10 +103,10 @@ export default function BookingWizard({
         name: "travelers"
     })
 
-    const watchAllFields = watch()
+    const watchAllFields = useWatch({ control }) as BookingWizardData
 
     const validateStep = async (step: number) => {
-        let fieldsToValidate: any[] = []
+        let fieldsToValidate: (keyof BookingWizardData)[] = []
         if (step === 1) {
             fieldsToValidate = ['checkIn', 'checkOut', 'guests', 'firstName', 'lastName', 'email', 'phone']
         } else if (step === 2) {
@@ -122,7 +121,7 @@ export default function BookingWizard({
         if (step === 1 && result) {
             const start = new Date(watchAllFields.checkIn)
             const end = new Date(watchAllFields.checkOut)
-            const diffDays = Math.ceil(Math.abs(end.getTime() - start.getTime()) / (1000 * 60 * 60 * 24))
+            const diffDays = Math.ceil(Math.abs((end.getTime() - start.getTime()) / (1000 * 60 * 60 * 24)))
 
             const selectedRoomName = watchAllFields.roomPreference
             const roomConfig = roomOptions?.find(opt => 
@@ -187,7 +186,7 @@ export default function BookingWizard({
             </div>
 
             {/* Step Content */}
-            <form onSubmit={handleSubmit(onSubmit as any)} className="bg-white dark:bg-slate-900 rounded-[3rem] p-10 border border-slate-200 dark:border-slate-800 shadow-2xl overflow-hidden">
+            <form onSubmit={handleSubmit(onSubmit)} className="bg-white dark:bg-slate-900 rounded-[3rem] p-10 border border-slate-200 dark:border-slate-800 shadow-2xl overflow-hidden">
                 <AnimatePresence mode="wait">
                     <motion.div
                         key={currentStep}
