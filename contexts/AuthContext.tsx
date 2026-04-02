@@ -1,14 +1,9 @@
 'use client'
 
-import { createContext, useContext, useEffect, useState, useMemo } from 'react'
-import { createClient } from '@/lib/supabase'
-import { User } from '@supabase/supabase-js'
-
-// H-07 FIX: Moved supabase client creation inside component with useMemo
-// to prevent cross-request session leakage in Next.js SSR
+import { createContext, useContext, useEffect, useState } from 'react'
 
 type AuthContextType = {
-    user: User | null
+    user: { id: string, email: string, user_metadata: any } | null
     loading: boolean
     signOut: () => Promise<void>
 }
@@ -20,32 +15,38 @@ const AuthContext = createContext<AuthContextType>({
 })
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
-    const [user, setUser] = useState<User | null>(null)
-    const [loading, setLoading] = useState(true)
-    // H-07 FIX: Create client inside component with useMemo for SSR safety
-    const supabase = useMemo(() => createClient(), [])
+    // Mock user for testing without real authentication
+    const [user] = useState<{ id: string, email: string, user_metadata: any } | null>({
+        id: 'mock-user-id',
+        email: 'guest@example.com',
+        user_metadata: { name: 'Guest User' }
+    })
+    const [loading] = useState(false)
 
     useEffect(() => {
-        // Check active session
-        supabase.auth.getSession().then(({ data: { session } }) => {
-            setUser(session?.user ?? null)
-            setLoading(false)
-        })
+        // Clear all session storage and auth-related cookies/history
+        try {
+            if (typeof window !== 'undefined') {
+                // Clear any supabase-related local storage
+                Object.keys(localStorage).forEach(key => {
+                    if (key.startsWith('sb-')) {
+                        localStorage.removeItem(key)
+                    }
+                })
+                // Clear any specific session storage
+                sessionStorage.clear()
+                console.log('[AuthContext] Legacy session data cleared for auth-free mode')
+            }
+        } catch (e) {
+            console.error('Error clearing legacy session data:', e)
+        }
+        
+    }, [])
 
-        // Listen for auth changes
-        const {
-            data: { subscription },
-        } = supabase.auth.onAuthStateChange((_event, session) => {
-            setUser(session?.user ?? null)
-            setLoading(false)
-        })
-
-        return () => subscription.unsubscribe()
-    }, [supabase])
 
     const signOut = async () => {
-        await supabase.auth.signOut()
-        setUser(null)
+        // No-op for mock environment
+        console.log('Sign out requested - no-op in auth-free mode')
     }
 
     return (
@@ -56,3 +57,4 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 }
 
 export const useAuth = () => useContext(AuthContext)
+

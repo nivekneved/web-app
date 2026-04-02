@@ -5,8 +5,7 @@ import { useAuth } from '@/contexts/AuthContext'
 import { createClient } from '@/lib/supabase'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
-import { User, Mail, Calendar, MapPin, LogOut, BookOpen } from 'lucide-react'
-import { toast } from 'sonner'
+import { User, Mail, Calendar, MapPin, BookOpen } from 'lucide-react'
 
 const supabase = createClient()
 
@@ -30,7 +29,7 @@ type Profile = {
 }
 
 export default function DashboardPage() {
-    const { user, loading: authLoading, signOut } = useAuth()
+    const { user, loading: authLoading } = useAuth()
     const router = useRouter()
     const [profile, setProfile] = useState<Profile | null>(null)
     const [bookings, setBookings] = useState<Booking[]>([])
@@ -69,19 +68,12 @@ export default function DashboardPage() {
             }
         }
 
-        if (!authLoading && !user) {
-            router.push('/login')
-        } else if (user) {
+        if (user) {
             loadProfile()
             loadBookings()
         }
     }, [user, authLoading, router])
 
-    async function handleSignOut() {
-        await signOut()
-        toast.success('Signed out successfully')
-        router.push('/')
-    }
 
     if (authLoading || loading) {
         return (
@@ -102,14 +94,8 @@ export default function DashboardPage() {
                         <h1 className="text-4xl font-black text-slate-900 mb-2">My Dashboard</h1>
                         <p className="text-slate-500 font-medium">Welcome back, {profile?.name || 'Traveler'}!</p>
                     </div>
-                    <button
-                        onClick={handleSignOut}
-                        className="px-6 py-3 bg-slate-900 text-white rounded-xl font-bold flex items-center gap-2 hover:bg-red-600 transition-all shadow-lg"
-                    >
-                        <LogOut size={18} />
-                        Sign Out
-                    </button>
                 </div>
+
 
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
                     {/* Profile Card */}

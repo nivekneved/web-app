@@ -1,6 +1,15 @@
 # 05 History & Agent Progress
 
-## 2026-04-01 - Ecosystem E2E Production Readiness Audit
+## 2026-04-02 - Ecosystem Auth Removal & Admin Decommissioning
+- **Admin App Deletion**: Permanently removed the entire `admin-app` directory per client request. (A-01)
+- **Auth Guard Neutralization**: Deleted `middleware.ts` to disable all route protection and authentication redirects. (W-01)
+- **Guest-Only Session Injection**: Refactored `AuthContext.tsx` to provide a persistent, mocked guest user, ensuring logic parity without login. (W-02)
+- **Session Cleanup Automation**: Implemented `useEffect` in `AuthContext` to scan and clear legacy Supabase `localStorage` and `sessionStorage` on startup. (W-03)
+- **Supabase Client Hardening**: Disabled `persistSession` and `autoRefreshToken` in `lib/supabase.ts` and `lib/supabaseServer.ts` for a session-free environment. (W-04)
+- **UI De-authentication**: Removed the "Sign Out" button from the Dashboard and deleted the `/login` route. (W-05)
+
+---
+
 - **Admin Auth Bug Fix**: Fixed a critical bug in `AuthContext.jsx` where the `isAdmin` check was incorrectly parsing the JSONB response from Supabase as an array. (A-02)
 - **Mobile Booking Sync**: Aligned `mobile-app` submission logic with the latest Supabase schema, mapping local keys to `check_in_date`, `check_out_date`, `service_type`, and `service_name`. (M-02)
 - **Search Detail Redirector**: Implemented dynamic routing in `app/search/details/[id]` to fix 404s, automatically mapping requests to specialized routes (`/hotels/`, `/activities/`). (R-01)
