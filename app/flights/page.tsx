@@ -84,13 +84,13 @@ export default function FlightsPage() {
                         </div>
                         
                         {/* 
-                          * GOL IBE search form implementation_D4 version
-                          * Opening results in a new tab as per latest user request
+                          * GOL IBE search form implementation
+                          * Opening results within the flight page for a seamless experience
                           */}
                         <iframe 
                             id="golIbeIframe"
                             name="golIbeIframe"
-                            src="https://travellounge.golibe.com/iframe?iframe=1&target=_blank&embedded=true" 
+                            src="https://travellounge.golibe.com/iframe?iframe=1&target=_self&embedded=true" 
                             width="100%" 
                             height={iframeHeight}
                             frameBorder="0" 
