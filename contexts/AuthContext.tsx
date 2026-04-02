@@ -2,47 +2,33 @@
 
 import { createContext, useContext, useEffect, useState } from 'react'
 
+// Authentication has been removed as per guest-only requirement
 type AuthContextType = {
-    user: { id: string, email: string, user_metadata: any } | null
+    user: null
     loading: boolean
     signOut: () => Promise<void>
 }
 
 const AuthContext = createContext<AuthContextType>({
     user: null,
-    loading: true,
+    loading: false,
     signOut: async () => { }
 })
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
-    // Mock user for testing without real authentication
-    const [user] = useState<{ id: string, email: string, user_metadata: any } | null>({
-        id: 'mock-user-id',
-        email: 'guest@example.com',
-        user_metadata: { name: 'Guest User' }
-    })
-    const [loading] = useState(false)
-
+    // Clear all session storage and auth-related cookies on bootstrap
     useEffect(() => {
-        // Clear all session storage and auth-related cookies/history
         try {
             if (typeof window !== 'undefined') {
-                // Clear any supabase-related local storage
-                Object.keys(localStorage).forEach(key => {
-                    if (key.startsWith('sb-')) {
-                        localStorage.removeItem(key)
-                    }
-                })
-                // Clear any specific session storage
+                // Clear all storage to ensure no legacy tokens remain
+                localStorage.clear()
                 sessionStorage.clear()
-                console.log('[AuthContext] Legacy session data cleared for auth-free mode')
+                console.log('[AuthContext] All legacy storage data cleared')
             }
         } catch (e) {
-            console.error('Error clearing legacy session data:', e)
+            console.error('Error clearing legacy storage:', e)
         }
-        
     }, [])
-
 
     const signOut = async () => {
         // No-op for mock environment
@@ -50,11 +36,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     }
 
     return (
-        <AuthContext.Provider value={{ user, loading, signOut }}>
+        <AuthContext.Provider value={{ user: null, loading: false, signOut }}>
             {children}
         </AuthContext.Provider>
     )
 }
 
 export const useAuth = () => useContext(AuthContext)
-

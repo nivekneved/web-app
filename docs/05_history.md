@@ -1,12 +1,12 @@
 # 05 History & Agent Progress
 
-## 2026-04-02 - Ecosystem Auth Removal & Admin Decommissioning
-- **Admin App Deletion**: Permanently removed the entire `admin-app` directory per client request. (A-01)
-- **Auth Guard Neutralization**: Deleted `middleware.ts` to disable all route protection and authentication redirects. (W-01)
-- **Guest-Only Session Injection**: Refactored `AuthContext.tsx` to provide a persistent, mocked guest user, ensuring logic parity without login. (W-02)
-- **Session Cleanup Automation**: Implemented `useEffect` in `AuthContext` to scan and clear legacy Supabase `localStorage` and `sessionStorage` on startup. (W-03)
-- **Supabase Client Hardening**: Disabled `persistSession` and `autoRefreshToken` in `lib/supabase.ts` and `lib/supabaseServer.ts` for a session-free environment. (W-04)
-- **UI De-authentication**: Removed the "Sign Out" button from the Dashboard and deleted the `/login` route. (W-05)
+## 2026-04-02 - Ecosystem-Wide Auth Removal & Non-Restricted Access
+- **Auth-Free Ecosystem Realization**: Implemented a strictly anonymous, non-restricted environment across all applications (Web, Mobile, Admin). (E-01)
+- **Admin App Restoration & Neutralization**: Restored the `admin-app` from remote, bypassing all `ProtectedRoute` guards and mapping the login route directly to the dashboard. (A-01)
+- **Zero-Identity AuthContext**: Refactored `AuthContext` in all apps to return `null` for users and non-functional no-op methods (`login`, `register`, `logout`), ensuring no user validation occurs. (W-02)
+- **Storage & Cache Purge**: Enforced automated cleanup of all legacy Supabase `localStorage`, `sessionStorage`, and persistent tokens on application startup. (W-03)
+- **UI Sanitization**: Permanently removed all login forms, registration pages, forget password flows, and "Account/Profile" identity sections from all user interfaces. (G-01)
+- **Mobile Guest Parity**: Stripped `profile.tsx` of all identity markers and replaced it with a generic "Guest Member" view focused solely on support and versioning. (M-01)
 
 ---
 
