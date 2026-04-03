@@ -34,7 +34,6 @@ export default function DealsCarousel({ data: externalData }: { data?: Deal[] })
     const [isPaused, setIsPaused] = useState(false)
     const [itemsPerPage, setItemsPerPage] = useState(4)
 
-    // Handle responsiveness
     useEffect(() => {
         const updateItemsPerPage = () => {
             if (window.innerWidth >= 1280) setItemsPerPage(4)
@@ -62,7 +61,7 @@ export default function DealsCarousel({ data: externalData }: { data?: Deal[] })
                 .from('services')
                 .select('id, name, base_price, image_url, duration_days, duration_hours, service_type, rating, deal_note, region, location, description, short_description')
                 .eq('is_seasonal_deal', true)
-                .limit(12) // increase limit for better slider experience
+                .limit(10)
                 .order('rating', { ascending: false })
 
             if (error) throw error
@@ -74,75 +73,75 @@ export default function DealsCarousel({ data: externalData }: { data?: Deal[] })
         }
     }
 
+    const maxIndex = Math.max(0, deals.length - itemsPerPage)
+
     const nextSlide = useCallback(() => {
         if (deals.length === 0) return
-        setCurrentIndex((prev) => (prev + 1) % Math.max(1, deals.length - itemsPerPage + 1))
-    }, [deals.length, itemsPerPage])
+        setCurrentIndex((prev) => (prev >= maxIndex ? 0 : prev + 1))
+    }, [deals.length, maxIndex])
 
     const prevSlide = () => {
         if (deals.length === 0) return
-        setCurrentIndex((prev) => (prev - 1 + Math.max(1, deals.length - itemsPerPage + 1)) % Math.max(1, deals.length - itemsPerPage + 1))
+        setCurrentIndex((prev) => (prev <= 0 ? maxIndex : prev - 1))
     }
 
-    // Auto-slide logic
     useEffect(() => {
         if (isPaused || loading || deals.length <= itemsPerPage) return
-        const interval = setInterval(nextSlide, 4000)
+        const interval = setInterval(nextSlide, 5000)
         return () => clearInterval(interval)
     }, [isPaused, loading, deals.length, itemsPerPage, nextSlide])
 
     if (loading) return <section className="py-8 bg-slate-50"><div className="container mx-auto px-4"><GridSkeleton count={4} /></div></section>
 
     return (
-        <section className="py-12 bg-slate-50 relative overflow-hidden">
-            <div className="container mx-auto px-4">
-                <div className="flex justify-between items-end mb-10">
-                    <div>
-                        <h2 className="text-xs font-black text-red-600 uppercase tracking-[0.5em] mb-4">Exclusive Offers</h2>
-                        <h3 className="text-4xl md:text-6xl font-black text-slate-900 tracking-tighter">Seasonal Deals</h3>
+        <section className="py-20 bg-slate-50 overflow-hidden">
+            <div className="container mx-auto px-6">
+                <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-12 gap-6">
+                    <div className="space-y-4">
+                        <h2 className="text-[10px] font-black text-red-600 uppercase tracking-[0.5em]">Exclusive Offers</h2>
+                        <h3 className="text-4xl md:text-6xl font-black text-slate-900 tracking-tighter leading-none">Seasonal Deals</h3>
                     </div>
                     
-                    <div className="flex items-center gap-4">
-                        <Link href="/packages" className="hidden md:flex items-center gap-3 text-slate-400 font-black text-[10px] uppercase tracking-[0.3em] hover:text-red-600 transition-all mr-6">
-                            View All <ArrowRight size={14} />
+                    <div className="flex items-center gap-6">
+                        <Link href="/packages" className="hidden md:flex items-center gap-3 text-slate-400 font-black text-[10px] uppercase tracking-[0.3em] hover:text-red-600 transition-all">
+                            Explore All <ArrowRight size={14} />
                         </Link>
                         
-                        <div className="flex items-center gap-2">
+                        <div className="flex items-center gap-3">
                              <button 
                                 onClick={prevSlide}
-                                className="w-12 h-12 rounded-full border border-slate-200 flex items-center justify-center text-slate-400 hover:border-red-600 hover:text-white hover:bg-red-600 transition-all shadow-sm"
-                                aria-label="Previous slide"
+                                className="w-14 h-14 rounded-full border-2 border-slate-200 flex items-center justify-center text-slate-400 hover:border-red-600 hover:text-red-600 transition-all bg-white shadow-lg"
+                                aria-label="Previous"
                              >
-                                <ChevronLeft size={20} />
+                                <ChevronLeft size={24} />
                              </button>
                              <button 
                                 onClick={nextSlide}
-                                className="w-12 h-12 rounded-full border border-slate-200 flex items-center justify-center text-slate-400 hover:border-red-600 hover:text-white hover:bg-red-600 transition-all shadow-sm"
-                                aria-label="Next slide"
+                                className="w-14 h-14 rounded-full border-2 border-slate-200 flex items-center justify-center text-slate-400 hover:border-red-600 hover:text-red-600 transition-all bg-white shadow-lg"
+                                aria-label="Next"
                              >
-                                <ChevronRight size={20} />
+                                <ChevronRight size={24} />
                              </button>
                         </div>
                     </div>
                 </div>
 
                 <div 
-                    className="relative"
+                    className="relative group"
                     onMouseEnter={() => setIsPaused(true)}
                     onMouseLeave={() => setIsPaused(false)}
                 >
-                    <div className="overflow-hidden">
+                    <div className="relative overflow-visible">
                         <motion.div 
-                            className="flex gap-8"
-                            animate={{ x: `-${currentIndex * (100 / itemsPerPage)}%` }}
-                            transition={{ type: "spring", stiffness: 300, damping: 30 }}
-                            style={{ width: `${(deals.length / itemsPerPage) * 100}%` }}
+                            className="flex"
+                            animate={{ x: `calc(-${currentIndex * (100 / itemsPerPage)}% - ${currentIndex * (32 / itemsPerPage)}px)` }}
+                            transition={{ type: "spring", stiffness: 100, damping: 20 }}
                         >
                             {deals.map((deal) => (
                                 <div 
                                     key={deal.id} 
-                                    className="flex-shrink-0"
-                                    style={{ width: `calc(${100 / (deals.length)}% - ${(8 * (deals.length - 1)) / deals.length}px)` }}
+                                    className="flex-shrink-0 px-4"
+                                    style={{ width: `${100 / itemsPerPage}%` }}
                                 >
                                     <ServiceCard
                                         id={deal.id}
@@ -166,23 +165,17 @@ export default function DealsCarousel({ data: externalData }: { data?: Deal[] })
                         </motion.div>
                     </div>
 
-                    {/* Pagination Dots */}
-                    <div className="flex justify-center gap-3 mt-12">
-                        {Array.from({ length: Math.max(1, deals.length - itemsPerPage + 1) }).map((_, i) => (
+                    {/* Navigation Dots - Premium Style */}
+                    <div className="flex justify-center gap-3 mt-16">
+                        {Array.from({ length: maxIndex + 1 }).map((_, i) => (
                             <button
                                 key={i}
                                 onClick={() => setCurrentIndex(i)}
-                                className={`h-1.5 transition-all duration-500 rounded-full ${currentIndex === i ? 'bg-red-600 w-10' : 'bg-slate-200 w-4 hover:bg-slate-300'}`}
-                                aria-label={`Go to slide ${i + 1}`}
+                                className={`h-1.5 transition-all duration-500 rounded-full ${currentIndex === i ? 'bg-red-600 w-12' : 'bg-slate-200 w-4 hover:bg-red-200'}`}
+                                aria-label={`Slide ${i + 1}`}
                             />
                         ))}
                     </div>
-                </div>
-
-                <div className="mt-12 text-center md:hidden">
-                    <Link href="/packages" className="inline-flex items-center gap-2 text-slate-900 font-bold hover:text-red-600 transition-colors">
-                        View All Offers <ArrowRight size={20} />
-                    </Link>
                 </div>
             </div>
         </section>
