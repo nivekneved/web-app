@@ -2,6 +2,7 @@
 
 import React, { Suspense } from 'react'
 import ServiceListing from '@/components/ServiceListing'
+import SearchBar from '@/components/SearchBar'
 import { useSearchParams } from 'next/navigation'
 
 export default function GlobalSearchPage() {
@@ -27,12 +28,22 @@ function SearchPageContent() {
     }
 
     return (
-        <ServiceListing 
-            title="Search Results"
-            subtitle={searchSubtitle}
-            heroImage="/hero-hotel.png" // Fallback hero
-            tag="Global Search"
-            searchPlaceholder="Search everything..."
-        />
+        <div className="bg-[#F2F5F7] min-h-screen">
+            {/* Context Search Form */}
+            <div className="bg-white border-b border-slate-200 py-6 sticky top-0 z-[100] shadow-sm">
+                <div className="container mx-auto">
+                    <SearchBar />
+                </div>
+            </div>
+
+            <ServiceListing 
+                title="Search Results"
+                subtitle={searchSubtitle}
+                heroImage="/hero-hotel.png" // Fallback hero
+                tag="Global Search"
+                searchPlaceholder="Refine search by name or location..."
+                compactHero={true}
+            />
+        </div>
     )
 }

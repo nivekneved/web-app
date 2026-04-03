@@ -68,6 +68,7 @@ type ServiceListingProps = {
     tag?: string
     searchPlaceholder?: string
     categorySlug?: string
+    compactHero?: boolean
 }
 
 export default function ServiceListing({
@@ -79,7 +80,8 @@ export default function ServiceListing({
     includeRegions,
     tag,
     searchPlaceholder = "Search by name or location...",
-    categorySlug
+    categorySlug,
+    compactHero = false
 }: ServiceListingProps) {
     return (
         <Suspense fallback={<div className="min-h-screen bg-[#F2F5F7] animate-pulse" />}>
@@ -93,6 +95,7 @@ export default function ServiceListing({
                 tag={tag}
                 searchPlaceholder={searchPlaceholder}
                 categorySlug={categorySlug}
+                compactHero={compactHero}
             />
         </Suspense>
     )
@@ -107,8 +110,9 @@ function ServiceListingInner({
     includeRegions,
     tag,
     searchPlaceholder,
-    categorySlug
-}: ServiceListingProps) {
+    categorySlug,
+    compactHero
+}: ServiceListingProps & { compactHero?: boolean }) {
     const { generalConfig: config } = useSettings()
     const labels = (config?.ui_labels || {}) as Record<string, string>
     const placeholders = (config?.form_placeholders || {}) as Record<string, string>
@@ -123,6 +127,7 @@ function ServiceListingInner({
     const [selectedRatings, setSelectedRatings] = useState<number[]>([])
     const [searchTerm, setSearchTerm] = useState('')
     const [selectedAmenities, setSelectedAmenities] = useState<string[]>([])
+    const [showMobileFilters, setShowMobileFilters] = useState(false)
 
     const loadServices = useCallback(async () => {
         try {
@@ -310,7 +315,7 @@ function ServiceListingInner({
     return (
         <div className="min-h-screen bg-[#F2F5F7]">
             {/* Hero Section */}
-            <div className="relative h-[250px] md:h-[350px] flex items-center overflow-hidden bg-slate-900 border-b border-white/10">
+            <div className={`relative ${compactHero ? 'h-[150px] md:h-[200px]' : 'h-[250px] md:h-[350px]'} flex items-center overflow-hidden bg-slate-900 border-b border-white/10`}>
                 <Image
                     src={resolveImageUrl(heroImage)}
                     alt={title}
@@ -325,7 +330,7 @@ function ServiceListingInner({
                             <motion.span 
                                 initial={{ opacity: 0, y: 10 }}
                                 animate={{ opacity: 1, y: 0 }}
-                                className="inline-block py-2 px-6 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-white text-[10px] font-black uppercase tracking-[0.4em] mb-6"
+                                className={`inline-block py-2 px-6 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-white text-[10px] font-black uppercase tracking-[0.4em] ${compactHero ? 'mb-2' : 'mb-6'}`}
                             >
                                 {tag}
                             </motion.span>
@@ -333,27 +338,35 @@ function ServiceListingInner({
                         <motion.h1 
                             initial={{ opacity: 0, y: 20 }}
                             animate={{ opacity: 1, y: 0 }}
-                            className="text-4xl md:text-6xl font-black text-white mb-6 uppercase tracking-tight leading-[1.1]"
+                            className={`${compactHero ? 'text-2xl md:text-3xl' : 'text-4xl md:text-6xl'} font-black text-white mb-6 uppercase tracking-tight leading-[1.1]`}
                         >
                             {title}
                         </motion.h1>
-                        <motion.p 
-                            initial={{ opacity: 0, y: 20 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            transition={{ delay: 0.1 }}
-                            className="text-lg text-white/70 font-medium max-w-2xl mx-auto leading-relaxed"
-                        >
-                            {subtitle}
-                        </motion.p>
+                        {subtitle && !compactHero && (
+                            <motion.p 
+                                initial={{ opacity: 0, y: 20 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                transition={{ delay: 0.1 }}
+                                className="text-lg text-white/70 font-medium max-w-2xl mx-auto leading-relaxed"
+                            >
+                                {subtitle}
+                            </motion.p>
+                        )}
                     </div>
                 </div>
             </div>
 
-            <div className="container mx-auto px-4 py-12">
+            <div className="container mx-auto px-4 py-8">
                 <div className="flex flex-col lg:flex-row gap-8">
                     {/* Sidebar Filters */}
-                    <aside className="lg:w-1/4 space-y-6">
-                        <div className="bg-white rounded-3xl p-8 shadow-sm border border-slate-300 sticky top-24">
+                    <aside className={`lg:w-1/4 lg:block ${showMobileFilters ? 'block' : 'hidden'}`}>
+                        <div className="bg-white rounded-3xl p-8 shadow-sm border border-slate-300 sticky top-24 max-h-[calc(100vh-120px)] overflow-y-auto custom-scrollbar">
+                            <div className="flex items-center justify-between mb-8 pb-4 border-b border-slate-100 lg:hidden">
+                                <h3 className="text-xl font-bold text-slate-900">Filters</h3>
+                                <button onClick={() => setShowMobileFilters(false)} className="p-2 text-slate-400 hover:text-slate-600">
+                                    <X size={24} />
+                                </button>
+                            </div>
                             <div className="flex items-center justify-between mb-8 pb-4 border-b border-slate-100">
                                 <h3 className="text-xl font-bold text-slate-900 flex items-center gap-2">
                                     <Filter size={20} className="text-red-600" />
@@ -430,7 +443,7 @@ function ServiceListingInner({
                                 <div className="mb-8">
                                     <label className="block text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mb-4">{labels.popular_tags || 'Popular Tags'}</label>
                                     <div className="flex flex-wrap gap-2">
-                                        {['Sea Adventure', 'Land Adventure', 'Family Friendly', 'Romantic', 'All Inclusive'].filter(a => availableAmenities.includes(a)).map(amenity => (
+                                        {availableAmenities.map(amenity => (
                                             <button
                                                 key={amenity}
                                                 onClick={() => toggleAmenity(amenity)}
@@ -477,8 +490,22 @@ function ServiceListingInner({
 
                     {/* Content */}
                     <main className="lg:w-3/4">
+                        {/* Mobile Filter Trigger */}
+                        <div className="lg:hidden mb-6 flex gap-4">
+                            <button 
+                                onClick={() => setShowMobileFilters(true)}
+                                className="flex-1 bg-white border border-slate-300 rounded-2xl py-4 flex items-center justify-center gap-2 font-black text-xs uppercase tracking-widest text-slate-900"
+                            >
+                                <Filter size={16} className="text-red-600" />
+                                {labels.filter_btn || 'Open Filters'}
+                            </button>
+                            <div className="w-12 bg-white border border-slate-300 rounded-2xl flex items-center justify-center font-black text-red-600">
+                                {processedServices.length}
+                            </div>
+                        </div>
+
                         {/* Prominent Search Bar */}
-                        <div className="mb-8">
+                        <div className={`mb-8 ${compactHero ? 'hidden lg:block' : ''}`}>
                             <div className="relative group">
                                 <div className="absolute inset-y-0 left-6 flex items-center pointer-events-none">
                                     <Search className="h-6 w-6 text-slate-400 group-focus-within:text-red-600 transition-colors" />

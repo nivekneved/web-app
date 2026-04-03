@@ -146,3 +146,19 @@ html {
 .bg-hero {
   background: linear-gradient(135deg, #DC2626 0%, #1E293B 100%);
 }
+
+.custom-scrollbar::-webkit-scrollbar {
+  width: 4px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  @apply bg-slate-100;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  @apply bg-slate-300 rounded-full;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  @apply bg-red-600/30;
+}
