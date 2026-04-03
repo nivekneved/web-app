@@ -36,7 +36,7 @@ const socialLinks = [
 ];
 
 export default function FloatingSocial() {
-  const [isOpen, setIsOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(true);
 
   return (
     <div className="fixed bottom-8 right-8 z-[100] flex flex-col items-end gap-3">
