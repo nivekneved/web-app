@@ -8,9 +8,12 @@
   - `components/PromoBanner.tsx`: New high-fidelity promo banner with "20 for 20" badge.
   - `app/page.tsx`: Integrated components below hero section.
   - `public/assets/promo-banner.png`: Generated promotional asset.
+- **Task: Refactor Seasonal Deals to Slider**
+  - `components/DealsCarousel.tsx`: Refactored to infinite auto-sliding carousel with arrows/dots.
+  - Implemented pause on hover and responsive item counts (4 on desktop).
 - **Validation**:
   - `npm run lint`: Passed (0 errors, warnings resolved).
-  - UI verified for mobile responsiveness and premium visuals.
+  - UI verified for smooth sliding and mobile responsiveness.
   - No breakages to existing hero or intro sections.
 
 ---

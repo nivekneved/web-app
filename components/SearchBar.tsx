@@ -1,7 +1,7 @@
 'use client'
 
 import React, { useState, useRef, useEffect } from 'react'
-import { Search, Plus, Minus, Calendar, Users } from 'lucide-react'
+import { Search, Plus, Minus } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
 
 interface GuestCount {
