@@ -287,7 +287,10 @@ function ServiceListingInner({
         const base = (type === 'activity' || type === 'sea_activity' || type === 'land_activity') ? '/activities' : 
                      type === 'tour' ? '/tours' : 
                      type === 'cruise' ? '/cruises' : 
-                     type === 'hotel' ? '/hotels' : 
+                     type === 'hotel' || type === 'stays' ? '/hotels' : 
+                     type === 'restaurant' ? '/restaurants' :
+                     type === 'spa' || type === 'beauty' ? '/spa' :
+                     type === 'day-package' || type === 'day_package' ? '/day-packages' :
                      type === 'lounge' ? '/lounge' : '/services'
         return `${base}/${service.id}`
     }

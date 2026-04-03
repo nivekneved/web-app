@@ -2,7 +2,7 @@
 
 import React, { useState, useRef, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
-import { Search, Plus, Minus, Hotel, Compass, Ship, LayoutGrid, Coffee, MapPin } from 'lucide-react'
+import { Search, Plus, Minus, Hotel, Compass, MapPin, Sun, Sparkles, Utensils, Clock } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
 
 interface GuestCount {
@@ -15,8 +15,9 @@ export default function SearchBar() {
   const [guests, setGuests] = useState<GuestCount>({ adults: 2, children: 0 })
   const [checkIn, setCheckIn] = useState<string>('2026-04-30')
   const [checkOut, setCheckOut] = useState<string>('2026-05-29')
-  const [selectedCategory, setSelectedCategory] = useState<string>('all')
+  const [selectedCategory, setSelectedCategory] = useState<string>('stays')
   const [location, setLocation] = useState<string>('')
+  const [time, setTime] = useState<string>('12:00')
   
   const router = useRouter()
   const guestRef = useRef<HTMLDivElement>(null)
@@ -24,23 +25,32 @@ export default function SearchBar() {
   const handleSearch = () => {
     const params = new URLSearchParams()
     if (checkIn) params.set('checkIn', checkIn)
-    if (checkOut) params.set('checkOut', checkOut)
+    
+    // Only include checkOut for "Stays"
+    if (selectedCategory === 'stays' && checkOut) {
+        params.set('checkOut', checkOut)
+    }
+
     params.set('adults', guests.adults.toString())
     params.set('children', guests.children.toString())
-    if (selectedCategory !== 'all') params.set('type', selectedCategory)
+    params.set('type', selectedCategory)
+    
     if (location) params.set('location', location)
+    if (selectedCategory === 'restaurants') params.set('time', time)
     
     router.push(`/search?${params.toString()}`)
   }
 
   const categories = [
-    { id: 'all', label: 'All', icon: <LayoutGrid size={18} /> },
-    { id: 'hotel', label: 'Hotels', icon: <Hotel size={18} /> },
-    { id: 'activity', label: 'Activities', icon: <MapPin size={18} /> },
-    { id: 'tour', label: 'Tours', icon: <Compass size={18} /> },
-    { id: 'cruise', label: 'Cruises', icon: <Ship size={18} /> },
-    { id: 'lounge', label: 'Lounge', icon: <Coffee size={18} /> },
+    { id: 'stays', label: 'Stays', icon: <Hotel size={18} />, fields: ['location', 'range', 'guests'] },
+    { id: 'day-packages', label: 'Day Packages', icon: <Sun size={18} />, fields: ['location', 'single', 'guests'] },
+    { id: 'activity', label: 'Activities', icon: <Compass size={18} />, fields: ['location', 'single', 'guests'] },
+    { id: 'restaurants', label: 'Restaurants', icon: <Utensils size={18} />, fields: ['location', 'single', 'time', 'guests'] },
+    { id: 'spa', label: 'Spa', icon: <Sparkles size={18} />, fields: ['location', 'single', 'guests'] },
   ]
+
+  const activeTabDetails = categories.find(c => c.id === selectedCategory) || categories[0]
+  const fields = activeTabDetails.fields
 
   // format date for display
   const formatDate = (dateStr: string) => {
@@ -79,15 +89,15 @@ export default function SearchBar() {
   return (
     <div className="w-full max-w-6xl mx-auto px-4 mt-1 relative z-40">
       {/* Category Tabs */}
-      <div className="flex items-center justify-center gap-1 md:gap-4 mb-6 md:mb-8 overflow-x-auto pb-2 scrollbar-none no-scrollbar">
+      <div className="flex items-center justify-center gap-1 md:gap-2 mb-6 md:mb-8 overflow-x-auto pb-2 scrollbar-none no-scrollbar">
         {categories.map((cat) => (
           <button
             key={cat.id}
             onClick={() => setSelectedCategory(cat.id)}
             className={`flex items-center gap-2 px-6 py-3 rounded-full font-bold text-sm transition-all whitespace-nowrap border-2 ${
               selectedCategory === cat.id 
-              ? 'bg-white text-[#0060CE] border-white shadow-lg' 
-              : 'bg-black/10 text-white border-transparent hover:bg-white/20'
+              ? 'bg-[#0060CE] text-white border-[#0060CE] shadow-xl shadow-blue-600/20 scale-105' 
+              : 'bg-white/10 text-white border-transparent hover:bg-white/30'
             }`}
           >
             {cat.icon}
@@ -96,72 +106,108 @@ export default function SearchBar() {
         ))}
       </div>
 
-      <div className="bg-white rounded-[2rem] md:rounded-full shadow-[0_20px_50px_rgba(0,0,0,0.15)] p-2 md:p-3 flex flex-col md:flex-row items-stretch md:items-center gap-2 border border-slate-100">
+      <motion.div 
+        layout
+        className="bg-white rounded-[2rem] md:rounded-full shadow-[0_20px_50px_rgba(0,0,0,0.15)] p-2 md:p-3 flex flex-col md:flex-row items-stretch md:items-center gap-2 border border-slate-100"
+      >
         
         {/* Location / Search */}
-        <div className="flex-[1.5] px-6 py-2 border-r border-slate-100 last:border-0 cursor-pointer hover:bg-slate-50 transition-colors rounded-3xl md:rounded-none md:rounded-l-full relative group">
-          <label className="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1 group-hover:text-blue-600 transition-colors">
-            Where?
-          </label>
-          <div className="flex items-center gap-2">
-            <MapPin size={16} className="text-slate-400" />
-            <input 
-              type="text" 
-              placeholder="Destination..."
-              className="bg-transparent border-none focus:ring-0 p-0 text-slate-900 font-bold text-sm md:text-base placeholder:text-slate-300 w-full"
-              value={location}
-              onChange={(e) => setLocation(e.target.value)}
-            />
-          </div>
-        </div>
+        {fields.includes('location') && (
+            <div className="flex-[1.2] px-6 py-2 border-r border-slate-100 last:border-0 cursor-pointer hover:bg-slate-50 transition-colors rounded-3xl md:rounded-none md:rounded-l-full relative group">
+                <label className="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1 group-hover:text-blue-600 transition-colors">
+                    {selectedCategory === 'restaurants' ? 'Cuisine / Restaurant' : selectedCategory === 'spa' ? 'Spa Center' : 'Where?'}
+                </label>
+                <div className="flex items-center gap-2">
+                    <MapPin size={16} className="text-slate-400" />
+                    <input 
+                        type="text" 
+                        placeholder={selectedCategory === 'stays' ? "Destination / Hotel..." : "Search..."}
+                        className="bg-transparent border-none focus:ring-0 p-0 text-slate-900 font-bold text-sm md:text-base placeholder:text-slate-300 w-full"
+                        value={location}
+                        onChange={(e) => setLocation(e.target.value)}
+                    />
+                </div>
+            </div>
+        )}
 
-        {/* Check-in */}
-        <div className="flex-1 px-6 py-2 border-r border-slate-100 last:border-0 cursor-pointer hover:bg-slate-50 transition-colors relative group">
-          <label className="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1 group-hover:text-blue-600 transition-colors">
-            Check-in
-          </label>
-          <div className="flex items-center gap-2">
-            <span className="text-slate-900 font-bold text-sm md:text-base">
-              {formatDate(checkIn)}
-            </span>
-            <input 
-              type="date" 
-              className="absolute inset-0 opacity-0 cursor-pointer"
-              value={checkIn}
-              onChange={(e) => setCheckIn(e.target.value)}
-            />
-          </div>
-        </div>
+        {/* Date Logic */}
+        {(fields.includes('range') || fields.includes('single')) && (
+            <div className="flex-1 flex flex-col md:flex-row items-stretch md:items-center border-r border-slate-100 last:border-0">
+                {/* Start Date / Single Date */}
+                <div className="flex-1 px-6 py-2 cursor-pointer hover:bg-slate-50 transition-colors relative group">
+                    <label className="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1 group-hover:text-blue-600 transition-colors">
+                        {fields.includes('range') ? 'Check-in' : 'Visit Date'}
+                    </label>
+                    <div className="flex items-center gap-2">
+                        <span className="text-slate-900 font-bold text-sm md:text-base whitespace-nowrap">
+                            {formatDate(checkIn)}
+                        </span>
+                        <input 
+                            type="date" 
+                            className="absolute inset-0 opacity-0 cursor-pointer"
+                            value={checkIn}
+                            onChange={(e) => setCheckIn(e.target.value)}
+                        />
+                    </div>
+                </div>
 
-        {/* Check-out */}
-        <div className="flex-1 px-6 py-2 border-r border-slate-100 last:border-0 cursor-pointer hover:bg-slate-50 transition-colors relative group">
-          <label className="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1 group-hover:text-blue-600 transition-colors">
-            Check-out
-          </label>
-          <div className="flex items-center gap-2">
-            <span className="text-slate-900 font-bold text-sm md:text-base">
-              {formatDate(checkOut)}
-            </span>
-            <input 
-              type="date" 
-              className="absolute inset-0 opacity-0 cursor-pointer"
-              value={checkOut}
-              onChange={(e) => setCheckOut(e.target.value)}
-            />
-          </div>
-        </div>
+                {/* End Date (Only for range) */}
+                {fields.includes('range') && (
+                    <div className="flex-1 px-6 py-2 border-l border-slate-100 cursor-pointer hover:bg-slate-50 transition-colors relative group">
+                        <label className="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1 group-hover:text-blue-600 transition-colors">
+                            Check-out
+                        </label>
+                        <div className="flex items-center gap-2">
+                            <span className="text-slate-900 font-bold text-sm md:text-base whitespace-nowrap">
+                                {formatDate(checkOut)}
+                            </span>
+                            <input 
+                                type="date" 
+                                className="absolute inset-0 opacity-0 cursor-pointer"
+                                value={checkOut}
+                                onChange={(e) => setCheckOut(e.target.value)}
+                            />
+                        </div>
+                    </div>
+                )}
+            </div>
+        )}
+
+        {/* Time Selection (Restaurants) */}
+        {fields.includes('time') && (
+            <div className="flex-1 px-6 py-2 border-r border-slate-100 last:border-0 cursor-pointer hover:bg-slate-50 transition-colors relative group">
+                <label className="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1 group-hover:text-blue-600 transition-colors">
+                    Time
+                </label>
+                <div className="flex items-center gap-2">
+                    <Clock size={16} className="text-slate-400" />
+                    <select 
+                        className="bg-transparent border-none focus:ring-0 p-0 text-slate-900 font-bold text-sm md:text-base w-full appearance-none cursor-pointer"
+                        value={time}
+                        onChange={(e) => setTime(e.target.value)}
+                    >
+                        {Array.from({ length: 24 }).map((_, i) => (
+                            <React.Fragment key={i}>
+                                <option value={`${i.toString().padStart(2, '0')}:00`}>{i.toString().padStart(2, '0')}:00</option>
+                                <option value={`${i.toString().padStart(2, '0')}:30`}>{i.toString().padStart(2, '0')}:30</option>
+                            </React.Fragment>
+                        ))}
+                    </select>
+                </div>
+            </div>
+        )}
 
         {/* Guests */}
         <div 
           ref={guestRef}
           onClick={() => setShowGuests(!showGuests)}
-          className="flex-1 px-6 py-2 cursor-pointer hover:bg-slate-50 transition-colors relative group"
+          className="flex-1 px-6 py-2 cursor-pointer hover:bg-slate-50 transition-colors relative group border-r border-slate-100 last:border-0"
         >
           <label className="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1 group-hover:text-blue-600 transition-colors">
             Guests
           </label>
           <div className="flex items-center justify-between">
-            <span className="text-slate-900 font-bold text-sm md:text-base">
+            <span className="text-slate-900 font-bold text-sm md:text-base whitespace-nowrap">
               {totalGuests > 0 ? `${totalGuests} Guests` : 'Add Guests'}
             </span>
           </div>
@@ -228,7 +274,7 @@ export default function SearchBar() {
                     onClick={handleSearch}
                     className="w-full py-4 bg-[#0060CE] text-white font-black rounded-2xl hover:bg-blue-700 transition-all transform hover:scale-[1.02] shadow-lg shadow-blue-600/20 text-sm uppercase tracking-widest mt-2"
                   >
-                    Search
+                    Confirm
                   </button>
                 </div>
               </motion.div>
@@ -240,14 +286,14 @@ export default function SearchBar() {
         <div className="md:pl-4 py-1 pr-1">
           <button 
             onClick={handleSearch}
-            className="w-full md:w-auto px-10 py-5 bg-[#0060CE] text-white rounded-full font-black text-sm tracking-[0.2em] hover:bg-blue-700 transition-all transform hover:scale-105 shadow-xl shadow-blue-600/30 uppercase flex items-center justify-center gap-3"
+            className="w-full md:w-auto px-12 py-5 bg-[#0060CE] text-white rounded-full font-black text-sm tracking-[0.2em] hover:bg-blue-700 transition-all transform hover:scale-105 shadow-xl shadow-blue-600/30 uppercase flex items-center justify-center gap-3"
           >
             <Search size={18} strokeWidth={3} />
             <span className="md:inline">Search</span>
           </button>
         </div>
 
-      </div>
+      </motion.div>
     </div>
   )
 }
