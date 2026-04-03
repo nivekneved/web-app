@@ -12,7 +12,9 @@ import CategoryGrid from '@/components/CategoryGrid'
 import DealsCarousel from '@/components/DealsCarousel'
 import AnnouncementPopup from '@/components/AnnouncementPopup'
 import PartnerSlider from '@/components/PartnerSlider'
+import PromoBanner from '@/components/PromoBanner'
 import NewsSection from '@/components/NewsSection'
+import SearchBar from '@/components/SearchBar'
 
 import { createClient } from '@/lib/supabase'
 import { resolveImageUrl } from '@/lib/image'
@@ -347,6 +349,12 @@ export default function HomePage() {
           ))}
         </div>
       </section>
+
+      {/* Floating Search Bar Integration */}
+      <SearchBar />
+
+      {/* Special Offer Banner */}
+      <PromoBanner />
 
       {/* Luxury Intro Section */}
       <section className="py-10 bg-white relative">
