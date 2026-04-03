@@ -1,3 +1,4 @@
+/*
 'use client'
 
 import React from 'react'
@@ -14,4 +15,9 @@ export default function RestaurantsPage() {
             searchPlaceholder="Search restaurants, cuisines..."
         />
     )
+}
+*/
+
+export default function RestaurantsPlaceholder() {
+    return <div>Category not available</div>
 }

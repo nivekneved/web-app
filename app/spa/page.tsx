@@ -1,3 +1,4 @@
+/*
 'use client'
 
 import React from 'react'
@@ -14,4 +15,9 @@ export default function SpaPage() {
             searchPlaceholder="Search spas, treatments, yoga..."
         />
     )
+}
+*/
+
+export default function SpaPlaceholder() {
+    return <div>Category not available</div>
 }

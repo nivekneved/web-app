@@ -2,7 +2,7 @@
 
 import React, { useState, useRef, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
-import { Search, Plus, Minus, Hotel, Compass, MapPin, Sun, Sparkles, Utensils, Clock } from 'lucide-react'
+import { Search, Plus, Minus, Hotel, Compass, MapPin, Sun, Clock } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
 
 interface GuestCount {
@@ -42,11 +42,9 @@ export default function SearchBar() {
   }
 
   const categories = [
-    { id: 'hotels', label: 'Stays', icon: <Hotel size={18} />, fields: ['location', 'range', 'guests'] },
+    { id: 'hotels', label: 'Hotels', icon: <Hotel size={18} />, fields: ['location', 'range', 'guests'] },
     { id: 'day-packages', label: 'Day Packages', icon: <Sun size={18} />, fields: ['location', 'single', 'guests'] },
     { id: 'activities', label: 'Activities', icon: <Compass size={18} />, fields: ['location', 'single', 'guests'] },
-    { id: 'restaurants', label: 'Restaurants', icon: <Utensils size={18} />, fields: ['location', 'single', 'time', 'guests'] },
-    { id: 'spa', label: 'Spa', icon: <Sparkles size={18} />, fields: ['location', 'single', 'guests'] },
   ]
 
   const activeTabDetails = categories.find(c => c.id === selectedCategory) || categories[0]
