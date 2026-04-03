@@ -206,6 +206,17 @@ function ServiceListingInner({
                 s.location?.toLowerCase().includes(term)
             )
         }
+        
+        const adults = Number(searchParams.get('adults')) || 0
+        const children = Number(searchParams.get('children')) || 0
+        const totalGuests = adults + children
+
+        if (totalGuests > 0) {
+            result = result.filter(s => {
+                // If max_group_size is defined, check it. Otherwise, assume it fits (like 0/null means unknown)
+                return !s.max_group_size || s.max_group_size >= totalGuests
+            })
+        }
 
         if (filterPrice) {
             result = result.filter(s => Number(s.base_price) <= filterPrice)
@@ -246,7 +257,7 @@ function ServiceListingInner({
         })
 
         return result
-    }, [services, sortBy, filterPrice, selectedRegions, selectedRatings, searchTerm, selectedAmenities])
+    }, [services, sortBy, filterPrice, selectedRegions, selectedRatings, searchTerm, selectedAmenities, searchParams])
 
     const getServiceLink = (service: Service) => {
         const type = service.service_type.toLowerCase()

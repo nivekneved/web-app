@@ -1,6 +1,7 @@
 'use client'
 
 import React, { useState, useRef, useEffect } from 'react'
+import { useRouter } from 'next/navigation'
 import { Search, Plus, Minus } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
 
@@ -15,7 +16,18 @@ export default function SearchBar() {
   const [checkIn, setCheckIn] = useState<string>('2026-04-30')
   const [checkOut, setCheckOut] = useState<string>('2026-05-29')
   
+  const router = useRouter()
   const guestRef = useRef<HTMLDivElement>(null)
+
+  const handleSearch = () => {
+    const params = new URLSearchParams()
+    if (checkIn) params.set('checkIn', checkIn)
+    if (checkOut) params.set('checkOut', checkOut)
+    params.set('adults', guests.adults.toString())
+    params.set('children', guests.children.toString())
+    
+    router.push(`/search?${params.toString()}`)
+  }
 
   // format date for display
   const formatDate = (dateStr: string) => {
@@ -164,7 +176,10 @@ export default function SearchBar() {
                     </div>
                   </div>
 
-                  <button className="w-full py-4 bg-[#0060CE] text-white font-black rounded-2xl hover:bg-blue-700 transition-all transform hover:scale-[1.02] shadow-lg shadow-blue-600/20 text-sm uppercase tracking-widest mt-2">
+                  <button 
+                    onClick={handleSearch}
+                    className="w-full py-4 bg-[#0060CE] text-white font-black rounded-2xl hover:bg-blue-700 transition-all transform hover:scale-[1.02] shadow-lg shadow-blue-600/20 text-sm uppercase tracking-widest mt-2"
+                  >
                     Search
                   </button>
                 </div>
@@ -175,7 +190,10 @@ export default function SearchBar() {
 
         {/* Search Button */}
         <div className="md:pl-4 py-1 pr-1">
-          <button className="w-full md:w-auto px-10 py-5 bg-[#0060CE] text-white rounded-full font-black text-sm tracking-[0.2em] hover:bg-blue-700 transition-all transform hover:scale-105 shadow-xl shadow-blue-600/30 uppercase flex items-center justify-center gap-3">
+          <button 
+            onClick={handleSearch}
+            className="w-full md:w-auto px-10 py-5 bg-[#0060CE] text-white rounded-full font-black text-sm tracking-[0.2em] hover:bg-blue-700 transition-all transform hover:scale-105 shadow-xl shadow-blue-600/30 uppercase flex items-center justify-center gap-3"
+          >
             <Search size={18} strokeWidth={3} />
             <span className="md:inline">Search</span>
           </button>
