@@ -134,7 +134,7 @@ export default function DealsCarousel({ data: externalData }: { data?: Deal[] })
                     <div className="relative overflow-visible">
                         <motion.div 
                             className="flex"
-                            animate={{ x: `calc(-${currentIndex * (100 / itemsPerPage)}% - ${currentIndex * (32 / itemsPerPage)}px)` }}
+                            animate={{ x: `-${currentIndex * (100 / itemsPerPage)}%` }}
                             transition={{ type: "spring", stiffness: 100, damping: 20 }}
                         >
                             {deals.map((deal) => (
