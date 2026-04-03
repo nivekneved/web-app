@@ -87,7 +87,7 @@ export default function SearchBar() {
   const totalGuests = guests.adults + guests.children
 
   return (
-    <div className="w-full max-w-6xl mx-auto px-4 mt-1 relative z-40">
+    <div className="w-full max-w-6xl mx-auto px-4 -mt-16 md:-mt-24 relative z-40">
       {/* Category Tabs */}
       <div className="flex items-center justify-center gap-1 md:gap-2 mb-6 md:mb-8 overflow-x-auto pb-2 scrollbar-none no-scrollbar">
         {categories.map((cat) => (
@@ -97,7 +97,7 @@ export default function SearchBar() {
             className={`flex items-center gap-2 px-6 py-3 rounded-full font-bold text-sm transition-all whitespace-nowrap border-2 ${
               selectedCategory === cat.id 
               ? 'bg-[#0060CE] text-white border-[#0060CE] shadow-xl shadow-blue-600/20 scale-105' 
-              : 'bg-white/10 text-white border-transparent hover:bg-white/30'
+              : 'bg-black/20 backdrop-blur-md text-white border-white/10 hover:bg-black/30'
             }`}
           >
             {cat.icon}
