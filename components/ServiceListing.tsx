@@ -31,6 +31,9 @@ type Service = {
     description?: string
     short_description?: string
     max_group_size?: number
+    max_adults?: number
+    max_children?: number
+    child_age_limit?: number
     room_types?: unknown[]
     itinerary?: unknown[]
     stock?: number
@@ -128,7 +131,8 @@ function ServiceListingInner({
                 'id', 'name', 'location', 'base_price', 'image_url', 
                 'duration_days', 'duration_hours', 'service_type', 
                 'rating', 'region', 'amenities', 'is_seasonal_deal', 'deal_note',
-                'description', 'max_group_size', 'room_types', 'itinerary', 'stock',
+                'description', 'max_group_size', 'max_adults', 'max_children',
+                'child_age_limit', 'room_types', 'itinerary', 'stock',
                 'status', 'cta_text', 'cta_link', 'gallery_images', 'meta_title',
                 'meta_description', 'seo_keywords', 'special_features', 'seasonality',
                 'highlights', 'included', 'not_included', 'cancellation_policy',
@@ -213,8 +217,16 @@ function ServiceListingInner({
 
         if (totalGuests > 0) {
             result = result.filter(s => {
-                // If max_group_size is defined, check it. Otherwise, assume it fits (like 0/null means unknown)
-                return !s.max_group_size || s.max_group_size >= totalGuests
+                // 1. Check Total Group Size (PAX MAX)
+                if (s.max_group_size && totalGuests > s.max_group_size) return false
+                
+                // 2. Check Specific Adult Capacity
+                if (s.max_adults && adults > s.max_adults) return false
+                
+                // 3. Check Specific Children Capacity
+                if (s.max_children && children > s.max_children) return false
+                
+                return true
             })
         }
 
