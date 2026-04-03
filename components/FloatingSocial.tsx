@@ -39,14 +39,14 @@ export default function FloatingSocial() {
   const [isOpen, setIsOpen] = useState(true);
 
   return (
-    <div className="fixed bottom-8 right-8 z-[100] flex flex-col items-end gap-3">
+    <div className="fixed bottom-6 right-6 z-[100] flex flex-col items-end gap-2">
       <AnimatePresence>
         {isOpen && (
           <motion.div
-            initial={{ opacity: 0, y: 20, scale: 0.8 }}
+            initial={{ opacity: 0, y: 15, scale: 0.8 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: 20, scale: 0.8 }}
-            className="flex flex-col gap-3 mb-2"
+            exit={{ opacity: 0, y: 15, scale: 0.8 }}
+            className="flex flex-col gap-2 mb-1"
           >
             {socialLinks.map((social, index) => (
               <motion.a
@@ -54,14 +54,14 @@ export default function FloatingSocial() {
                 href={social.href}
                 target="_blank"
                 rel="noopener noreferrer"
-                initial={{ opacity: 0, x: 20 }}
+                initial={{ opacity: 0, x: 15 }}
                 animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: index * 0.1 }}
-                className={`flex items-center justify-center p-1.5 rounded-2xl shadow-lg backdrop-blur-md bg-white/90 dark:bg-slate-800/90 border border-slate-200 dark:border-slate-700 group transition-all hover:scale-110 active:scale-95`}
+                transition={{ delay: index * 0.05 }}
+                className={`flex items-center justify-center p-1 rounded-xl shadow-lg backdrop-blur-md bg-white/90 dark:bg-slate-800/90 border border-slate-100 dark:border-slate-700 group transition-all hover:scale-110 active:scale-95`}
                 title={social.name}
               >
-                <div className={`${social.color} ${social.hoverColor} p-2.5 rounded-xl text-white shadow-md transition-colors`}>
-                  <social.icon size={20} />
+                <div className={`${social.color} ${social.hoverColor} p-2 rounded-lg text-white shadow-md transition-colors`}>
+                  <social.icon size={18} />
                 </div>
               </motion.a>
             ))}
@@ -72,15 +72,15 @@ export default function FloatingSocial() {
       <motion.button
         onClick={() => setIsOpen(!isOpen)}
         whileHover={{ scale: 1.05 }}
-        whileTap={{ scale: 0.95 }}
-        className={`p-4 rounded-full shadow-2xl transition-all flex items-center justify-center ${
+        whileTap={{ scale: 0.90 }}
+        className={`p-3 rounded-full shadow-xl transition-all flex items-center justify-center ${
           isOpen 
             ? 'bg-slate-900 text-white rotate-90' 
-            : 'bg-primary text-white shadow-primary/30'
+            : 'bg-primary text-white shadow-primary/20'
         }`}
         aria-label="Social media menu"
       >
-        {isOpen ? <X size={24} /> : <Share2 size={24} />}
+        {isOpen ? <X size={20} /> : <Share2 size={20} />}
       </motion.button>
     </div>
   );
