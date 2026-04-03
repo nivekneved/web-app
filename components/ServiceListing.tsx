@@ -180,7 +180,13 @@ function ServiceListingInner({
 
     useEffect(() => {
         loadServices()
-    }, [loadServices])
+        
+        // Handle initial search from homepage
+        const initialSearch = searchParams.get('location')
+        if (initialSearch) {
+            setSearchTerm(initialSearch)
+        }
+    }, [loadServices, searchParams])
 
     useEffect(() => {
         if (urlRegion) {

@@ -2,7 +2,7 @@
 
 import React, { useState, useRef, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
-import { Search, Plus, Minus } from 'lucide-react'
+import { Search, Plus, Minus, Hotel, Compass, Ship, LayoutGrid, Coffee, MapPin } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
 
 interface GuestCount {
@@ -15,6 +15,8 @@ export default function SearchBar() {
   const [guests, setGuests] = useState<GuestCount>({ adults: 2, children: 0 })
   const [checkIn, setCheckIn] = useState<string>('2026-04-30')
   const [checkOut, setCheckOut] = useState<string>('2026-05-29')
+  const [selectedCategory, setSelectedCategory] = useState<string>('all')
+  const [location, setLocation] = useState<string>('')
   
   const router = useRouter()
   const guestRef = useRef<HTMLDivElement>(null)
@@ -25,9 +27,20 @@ export default function SearchBar() {
     if (checkOut) params.set('checkOut', checkOut)
     params.set('adults', guests.adults.toString())
     params.set('children', guests.children.toString())
+    if (selectedCategory !== 'all') params.set('type', selectedCategory)
+    if (location) params.set('location', location)
     
     router.push(`/search?${params.toString()}`)
   }
+
+  const categories = [
+    { id: 'all', label: 'All', icon: <LayoutGrid size={18} /> },
+    { id: 'hotel', label: 'Hotels', icon: <Hotel size={18} /> },
+    { id: 'activity', label: 'Activities', icon: <MapPin size={18} /> },
+    { id: 'tour', label: 'Tours', icon: <Compass size={18} /> },
+    { id: 'cruise', label: 'Cruises', icon: <Ship size={18} /> },
+    { id: 'lounge', label: 'Lounge', icon: <Coffee size={18} /> },
+  ]
 
   // format date for display
   const formatDate = (dateStr: string) => {
@@ -65,10 +78,45 @@ export default function SearchBar() {
 
   return (
     <div className="w-full max-w-6xl mx-auto px-4 mt-1 relative z-40">
-      <div className="bg-white rounded-full shadow-[0_20px_50px_rgba(0,0,0,0.15)] p-2 md:p-3 flex flex-col md:flex-row items-stretch md:items-center gap-2 border border-slate-100">
+      {/* Category Tabs */}
+      <div className="flex items-center justify-center gap-1 md:gap-4 mb-6 md:mb-8 overflow-x-auto pb-2 scrollbar-none no-scrollbar">
+        {categories.map((cat) => (
+          <button
+            key={cat.id}
+            onClick={() => setSelectedCategory(cat.id)}
+            className={`flex items-center gap-2 px-6 py-3 rounded-full font-bold text-sm transition-all whitespace-nowrap border-2 ${
+              selectedCategory === cat.id 
+              ? 'bg-white text-[#0060CE] border-white shadow-lg' 
+              : 'bg-black/10 text-white border-transparent hover:bg-white/20'
+            }`}
+          >
+            {cat.icon}
+            {cat.label}
+          </button>
+        ))}
+      </div>
+
+      <div className="bg-white rounded-[2rem] md:rounded-full shadow-[0_20px_50px_rgba(0,0,0,0.15)] p-2 md:p-3 flex flex-col md:flex-row items-stretch md:items-center gap-2 border border-slate-100">
         
+        {/* Location / Search */}
+        <div className="flex-[1.5] px-6 py-2 border-r border-slate-100 last:border-0 cursor-pointer hover:bg-slate-50 transition-colors rounded-3xl md:rounded-none md:rounded-l-full relative group">
+          <label className="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1 group-hover:text-blue-600 transition-colors">
+            Where?
+          </label>
+          <div className="flex items-center gap-2">
+            <MapPin size={16} className="text-slate-400" />
+            <input 
+              type="text" 
+              placeholder="Destination..."
+              className="bg-transparent border-none focus:ring-0 p-0 text-slate-900 font-bold text-sm md:text-base placeholder:text-slate-300 w-full"
+              value={location}
+              onChange={(e) => setLocation(e.target.value)}
+            />
+          </div>
+        </div>
+
         {/* Check-in */}
-        <div className="flex-1 px-6 py-2 border-r border-slate-100 last:border-0 cursor-pointer hover:bg-slate-50 transition-colors rounded-3xl md:rounded-none md:rounded-l-full relative group">
+        <div className="flex-1 px-6 py-2 border-r border-slate-100 last:border-0 cursor-pointer hover:bg-slate-50 transition-colors relative group">
           <label className="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1 group-hover:text-blue-600 transition-colors">
             Check-in
           </label>
