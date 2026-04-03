@@ -3,8 +3,14 @@
 import { createContext, useContext, useEffect, useState } from 'react'
 
 // Authentication has been removed as per guest-only requirement
+type AuthUser = {
+    id: string
+    email: string
+    created_at: string
+} | null
+
 type AuthContextType = {
-    user: null
+    user: AuthUser
     loading: boolean
     signOut: () => Promise<void>
 }
