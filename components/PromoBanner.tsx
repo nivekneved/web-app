@@ -1,3 +1,4 @@
+/*
 'use client'
 
 import React from 'react'
@@ -20,10 +21,8 @@ export default function PromoBanner() {
           className="object-cover transition-transform duration-700 group-hover:scale-105"
         />
         
-        {/* Banner Overlays & Text Content */}
         <div className="absolute inset-0 bg-red-600/90 flex items-center justify-between px-8 md:px-16 overflow-hidden">
           
-          {/* Left badge Section (20 for 20 logo style) */}
           <div className="hidden md:flex items-center gap-4 relative z-10">
             <div className="bg-white text-black font-black text-6xl md:text-8xl p-4 rounded-3xl -rotate-6 shadow-2xl flex flex-col items-center leading-none">
               <span className="text-4xl text-red-600">20</span>
@@ -33,7 +32,6 @@ export default function PromoBanner() {
                 <span className="text-5xl">20</span>
               </div>
             </div>
-            {/* 20% off burst effect */}
             <div className="absolute -top-6 -right-12 bg-yellow-400 text-black font-black text-xl md:text-2xl p-4 rounded-full rotate-12 shadow-xl border-4 border-white animate-pulse">
               20% OFF
             </div>
@@ -49,10 +47,15 @@ export default function PromoBanner() {
           </div>
         </div>
         
-        {/* Glow Effects */}
         <div className="absolute top-0 right-0 w-1/3 h-full bg-gradient-to-l from-white/10 to-transparent pointer-events-none" />
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full bg-[radial-gradient(circle,rgba(255,255,255,0.15)_0%,transparent_70%)] pointer-events-none" />
       </motion.div>
     </div>
   )
+}
+*/
+
+// Component commented out as requested by USER
+export default function PromoBanner() {
+    return null;
 }

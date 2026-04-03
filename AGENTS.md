@@ -5,8 +5,8 @@
 **Rating: 5/5**
 - **Changes**:
   - `components/SearchBar.tsx`: New premium search bar with date/guest logic.
-  - `components/PromoBanner.tsx`: New high-fidelity promo banner with "20 for 20" badge.
-  - `app/page.tsx`: Integrated components below hero section.
+  - `components/PromoBanner.tsx`: **(Commented out as requested)** New high-fidelity promo banner with "20 for 20" badge.
+  - `app/page.tsx`: Integrated components below hero section. **(PromoBanner now commented out)**
   - `public/assets/promo-banner.png`: Generated promotional asset.
 - **Task: Refactor Seasonal Deals to Slider**
   - `components/DealsCarousel.tsx`: Refactored to infinite auto-sliding carousel with arrows/dots.

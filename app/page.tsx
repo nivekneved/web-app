@@ -12,7 +12,7 @@ import CategoryGrid from '@/components/CategoryGrid'
 import DealsCarousel from '@/components/DealsCarousel'
 import AnnouncementPopup from '@/components/AnnouncementPopup'
 import PartnerSlider from '@/components/PartnerSlider'
-import PromoBanner from '@/components/PromoBanner'
+// import PromoBanner from '@/components/PromoBanner'
 import NewsSection from '@/components/NewsSection'
 import SearchBar from '@/components/SearchBar'
 
@@ -353,8 +353,9 @@ export default function HomePage() {
       {/* Floating Search Bar Integration */}
       <SearchBar />
 
-      {/* Special Offer Banner */}
+      {/* Special Offer Banner - Commented out as requested
       <PromoBanner />
+      */}
 
       {/* Luxury Intro Section */}
       <section className="py-10 bg-white relative">
