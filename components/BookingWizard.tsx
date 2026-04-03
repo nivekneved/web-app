@@ -21,7 +21,8 @@ const travelerSchema = z.object({
 const bookingSchema = z.object({
     checkIn: z.string().min(1, 'Check-in date is required'),
     checkOut: z.string().min(1, 'Check-out date is required'),
-    guests: z.number().min(1).max(20),
+    adults: z.number().min(1).max(20),
+    children: z.number().min(0).max(20),
     firstName: z.string().min(2, 'First name is required'),
     lastName: z.string().min(2, 'Last name is required'),
     email: z.string().email('Invalid email address'),
@@ -48,22 +49,26 @@ type BookingWizardProps = {
     serviceId: string
     serviceName: string
     servicePrice: number
+    childPrice?: number
     serviceCategory: string
-    onComplete: (data: BookingWizardData) => void
+    onComplete: (data: BookingWizardData, totalAmount: number) => void
     isLoading?: boolean
     initialData?: Partial<BookingWizardData>
     roomOptions?: RoomOption[]
     showRoomSelection?: boolean
+    mealPlans?: { label: string, price: number, id: string }[]
 }
 
 export default function BookingWizard({ 
     serviceName, 
     servicePrice, 
+    childPrice = 0,
     onComplete, 
     isLoading, 
     initialData, 
     roomOptions, 
-    showRoomSelection = true 
+    showRoomSelection = true,
+    mealPlans = []
 }: BookingWizardProps) {
     const { generalConfig } = useSettings()
     const labels = generalConfig?.ui_labels || {}
@@ -75,7 +80,8 @@ export default function BookingWizard({
         defaultValues: {
             checkIn: initialData?.checkIn || '',
             checkOut: initialData?.checkOut || '',
-            guests: initialData?.guests || 1,
+            adults: initialData?.adults || 2,
+            children: initialData?.children || 0,
             firstName: initialData?.firstName || '',
             lastName: initialData?.lastName || '',
             email: initialData?.email || '',
@@ -108,7 +114,7 @@ export default function BookingWizard({
     const validateStep = async (step: number) => {
         let fieldsToValidate: (keyof BookingWizardData)[] = []
         if (step === 1) {
-            fieldsToValidate = ['checkIn', 'checkOut', 'guests', 'firstName', 'lastName', 'email', 'phone']
+            fieldsToValidate = ['checkIn', 'checkOut', 'adults', 'children', 'firstName', 'lastName', 'email', 'phone']
         } else if (step === 2) {
             fieldsToValidate = ['travelers']
         } else if (step === 3) {
@@ -117,7 +123,6 @@ export default function BookingWizard({
 
         const result = await trigger(fieldsToValidate)
         
-        // Special logic for min_stay if it's step 1
         if (step === 1 && result) {
             const start = new Date(watchAllFields.checkIn)
             const end = new Date(watchAllFields.checkOut)
@@ -149,13 +154,18 @@ export default function BookingWizard({
         if (currentStep > 1) setCurrentStep((prev) => (prev - 1))
     }
 
+    const calculateTotal = () => {
+        const selectedMealObj = mealPlans.find(m => m.id === watchAllFields.mealPreference)
+        const mealCostTotal = selectedMealObj ? (selectedMealObj.price * (watchAllFields.adults + watchAllFields.children)) : 0
+        return (watchAllFields.adults * servicePrice) + (watchAllFields.children * childPrice) + mealCostTotal
+    }
+
     const onSubmit = (data: BookingWizardData) => {
-        onComplete(data)
+        onComplete(data, calculateTotal())
     }
 
     return (
         <div className="w-full">
-            {/* Progress Steps */}
             <div className="mb-12">
                 <div className="flex items-center justify-between">
                     {[
@@ -185,7 +195,6 @@ export default function BookingWizard({
                 </div>
             </div>
 
-            {/* Step Content */}
             <form onSubmit={handleSubmit(onSubmit)} className="bg-white dark:bg-slate-900 rounded-[3rem] p-10 border border-slate-200 dark:border-slate-800 shadow-2xl overflow-hidden">
                 <AnimatePresence mode="wait">
                     <motion.div
@@ -199,9 +208,9 @@ export default function BookingWizard({
                             <div className="space-y-8">
                                 <div className="space-y-2">
                                     <h2 className="text-3xl font-black text-slate-900 dark:text-white leading-tight">
-                                        {labels.complete_reservation || 'Complete Your Reservation'}
+                                        {labels.complete_request || 'Complete Your Booking Request'}
                                     </h2>
-                                    <p className="text-slate-500 font-medium">Please provide your booking and contact details.</p>
+                                    <p className="text-slate-500 font-medium">Please provide your contact details. We will contact you via email to finalize your booking.</p>
                                 </div>
                                 
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6 p-8 bg-slate-50 dark:bg-slate-800/50 rounded-[2rem] border border-slate-100 dark:border-slate-800">
@@ -229,16 +238,30 @@ export default function BookingWizard({
                                         </div>
                                         {errors.checkOut && <p className="text-red-500 text-[10px] font-bold uppercase tracking-widest flex items-center gap-1"><AlertCircle size={10} /> {errors.checkOut.message}</p>}
                                     </div>
-                                    <div className="md:col-span-2 space-y-2">
-                                        <label className="text-xs font-black text-slate-400 uppercase tracking-widest">{labels.number_of_guests || 'Guests'}</label>
-                                        <div className="relative">
-                                            <Users className="absolute left-4 top-1/2 -translate-y-1/2 text-red-600" size={18} />
-                                            <input
-                                                type="number"
-                                                min="1"
-                                                {...register('guests', { valueAsNumber: true })}
-                                                className="w-full pl-12 pr-4 py-4 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl focus:ring-4 focus:ring-red-600/10 outline-none transition-all font-bold dark:text-white"
-                                            />
+                                    <div className="md:col-span-2 grid grid-cols-2 gap-6 pt-4 border-t border-slate-100 dark:border-slate-800">
+                                        <div className="space-y-2">
+                                            <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest">{labels.adults || 'Adults'}</label>
+                                            <div className="relative">
+                                                <Users className="absolute left-4 top-1/2 -translate-y-1/2 text-red-600" size={18} />
+                                                <input
+                                                    type="number"
+                                                    min="1"
+                                                    {...register('adults', { valueAsNumber: true })}
+                                                    className="w-full pl-12 pr-4 py-4 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl focus:ring-4 focus:ring-red-600/10 outline-none transition-all font-bold dark:text-white"
+                                                />
+                                            </div>
+                                        </div>
+                                        <div className="space-y-2">
+                                            <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest">{labels.children || 'Children'}</label>
+                                            <div className="relative">
+                                                <Users className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" size={18} />
+                                                <input
+                                                    type="number"
+                                                    min="0"
+                                                    {...register('children', { valueAsNumber: true })}
+                                                    className="w-full pl-12 pr-4 py-4 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl focus:ring-4 focus:ring-red-600/10 outline-none transition-all font-bold dark:text-white"
+                                                />
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -332,7 +355,9 @@ export default function BookingWizard({
                                 <div className="space-y-4 max-h-[500px] overflow-y-auto pr-4 custom-scrollbar">
                                     {fields.length === 0 && (
                                         <div className="p-12 text-center border-2 border-dashed border-slate-200 dark:border-slate-800 rounded-[2rem]">
-                                            <Users className="mx-auto text-slate-200 dark:text-slate-800 mb-4" size={48} />
+                                            <div className="mb-4 flex justify-center">
+                                                <Users size={48} className="text-slate-200 dark:text-slate-800" />
+                                            </div>
                                             <p className="text-slate-400 font-bold uppercase text-[10px] tracking-widest">No additional travelers added</p>
                                         </div>
                                     )}
@@ -394,15 +419,40 @@ export default function BookingWizard({
                                 </div>
 
                                 <div className="space-y-8">
-                                    <div className="space-y-4">
-                                        <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest block text-center">{labels.meal_preference || 'Meal Preference'}</label>
+                                    {mealPlans.length > 0 && (
+                                        <div className="space-y-6">
+                                            <div className="flex flex-col items-center gap-2">
+                                                <Utensils className="text-red-600 mb-2" size={32} />
+                                                <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest block text-center">{labels.choose_meal_plan || 'Choose Your Meal Plan'}</label>
+                                            </div>
+                                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                                                {mealPlans.map((meal) => (
+                                                    <label key={meal.id} className="cursor-pointer group">
+                                                        <input
+                                                            type="radio"
+                                                            value={meal.id}
+                                                            {...register('mealPreference')}
+                                                            className="peer hidden"
+                                                        />
+                                                        <div className="h-full px-4 py-8 bg-slate-50 dark:bg-slate-800/50 border-2 border-transparent peer-checked:border-red-600 peer-checked:bg-white dark:peer-checked:bg-slate-800 rounded-3xl transition-all text-center shadow-sm group-hover:shadow-md">
+                                                            <span className="block font-black text-slate-400 peer-checked:text-slate-900 dark:peer-checked:text-white text-[12px] uppercase tracking-widest mb-2">{meal.label}</span>
+                                                            <span className="block text-xs font-bold text-red-600">+Rs {meal.price.toLocaleString()} {labels.per_pax || 'per pax'}</span>
+                                                        </div>
+                                                    </label>
+                                                ))}
+                                            </div>
+                                        </div>
+                                    )}
+
+                                    <div className="space-y-4 pt-8 border-t border-slate-100 dark:border-slate-800">
+                                        <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest block text-center">Dietary Requirements</label>
                                         <div className="grid grid-cols-2 lg:grid-cols-5 gap-4">
                                             {['none', 'vegetarian', 'vegan', 'halal', 'kosher'].map((pref) => (
                                                 <label key={pref} className="cursor-pointer">
                                                     <input
                                                         type="radio"
                                                         value={pref}
-                                                        {...register('mealPreference')}
+                                                        name="dietary"
                                                         className="peer hidden"
                                                     />
                                                     <div className="h-full px-4 py-8 bg-slate-50 dark:bg-slate-800/50 border-2 border-transparent peer-checked:border-red-600 peer-checked:bg-white dark:peer-checked:bg-slate-800 rounded-3xl transition-all text-center">
@@ -414,7 +464,7 @@ export default function BookingWizard({
                                     </div>
 
                                     {showRoomSelection && (
-                                        <div className="space-y-4">
+                                        <div className="space-y-4 pt-8 border-t border-slate-100 dark:border-slate-800">
                                             <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest block text-center">{labels.room_type || 'Room Preference'}</label>
                                             <select
                                                 {...register('roomPreference')}
@@ -466,9 +516,47 @@ export default function BookingWizard({
                                                     <p className="font-bold text-lg">{watchAllFields.checkOut}</p>
                                                 </div>
                                             </div>
-                                            <div className="pt-6 border-t border-white/10 flex justify-between items-end">
-                                                <span className="text-[10px] font-black text-slate-500 uppercase tracking-widest">Total Investment</span>
-                                                <span className="text-3xl font-black text-red-600">Rs {servicePrice.toLocaleString()}</span>
+                                            <div className="pt-6 border-t border-white/10 flex flex-col gap-2">
+                                                <div className="flex justify-between items-center text-[10px] font-black text-slate-500 uppercase tracking-widest">
+                                                    <span>Adults ({watchAllFields.adults})</span>
+                                                    <span>Rs {(watchAllFields.adults * servicePrice).toLocaleString()}</span>
+                                                </div>
+                                                {watchAllFields.children > 0 && (
+                                                    <div className="flex justify-between items-center text-[10px] font-black text-slate-500 uppercase tracking-widest">
+                                                        <span>Children ({watchAllFields.children})</span>
+                                                        <span>Rs {(watchAllFields.children * childPrice).toLocaleString()}</span>
+                                                    </div>
+                                                )}
+                                                {(() => {
+                                                    const selectedMeal = mealPlans.find(m => m.id === watchAllFields.mealPreference)
+                                                    if (selectedMeal && selectedMeal.price > 0) {
+                                                        const totalGuests = watchAllFields.adults + watchAllFields.children
+                                                        return (
+                                                            <div className="flex justify-between items-center text-[10px] font-black text-slate-500 uppercase tracking-widest">
+                                                                <span>{selectedMeal.label} ({totalGuests} pax)</span>
+                                                                <span>Rs {(selectedMeal.price * totalGuests).toLocaleString()}</span>
+                                                            </div>
+                                                        )
+                                                    }
+                                                    return null
+                                                })()}
+                                                
+                                                <div className="flex justify-between items-end mt-2 pt-4 border-t border-white/5">
+                                                    <div className="flex flex-col">
+                                                        <span className="text-[10px] font-black text-slate-500 uppercase tracking-widest">Total Investment</span>
+                                                        {(() => {
+                                                            const selectedMealObj = mealPlans.find(m => m.id === watchAllFields.mealPreference)
+                                                            const mealCostTotal = selectedMealObj ? (selectedMealObj.price * (watchAllFields.adults + watchAllFields.children)) : 0
+                                                            const finalTotal = (watchAllFields.adults * servicePrice) + (watchAllFields.children * childPrice) + mealCostTotal
+                                                            const points = Math.floor(finalTotal / 10)
+                                                            return <span className="text-[10px] font-black text-green-500 uppercase tracking-widest mt-1">You will earn +{points.toLocaleString()}pts</span>
+                                                        })()}
+                                                    </div>
+                                                    {(() => {
+                                                        const finalTotal = calculateTotal()
+                                                        return <span className="text-3xl font-black text-red-600">Rs {finalTotal.toLocaleString()}</span>
+                                                    })()}
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -482,7 +570,7 @@ export default function BookingWizard({
                                             </div>
                                             <div className="space-y-1">
                                                 <h3 className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Group Composition</h3>
-                                                <p className="font-black text-slate-900 dark:text-white uppercase tracking-tighter">{watchAllFields.guests} Adults / {fields.length} Additional Travelers</p>
+                                                <p className="font-black text-slate-900 dark:text-white uppercase tracking-tighter">{watchAllFields.adults} Adults / {watchAllFields.children} Children</p>
                                             </div>
                                             {watchAllFields.notes && (
                                                 <div className="space-y-1">
@@ -490,6 +578,14 @@ export default function BookingWizard({
                                                     <p className="text-slate-500 text-sm italic">&ldquo;{watchAllFields.notes}&rdquo;</p>
                                                 </div>
                                             )}
+                                            <div className="space-y-3 pt-6 border-t border-slate-100 dark:border-slate-800">
+                                                <h3 className="text-[10px] font-black text-red-600 uppercase tracking-widest flex items-center gap-2">
+                                                    <Mail size={14} /> Next Steps
+                                                </h3>
+                                                <p className="text-slate-500 text-xs font-bold leading-relaxed italic">
+                                                    This is a booking request only. No payment is required now. Our team will contact you via email to finalize the booking and provide payment instructions.
+                                                </p>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -498,7 +594,6 @@ export default function BookingWizard({
                     </motion.div>
                 </AnimatePresence>
 
-                {/* Navigation Buttons */}
                 <div className="flex gap-4 mt-12">
                     {currentStep > 1 && (
                         <button
@@ -523,7 +618,7 @@ export default function BookingWizard({
                             disabled={isLoading}
                             className="h-16 flex-[2] px-8 bg-red-600 text-white rounded-2xl font-black uppercase text-[10px] tracking-widest hover:bg-slate-900 transition-all shadow-[0_20px_40px_rgba(220,38,38,0.3)] disabled:opacity-50 flex items-center justify-center gap-2"
                         >
-                            {isLoading ? (labels.submitting_btn || 'Processing...') : (labels.submit_booking_btn || 'Confirm Reservation')}
+                            {isLoading ? (labels.submitting_btn || 'Processing...') : (labels.submit_request_btn || 'Submit Booking Request')}
                         </button>
                     )}
                 </div>

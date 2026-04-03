@@ -135,7 +135,7 @@ function ServiceListingInner({
             const selectFields = [
                 'id', 'name', 'location', 'base_price', 'image_url', 
                 'duration_days', 'duration_hours', 'service_type', 
-                'rating', 'region', 'amenities', 'is_seasonal_deal', 'deal_note',
+                'rating', 'region', 'amenities', 'is_seasonal_deal', 'deal_note', 'child_price',
                 'description', 'max_group_size', 'max_adults', 'max_children',
                 'child_age_limit', 'room_types', 'itinerary', 'stock',
                 'status', 'cta_text', 'cta_link', 'gallery_images', 'meta_title',
@@ -624,6 +624,7 @@ function ServiceListingInner({
                                                 region={service.region}
                                                 description={service.description}
                                                 short_description={service.short_description}
+                                                child_price={service.child_price}
                                             />
                                         </motion.div>
                                     ))

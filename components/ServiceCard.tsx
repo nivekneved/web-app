@@ -18,6 +18,7 @@ interface ServiceCardProps {
     title: string
     location?: string
     price: number
+    child_price?: number
     image: string
     duration?: string
     link: string
@@ -31,7 +32,7 @@ interface ServiceCardProps {
     short_description?: string
 }
 
-export default function ServiceCard({ id, title, location, price, image, duration, link, tag, rating, service_type, isSeasonal, dealNote, region, description, short_description }: ServiceCardProps) {
+export default function ServiceCard({ id, title, location, price, child_price, image, duration, link, tag, rating, service_type, isSeasonal, dealNote, region, description, short_description }: ServiceCardProps) {
     const { generalConfig: config } = useSettings()
     const labels = (config?.ui_labels || {}) as Record<string, string>
     const [showWizard, setShowWizard] = React.useState(false)
@@ -44,11 +45,11 @@ export default function ServiceCard({ id, title, location, price, image, duratio
             serviceId: id,
             serviceName: title,
             serviceCategory: service_type || 'service',
-            amount: price,
+            amount: (data.adults * price) + (data.children * (child_price || 0)),
             startDate: data.checkIn,
             endDate: data.checkOut,
-            paxAdults: data.guests,
-            paxChildren: 0,
+            paxAdults: data.adults,
+            paxChildren: data.children,
             travelers: data.travelers as Record<string, unknown>[],
             specialRequests: data.notes,
             firstName: data.firstName,
@@ -60,7 +61,8 @@ export default function ServiceCard({ id, title, location, price, image, duratio
         if (result.success) {
             toast.success(labels.booking_success || 'Booking request submitted successfully!')
             setShowWizard(false)
-            router.push(`/booking-confirmation?id=${result.bookingId}&service=${encodeURIComponent(title)}&amount=${price}`)
+            const totalAmount = (data.adults * price) + (data.children * (child_price || 0))
+            router.push(`/booking-confirmation?id=${result.bookingId}&service=${encodeURIComponent(title)}&amount=${totalAmount}`)
         } else {
             toast.error(result.error || labels.booking_error || 'Failed to submit booking request')
         }
@@ -86,9 +88,16 @@ export default function ServiceCard({ id, title, location, price, image, duratio
                                 serviceId={id}
                                 serviceName={title}
                                 servicePrice={price}
+                                childPrice={child_price}
                                 serviceCategory={service_type || 'service'}
                                 onComplete={handleBookingComplete}
                                 isLoading={bookingLoading}
+                                initialData={{
+                                    checkIn: new URLSearchParams(window.location.search).get('checkIn') || '',
+                                    checkOut: new URLSearchParams(window.location.search).get('checkOut') || '',
+                                    adults: Number(new URLSearchParams(window.location.search).get('adults')) || 2,
+                                    children: Number(new URLSearchParams(window.location.search).get('children')) || 0
+                                }}
                             />
                         </div>
                     </div>

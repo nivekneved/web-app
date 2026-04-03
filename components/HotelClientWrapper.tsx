@@ -13,6 +13,7 @@ import {
 } from 'lucide-react';
 import Link from 'next/link'
 import Image from 'next/image'
+import { useRouter } from 'next/navigation'
 import { toast } from 'sonner'
 import { useWishlist } from '@/contexts/WishlistContext'
 import ReviewsSection from '@/components/ReviewsSection'
@@ -22,6 +23,7 @@ import { Breadcrumbs } from './ui/Breadcrumbs'
 import { Badge } from './ui/Badge'
 import { Button } from './ui/Button'
 import { cn } from '@/lib/utils'
+import { createClient } from '@/lib/supabase'
 import { resolveImageUrl } from '@/lib/image'
 import StarRating from './ui/StarRating'
 import SocialShare from '@/components/SocialShare'
@@ -79,9 +81,22 @@ type Hotel = {
     room_types?: RoomType[]
 }
 
+interface UserProfile {
+    id: string;
+    first_name?: string;
+    last_name?: string;
+    email?: string;
+    phone?: string;
+    user_metadata?: {
+        first_name?: string;
+        last_name?: string;
+    };
+}
+
 export default function HotelClientWrapper({ hotel }: { hotel: Hotel }) {
     const { generalConfig: config } = useSettings()
     const labels = (config?.ui_labels || {}) as Record<string, string>
+    const router = useRouter()
     const { addToWishlist, removeFromWishlist, isInWishlist } = useWishlist()
     
     const [checkIn, setCheckIn] = useState('')
@@ -92,6 +107,24 @@ export default function HotelClientWrapper({ hotel }: { hotel: Hotel }) {
     const [bookingLoading, setBookingLoading] = useState(false)
     const [activeGallery, setActiveGallery] = useState<{ images: string[], title: string } | null>(null)
     const [currentGalleryIdx, setCurrentGalleryIdx] = useState(0)
+
+    const [userProfile, setUserProfile] = useState<UserProfile | null>(null)
+
+    useEffect(() => {
+        async function fetchUser() {
+            const supabase = createClient()
+            const { data: { user } } = await supabase.auth.getUser()
+            if (user) {
+                const { data: profile } = await supabase
+                    .from('profiles')
+                    .select('*')
+                    .eq('id', user.id)
+                    .single()
+                setUserProfile(profile || user)
+            }
+        }
+        fetchUser()
+    }, [])
 
     function toggleWishlist() {
         if (!hotel) return
@@ -151,25 +184,19 @@ export default function HotelClientWrapper({ hotel }: { hotel: Hotel }) {
         setShowWizard(true)
     }
 
-    const onBookingConfirm = async (formData: BookingWizardData) => {
+    const onBookingConfirm = async (formData: BookingWizardData, totalAmount: number) => {
         setBookingLoading(true)
         try {
-            // Find the room type selected in the wizard to get its correct price
-            const roomInWizard = hotel.room_types?.find(r => r.type === formData.roomPreference);
-            const calculatedAmount = roomInWizard 
-                ? (parseFloat(roomInWizard.prices?.[currentDayKey] || roomInWizard.prices?.mon || roomInWizard.price?.toString() || '0') || hotel.base_price)
-                : hotel.base_price;
-
-            const { success, error } = await createBookingRequest({
+            const { success, error, bookingId } = await createBookingRequest({
                 serviceId: hotel.id,
                 serviceName: hotel.name,
                 serviceCategory: 'hotel',
-                amount: calculatedAmount,
+                amount: totalAmount,
                 startDate: formData.checkIn || checkIn,
                 endDate: formData.checkOut || checkOut,
-                paxAdults: formData.guests || guests,
+                paxAdults: formData.adults || guests,
+                paxChildren: formData.children || 0,
                 roomPreference: formData.roomPreference || selectedRoom?.type,
-                paxChildren: 0,
                 travelers: formData.travelers as Record<string, unknown>[],
                 specialRequests: formData.notes,
                 firstName: formData.firstName,
@@ -181,6 +208,7 @@ export default function HotelClientWrapper({ hotel }: { hotel: Hotel }) {
             if (success) {
                 toast.success(labels.booking_success || 'Booking request sent successfully!')
                 setShowWizard(false)
+                router.push(`/booking-confirmation?id=${bookingId}&service=${encodeURIComponent(hotel.name)}&amount=${totalAmount}`)
             } else {
                 throw new Error(error || 'Booking failed')
             }
@@ -385,18 +413,73 @@ export default function HotelClientWrapper({ hotel }: { hotel: Hotel }) {
                             </div>
                         </section>
 
-                        <section>
-                            <h2 className="text-xs font-black text-red-600 uppercase tracking-[0.4em] mb-3">{labels.experience_label || 'Experience'}</h2>
-                            <h3 className="text-4xl font-black text-slate-900 mb-6 leading-tight">{labels.premium_amenities || 'Premium Amenities'}</h3>
-                            <div className="grid grid-cols-2 md:grid-cols-3 gap-6">
-                                {hotel.amenities?.map((amenity, idx) => (
-                                    <div key={idx} className="flex items-center gap-4 p-6 bg-slate-50 rounded-[2rem] border border-slate-100 hover:bg-white hover:shadow-xl hover:shadow-slate-200/50 transition-all duration-300">
-                                        <div className="w-12 h-12 bg-white rounded-2xl flex items-center justify-center text-red-600 shadow-sm">
-                                            <Check size={20} />
-                                        </div>
-                                        <span className="font-black text-xs uppercase tracking-widest text-slate-600">{amenity}</span>
+                        <section id="policy-sections" className="space-y-12">
+                            <h2 className="text-xs font-black text-red-600 uppercase tracking-[0.4em] mb-3">Policies & Facts</h2>
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                                 {/* Highlights */}
+                                {hotel.highlights && hotel.highlights.length > 0 && (
+                                    <div className="bg-white rounded-[2rem] p-8 border border-slate-100 shadow-sm">
+                                        <h2 className="text-[10px] font-black text-red-600 uppercase tracking-widest mb-6">Key Highlights</h2>
+                                        <ul className="space-y-4">
+                                            {hotel.highlights.map((h, i) => (
+                                                <li key={i} className="flex items-start gap-4 p-3 hover:bg-slate-50 rounded-xl transition-all">
+                                                    <div className="w-6 h-6 rounded-full bg-red-50 text-red-600 flex items-center justify-center shrink-0">
+                                                        <Check size={14} />
+                                                    </div>
+                                                    <span className="font-bold text-slate-700 text-sm">{h}</span>
+                                                </li>
+                                            ))}
+                                        </ul>
                                     </div>
-                                ))}
+                                )}
+
+                                {/* Included & Not Included */}
+                                <div className="bg-slate-900 rounded-[2rem] p-8 shadow-2xl relative overflow-hidden">
+                                    <div className="absolute top-0 right-0 w-32 h-32 bg-red-600/10 rounded-full blur-3xl -mr-16 -mt-16" />
+                                    <h2 className="text-[10px] font-black text-red-500 uppercase tracking-widest mb-6">Value Inclusions</h2>
+                                    <div className="space-y-6 relative">
+                                        {hotel.included && hotel.included.length > 0 && (
+                                            <div>
+                                                <h3 className="text-white font-black uppercase text-[10px] tracking-widest mb-3">Package Features</h3>
+                                                <div className="flex flex-wrap gap-2">
+                                                    {hotel.included.map((inc, i) => (
+                                                        <span key={i} className="px-3 py-1.5 bg-white/5 border border-white/10 rounded-full text-white/80 text-[10px] font-black tracking-widest">{inc}</span>
+                                                    ))}
+                                                </div>
+                                            </div>
+                                        )}
+                                        {hotel.not_included && hotel.not_included.length > 0 && (
+                                            <div>
+                                                <h3 className="text-white/40 font-black uppercase text-[10px] tracking-widest mb-3">Not Included</h3>
+                                                <div className="flex flex-wrap gap-2">
+                                                    {hotel.not_included.map((not, i) => (
+                                                        <span key={i} className="px-3 py-1.5 bg-white/5 border border-white/5 border-dashed rounded-full text-white/40 text-[10px] font-black tracking-widest">{not}</span>
+                                                    ))}
+                                                </div>
+                                            </div>
+                                        )}
+                                    </div>
+                                </div>
+                            </div>
+
+                            {/* Extended Policies */}
+                            <div className="bg-slate-50 rounded-[2rem] p-10 border border-slate-100 shadow-inner">
+                                <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
+                                    {hotel.cancellation_policy && (
+                                        <section>
+                                            <h2 className="text-[10px] font-black text-red-600 uppercase tracking-widest mb-4">Refund Policy</h2>
+                                            <h3 className="text-2xl font-black text-slate-900 mb-6 tracking-tight">Cancellation</h3>
+                                            <p className="text-slate-500 font-medium leading-relaxed text-sm whitespace-pre-line">{hotel.cancellation_policy}</p>
+                                        </section>
+                                    )}
+                                    {hotel.terms_and_conditions && (
+                                        <section>
+                                            <h2 className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-4">House Rules</h2>
+                                            <h3 className="text-2xl font-black text-slate-900 mb-6 tracking-tight">Terms & Conditions</h3>
+                                            <p className="text-slate-500 font-medium leading-relaxed text-sm whitespace-pre-line">{hotel.terms_and_conditions}</p>
+                                        </section>
+                                    )}
+                                </div>
                             </div>
                         </section>
 
@@ -497,12 +580,17 @@ export default function HotelClientWrapper({ hotel }: { hotel: Hotel }) {
                                 ? (parseFloat(selectedRoom.prices?.[currentDayKey] || selectedRoom.prices?.mon || selectedRoom.price?.toString() || '0') || hotel.base_price)
                                 : hotel.base_price}
                             serviceCategory="hotel"
-                            initialData={{
-                                checkIn,
-                                checkOut,
-                                guests,
-                                roomPreference: selectedRoom?.type
-                            }}
+                             initialData={{
+                                 checkIn,
+                                 checkOut,
+                                 adults: guests,
+                                 children: 0,
+                                 roomPreference: selectedRoom?.type,
+                                 firstName: userProfile?.first_name || userProfile?.user_metadata?.first_name || '',
+                                 lastName: userProfile?.last_name || userProfile?.user_metadata?.last_name || '',
+                                 email: userProfile?.email || '',
+                                 phone: userProfile?.phone || ''
+                             }}
                             onComplete={onBookingConfirm}
                             isLoading={bookingLoading}
                             roomOptions={hotel.room_types?.map(r => ({ type: r.type, min_stay: r.min_stay }))}

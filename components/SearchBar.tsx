@@ -15,7 +15,7 @@ export default function SearchBar() {
   const [guests, setGuests] = useState<GuestCount>({ adults: 2, children: 0 })
   const [checkIn, setCheckIn] = useState<string>('2026-04-30')
   const [checkOut, setCheckOut] = useState<string>('2026-05-29')
-  const [selectedCategory, setSelectedCategory] = useState<string>('stays')
+  const [selectedCategory, setSelectedCategory] = useState<string>('hotels')
   const [location, setLocation] = useState<string>('')
   const [time, setTime] = useState<string>('12:00')
   
@@ -26,8 +26,8 @@ export default function SearchBar() {
     const params = new URLSearchParams()
     if (checkIn) params.set('checkIn', checkIn)
     
-    // Only include checkOut for "Stays"
-    if (selectedCategory === 'stays' && checkOut) {
+    // Only include checkOut for "Hotels"
+    if (selectedCategory === 'hotels' && checkOut) {
         params.set('checkOut', checkOut)
     }
 
@@ -42,9 +42,9 @@ export default function SearchBar() {
   }
 
   const categories = [
-    { id: 'stays', label: 'Stays', icon: <Hotel size={18} />, fields: ['location', 'range', 'guests'] },
+    { id: 'hotels', label: 'Stays', icon: <Hotel size={18} />, fields: ['location', 'range', 'guests'] },
     { id: 'day-packages', label: 'Day Packages', icon: <Sun size={18} />, fields: ['location', 'single', 'guests'] },
-    { id: 'activity', label: 'Activities', icon: <Compass size={18} />, fields: ['location', 'single', 'guests'] },
+    { id: 'activities', label: 'Activities', icon: <Compass size={18} />, fields: ['location', 'single', 'guests'] },
     { id: 'restaurants', label: 'Restaurants', icon: <Utensils size={18} />, fields: ['location', 'single', 'time', 'guests'] },
     { id: 'spa', label: 'Spa', icon: <Sparkles size={18} />, fields: ['location', 'single', 'guests'] },
   ]

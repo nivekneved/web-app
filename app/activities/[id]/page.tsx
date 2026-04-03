@@ -14,7 +14,7 @@ async function getActivity(id: string) {
     
     const { data, error } = await supabase
         .from('services')
-        .select('id, name, description, location, region, base_price, rating, image_url, amenities, duration_hours, itinerary')
+        .select('*')
         .eq('id', id)
         .in('service_type', ['activity', 'land_activity', 'sea_activity'])
         .single()

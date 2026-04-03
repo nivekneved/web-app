@@ -1,5 +1,15 @@
 # 05 History & Agent Progress
 
+## 2026-04-03 - High-Fidelity Booking Ecosystem & Email-First Policy
+- **Premium Detail Pages**: Upgraded Activity and Hotel detail pages with high-fidelity modules for Highlights, Inclusions/Exclusions, and Policies. (W-05)
+- **Email-First Booking Policy**: Refactored the entire booking flow (Wizard & Confirmation) to reflect that all bookings are requests finalized via email (no online payment). (B-05)
+- **Personalized Booking Experience**: Implemented user profile pre-fills in the Booking Wizard, automatically pulling authenticated traveler data (first name, last name, email, phone) to ensure a frictionless and personalized discovery journey. (U-01)
+- **Room Type Data Enrichment**: Seeded existing hotels with comprehensive `room_types` data, including multi-day pricing, features, and high-fidelity image placeholders. (S-05)
+- **Loyalty Transparency**: Integrated points-earning estimations into the booking review step (+1pt per Rs 10 spent) to enhance traveler engagement and retention. (L-01)
+- **Type Safety & Hardening**: Introduced robust `UserProfile` interfaces to resolve TS lint errors and ensure a reliable, enterprise-grade codebase. (T-01)
+
+---
+
 ## 2026-04-02 - Ecosystem-Wide Auth Removal & Non-Restricted Access
 - **Auth-Free Ecosystem Realization**: Implemented a strictly anonymous, non-restricted environment across all applications (Web, Mobile, Admin). (E-01)
 - **Admin App Restoration & Neutralization**: Restored the `admin-app` from remote, bypassing all `ProtectedRoute` guards and mapping the login route directly to the dashboard. (A-01)

@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { MapPin, Check, ArrowLeft, Clock, Heart } from 'lucide-react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
@@ -11,6 +11,7 @@ import { createBookingRequest } from '@/lib/bookingService'
 import StarRating from '@/components/ui/StarRating'
 import ReviewsSection from '@/components/ReviewsSection'
 import { useSettings } from '@/contexts/SettingsContext'
+import { createClient } from '@/lib/supabase'
 
 type ActivityService = {
     id: string
@@ -24,6 +25,28 @@ type ActivityService = {
     amenities: string[]
     duration_hours: number
     itinerary?: { time: string; title: string; description: string }[]
+    highlights?: string[]
+    included?: string[]
+    not_included?: string[]
+    cancellation_policy?: string
+    terms_and_conditions?: string
+    meal_plans?: { id: string; label: string; price: number }[]
+    child_price?: number
+    child_age_limit?: number
+    max_adults?: number
+    max_children?: number
+}
+
+interface UserProfile {
+    id: string;
+    first_name?: string;
+    last_name?: string;
+    email?: string;
+    phone?: string;
+    user_metadata?: {
+        first_name?: string;
+        last_name?: string;
+    };
 }
 
 export default function ActivityClientWrapper({ activity }: { activity: ActivityService }) {
@@ -35,6 +58,23 @@ export default function ActivityClientWrapper({ activity }: { activity: Activity
     const [showWizard, setShowWizard] = useState(false)
     const [bookingLoading, setBookingLoading] = useState(false)
     const { addToWishlist, removeFromWishlist, isInWishlist } = useWishlist()
+    const [userProfile, setUserProfile] = useState<UserProfile | null>(null)
+
+    useEffect(() => {
+        async function fetchUser() {
+            const supabase = createClient()
+            const { data: { user } } = await supabase.auth.getUser()
+            if (user) {
+                const { data: profile } = await supabase
+                    .from('profiles')
+                    .select('*')
+                    .eq('id', user.id)
+                    .single()
+                setUserProfile(profile || user)
+            }
+        }
+        fetchUser()
+    }, [])
 
     function toggleWishlist() {
         if (isInWishlist(activity.id)) {
@@ -61,17 +101,17 @@ export default function ActivityClientWrapper({ activity }: { activity: Activity
         setShowWizard(true)
     }
 
-    async function handleBookingComplete(data: BookingWizardData) {
+    async function handleBookingComplete(data: BookingWizardData, totalAmount: number) {
         setBookingLoading(true)
         
         const result = await createBookingRequest({
             serviceId: activity.id,
             serviceName: activity.name,
             serviceCategory: 'activity',
-            amount: activity.base_price,
+            amount: totalAmount,
             startDate: data.checkIn || date,
             endDate: data.checkOut,
-            paxAdults: data.guests || participants,
+            paxAdults: data.adults || participants,
             paxChildren: 0,
             travelers: data.travelers as Record<string, unknown>[],
             specialRequests: data.notes,
@@ -83,8 +123,7 @@ export default function ActivityClientWrapper({ activity }: { activity: Activity
 
         if (result.success) {
             toast.success(labels.booking_success || 'Booking request submitted successfully!')
-            setShowWizard(false)
-            router.push(`/booking-confirmation?id=${result.bookingId}&service=${encodeURIComponent(activity.name)}&amount=${activity.base_price}`)
+            router.push(`/booking-confirmation?id=${result.bookingId}&service=${encodeURIComponent(activity.name)}&amount=${totalAmount}`)
         } else {
             toast.error(result.error || labels.booking_error || 'Failed to submit booking request')
         }
@@ -108,13 +147,20 @@ export default function ActivityClientWrapper({ activity }: { activity: Activity
                                 serviceId={activity.id}
                                 serviceName={activity.name}
                                 servicePrice={activity.base_price}
+                                childPrice={activity.child_price}
                                 serviceCategory="activity"
                                 onComplete={handleBookingComplete}
                                 isLoading={bookingLoading}
                                 showRoomSelection={false}
+                                mealPlans={activity.meal_plans}
                                 initialData={{
                                     checkIn: date,
-                                    guests: participants
+                                    adults: participants,
+                                    children: 0,
+                                    firstName: userProfile?.first_name || userProfile?.user_metadata?.first_name || '',
+                                    lastName: userProfile?.last_name || userProfile?.user_metadata?.last_name || '',
+                                    email: userProfile?.email || '',
+                                    phone: userProfile?.phone || ''
                                 }}
                             />
 
@@ -187,6 +233,17 @@ export default function ActivityClientWrapper({ activity }: { activity: Activity
                                         <div className="text-sm text-slate-500 mb-1">{labels.starting_from || 'Starting from'}</div>
                                         <div className="text-4xl font-black text-slate-900">Rs {activity.base_price?.toLocaleString()}</div>
                                         <div className="text-sm text-slate-500">{labels.per_person || 'per person'}</div>
+                                        {activity.child_price && activity.child_price > 0 && (
+                                            <div className="mt-2 flex items-center justify-between p-3 bg-white/50 rounded-xl border border-slate-200 border-dashed">
+                                                <div className="flex flex-col">
+                                                    <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest">{labels.child_rate || 'Child Rate'}</span>
+                                                    <span className="text-xs font-bold text-red-600">MUR {activity.child_price.toLocaleString()}</span>
+                                                </div>
+                                                {activity.child_age_limit && (
+                                                    <span className="text-[8px] font-black p-1 bg-slate-100 rounded text-slate-400 uppercase">Under {activity.child_age_limit} yrs</span>
+                                                )}
+                                            </div>
+                                        )}
                                     </div>
 
                                     <div className="space-y-4">
@@ -226,6 +283,54 @@ export default function ActivityClientWrapper({ activity }: { activity: Activity
                             </div>
                         </div>
 
+                {/* Activity Content Sections */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-12 mb-12">
+                     {/* Highlights */}
+                    {activity.highlights && activity.highlights.length > 0 && (
+                        <div className="bg-white rounded-[2rem] p-10 border border-slate-100 shadow-sm">
+                            <h2 className="text-xs font-black text-red-600 uppercase tracking-[0.4em] mb-6">Key Highlights</h2>
+                            <ul className="space-y-4">
+                                {activity.highlights.map((h, i) => (
+                                    <li key={i} className="flex items-start gap-4 p-4 hover:bg-slate-50 rounded-2xl transition-all">
+                                        <div className="w-8 h-8 rounded-full bg-red-50 text-red-600 flex items-center justify-center shrink-0">
+                                            <Check size={16} />
+                                        </div>
+                                        <span className="font-bold text-slate-700">{h}</span>
+                                    </li>
+                                ))}
+                            </ul>
+                        </div>
+                    )}
+
+                    {/* Quick Inclusions */}
+                    <div className="bg-slate-900 rounded-[2rem] p-10 shadow-2xl relative overflow-hidden">
+                        <div className="absolute top-0 right-0 w-32 h-32 bg-red-600/10 rounded-full blur-3xl -mr-16 -mt-16" />
+                        <h2 className="text-xs font-black text-red-500 uppercase tracking-[0.4em] mb-6">Experience Value</h2>
+                        <div className="space-y-8 relative">
+                            {activity.included && activity.included.length > 0 && (
+                                <div>
+                                    <h3 className="text-white font-black uppercase text-[10px] tracking-widest mb-4">Included In This Price</h3>
+                                    <div className="flex flex-wrap gap-2">
+                                        {activity.included.map((inc, i) => (
+                                            <span key={i} className="px-4 py-2 bg-white/5 border border-white/10 rounded-full text-white/80 text-xs font-black tracking-widest">{inc}</span>
+                                        ))}
+                                    </div>
+                                </div>
+                            )}
+                            {activity.not_included && activity.not_included.length > 0 && (
+                                <div>
+                                    <h3 className="text-white/40 font-black uppercase text-[10px] tracking-widest mb-4">Important: Not Included</h3>
+                                    <div className="flex flex-wrap gap-2">
+                                        {activity.not_included.map((not, i) => (
+                                            <span key={i} className="px-4 py-2 bg-white/5 border border-white/5 border-dashed rounded-full text-white/40 text-xs font-black tracking-widest">{not}</span>
+                                        ))}
+                                    </div>
+                                </div>
+                            )}
+                        </div>
+                    </div>
+                </div>
+
                 {/* Itinerary Section */}
                 {activity.itinerary && activity.itinerary.length > 0 && (
                     <div className="bg-white rounded-[2rem] p-10 border border-slate-100 shadow-sm mb-12">
@@ -261,23 +366,26 @@ export default function ActivityClientWrapper({ activity }: { activity: Activity
                     </div>
                 )}
 
-                {/* Inclusions */}
-                {activity.amenities && activity.amenities.length > 0 && (
-                    <div className="bg-white rounded-[2rem] p-10 border border-slate-100 shadow-sm mb-12">
-                        <h2 className="text-xs font-black text-red-600 uppercase tracking-[0.4em] mb-6">{labels.service_details_label || 'Service Details'}</h2>
-                        <h3 className="text-4xl font-black text-slate-900 mb-10 leading-tight">{labels.whats_included || "What's Included"}</h3>
-                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                            {activity.amenities.map((amenity, idx) => (
-                                <div key={idx} className="flex items-center gap-4 p-6 bg-slate-50 rounded-[2rem] border border-slate-100 hover:bg-white hover:shadow-xl hover:shadow-slate-200/50 transition-all duration-300">
-                                    <div className="w-10 h-10 bg-white rounded-xl flex items-center justify-center text-red-600 shadow-sm">
-                                        <Check size={18} />
-                                    </div>
-                                    <span className="font-black text-xs uppercase tracking-widest text-slate-600">{amenity}</span>
-                                </div>
-                            ))}
-                        </div>
+                {/* Policies Section */}
+                <div className="bg-white rounded-[2rem] p-10 border border-slate-100 shadow-sm mb-12 overflow-hidden relative group">
+                    <div className="absolute top-0 right-0 w-64 h-64 bg-slate-50 rounded-full -mr-32 -mt-32 transition-transform group-hover:scale-110 duration-700" />
+                    <div className="relative grid grid-cols-1 lg:grid-cols-2 gap-12">
+                        {activity.cancellation_policy && (
+                            <section>
+                                <h2 className="text-[10px] font-black text-red-600 uppercase tracking-[0.4em] mb-4">Refund Policy</h2>
+                                <h3 className="text-3xl font-black text-slate-900 mb-6">Cancellation</h3>
+                                <p className="text-slate-500 font-medium leading-relaxed whitespace-pre-line">{activity.cancellation_policy}</p>
+                            </section>
+                        )}
+                        {activity.terms_and_conditions && (
+                            <section>
+                                <h2 className="text-[10px] font-black text-slate-400 uppercase tracking-[0.4em] mb-4">Legal Notice</h2>
+                                <h3 className="text-3xl font-black text-slate-900 mb-6">Terms & Conditions</h3>
+                                <p className="text-slate-500 font-medium leading-relaxed whitespace-pre-line">{activity.terms_and_conditions}</p>
+                            </section>
+                        )}
                     </div>
-                )}
+                </div>
 
                 <div className="mb-12">
                     <ReviewsSection serviceId={activity.id} serviceType="activity" />

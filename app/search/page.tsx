@@ -20,7 +20,6 @@ function SearchPageContent() {
     const adults = searchParams.get('adults')
     const children = searchParams.get('children')
     const type = searchParams.get('type')
-    const location = searchParams.get('location')
     
     // Construct a title/subtitle that shows the user's search context
     const guestLabel = (Number(adults) || 2) + (Number(children) || 0)
@@ -45,7 +44,7 @@ function SearchPageContent() {
                 tag="Global Search"
                 searchPlaceholder="Refine search by name or location..."
                 compactHero={true}
-                serviceTypes={type ? [type] : undefined}
+                categorySlug={type || undefined}
             />
         </div>
     )
