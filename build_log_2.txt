@@ -1,0 +1,88 @@
+
+> web@0.1.1 build
+> next build
+
+ΓÜá Warning: Next.js inferred your workspace root, but it may not be correct.
+ We detected multiple lockfiles and selected the directory of C:\Users\deven\yarn.lock as the root directory.
+ To silence this warning, set `turbopack.root` in your Next.js config, or consider removing one of the lockfiles if it's not needed.
+   See https://nextjs.org/docs/app/api-reference/config/next-config-js/turbopack#root-directory for more information.
+ Detected additional lockfiles: 
+   * C:\Users\deven\Desktop\web-app\package-lock.json
+
+Γû▓ Next.js 16.1.2 (Turbopack)
+- Environments: .env.local, .env
+
+  Creating an optimized production build ...
+Γ£ô Compiled successfully in 3.9s
+  Running TypeScript ...
+  Collecting page data using 19 workers ...
+  Generating static pages using 19 workers (0/50) ...
+  Generating static pages using 19 workers (12/50) 
+  Generating static pages using 19 workers (24/50) 
+  Generating static pages using 19 workers (37/50) 
+Γ£ô Generating static pages using 19 workers (50/50) in 1899.3ms
+  Finalizing page optimization ...
+
+Route (app)
+Γöî ╞Æ /
+Γö£ ╞Æ /_not-found
+Γö£ ╞Æ /about
+Γö£ ╞Æ /about/team
+Γö£ ╞Æ /activities
+Γö£ ╞Æ /activities/[id]
+Γö£ ╞Æ /activities/land
+Γö£ ╞Æ /activities/sea
+Γö£ ╞Æ /booking-confirmation
+Γö£ ╞Æ /compare
+Γö£ ╞Æ /contact
+Γö£ ╞Æ /cruises
+Γö£ ╞Æ /cruises/[id]
+Γö£ ╞Æ /dashboard
+Γö£ ╞Æ /day-packages
+Γö£ ╞Æ /destinations
+Γö£ ╞Æ /destinations/international
+Γö£ ╞Æ /destinations/mauritius
+Γö£ ╞Æ /destinations/mauritius/east
+Γö£ ╞Æ /destinations/mauritius/north
+Γö£ ╞Æ /destinations/mauritius/south
+Γö£ ╞Æ /destinations/mauritius/west
+Γö£ ╞Æ /destinations/rodrigues
+Γö£ ╞Æ /faq
+Γö£ ╞Æ /flight
+Γö£ ╞Æ /flights
+Γö£ ╞Æ /flights/[id]
+Γö£ ╞Æ /guided-group-tours
+Γö£ ╞Æ /hotel-day-packages
+Γö£ ╞Æ /hotel-packages
+Γö£ ╞Æ /hotels
+Γö£ ╞Æ /hotels/[id]
+Γö£ ╞Æ /hotels/mauritius
+Γö£ ╞Æ /local-deals
+Γö£ ╞Æ /mauritius
+Γö£ ╞Æ /news
+Γö£ ╞Æ /news/[slug]
+Γö£ ╞Æ /packages
+Γö£ ╞Æ /packages/[id]
+Γö£ ╞Æ /payment
+Γö£ ╞Æ /plan-my-trip
+Γö£ ╞Æ /privacy-policy
+Γö£ ╞Æ /rodrigue-hotels
+Γö£ ╞Æ /rodrigues
+Γö£ ╞Æ /rodrigues/[slug]
+Γö£ ╞Æ /safety
+Γö£ ╞Æ /saved-searches
+Γö£ ╞Æ /search
+Γö£ ╞Æ /search/details/[id]
+Γö£ ╞Æ /services
+Γö£ ╞Æ /tailormade
+Γö£ ╞Æ /terms-conditions
+Γö£ ╞Æ /tours
+Γö£ ╞Æ /tours/[id]
+Γö£ ╞Æ /transfers
+Γö£ ╞Æ /transfers/[id]
+Γö£ ╞Æ /visa-services
+Γöö ╞Æ /wishlist
+
+
+╞Æ  (Dynamic)  server-rendered on demand
+

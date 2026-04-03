@@ -87,8 +87,8 @@ export default function CruiseDetailPage() {
             amount: cruise.base_price,
             startDate: data.checkIn || departureDate,
             endDate: data.checkOut,
-            paxAdults: data.guests || guests,
-            paxChildren: 0,
+            paxAdults: data.adults || guests,
+            paxChildren: data.children || 0,
             travelers: data.travelers as Record<string, unknown>[],
             specialRequests: data.notes,
             firstName: data.firstName,
@@ -151,7 +151,8 @@ export default function CruiseDetailPage() {
                                 isLoading={bookingLoading}
                                 initialData={{
                                     checkIn: departureDate,
-                                    guests: guests
+                                    adults: guests,
+                                    children: 0
                                 }}
                             />
                         </div>

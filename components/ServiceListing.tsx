@@ -56,6 +56,7 @@ type Service = {
     featured?: boolean
     priority?: number
     secondary_image_url?: string
+    child_price?: number
 }
 
 type ServiceListingProps = {

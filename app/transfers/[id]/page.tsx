@@ -108,8 +108,8 @@ export default function TransferDetailPage() {
             amount: transfer.base_price,
             startDate: data.checkIn || pickupDate,
             endDate: data.checkOut,
-            paxAdults: data.guests || travelers,
-            paxChildren: 0,
+            paxAdults: data.adults || travelers,
+            paxChildren: data.children || 0,
             travelers: data.travelers as Record<string, unknown>[],
             specialRequests: data.notes,
             firstName: data.firstName,
@@ -174,7 +174,8 @@ export default function TransferDetailPage() {
                                 isLoading={bookingLoading}
                                 initialData={{
                                     checkIn: pickupDate,
-                                    guests: travelers
+                                    adults: travelers,
+                                    children: 0
                                 }}
                             />
                         </div>

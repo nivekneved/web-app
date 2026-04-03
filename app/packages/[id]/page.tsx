@@ -109,8 +109,8 @@ export default function PackageDetailPage() {
             amount: pkg.base_price,
             startDate: data.checkIn || date,
             endDate: data.checkOut,
-            paxAdults: data.guests || participants,
-            paxChildren: 0,
+            paxAdults: data.adults || participants,
+            paxChildren: data.children || 0,
             travelers: data.travelers as Record<string, unknown>[],
             specialRequests: data.notes,
             firstName: data.firstName,
@@ -190,7 +190,8 @@ export default function PackageDetailPage() {
                                 isLoading={bookingLoading}
                                 initialData={{
                                     checkIn: date,
-                                    guests: participants
+                                    adults: participants,
+                                    children: 0
                                 }}
                             />
                         </div>
