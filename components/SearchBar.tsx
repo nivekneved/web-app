@@ -52,7 +52,7 @@ export default function SearchBar() {
   const totalGuests = guests.adults + guests.children
 
   return (
-    <div className="w-full max-w-6xl mx-auto px-4 -mt-12 relative z-40">
+    <div className="w-full max-w-6xl mx-auto px-4 mt-1 relative z-40">
       <div className="bg-white rounded-full shadow-[0_20px_50px_rgba(0,0,0,0.15)] p-2 md:p-3 flex flex-col md:flex-row items-stretch md:items-center gap-2 border border-slate-100">
         
         {/* Check-in */}

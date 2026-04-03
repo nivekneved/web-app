@@ -358,7 +358,7 @@ export default function HomePage() {
       */}
 
       {/* Luxury Intro Section */}
-      <section className="py-10 bg-white relative">
+      <section className="pt-24 pb-10 bg-white relative">
         <div className="container mx-auto px-6">
           <div className="flex flex-col md:flex-row items-end justify-between gap-12 mb-6">
             <motion.div 
